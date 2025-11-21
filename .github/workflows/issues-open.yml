@@ -1,36 +1,36 @@
-name: Send Issue to Discord
+# name: Send Issue to Discord
 
-on:
-  issues:
-    types: [opened]
+# on:
+#   issues:
+#     types: [opened]
 
-jobs:
-  discord:
-    runs-on: ubuntu-latest
+# jobs:
+#   discord:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Send Discord Notification
-        run: |
-          curl -H "Content-Type: application/json" \
-            -X POST \
-            -d "{
-              \"embeds\": [{
-                \"title\": \"🔔 New Issue Created!\",
-                \"url\": \"${{ github.event.issue.html_url }}\",
-                \"color\": 15258703,
-                \"description\": \"#${{ github.event.issue.number }} - ${{ github.event.issue.title }}\",
-                \"fields\": [
-                  {
-                    \"name\": \"👤 작성자\",
-                    \"value\": \"${{ github.event.issue.user.login }}\",
-                    \"inline\": true
-                  },
-                  {
-                    \"name\": \"📝 내용\",
-                    \"value\": \"${{ github.event.issue.body || '내용 없음' }}\"
-                  }
-                ],
-                \"timestamp\": \"${{ github.event.issue.created_at }}\"
-              }]
-            }" \
-            ${{ secrets.DISCORD_WEBHOOK_ISSUES }}
+#     steps:
+#       - name: Send Discord Notification
+#         run: |
+#           curl -H "Content-Type: application/json" \
+#             -X POST \
+#             -d "{
+#               \"embeds\": [{
+#                 \"title\": \"🔔 New Issue Created!\",
+#                 \"url\": \"${{ github.event.issue.html_url }}\",
+#                 \"color\": 15258703,
+#                 \"description\": \"#${{ github.event.issue.number }} - ${{ github.event.issue.title }}\",
+#                 \"fields\": [
+#                   {
+#                     \"name\": \"👤 작성자\",
+#                     \"value\": \"${{ github.event.issue.user.login }}\",
+#                     \"inline\": true
+#                   },
+#                   {
+#                     \"name\": \"📝 내용\",
+#                     \"value\": \"${{ github.event.issue.body || '내용 없음' }}\"
+#                   }
+#                 ],
+#                 \"timestamp\": \"${{ github.event.issue.created_at }}\"
+#               }]
+#             }" \
+#             ${{ secrets.DISCORD_WEBHOOK_ISSUES }}
