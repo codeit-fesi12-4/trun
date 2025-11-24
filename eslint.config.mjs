@@ -27,22 +27,90 @@ export default [
       import: importPlugin,
     },
     rules: {
-      "import/prefer-default-export": "off",
+      "react/jsx-no-bind": [
+        "error",
+        {
+          allowArrowFunctions: true,
+          ignoreDOMComponents: true,
+        },
+      ],
+      "react/jsx-key": [
+        "error",
+        {
+          checkFragmentShorthand: true,
+          warnOnDuplicates: true,
+        },
+      ],
+      // "import/no-unused-modules": [
+      //   "error",
+      //   {
+      //     unusedExports: true,
+      //   },
+      // ],
+      "no-param-reassign": [
+        "error",
+        {
+          props: true,
+          ignorePropertyModificationsFor: ["state"], // Zustand state 예외
+        },
+      ],
+      "no-new-func": "error",
+      "no-eval": "error",
+      "prefer-template": "error",
+      "object-shorthand": "error",
+      "no-var": "error",
+      "prefer-const": "error",
+      "no-return-await": "off", // TS에서는 필요할 수 있음
+      "@typescript-eslint/return-await": ["warn", "in-try-catch"],
+      "import/no-default-export": "off",
+      "import/no-cycle": "error",
+      "import/no-duplicates": "error",
+      "react/self-closing-comp": "error",
+      "react/no-unstable-nested-components": "error",
+      "react/no-array-index-key": "warn",
+      "@typescript-eslint/prefer-optional-chain": "error",
+      "@typescript-eslint/no-unnecessary-condition": "warn",
+      "@typescript-eslint/no-misused-promises": "error",
+      "@typescript-eslint/no-floating-promises": "error",
+      "import/prefer-default-export": "error",
       "react/jsx-props-no-spreading": "off",
       "react/react-in-jsx-scope": "off",
       "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
       "@typescript-eslint/explicit-module-boundary-types": "off",
-      "@typescript-eslint/no-unused-vars": ["warn"],
+      "@typescript-eslint/no-unused-vars": ["error"],
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": ["warn", { allow: ["warn", "error"] }],
-      "import/order": [
+      // "import/order": [
+      //   "warn",
+      //   {
+      //     grups: ["builtin", "external", "internal", ["parent", "sibling"], "index", "object"],
+      //     alphabetioze: { order: "asc", caseInsensitive: true },
+      //     "newlines-between": "always",
+      //   },
+      // ],
+      "prefer-arrow-callback": [
         "warn",
         {
-          groups: ["builtin", "external", "internal", ["parent", "sibling"], "index", "object"],
-          alphabetize: { order: "asc", caseInsensitive: true },
-          "newlines-between": "always",
+          allowNamedFunctions: false,
         },
       ],
+      "func-style": [
+        "warn",
+        "expression",
+        {
+          allowArrowFunctions: true,
+        },
+      ],
+      "arrow-body-style": ["warn", "as-needed"],
+      // "prefer-arrow-functions/prefer-arrow-functions": [
+      //   "warn",
+      //   {
+      //     classPropertiesAllowed: false,
+      //     disallowPrototype: false,
+      //     returnStyle: "unchanged",
+      //     singleReturnOnly: false,
+      //   },
+      // ],
     },
   },
 ];
