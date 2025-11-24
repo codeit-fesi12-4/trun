@@ -41,12 +41,6 @@ export default [
           warnOnDuplicates: true,
         },
       ],
-      // "import/no-unused-modules": [
-      //   "error",
-      //   {
-      //     unusedExports: true,
-      //   },
-      // ],
       "no-param-reassign": [
         "error",
         {
@@ -91,6 +85,14 @@ export default [
       "prefer-arrow-callback": [
         "warn",
         {
+          groups: ["builtin", "external", "internal", ["parent", "sibling"], "index", "object"],
+          alphabetize: { order: "asc", caseInsensitive: true },
+          "newlines-between": "always",
+        },
+      ],
+      "prefer-arrow-callback": [
+        "warn",
+        {
           allowNamedFunctions: false,
         },
       ],
@@ -102,15 +104,6 @@ export default [
         },
       ],
       "arrow-body-style": ["warn", "as-needed"],
-      // "prefer-arrow-functions/prefer-arrow-functions": [
-      //   "warn",
-      //   {
-      //     classPropertiesAllowed: false,
-      //     disallowPrototype: false,
-      //     returnStyle: "unchanged",
-      //     singleReturnOnly: false,
-      //   },
-      // ],
     },
   },
 ];
