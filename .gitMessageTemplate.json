@@ -1,17 +1,7 @@
 {
   "configVersion": "1",
-  "staticTemplate": [
-    "{emoji} {type}{scope}: {description}",
-    "",
-    "{body}",
-    "",
-    "{breaking_change}{footer}"
-  ],
-  "dynamicTemplate": [
-    "{emoji} {type}{scope}: {description}",
-    "{body}",
-    "{breaking_change}{footer}"
-  ],
+  "staticTemplate": ["{emoji} {type} : {description}", "", "{body}"],
+  "dynamicTemplate": ["{emoji} {type}: {description}", "{body}"],
   "tokens": [
     {
       "label": "Type",
