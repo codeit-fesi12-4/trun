@@ -74,22 +74,6 @@ export default [
       "@typescript-eslint/no-unused-vars": ["error"],
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": ["warn", { allow: ["warn", "error"] }],
-      // "import/order": [
-      //   "warn",
-      //   {
-      //     grups: ["builtin", "external", "internal", ["parent", "sibling"], "index", "object"],
-      //     alphabetioze: { order: "asc", caseInsensitive: true },
-      //     "newlines-between": "always",
-      //   },
-      // ],
-      "prefer-arrow-callback": [
-        "warn",
-        {
-          groups: ["builtin", "external", "internal", ["parent", "sibling"], "index", "object"],
-          alphabetize: { order: "asc", caseInsensitive: true },
-          "newlines-between": "always",
-        },
-      ],
       "prefer-arrow-callback": [
         "warn",
         {
