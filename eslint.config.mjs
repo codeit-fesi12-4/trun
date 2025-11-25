@@ -42,12 +42,13 @@ export default [
         },
       ],
       "no-param-reassign": [
-        "error",
+        "off",
         {
           props: true,
           ignorePropertyModificationsFor: ["state"], // Zustand state 예외
         },
       ],
+      "react/prop-types": "off",
       "no-new-func": "error",
       "no-eval": "error",
       "prefer-template": "error",
@@ -60,13 +61,13 @@ export default [
       "import/no-cycle": "error",
       "import/no-duplicates": "error",
       "react/self-closing-comp": "error",
-      "react/no-unstable-nested-components": "error",
+      "react/no-unstable-nested-components": "off",
       "react/no-array-index-key": "warn",
       "@typescript-eslint/prefer-optional-chain": "error",
       "@typescript-eslint/no-unnecessary-condition": "warn",
       "@typescript-eslint/no-misused-promises": "error",
       "@typescript-eslint/no-floating-promises": "error",
-      "import/prefer-default-export": "error",
+      "import/prefer-default-export": "off",
       "react/jsx-props-no-spreading": "off",
       "react/react-in-jsx-scope": "off",
       "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
@@ -85,22 +86,8 @@ export default [
         { patterns: ["../**"] }, // 상위 폴더 상대경로 금지
       ],
 
-      "func-style": [
-        "warn",
-        "expression",
-        {
-          allowArrowFunctions: true,
-        },
-      ],
-      "arrow-body-style": ["warn", "as-needed"],
-    },
-  },
-  {
-    // shadcn/ui utils.ts 예외 처리
-    files: ["**/lib/utils.ts", "**/utils.ts"],
-    rules: {
-      "import/prefer-default-export": "off",
       "func-style": "off",
+      "arrow-body-style": ["warn", "as-needed"],
     },
   },
 ];
