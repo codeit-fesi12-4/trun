@@ -80,6 +80,11 @@ export default [
           allowNamedFunctions: false,
         },
       ],
+      "no-restricted-imports": [
+        "error",
+        { patterns: ["../**"] }, // 상위 폴더 상대경로 금지
+      ],
+
       "func-style": [
         "warn",
         "expression",
