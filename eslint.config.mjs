@@ -90,4 +90,12 @@ export default [
       "arrow-body-style": ["warn", "as-needed"],
     },
   },
+  {
+    // shadcn/ui utils.ts 예외 처리
+    files: ["**/lib/utils.ts", "**/utils.ts"],
+    rules: {
+      "import/prefer-default-export": "off",
+      "func-style": "off",
+    },
+  },
 ];
