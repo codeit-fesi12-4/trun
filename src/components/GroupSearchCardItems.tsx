@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { GroupSearchCardData } from "@/constants";
 
-interface GroupSearchCardItemProps {
+interface IGroupSearchCardItemProps {
   item: GroupSearchCardData;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
@@ -16,13 +16,14 @@ const GroupSearchCardItems = ({
   item,
   onFavoriteToggle,
   onJoinClick,
-}: GroupSearchCardItemProps) => {
+}: IGroupSearchCardItemProps) => {
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
 
   return (
-    <div className="flex flex-1 flex-col gap-1 py-4 pr-4 pl-6">
+    <div className="flex flex-1 flex-col gap-1 py-4 pr-4 pl-4 md:gap-1 md:py-4 md:pl-6">
       <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5 md:gap-2">
+          {/* 제목 */}
           <div className="flex flex-col gap-1">
             <h3 className="flex items-center gap-2 text-base font-semibold text-gray-800">
               <span>{item.title}</span>
@@ -30,7 +31,8 @@ const GroupSearchCardItems = ({
               <span className="text-xs text-gray-700">{item.subtitle}</span>
             </h3>
           </div>
-          <div className="mb-4 flex gap-2">
+          {/* 날짜/시간 */}
+          <div className="mb-3 flex gap-2 md:mb-4">
             <Badge variant="outline" className="rounded-sm bg-black text-sm text-white">
               {item.date}
             </Badge>
@@ -39,6 +41,7 @@ const GroupSearchCardItems = ({
             </Badge>
           </div>
         </div>
+        {/* 좋아요 버튼 */}
         <button
           type="button"
           onClick={() => onFavoriteToggle?.(item.id)}
@@ -58,9 +61,10 @@ const GroupSearchCardItems = ({
         </button>
       </div>
 
-      <div className="flex items-end justify-between gap-6">
+      <div className="flex items-end justify-between gap-4 md:gap-6">
         <div className="flex flex-1 flex-col gap-1">
           <div className="flex items-center">
+            {/* 인원 수 및 확정 표시 */}
             <div className="flex items-center gap-1">
               <Image
                 src="/icons/person.svg"
@@ -90,13 +94,14 @@ const GroupSearchCardItems = ({
               )}
             </div>
           </div>
+          {/* 진행 상태 바 */}
           <Progress
             value={participantPercentage}
             className="h-1 w-full bg-orange-100 [&>div]:bg-orange-500"
           />
         </div>
-        {/* 상세 페이지 버튼 */}
-        <div className="mr-2">
+        {/* 상세 버튼 */}
+        <div className="mr-0 md:mr-2">
           <Button
             variant="link"
             size="xs"

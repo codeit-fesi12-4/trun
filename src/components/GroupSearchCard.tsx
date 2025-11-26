@@ -6,21 +6,21 @@ import { GroupSearchCardData as GroupSearchCardItemType } from "@/constants";
 import GroupSearchCardItems from "@/components/GroupSearchCardItems";
 import { Badge } from "@/components/ui/badge";
 
-interface GroupSearchCardProps {
+interface IGroupSearchCardProps {
   item: GroupSearchCardItemType;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
 }
 
-const GroupSearchCard = ({ item, onFavoriteToggle, onJoinClick }: GroupSearchCardProps) => (
+const GroupSearchCard = ({ item, onFavoriteToggle, onJoinClick }: IGroupSearchCardProps) => (
   <Card
     key={item.id}
     className="overflow-hidden border-[0.5px] py-0 shadow-none transition-shadow hover:border-transparent hover:shadow-[0px_10px_10px_0px_rgba(0,0,0,0.05),2px_2px_12px_0px_rgba(0,0,0,0.01)]"
   >
     <CardContent className="p-0">
-      <div className="flex items-stretch">
+      <div className="flex flex-col items-stretch md:flex-row">
         {/* 이미지 영역 */}
-        <div className="relative w-64 shrink-0 self-stretch overflow-hidden rounded-l-xl">
+        <div className="relative h-48 w-full shrink-0 overflow-hidden rounded-t-xl md:h-auto md:w-64 md:rounded-t-none md:rounded-l-xl">
           <Image src={item.imageUrl} alt={item.title} fill className="object-cover" />
           {/* 이미지 위 오버레이 배지 */}
           <div className="absolute top-0 right-0">
