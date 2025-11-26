@@ -1,10 +1,9 @@
 "use client";
 
-import { ArrowRight, Heart, User } from "lucide-react";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { cn } from "@/lib/utils";
 import { GroupSearchCardData } from "@/constants";
 
 interface GroupSearchCardItemProps {
@@ -21,57 +20,69 @@ const GroupSearchCardItems = ({
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
 
   return (
-    <div className="flex flex-1 flex-col gap-1 py-3 pr-3 pl-5">
-      {/* 제목 및 좋아요 버튼 */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold text-gray-800">
-          {item.title} <span className="text-gray-900">|</span>{" "}
-          <span className="text-xs text-gray-700">{item.subtitle}</span>
-        </h3>
+    <div className="flex flex-1 flex-col gap-1 py-4 pr-4 pl-6">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
+            <h3 className="flex items-center gap-2 text-base font-semibold text-gray-800">
+              <span>{item.title}</span>
+              <span className="text-gray-900">|</span>
+              <span className="text-xs text-gray-700">{item.subtitle}</span>
+            </h3>
+          </div>
+          <div className="mb-4 flex gap-2">
+            <Badge variant="outline" className="rounded-sm bg-black text-sm text-white">
+              {item.date}
+            </Badge>
+            <Badge variant="outline" className="rounded-sm bg-black text-sm text-orange-600">
+              {item.time}
+            </Badge>
+          </div>
+        </div>
         <button
           type="button"
           onClick={() => onFavoriteToggle?.(item.id)}
-          className="rounded-full border p-1.5 text-gray-400 transition-colors hover:bg-orange-50 hover:text-orange-500"
           aria-label={item.isFavorite ? "좋아요 취소" : "좋아요"}
         >
-          <Heart
-            className={cn("size-4", item.isFavorite && "fill-orange-500 text-orange-500")}
-            strokeWidth={2.5}
+          <Image
+            src={
+              item.isFavorite
+                ? "/icons/size=large, state=active.svg"
+                : "/icons/size=large, state=inactive.svg"
+            }
+            alt={item.isFavorite ? "좋아요" : "좋아요 취소"}
+            width={36}
+            height={36}
+            className="size-9"
           />
         </button>
       </div>
 
-      {/* 날짜/시간 배지 */}
-      <div className="mb-4 flex gap-2">
-        <Badge variant="outline" className="rounded-sm bg-black text-white">
-          {item.date}
-        </Badge>
-        <Badge variant="outline" className="rounded-sm bg-black text-orange-600">
-          {item.time}
-        </Badge>
-      </div>
-
-      {/* 인원 수 및 확정 배너 */}
-      <div className="flex justify-between gap-6">
-        <div className="flex flex-1 flex-col">
-          <div className="flex items-center gap-2">
-            <div className="mb-2 flex items-center gap-1.5">
-              <User className="size-3.5 text-gray-600" strokeWidth={2.5} />
+      <div className="flex items-end justify-between gap-6">
+        <div className="flex flex-1 flex-col gap-1">
+          <div className="flex items-center">
+            <div className="flex items-center gap-1">
+              <Image
+                src="/icons/person.svg"
+                alt="person"
+                width={14}
+                height={14}
+                className="size-3.5"
+              />
               <span className="text-xs font-semibold text-gray-600">
                 {item.participants}/{item.maxParticipants}
               </span>
               {item.status === "confirmed" && (
                 <div className="flex items-center gap-1">
                   <Badge variant="outline" className="border-none text-orange-600">
-                    <div className="rounded-full bg-orange-500 p-0.5 text-white">
-                      <svg className="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+                    <div className="">
+                      <Image
+                        src="/icons/Property 1=Variant2.svg"
+                        alt="check"
+                        width={20}
+                        height={20}
+                        className="size-5"
+                      />
                     </div>
                     개설확정
                   </Badge>
@@ -85,16 +96,22 @@ const GroupSearchCardItems = ({
           />
         </div>
         {/* 상세 페이지 버튼 */}
-        <div className="mt-2 flex items-end">
+        <div className="mr-2">
           <Button
             variant="link"
-            size="sm"
-            className="bg-white p-0 text-orange-500"
+            size="xs"
+            className="bg-white p-0 font-semibold text-orange-500"
             onClick={() => onJoinClick?.(item.id)}
             type="button"
           >
             join now
-            <ArrowRight className="size-4 text-orange-500" strokeWidth={2.5} />
+            <Image
+              src="/icons/arrow_right.svg"
+              alt="arrow right"
+              width={16}
+              height={16}
+              className="size-4"
+            />
           </Button>
         </div>
       </div>
