@@ -5,9 +5,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-const GetheringSort = () => (
+const GatheringSort = () => (
   <DropdownMenu>
-    <DropdownMenuTrigger className="flex h-[36px] w-[36px] items-center justify-center gap-[4px] rounded-[12px] border-[2px] border-gray-100 bg-white text-sm font-medium sm:h-[40px] sm:w-[110px]">
+    <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center gap-1 rounded-[12px] border-2 border-gray-100 bg-white text-sm font-medium sm:h-10 sm:w-[110px]">
       <svg
         width="24"
         height="24"
@@ -31,9 +31,9 @@ const GetheringSort = () => (
       <span className="hidden sm:block">마감 임박</span>
     </DropdownMenuTrigger>
     <DropdownMenuContent>
-      <DropdownMenuItem>마감 임박</DropdownMenuItem>
+      <DropdownMenuItem className="data-highlighted:bg-orange-100">마감 임박</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 );
 
-export default GetheringSort;
+export default GatheringSort;
