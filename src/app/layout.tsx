@@ -3,7 +3,7 @@ import "./globals.css";
 import Providers from "./providers";
 import { pretendard } from "./font";
 import Header from "@/components/layouts/Header";
-import LayoutWrapper from "@/components/LayoutWrapper";
+import LayoutWrapper from "@/components/layouts/LayoutWrapper";
 
 export const metadata: Metadata = {
   title: "같이달림",
