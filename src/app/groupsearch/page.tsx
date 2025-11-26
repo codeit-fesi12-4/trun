@@ -1,4 +1,4 @@
-import GroupSearchFilter from "@/components/GroupSearchFilter";
+import GroupSearchFilter from "@/components/SearchGatheringLayout";
 
 const GroupsearchPage = () => <GroupSearchFilter />;
 

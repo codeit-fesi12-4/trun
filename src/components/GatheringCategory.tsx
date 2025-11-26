@@ -1,23 +1,13 @@
-import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
-const GroupSearchFilter = () => (
-  <div className="mx-[10%]">
-    <div className="mt-[50px] mb-[30px] flex flex-row gap-[16px]">
-      <div className="h-[72px] w-[72px]">
-        <Image src="icons/gethering.svg" alt="모임참여아이콘" width={100} height={100} />
-      </div>
-      <div className="flex flex-col justify-center gap-[8px]">
-        <p className="text-sm font-medium text-gray-700">함께 할 사람이 없나요?</p>
-        <h1 className="text-2sl font-semibold text-gray-900">지금 모임에 참여해보세요</h1>
-      </div>
-    </div>
-    <div>
-      <Tabs defaultValue="달램핏" className="w-[400px]">
-        <TabsList className="gap-2 bg-transparent">
+const GatheringCategory = () => (
+  <div>
+    <Tabs defaultValue="달램핏" className="w-full">
+      <TabsList className="mb-[10px] flex w-full justify-between bg-transparent">
+        <div className="flex h-[38px] w-[194px] gap-2">
           <TabsTrigger
             value="달램핏"
-            className="gap-[1px] px-[5px] py-[18px] text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-[2px] data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:!h-[32px] [&>svg]:!w-[32px]"
+            className="w-[83px] gap-[1px] px-[5px] py-[18px] text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-[2px] data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:!h-[32px] [&>svg]:!w-[32px]"
           >
             달램핏
             <svg
@@ -144,12 +134,40 @@ const GroupSearchFilter = () => (
               <path d="M24.375 2.375L24.375 3.375" stroke="currentColor" strokeLinecap="round" />
             </svg>
           </TabsTrigger>
-        </TabsList>
-        <TabsContent value="달램핏">달램핏 내용이다.</TabsContent>
-        <TabsContent value="워케이션">워케이션 내용이다.</TabsContent>
-      </Tabs>
-    </div>
+        </div>
+        <button className="h-[44px] w-[115px] rounded-[12px] bg-orange-600 text-base font-semibold text-white">
+          모임 만들기
+        </button>
+      </TabsList>
+      <TabsContent value="달램핏">
+        <Tabs defaultValue="all" className="w-fit">
+          <TabsList className="flex w-full justify-between gap-[8px] bg-transparent">
+            <TabsTrigger
+              value="all"
+              className="h-[40px] w-[57px] rounded-[12px] bg-gray-200 text-sm font-medium text-gray-900 data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+            >
+              전체
+            </TabsTrigger>
+            <TabsTrigger
+              value="오피스 스트레칭"
+              className="h-[40px] w-fit rounded-[12px] bg-gray-200 px-[15px] text-sm font-medium text-gray-900 data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+            >
+              오피스 스트레칭
+            </TabsTrigger>
+            <TabsTrigger
+              value="마인드풀니스"
+              className="h-[40px] w-fit rounded-[12px] bg-gray-200 px-[15px] text-sm font-medium text-gray-900 data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+            >
+              마인드풀니스
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="account">Make changes to your account here.</TabsContent>
+          <TabsContent value="password">Change your password here.</TabsContent>
+        </Tabs>
+      </TabsContent>
+      <TabsContent value="워케이션" />
+    </Tabs>
   </div>
 );
 
-export default GroupSearchFilter;
+export default GatheringCategory;
