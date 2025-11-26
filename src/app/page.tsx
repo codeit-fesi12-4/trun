@@ -15,7 +15,7 @@ const page = () => (
       </TabsContent>
     </Tabs>
 
-    <div className="p-4">
+    <div>
       <h1 className="text-3xl font-bold text-orange-500">안녕하세요</h1>
       <p className="text-2xl font-semibold text-orange-800">본문 내용</p>
     </div>
