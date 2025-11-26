@@ -9,7 +9,9 @@ const SearchGatheringLayout = () => (
       </div>
       <div className="flex flex-col justify-center gap-[8px]">
         <p className="text-sm font-medium text-gray-700">함께 할 사람이 없나요?</p>
-        <h1 className="text-2sl font-semibold text-gray-900">지금 모임에 참여해보세요</h1>
+        <h1 className="text-lg font-semibold text-gray-900 sm:text-2xl">
+          지금 모임에 참여해보세요
+        </h1>
       </div>
     </div>
     <GatheringCategory />

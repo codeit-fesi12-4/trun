@@ -1,5 +1,5 @@
-import GroupSearchFilter from "@/components/SearchGatheringLayout";
+import SearchGatheringLayout from "@/components/SearchGatheringLayout";
 
-const GroupsearchPage = () => <GroupSearchFilter />;
+const GroupsearchPage = () => <SearchGatheringLayout />;
 
 export default GroupsearchPage;
