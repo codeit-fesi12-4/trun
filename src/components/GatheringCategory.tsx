@@ -1,14 +1,17 @@
-import GetheringCategoryContent from "./GetheringCategoryContent";
+import DatePicker from "./DatePicker";
+import GetheringCategoryContent from "./GatheringCategoryContent";
+import GatheringFilter from "./GatheringFilter";
+import GatheringSort from "./GatheringSort";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
 const GatheringCategory = () => (
   <div>
-    <Tabs defaultValue="달램핏" className="w-full">
-      <TabsList className="mb-[10px] flex w-full justify-between bg-transparent">
-        <div className="flex h-[38px] w-[194px] gap-2">
+    <Tabs defaultValue="달램핏">
+      <TabsList className="mb-2 flex w-full justify-between bg-transparent p-0">
+        <div className="flex gap-3">
           <TabsTrigger
             value="달램핏"
-            className="w-[83px] gap-[1px] px-[5px] py-[18px] text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-[2px] data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:!h-[32px] [&>svg]:!w-[32px]"
+            className="mb-2 w-fit gap-1 bg-transparent! p-0 pb-1 text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:h-8! [&>svg]:w-8!"
           >
             달램핏
             <svg
@@ -70,7 +73,7 @@ const GatheringCategory = () => (
           </TabsTrigger>
           <TabsTrigger
             value="워케이션"
-            className="gap-[1px] px-[5px] py-[18px] text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-[2px] data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:!h-[32px] [&>svg]:!w-[32px]"
+            className="mb-2 w-fit gap-1 bg-transparent! p-0 pb-1 text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:h-8! [&>svg]:w-8!"
           >
             워케이션
             <svg
@@ -136,12 +139,20 @@ const GatheringCategory = () => (
             </svg>
           </TabsTrigger>
         </div>
-        <button className="h-[44px] w-[115px] rounded-[12px] bg-orange-600 text-base font-semibold text-white">
+        <button className="h-11 w-[100] rounded-[12px] bg-orange-600 text-sm font-semibold text-white sm:w-[115px] sm:text-base">
           모임 만들기
         </button>
       </TabsList>
       <GetheringCategoryContent />
     </Tabs>
+    <div className="my-4 h-0.5 w-full bg-gray-200" />
+    <div className="flex justify-between">
+      <div className="flex gap-2">
+        <GatheringFilter />
+        <DatePicker />
+      </div>
+      <GatheringSort />
+    </div>
   </div>
 );
 
