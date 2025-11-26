@@ -166,3 +166,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .nav-link {
+    @apply text-sm font-semibold text-white hover:text-gray-900 md:text-base;
+  }
+}
