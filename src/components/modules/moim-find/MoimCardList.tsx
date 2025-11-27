@@ -1,6 +1,6 @@
 "use client";
 
-import MoimCard from "@/components/modules/moim-find/MiomCard";
+import MoimCard from "@/components/modules/moim-find/MoimCard";
 import { MoimCardData, GROUP_SEARCH_CARD_SAMPLE_DATA } from "@/constants";
 
 interface IMoimCardListProps {
