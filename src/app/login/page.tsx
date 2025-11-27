@@ -1,20 +1,61 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
-import { LoginErrors, LoginForm, validateLogin } from "@/utils/validators";
+import { getUserProfile, postSignin } from "@/hooks/api/auth";
+import { useAuthStore } from "@/stores/authStore";
+
+interface LoginErrors {
+  email?: string;
+  password?: string;
+}
 
 const LoginPage = () => {
-  const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
+  const router = useRouter();
+  const { setToken, setUser } = useAuthStore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setErrors(validateLogin(form));
+  const signinMutation = useMutation({
+    mutationFn: () => postSignin({ email, password }),
+    onSuccess: async data => {
+      setServerError(null);
+      setToken(data.token);
+      const profile = await getUserProfile();
+      setUser(profile);
+      router.push("/");
+    },
+    onError: error => {
+      setServerError(error.message);
+    },
+  });
+
+  const validate = (): LoginErrors => {
+    const nextErrors: LoginErrors = {};
+    if (!email.trim()) {
+      nextErrors.email = "이메일을 입력해주세요.";
+    }
+    if (!password) {
+      nextErrors.password = "비밀번호를 입력해주세요.";
+    }
+    return nextErrors;
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const nextErrors = validate();
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length === 0) {
+      signinMutation.mutate();
+    }
   };
 
   return (
@@ -38,8 +79,8 @@ const LoginPage = () => {
           label="아이디"
           placeholder="이메일을 입력해주세요."
           autoComplete="email"
-          value={form.email}
-          onChange={e => setForm(prev => ({ ...prev, email: e.target.value }))}
+          value={email}
+          onChange={event => setEmail(event.target.value)}
           error={errors.email}
         />
         <AuthPasswordField
@@ -47,16 +88,18 @@ const LoginPage = () => {
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요."
           autoComplete="current-password"
-          value={form.password}
-          onChange={e => setForm(prev => ({ ...prev, password: e.target.value }))}
+          value={password}
+          onChange={event => setPassword(event.target.value)}
           error={errors.password}
         />
         <Button
           type="submit"
-          className="h-11 w-full rounded-lg bg-gray-500 text-base font-semibold text-white transition-colors hover:bg-gray-600"
+          disabled={signinMutation.isPending}
+          className="h-11 w-full rounded-lg bg-gray-500 text-base font-semibold text-white transition-colors hover:bg-gray-600 disabled:opacity-50"
         >
-          로그인
+          {signinMutation.isPending ? "로그인 중..." : "로그인"}
         </Button>
+        {serverError ? <p className="text-sm font-semibold text-red-600">{serverError}</p> : null}
       </form>
     </AuthLayout>
   );

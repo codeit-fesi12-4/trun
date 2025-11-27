@@ -33,7 +33,7 @@ export const AuthTextField = ({
       autoComplete={autoComplete}
       aria-invalid={Boolean(error)}
       className={cn(
-        "h-11 rounded-lg border border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:font-medium placeholder:text-gray-400",
+        "tablet:placeholder:text-base pc:placeholder:text-base h-11 rounded-lg border border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400",
         "focus-visible:border-gray-400 focus-visible:ring-gray-200",
         error &&
           "border-2 border-red-600 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",
@@ -73,7 +73,7 @@ export const AuthPasswordField = ({
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
           className={cn(
-            "h-11 rounded-lg border border-gray-200 bg-gray-50 pr-10 text-base font-medium text-gray-900 placeholder:font-medium placeholder:text-gray-400",
+            "tablet:placeholder:text-base pc:placeholder:text-base h-11 rounded-lg border border-gray-200 bg-gray-50 pr-10 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400",
             "focus-visible:border-gray-400 focus-visible:ring-gray-200",
             error &&
               "border-2 border-red-500 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",
