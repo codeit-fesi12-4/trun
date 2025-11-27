@@ -10,6 +10,7 @@ import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/Auth
 import { Button } from "@/components/ui/button";
 import { getUserProfile, postSignin } from "@/hooks/api/auth";
 import { useAuthStore } from "@/stores/authStore";
+import { validateLogin, LoginErrors as ValidationLoginErrors } from "@/utils/validators";
 
 interface LoginErrors {
   email?: string;
@@ -38,16 +39,7 @@ const LoginPage = () => {
     },
   });
 
-  const validate = (): LoginErrors => {
-    const nextErrors: LoginErrors = {};
-    if (!email.trim()) {
-      nextErrors.email = "이메일을 입력해주세요.";
-    }
-    if (!password) {
-      nextErrors.password = "비밀번호를 입력해주세요.";
-    }
-    return nextErrors;
-  };
+  const validate = (): LoginErrors => validateLogin({ email, password }) as ValidationLoginErrors;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -80,7 +72,11 @@ const LoginPage = () => {
           placeholder="이메일을 입력해주세요."
           autoComplete="email"
           value={email}
-          onChange={event => setEmail(event.target.value)}
+          onChange={event => {
+            setEmail(event.target.value);
+            if (serverError) setServerError(null);
+            if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
+          }}
           error={errors.email}
         />
         <AuthPasswordField
@@ -89,7 +85,11 @@ const LoginPage = () => {
           placeholder="비밀번호를 입력해주세요."
           autoComplete="current-password"
           value={password}
-          onChange={event => setPassword(event.target.value)}
+          onChange={event => {
+            setPassword(event.target.value);
+            if (serverError) setServerError(null);
+            if (errors.password) setErrors(prev => ({ ...prev, password: undefined }));
+          }}
           error={errors.password}
         />
         <Button

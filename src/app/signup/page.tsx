@@ -45,6 +45,10 @@ const SignupPage = () => {
   const handleChange = (field: keyof SignupForm) => (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setForm(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+    setServerError(null);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
