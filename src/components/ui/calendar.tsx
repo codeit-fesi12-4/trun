@@ -222,9 +222,9 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
   };
 
   return (
-    <div className="flex border-l border-gray-200">
+    <div className="flex gap-3 border-gray-200 p-3">
       {/* 시간 컬럼 */}
-      <div className="flex h-[280px] w-16 flex-col overflow-y-auto">
+      <div className="flex h-[300px] w-18 flex-col gap-3 overflow-y-auto">
         {hours.map(hour => {
           const isSelected = parseInt(hour) === currentHour;
           return (
@@ -232,7 +232,7 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
               key={hour}
               type="button"
               onClick={() => handleHourChange(hour)}
-              className={`flex h-10 items-center justify-center text-sm transition-colors ${
+              className={`mr-3 flex items-center justify-center rounded-md p-2 text-sm transition-colors ${
                 isSelected ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-gray-100"
               }`}
             >
@@ -243,7 +243,7 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
       </div>
 
       {/* 분 컬럼 */}
-      <div className="flex h-[280px] w-16 flex-col overflow-y-auto">
+      <div className="flex h-[300px] w-18 flex-col gap-3 overflow-y-auto">
         {minutes.map(minute => {
           const isSelected = parseInt(minute) === currentMinute;
           return (
@@ -251,7 +251,7 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
               key={minute}
               type="button"
               onClick={() => handleMinuteChange(minute)}
-              className={`flex h-10 items-center justify-center text-sm transition-colors ${
+              className={`mr-3 flex h-10 items-center justify-center rounded-md p-2 text-sm transition-colors ${
                 isSelected ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-gray-100"
               }`}
             >
@@ -262,7 +262,7 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
       </div>
 
       {/* AM/PM 컬럼 */}
-      <div className="flex h-[280px] w-16 flex-col overflow-y-auto">
+      <div className="flex h-[300px] w-12 flex-col gap-3">
         {periods.map(period => {
           const isSelected = period === currentPeriod;
           return (
@@ -270,7 +270,7 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
               key={period}
               type="button"
               onClick={() => handlePeriodChange(period)}
-              className={`flex h-10 items-center justify-center text-sm transition-colors ${
+              className={`flex h-9 items-center justify-center rounded-md text-sm transition-colors ${
                 isSelected ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-gray-100"
               }`}
             >
@@ -320,9 +320,33 @@ function TimeCalendar({ date, onDateChange }: ITimeCalendarProps) {
     }
   };
 
+  // 커스텀 DayButton: 기존 CalendarDayButton을 확장하여 주황색 배경, 하얀색 글자, rounded 적용
+  const CustomDayButton = (props: React.ComponentProps<typeof DayButton>) => (
+    <CalendarDayButton
+      {...props}
+      className={cn(
+        props.className,
+        "data-[selected-single=true]:rounded-md data-[selected-single=true]:bg-orange-500 data-[selected-single=true]:text-white",
+      )}
+    />
+  );
+
   return (
     <div className="flex">
-      <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
+      <div className="max-h-[310px] overflow-y-auto">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={handleDateSelect}
+          initialFocus
+          classNames={{
+            week: "flex w-full mt-1",
+          }}
+          components={{
+            DayButton: CustomDayButton,
+          }}
+        />
+      </div>
       <TimePicker date={date || new Date()} onTimeChange={handleTimeChange} />
     </div>
   );
