@@ -14,19 +14,25 @@ interface IDatePickerFieldProps {
 
 const DatePickerField = ({ label, date, onDateChange, formatDateTime }: IDatePickerFieldProps) => (
   <div className="flex w-full flex-col gap-2">
-    <label className="text-sm font-semibold text-gray-700">{label}</label>
+    <label className="text-xs font-semibold text-gray-700 sm:text-sm">{label}</label>
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-full justify-start border-transparent text-left font-semibold"
+          className="h-8 w-full justify-start border-transparent px-2 text-left text-xs font-semibold sm:h-9 sm:px-3 sm:text-sm"
         >
           {date ? (
             formatDateTime(date)
           ) : (
-            <span className="flex items-center gap-2 font-semibold text-gray-400">
-              날짜 및 시간을 선택하세요
-              <Image src="/icons/calendar.svg" alt="calendar" width={16} height={20} />
+            <span className="flex items-center gap-1.5 font-semibold text-gray-400 sm:gap-2">
+              <span className="text-xs sm:text-sm">날짜 및 시간을 선택하세요</span>
+              <Image
+                src="/icons/calendar.svg"
+                alt="calendar"
+                width={14}
+                height={16}
+                className="sm:h-5 sm:w-4"
+              />
             </span>
           )}
         </Button>

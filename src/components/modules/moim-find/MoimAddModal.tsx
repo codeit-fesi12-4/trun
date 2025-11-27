@@ -48,7 +48,7 @@ const ServiceCard = ({
 }: IServiceCardProps) => (
   <label
     htmlFor={id}
-    className={`flex flex-1 cursor-pointer items-start gap-2 rounded-lg border-2 p-3 transition-colors ${
+    className={`flex flex-1 cursor-pointer items-start gap-1.5 rounded-lg border-2 p-2 transition-colors sm:gap-2 sm:p-3 ${
       isSelected
         ? "border-transparent bg-gray-900 text-white"
         : "border-transparent bg-white text-gray-700"
@@ -58,7 +58,7 @@ const ServiceCard = ({
       id={id}
       checked={isSelected}
       onCheckedChange={onToggle}
-      className={`mt-1 shrink-0 ${
+      className={`mt-1 size-4 shrink-0 sm:size-5 ${
         isSelected
           ? checkColor === "orange-600"
             ? "data-[state=checked]:bg-white data-[state=checked]:text-orange-600! [&_svg]:stroke-[3px]"
@@ -67,8 +67,8 @@ const ServiceCard = ({
       }`}
     />
     <div className="flex flex-col">
-      <span className="text-base font-semibold">{title}</span>
-      {subtitle && <span className="text-sm">{subtitle}</span>}
+      <span className="text-sm font-semibold sm:text-base">{title}</span>
+      {subtitle && <span className="text-xs sm:text-sm">{subtitle}</span>}
     </div>
   </label>
 );
@@ -128,8 +128,8 @@ const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm [&>button[data-slot='dialog-close']]:top-5 [&>button[data-slot='dialog-close']]:right-6 [&>button[data-slot='dialog-close']>svg]:size-6">
-        <DialogHeader>
+      <DialogContent className="max-w-sm p-6 sm:max-w-md md:max-w-lg [&>button[data-slot='dialog-close']]:top-5.5 [&>button[data-slot='dialog-close']]:right-5 [&>button[data-slot='dialog-close']]:sm:top-5 [&>button[data-slot='dialog-close']]:sm:right-6 [&>button[data-slot='dialog-close']>svg]:size-6">
+        <DialogHeader className="text-left">
           <DialogTitle>모임 만들기</DialogTitle>
         </DialogHeader>
 
@@ -194,13 +194,13 @@ const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
                 placeholder="이미지를 첨부해주세요"
                 value={formData.image?.name || ""}
                 readOnly
-                className="flex-1 border-transparent font-semibold placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-300/20"
+                className="flex-1 border-transparent text-sm font-semibold placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-300/20 sm:text-base"
               />
               <label htmlFor="file-input">
                 <Button
                   type="button"
                   variant="outline"
-                  className="cursor-pointer rounded-lg border-orange-600 font-semibold text-orange-600 hover:bg-orange-600 hover:text-white"
+                  className="cursor-pointer rounded-lg border-orange-600 px-2 py-1.5 text-xs font-semibold text-orange-600 hover:bg-orange-600 hover:text-white sm:px-3 sm:py-2 sm:text-sm"
                   asChild
                 >
                   <span>파일 찾기</span>
@@ -219,7 +219,7 @@ const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
           {/* 선택 서비스 */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-semibold text-gray-700">선택 서비스</label>
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               <ServiceCard
                 id="service-1"
                 title="달램핏"
@@ -247,7 +247,7 @@ const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
           </div>
 
           {/* 모임 날짜 / 마감 날짜 */}
-          <div className="flex gap-4">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <DatePickerField
               label="모임 날짜"
               date={formData.meetingDate}
