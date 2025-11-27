@@ -14,7 +14,7 @@ const GroupSearchCardList = ({
   onFavoriteToggle,
   onJoinClick,
 }: IGroupSearchCardListProps) => (
-  <div className="tablet:w-3/4 tablet:px-6 pc:w-1/2 pc:max-w-[960px] mx-auto flex w-full flex-col gap-4 px-4">
+  <div className="mx-auto mt-6 flex w-full flex-col gap-4">
     {items.map(item => (
       <GroupSearchCard
         key={item.id}
