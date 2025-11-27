@@ -4,19 +4,15 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { GroupSearchCardData } from "@/constants";
+import { MoimCardData } from "@/constants";
 
-interface IGroupSearchCardItemProps {
-  item: GroupSearchCardData;
+interface IMoimCardItemProps {
+  item: MoimCardData;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
 }
 
-const GroupSearchCardItems = ({
-  item,
-  onFavoriteToggle,
-  onJoinClick,
-}: IGroupSearchCardItemProps) => {
+const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemProps) => {
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
 
   return (
@@ -133,4 +129,4 @@ const GroupSearchCardItems = ({
   );
 };
 
-export default GroupSearchCardItems;
+export default MoimCardItems;

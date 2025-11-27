@@ -5,10 +5,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import { useState } from "react";
 
-const GatheringFilter = () => {
+const MoimFindFilter = () => {
   const [selectedLocation, setSelectedLocation] = useState("지역 전체");
 
   const options = ["지역 전체", "건대입구", "종로 3가"];
@@ -45,4 +45,4 @@ const GatheringFilter = () => {
   );
 };
 
-export default GatheringFilter;
+export default MoimFindFilter;

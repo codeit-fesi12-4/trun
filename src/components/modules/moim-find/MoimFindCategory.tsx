@@ -1,19 +1,19 @@
-import DatePicker from "./DatePicker";
-import GetheringCategoryContent from "./GatheringCategoryContent";
-import GatheringFilter from "./GatheringFilter";
-import GatheringSort from "./GatheringSort";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import MoimFindCategoryContent from "./MoimFindCategoryContent";
+import MoimFindFilter from "./MoimFindFilter";
+import MoimFindDatePicker from "./MoimFindDatePicker";
+import MoimFindSort from "./MoimFindSort";
 
-const GatheringCategory = () => (
+const MoimFindCategory = () => (
   <div>
-    <Tabs defaultValue="달램핏">
+    <Tabs defaultValue="달림핏">
       <TabsList className="mb-2 flex w-full justify-between bg-transparent p-0">
         <div className="flex gap-3">
           <TabsTrigger
-            value="달램핏"
+            value="달림핏"
             className="mb-2 w-fit gap-1 bg-transparent! p-0 pb-1 text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:h-8! [&>svg]:w-8!"
           >
-            달램핏
+            달림핏
             <svg
               width="32"
               height="32"
@@ -72,10 +72,10 @@ const GatheringCategory = () => (
             </svg>
           </TabsTrigger>
           <TabsTrigger
-            value="워케이션"
+            value="런케이션"
             className="mb-2 w-fit gap-1 bg-transparent! p-0 pb-1 text-lg font-semibold text-gray-400 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none [&>svg]:h-8! [&>svg]:w-8!"
           >
-            워케이션
+            런케이션
             <svg
               width="32"
               height="32"
@@ -143,17 +143,17 @@ const GatheringCategory = () => (
           모임 만들기
         </button>
       </TabsList>
-      <GetheringCategoryContent />
+      <MoimFindCategoryContent />
     </Tabs>
     <div className="my-4 h-0.5 w-full bg-gray-200" />
     <div className="flex justify-between">
       <div className="flex gap-2">
-        <GatheringFilter />
-        <DatePicker />
+        <MoimFindFilter />
+        <MoimFindDatePicker />
       </div>
-      <GatheringSort />
+      <MoimFindSort />
     </div>
   </div>
 );
 
-export default GatheringCategory;
+export default MoimFindCategory;

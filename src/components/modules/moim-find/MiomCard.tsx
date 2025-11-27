@@ -2,17 +2,17 @@
 
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { GroupSearchCardData as GroupSearchCardItemType } from "@/constants";
-import GroupSearchCardItems from "@/components/GroupSearchCardItems";
+import { MoimCardData as MoimCardItemType } from "@/constants";
 import { Badge } from "@/components/ui/badge";
+import MoimCardItems from "./MoimCardItems";
 
-interface IGroupSearchCardProps {
-  item: GroupSearchCardItemType;
+interface IMoimCardProps {
+  item: MoimCardItemType;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
 }
 
-const GroupSearchCard = ({ item, onFavoriteToggle, onJoinClick }: IGroupSearchCardProps) => (
+const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardProps) => (
   <Card
     key={item.id}
     className="overflow-hidden border-[0.5px] py-0 shadow-none transition-shadow hover:border-transparent hover:shadow-[0px_10px_10px_0px_rgba(0,0,0,0.05),2px_2px_12px_0px_rgba(0,0,0,0.01)]"
@@ -41,14 +41,10 @@ const GroupSearchCard = ({ item, onFavoriteToggle, onJoinClick }: IGroupSearchCa
         </div>
 
         {/* 내용 영역 */}
-        <GroupSearchCardItems
-          item={item}
-          onFavoriteToggle={onFavoriteToggle}
-          onJoinClick={onJoinClick}
-        />
+        <MoimCardItems item={item} onFavoriteToggle={onFavoriteToggle} onJoinClick={onJoinClick} />
       </div>
     </CardContent>
   </Card>
 );
 
-export default GroupSearchCard;
+export default MoimCard;

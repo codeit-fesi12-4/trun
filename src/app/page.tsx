@@ -1,4 +1,4 @@
-import GroupSearchCardList from "@/components/GroupSearchCardList";
+import GroupSearchCardList from "@/components/modules/moim-find/MoimCardList";
 
 const page = () => (
   <>
