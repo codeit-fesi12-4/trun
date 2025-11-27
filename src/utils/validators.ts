@@ -14,7 +14,7 @@ export interface LoginErrors {
 export interface SignupForm {
   name: string;
   email: string;
-  company: string;
+  companyName: string;
   password: string;
   confirmPassword: string;
 }
@@ -22,7 +22,7 @@ export interface SignupForm {
 export interface SignupErrors {
   name?: string;
   email?: string;
-  company?: string;
+  companyName?: string;
   password?: string;
   confirmPassword?: string;
 }
@@ -53,8 +53,8 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
   } else if (duplicateEmails.includes(normalizedEmail)) {
     nextErrors.email = "중복된 이메일입니다.";
   }
-  if (!values.company.trim()) {
-    nextErrors.company = "회사명을 정확하게 입력해주세요.";
+  if (!values.companyName.trim()) {
+    nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
   }
   if (!values.password) {
     nextErrors.password = "비밀번호를 입력해주세요.";
