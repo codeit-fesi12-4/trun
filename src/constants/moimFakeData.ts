@@ -65,7 +65,7 @@ export const PARTICIPANTS = [
       email: "bb@gmail.com",
       name: "bb",
       companyName: "bb",
-      image: "/images/profile4.jpg",
+      image: "/images/profile5.jpg",
     },
   },
   {
@@ -78,7 +78,7 @@ export const PARTICIPANTS = [
       email: "bbb@gmail.com",
       name: "bbb",
       companyName: "bbb",
-      image: "/images/profile4.jpg",
+      image: "/images/profile2.jpg",
     },
   },
   {

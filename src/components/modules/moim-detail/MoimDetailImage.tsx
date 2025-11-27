@@ -7,8 +7,8 @@ interface IMoimDetailImage {
 }
 
 const MoimDetailImage = ({ moim }: IMoimDetailImage) => (
-  <div>
-    <div className="relative h-[180px] w-[343px] shrink-0 overflow-hidden rounded-3xl border-2 border-gray-200">
+  <div className="w-full">
+    <div className="relative aspect-343/180 w-full overflow-hidden rounded-3xl border-2 border-gray-200 sm:aspect-340/240 md:h-[270px] md:w-[486px]">
       <Image src={moim.image} alt="모임 이미지" fill className="object-cover" />
       {/* 이미지 위 오버레이 배지 */}
       <div className="absolute top-0 right-0">

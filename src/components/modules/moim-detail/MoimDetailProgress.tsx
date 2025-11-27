@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { IMoimInformation } from "@/constants/moimFakeData";
+import { IMoimInformation, PARTICIPANTS } from "@/constants/moimFakeData";
 import Image from "next/image";
-import MoimDetailPaticipantList from "./MoimDetailPaticipantList";
+import MoimDetailParticipantList from "./MoimDetailParticipantList";
 
 interface IMoimDetailProgress {
   moim: IMoimInformation;
@@ -11,12 +11,16 @@ interface IMoimDetailProgress {
 const MoimDetailProgress = ({ moim }: IMoimDetailProgress) => {
   const participantPercentage = (moim.participantCount / moim.capacity) * 100;
 
+  const participants = PARTICIPANTS;
+
   return (
-    <div className="flex flex-col gap-3 px-6 pt-3 pb-6">
+    <div className="flex flex-col gap-3 px-6 pt-3 pb-6 sm:pt-2">
       <div className="flex justify-between">
-        <div className="flex flex-row">
-          <span>모집 정원 {moim.capacity}명</span>
-          <MoimDetailPaticipantList />
+        <div className="flex flex-row items-center gap-3">
+          <span className="text-sm font-semibold text-gray-900">
+            모집 정원 {participants.length}명
+          </span>
+          <MoimDetailParticipantList />
         </div>
         <Badge className="gap-1 bg-transparent p-0 text-sm font-medium text-orange-500">
           <Image src="/icons/Property 1=Variant2.svg" alt="check" width={24} height={24} />

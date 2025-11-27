@@ -14,8 +14,8 @@ const MoimDetailInformation = ({ moim }: IMoimDetailInformation) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (
-    <div className="flex h-60 w-[343px] flex-col rounded-3xl border-2 border-gray-200 bg-white">
-      <div className="flex h-[135px] items-start justify-between border-b-2 border-dashed px-6 py-6">
+    <div className="flex w-full flex-col rounded-3xl border-2 border-gray-200 bg-white sm:aspect-340/240!">
+      <div className="flex items-start justify-between border-b-2 border-dashed p-6 sm:p-4">
         <div className="flex flex-col gap-3">
           {/* 제목 */}
           <div>

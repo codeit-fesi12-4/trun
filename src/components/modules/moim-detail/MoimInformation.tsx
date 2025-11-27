@@ -11,7 +11,7 @@ const MoimInformation = ({ moimId }: IMoimInformation) => {
   const data = MOIM_INFORMATION;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
       {moimId}
       <MoimDetailImage moim={data} />
       <MoimDetailInformation moim={data} />
