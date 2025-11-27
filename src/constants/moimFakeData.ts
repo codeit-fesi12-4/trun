@@ -27,3 +27,32 @@ export const MOIM_INFORMATION = {
   createdBy: 2566,
   canceledAt: null,
 };
+
+export const PARTICIPANTS = [
+  {
+    teamId: "trun",
+    userId: 2569,
+    gatheringId: 3654,
+    joinedAt: "2025-11-27T08:43:23.443Z",
+    User: {
+      id: 2569,
+      email: "bb@gmail.com",
+      name: "bb",
+      companyName: "bb",
+      image: "/images/profile1.jpg",
+    },
+  },
+  {
+    teamId: "trun",
+    userId: 2570,
+    gatheringId: 3654,
+    joinedAt: "2025-11-27T08:44:46.270Z",
+    User: {
+      id: 2570,
+      email: "bbb@gmail.com",
+      name: "bbb",
+      companyName: "bbb",
+      image: "/image/profile2.jpg",
+    },
+  },
+];
