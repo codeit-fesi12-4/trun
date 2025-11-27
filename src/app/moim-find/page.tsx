@@ -1,10 +1,10 @@
-import GroupSearchCardList from "@/components/modules/moim-find/MoimCardList";
+import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
 const MoimFindPage = () => (
   <>
     <MoimFindHeader />
-    <GroupSearchCardList />
+    <MoimCardList />
   </>
 );
 
