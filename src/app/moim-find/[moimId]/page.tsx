@@ -1,17 +1,18 @@
 import MoimDetailInformation from "@/components/modules/moim-detail/MoimDetailInformation";
+import MoimDetailReviewArea from "@/components/modules/moim-detail/MoimDetailReviewArea";
 
-interface IMoimDetailPage {
-  params: Promise<{
-    moimId: string;
-  }>;
-}
+// interface IMoimDetailPage {
+//   params: Promise<{
+//     moimId: string;
+//   }>;
+// }
 
-const MoimDetailPage = async ({ params }: IMoimDetailPage) => {
-  const { moimId } = await params;
-  return (
-    <div>
-      <MoimDetailInformation moimId={moimId} />
-    </div>
-  );
-};
+const MoimDetailPage = async () => (
+  // const { moimId } = await params;
+  <div className="flex flex-col gap-4">
+    <MoimDetailInformation />
+    <MoimDetailReviewArea />
+  </div>
+);
+
 export default MoimDetailPage;

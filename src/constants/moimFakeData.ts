@@ -1,4 +1,4 @@
-export interface IMoimInformation {
+export interface IFakeMoimInformation {
   teamId: string;
   id: number;
   type: string;
@@ -13,7 +13,32 @@ export interface IMoimInformation {
   canceledAt: string | null;
 }
 
-export const MOIM_INFORMATION = {
+export type IReviews = IReview[];
+
+export interface IReview {
+  teamId: string;
+  id: number;
+  score: number;
+  comment: string;
+  createdAt: string;
+  Gathering: {
+    teamId: string;
+    id: number;
+    type: string;
+    name: string;
+    dateTime: string;
+    location: string;
+    image: string;
+  };
+  User: {
+    teamId: string;
+    id: number;
+    name: string;
+    image: string | null;
+  };
+}
+
+export const FAKE_MOIM_INFORMATION = {
   teamId: "trun",
   id: 3654,
   type: "OFFICE_STRETCHING",
@@ -28,7 +53,7 @@ export const MOIM_INFORMATION = {
   canceledAt: null,
 };
 
-export const PARTICIPANTS = [
+export const FAKE_PARTICIPANTS = [
   {
     teamId: "trun",
     userId: 2569,
@@ -108,3 +133,539 @@ export const PARTICIPANTS = [
     },
   },
 ];
+
+export const FAKE_REVIEWLIST = {
+  data: [
+    {
+      teamId: "trun",
+      id: 915,
+      score: 5,
+      comment: "1",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: null,
+      },
+    },
+    {
+      teamId: "trun",
+      id: 916,
+      score: 4,
+      comment: "2",
+      createdAt: "2025-11-28T01:42:17.020Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2569,
+        name: "bb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 917,
+      score: 5,
+      comment: "3",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile2.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 918,
+      score: 0,
+      comment: "4",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 919,
+      score: 3,
+      comment: "5",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 920,
+      score: 2,
+      comment: "6",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/profile2.jpg",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 921,
+      score: 5,
+      comment: "7",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: null,
+      },
+    },
+    {
+      teamId: "trun",
+      id: 922,
+      score: 4,
+      comment: "8",
+      createdAt: "2025-11-28T01:42:17.020Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2569,
+        name: "bb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 923,
+      score: 5,
+      comment: "9",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile2.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 924,
+      score: 0,
+      comment: "10",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 925,
+      score: 3,
+      comment: "11",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 926,
+      score: 2,
+      comment: "12",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/profile2.jpg",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 927,
+      score: 5,
+      comment: "1",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: null,
+      },
+    },
+    {
+      teamId: "trun",
+      id: 928,
+      score: 4,
+      comment: "2",
+      createdAt: "2025-11-28T01:42:17.020Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2569,
+        name: "bb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 929,
+      score: 5,
+      comment: "3",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile2.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 930,
+      score: 0,
+      comment: "4",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 931,
+      score: 3,
+      comment: "5",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 932,
+      score: 2,
+      comment: "6",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/profile2.jpg",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 933,
+      score: 5,
+      comment: "7",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: null,
+      },
+    },
+    {
+      teamId: "trun",
+      id: 934,
+      score: 4,
+      comment: "8",
+      createdAt: "2025-11-28T01:42:17.020Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2569,
+        name: "bb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 935,
+      score: 5,
+      comment: "9",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile2.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 936,
+      score: 0,
+      comment: "10",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 937,
+      score: 3,
+      comment: "11",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/running-1.png",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile5.jpg",
+      },
+    },
+    {
+      teamId: "trun",
+      id: 938,
+      score: 2,
+      comment: "12",
+      createdAt: "2025-11-28T01:39:43.286Z",
+      Gathering: {
+        teamId: "trun",
+        id: 3654,
+        type: "OFFICE_STRETCHING",
+        name: "ㄹㄹㄹ",
+        dateTime: "2025-11-29T02:29:47.898Z",
+        location: "건대입구",
+        image: "/images/profile2.jpg",
+      },
+      User: {
+        teamId: "trun",
+        id: 2570,
+        name: "bbb",
+        image: "/images/profile3.jpg",
+      },
+    },
+  ],
+  totalItemCount: 24,
+  currentPage: 1,
+  totalPages: 6,
+};
