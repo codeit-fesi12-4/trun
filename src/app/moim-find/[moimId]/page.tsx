@@ -1,4 +1,4 @@
-import MoimInformation from "@/components/modules/moim-detail/MoimInformation";
+import MoimDetailInformation from "@/components/modules/moim-detail/MoimDetailInformation";
 
 interface IMoimDetailPage {
   params: Promise<{
@@ -10,7 +10,7 @@ const MoimDetailPage = async ({ params }: IMoimDetailPage) => {
   const { moimId } = await params;
   return (
     <div>
-      <MoimInformation moimId={moimId} />
+      <MoimDetailInformation moimId={moimId} />
     </div>
   );
 };

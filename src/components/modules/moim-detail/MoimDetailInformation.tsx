@@ -1,53 +1,22 @@
-"use client";
-
-import { Badge } from "@/components/ui/badge";
-import { IMoimInformation } from "@/constants/moimFakeData";
-import Image from "next/image";
-import { useState } from "react";
-import MoimDetailProgress from "./MoimDetailProgress";
+import { MOIM_INFORMATION } from "@/constants/moimFakeData";
+import MoimDetailImage from "./MoimDetailImage";
+import MoimDetailSummary from "./MoimDetailSummary";
 
 interface IMoimDetailInformation {
-  moim: IMoimInformation;
+  moimId: string;
 }
 
-const MoimDetailInformation = ({ moim }: IMoimDetailInformation) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+const MoimDetailInformation = ({ moimId }: IMoimDetailInformation) => {
+  // 추후 실제 데이터로 변경
+  const data = MOIM_INFORMATION;
 
   return (
-    <div className="h-240px flex w-full flex-col rounded-3xl border-2 border-gray-200 bg-white sm:h-full sm:w-1/2">
-      <div className="flex items-start justify-between border-b-2 border-dashed p-6 sm:p-5 md:p-6">
-        <div className="flex flex-col gap-3">
-          {/* 제목 */}
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900">{moim.name}</h1>
-            <p className="text-sm font-medium text-gray-700">{moim.location}</p>
-          </div>
-          {/* 날짜,시간 badge */}
-          <div className="flex flex-row gap-2">
-            <Badge className="h-6 rounded-[4px] text-sm font-medium">1월 7일</Badge>
-            <Badge className="h-6 rounded-[4px] text-sm font-medium text-orange-600">17:30</Badge>
-          </div>
-        </div>
-        {/* 좋아요 버튼 */}
-        <button
-          onClick={() => {
-            setIsFavorite(!isFavorite);
-          }}
-        >
-          <Image
-            src={
-              isFavorite
-                ? "/icons/size=large, state=active.svg"
-                : "/icons/size=large, state=inactive.svg"
-            }
-            alt={isFavorite ? "좋아요" : "좋아요 취소"}
-            width={48}
-            height={48}
-            className=""
-          />
-        </button>
+    <div>
+      <div className="flex w-full flex-col items-center gap-4 sm:h-60 sm:flex-row sm:justify-center md:h-[270px]">
+        <MoimDetailImage moim={data} />
+        <MoimDetailSummary moim={data} />
       </div>
-      <MoimDetailProgress moim={moim} />
+      {moimId}
     </div>
   );
 };
