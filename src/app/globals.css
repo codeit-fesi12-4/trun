@@ -174,4 +174,21 @@ body {
   .nav-link {
     @apply text-sm font-semibold text-white hover:text-gray-900 md:text-base;
   }
+
+  .time-picker-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .time-picker-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .time-picker-scrollbar::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 1px;
+  }
+
+  .time-picker-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
 }
