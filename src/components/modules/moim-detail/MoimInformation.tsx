@@ -11,10 +11,12 @@ const MoimInformation = ({ moimId }: IMoimInformation) => {
   const data = MOIM_INFORMATION;
 
   return (
-    <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center">
+    <div>
+      <div className="flex w-full flex-col items-center gap-4 sm:h-60 sm:flex-row sm:justify-center md:h-[270px]">
+        <MoimDetailImage moim={data} />
+        <MoimDetailInformation moim={data} />
+      </div>
       {moimId}
-      <MoimDetailImage moim={data} />
-      <MoimDetailInformation moim={data} />
     </div>
   );
 };

@@ -14,7 +14,7 @@ const MoimDetailProgress = ({ moim }: IMoimDetailProgress) => {
   const participants = PARTICIPANTS;
 
   return (
-    <div className="flex flex-col gap-3 px-6 pt-3 pb-6 sm:pt-2">
+    <div className="flex flex-col gap-3 px-6 pt-4 pb-6">
       <div className="flex justify-between">
         <div className="flex flex-row items-center gap-3">
           <span className="text-sm font-semibold text-gray-900">
@@ -22,7 +22,7 @@ const MoimDetailProgress = ({ moim }: IMoimDetailProgress) => {
           </span>
           <MoimDetailParticipantList />
         </div>
-        <Badge className="gap-1 bg-transparent p-0 text-sm font-medium text-orange-500">
+        <Badge className="gap-0 bg-transparent text-sm font-medium text-orange-500 sm:p-0 md:p-1">
           <Image src="/icons/Property 1=Variant2.svg" alt="check" width={24} height={24} />
           개설 확정
         </Badge>
