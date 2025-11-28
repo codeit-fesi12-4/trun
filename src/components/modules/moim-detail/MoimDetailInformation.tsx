@@ -1,14 +1,14 @@
-import { MOIM_INFORMATION } from "@/constants/moimFakeData";
+import { FAKE_MOIM_INFORMATION } from "@/constants/moimFakeData";
 import MoimDetailImage from "./MoimDetailImage";
 import MoimDetailSummary from "./MoimDetailSummary";
 
-interface IMoimDetailInformation {
-  moimId: string;
-}
+// interface IMoimDetailInformation {
+//   moimId: string;
+// }
 
-const MoimDetailInformation = ({ moimId }: IMoimDetailInformation) => {
+const MoimDetailInformation = () => {
   // 추후 실제 데이터로 변경
-  const data = MOIM_INFORMATION;
+  const data = FAKE_MOIM_INFORMATION;
 
   return (
     <div>
@@ -16,7 +16,6 @@ const MoimDetailInformation = ({ moimId }: IMoimDetailInformation) => {
         <MoimDetailImage moim={data} />
         <MoimDetailSummary moim={data} />
       </div>
-      {moimId}
     </div>
   );
 };

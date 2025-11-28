@@ -1,13 +1,13 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { IMoimInformation } from "@/constants/moimFakeData";
+import { IFakeMoimInformation } from "@/constants/moimFakeData";
 import Image from "next/image";
 import { useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 
 interface IMoimDetailSummary {
-  moim: IMoimInformation;
+  moim: IFakeMoimInformation;
 }
 
 const MoimDetailSummary = ({ moim }: IMoimDetailSummary) => {

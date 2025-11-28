@@ -1,17 +1,17 @@
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { IMoimInformation, PARTICIPANTS } from "@/constants/moimFakeData";
+import { IFakeMoimInformation, FAKE_PARTICIPANTS } from "@/constants/moimFakeData";
 import Image from "next/image";
 import MoimDetailParticipantList from "./MoimDetailParticipantList";
 
 interface IMoimDetailProgress {
-  moim: IMoimInformation;
+  moim: IFakeMoimInformation;
 }
 
 const MoimDetailProgress = ({ moim }: IMoimDetailProgress) => {
   const participantPercentage = (moim.participantCount / moim.capacity) * 100;
 
-  const participants = PARTICIPANTS;
+  const participants = FAKE_PARTICIPANTS;
 
   return (
     <div className="flex flex-col gap-3 px-6 pt-4 pb-6">

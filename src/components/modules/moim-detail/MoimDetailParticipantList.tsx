@@ -1,8 +1,8 @@
-import { PARTICIPANTS } from "@/constants/moimFakeData";
+import { FAKE_PARTICIPANTS } from "@/constants/moimFakeData";
 import Image from "next/image";
 
 const MoimDetailParticipantList = () => {
-  const participants = PARTICIPANTS;
+  const participants = FAKE_PARTICIPANTS;
   const isTooMany = participants.length > 4;
 
   const visibleParticipants = participants.slice(0, 4);
