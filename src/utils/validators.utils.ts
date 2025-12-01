@@ -1,31 +1,31 @@
 const EMAIL_PATTERN =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-export interface LoginForm {
+export type LoginForm = {
   email: string;
   password: string;
-}
+};
 
-export interface LoginErrors {
+export type LoginErrors = {
   email?: string;
   password?: string;
-}
+};
 
-export interface SignupForm {
+export type SignupForm = {
   name: string;
   email: string;
-  company: string;
+  companyName: string;
   password: string;
   confirmPassword: string;
-}
+};
 
-export interface SignupErrors {
+export type SignupErrors = {
   name?: string;
   email?: string;
-  company?: string;
+  companyName?: string;
   password?: string;
   confirmPassword?: string;
-}
+};
 
 export const validateLogin = (values: LoginForm): LoginErrors => {
   const nextErrors: LoginErrors = {};
@@ -53,8 +53,8 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
   } else if (duplicateEmails.includes(normalizedEmail)) {
     nextErrors.email = "중복된 이메일입니다.";
   }
-  if (!values.company.trim()) {
-    nextErrors.company = "회사명을 정확하게 입력해주세요.";
+  if (!values.companyName.trim()) {
+    nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
   }
   if (!values.password) {
     nextErrors.password = "비밀번호를 입력해주세요.";
