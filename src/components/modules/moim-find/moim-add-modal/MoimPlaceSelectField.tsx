@@ -43,13 +43,10 @@ const MoimPlaceSelectField = ({
         />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="서울">서울</SelectItem>
-        <SelectItem value="부산">부산</SelectItem>
-        <SelectItem value="대구">대구</SelectItem>
-        <SelectItem value="인천">인천</SelectItem>
-        <SelectItem value="광주">광주</SelectItem>
-        <SelectItem value="대전">대전</SelectItem>
-        <SelectItem value="울산">울산</SelectItem>
+        <SelectItem value="건대입구">건대입구</SelectItem>
+        <SelectItem value="을지로3가">을지로3가</SelectItem>
+        <SelectItem value="신림">신림</SelectItem>
+        <SelectItem value="홍대입구">홍대입구</SelectItem>
       </SelectContent>
     </Select>
   </div>

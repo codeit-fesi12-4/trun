@@ -6,10 +6,7 @@ import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
 const MoimFindPage = () => {
-  // 모임 목록 조회 API 호출
   const { data, isLoading, error } = useMoimsQuery({});
-
-  // API 응답 데이터(Moim[])를 MoimCardData[] 형식으로 변환
   const moimCardData = data ? convertMoimsToMoimCardData(data) : undefined;
 
   return (

@@ -1,18 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useCreateMoimMutation } from "@/hooks/api/moim.api";
+import { CreateMoimRequest, MoimType } from "@/types/moim.type";
 import MoimDatePickerField from "./moim-add-modal/MoimDatePickerField";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import ServieCheckboxField from "./moim-add-modal/ServieCheckboxField";
 import MoimInputField from "./moim-add-modal/MoimInputField";
 import MoimPlaceSelectField from "./moim-add-modal/MoimPlaceSelectField";
 
-interface IMoimAddModalProps {
+type MoimAddModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}
+};
 
-const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
+const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
+  const createMoimMutation = useCreateMoimMutation();
+
   const [formData, setFormData] = useState({
     title: "",
     location: "",
@@ -22,6 +26,18 @@ const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
     deadlineDate: undefined as Date | undefined,
     maxParticipants: "",
   });
+
+  // 서비스 선택을 MoimType으로 변환
+  const convertServiceToType = (service: string): MoimType | null => {
+    if (service === "달램핏-오피스 스트레칭") return "OFFICE_STRETCHING";
+    if (service === "달램핏-마인드풀니스") return "MINDFULNESS";
+    if (service === "워케이션") return "WORKATION";
+    return null;
+  };
+
+  // Date를 ISO 8601 형식으로 변환 (YYYY-MM-DDTHH:MM:SS.SSSZ)
+  // toISOString()을 사용하면 자동으로 UTC 시간으로 변환되고 Z가 붙음
+  const formatDateTime = (date: Date): string => date.toISOString();
 
   const handleFieldChange = (field: string, value: string | File | null | Date | undefined) => {
     setFormData(prev => ({
@@ -40,19 +56,73 @@ const MoimAddModal = ({ open, onOpenChange }: IMoimAddModalProps) => {
   };
 
   const handleSubmit = () => {
-    // TODO: 모임 생성 API 호출
-    // 모임 생성 로직 구현 필요
-    onOpenChange(false);
-    // 폼 초기화
-    setFormData({
-      title: "",
-      location: "",
-      image: null,
-      services: [],
-      meetingDate: undefined,
-      deadlineDate: undefined,
-      maxParticipants: "",
-    });
+    // 유효성 검사
+    if (!formData.title.trim()) {
+      alert("모임 이름을 입력해주세요.");
+      return;
+    }
+    if (!formData.location) {
+      alert("장소를 선택해주세요.");
+      return;
+    }
+    if (!formData.image) {
+      alert("이미지를 첨부해주세요.");
+      return;
+    }
+    if (formData.services.length === 0) {
+      alert("서비스를 선택해주세요.");
+      return;
+    }
+    if (!formData.meetingDate) {
+      alert("모임 날짜를 선택해주세요.");
+      return;
+    }
+    // 마감 날짜가 모임 날짜보다 이후인지 검증
+    if (formData.deadlineDate && formData.deadlineDate >= formData.meetingDate) {
+      alert("마감 날짜는 모임 날짜보다 이전이어야 합니다.");
+      return;
+    }
+    if (!formData.maxParticipants || Number(formData.maxParticipants) < 5) {
+      alert("모집 정원은 최소 5인 이상 입력해주세요.");
+      return;
+    }
+
+    // 서비스를 type으로 변환
+    const selectedType = convertServiceToType(formData.services[0]);
+    if (!selectedType) {
+      alert("유효한 서비스를 선택해주세요.");
+      return;
+    }
+
+    // CreateMoimRequest 형식으로 변환
+    const payload: CreateMoimRequest = {
+      name: formData.title,
+      location: formData.location,
+      type: selectedType,
+      dateTime: formatDateTime(formData.meetingDate),
+      capacity: Number(formData.maxParticipants),
+      image: formData.image,
+      registrationEnd: formData.deadlineDate ? formatDateTime(formData.deadlineDate) : undefined,
+    };
+
+    void createMoimMutation
+      .mutateAsync(payload)
+      .then(() => {
+        alert("모임이 성공적으로 생성되었습니다!");
+        onOpenChange(false);
+        setFormData({
+          title: "",
+          location: "",
+          image: null,
+          services: [],
+          meetingDate: undefined,
+          deadlineDate: undefined,
+          maxParticipants: "",
+        });
+      })
+      .catch(error => {
+        alert(`모임 생성에 실패했습니다: ${error.message}`);
+      });
   };
 
   return (
