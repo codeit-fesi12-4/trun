@@ -8,7 +8,7 @@ import {
   SignupRequest,
   SignupResponse,
   UserProfile,
-} from "@/types/auth";
+} from "@/types/auth.type";
 
 const buildAuthPath = (path: string, teamName: string) => `/${teamName}/auths${path}`;
 
