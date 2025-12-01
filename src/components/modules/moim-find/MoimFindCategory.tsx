@@ -50,6 +50,7 @@ const MoimFindCategory = () => {
         <MoimFindDatePicker />
         <MoimFindSort />
       </div>
+      {/* 모임 만들기 버튼 삭제로 아래 코드도 삭제 요청 */}
       <MoimAddModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </div>
   );
