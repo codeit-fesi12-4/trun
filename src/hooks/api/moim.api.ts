@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { TEAM_NAME } from "@/constants";
 import { apiFetch } from "@/lib/apiClient";
-import { GetMoimsParams, GetMoimsResponse } from "@/types/moim";
+import { GetMoimsParams, GetMoimsResponse } from "@/types/moim.type";
 
 // 경로를 만드는 헬퍼 함수 (로그인 API와 같은 패턴)
 const buildMoimsPath = (teamName: string, params?: GetMoimsParams) => {

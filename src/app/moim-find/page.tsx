@@ -1,7 +1,7 @@
 "use client";
 
-import { useMoimsQuery } from "@/hooks/api/moim";
-import { convertMoimsToMoimCardData } from "@/utils/moim";
+import { useMoimsQuery } from "@/hooks/api/moim.api";
+import { convertMoimsToMoimCardData } from "@/utils/moim.util";
 import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 

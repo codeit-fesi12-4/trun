@@ -1,6 +1,6 @@
 import { format, parseISO, differenceInDays, isToday, isTomorrow } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Moim } from "@/types/moim";
+import { Moim } from "@/types/moim.type";
 import { MoimCardData } from "@/constants";
 
 // ISO 8601 날짜 문자열을 "1월 7일" 형식으로 변환
