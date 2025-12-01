@@ -1,10 +1,6 @@
-import GroupSearchCardList from "@/components/GroupSearchCardList";
-
 const page = () => (
   <>
-    <div className="p-4">
-      <GroupSearchCardList />
-    </div>
+    <div className="p-4">메인 페이지</div>
   </>
 );
 

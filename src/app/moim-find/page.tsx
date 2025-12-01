@@ -1,11 +1,11 @@
-import GroupSearchCardList from "@/components/GroupSearchCardList";
-import SearchGatheringLayout from "@/components/SearchGatheringLayout";
+import MoimCardList from "@/components/modules/moim-find/MoimCardList";
+import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
-const GroupsearchPage = () => (
+const MoimFindPage = () => (
   <>
-    <SearchGatheringLayout />
-    <GroupSearchCardList />
+    <MoimFindHeader />
+    <MoimCardList />
   </>
 );
 
-export default GroupsearchPage;
+export default MoimFindPage;

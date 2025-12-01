@@ -4,19 +4,16 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { GroupSearchCardData } from "@/constants";
+import { MoimCardData } from "@/constants";
+import Link from "next/link";
 
-type GroupSearchCardItemProps = {
-  item: GroupSearchCardData;
+interface IMoimCardItemProps {
+  item: MoimCardData;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
-};
+}
 
-const GroupSearchCardItems = ({
-  item,
-  onFavoriteToggle,
-  onJoinClick,
-}: GroupSearchCardItemProps) => {
+const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemProps) => {
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
 
   return (
@@ -109,8 +106,8 @@ const GroupSearchCardItems = ({
             className="h-1 w-full bg-orange-100 md:h-1.5 lg:h-2 [&>div]:bg-orange-500"
           />
         </div>
-        {/* 상세 버튼 */}
-        <div className="mr-0 md:mr-2 lg:mr-4">
+        {/* 상세 버튼 - 추후 Link에 동적으로 생성된 모임 아이디 붙이기*/}
+        <Link href={`/moim-find/1`} className="mr-0 md:mr-2 lg:mr-4">
           <Button
             variant="link"
             size="xs"
@@ -127,10 +124,10 @@ const GroupSearchCardItems = ({
               className="size-3.5 md:size-4 lg:size-5"
             />
           </Button>
-        </div>
+        </Link>
       </div>
     </div>
   );
 };
 
-export default GroupSearchCardItems;
+export default MoimCardItems;

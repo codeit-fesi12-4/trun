@@ -3,9 +3,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
-const GatheringSort = () => (
+const MoimFindSort = () => (
   <DropdownMenu>
     <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center gap-1 rounded-[12px] border-2 border-gray-100 bg-white text-sm font-medium sm:h-10 sm:w-[110px]">
       <svg
@@ -36,4 +36,4 @@ const GatheringSort = () => (
   </DropdownMenu>
 );
 
-export default GatheringSort;
+export default MoimFindSort;

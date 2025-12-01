@@ -1,22 +1,22 @@
 "use client";
 
-import GroupSearchCard from "@/components/GroupSearchCard";
-import { GroupSearchCardData, GROUP_SEARCH_CARD_SAMPLE_DATA } from "@/constants";
+import MoimCard from "@/components/modules/moim-find/MoimCard";
+import { MoimCardData, GROUP_SEARCH_CARD_SAMPLE_DATA } from "@/constants";
 
-type GroupSearchCardListProps = {
-  items?: GroupSearchCardData[];
+interface IMoimCardListProps {
+  items?: MoimCardData[];
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
-};
+}
 
-const GroupSearchCardList = ({
+const MoimCardList = ({
   items = GROUP_SEARCH_CARD_SAMPLE_DATA,
   onFavoriteToggle,
   onJoinClick,
-}: GroupSearchCardListProps) => (
+}: IMoimCardListProps) => (
   <div className="mx-auto mt-6 flex w-full flex-col gap-4">
     {items.map(item => (
-      <GroupSearchCard
+      <MoimCard
         key={item.id}
         item={item}
         onFavoriteToggle={onFavoriteToggle}
@@ -26,4 +26,4 @@ const GroupSearchCardList = ({
   </div>
 );
 
-export default GroupSearchCardList;
+export default MoimCardList;

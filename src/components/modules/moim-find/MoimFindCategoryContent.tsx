@@ -1,11 +1,11 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const GatheringCategoryContent = () => {
+const MoimFindCategoryContent = () => {
   const items = ["전체", "오피스 스트레칭", "마인드풀니스"];
 
   return (
     <div className="h-10">
-      <TabsContent value="달램핏">
+      <TabsContent value="달림핏">
         <Tabs defaultValue="전체" className="w-fit">
           <TabsList className="flex w-full justify-between gap-2 bg-transparent">
             {items.map(item => (
@@ -21,9 +21,9 @@ const GatheringCategoryContent = () => {
           </TabsList>
         </Tabs>
       </TabsContent>
-      <TabsContent value="워케이션" />
+      <TabsContent value="런케이션" />
     </div>
   );
 };
 
-export default GatheringCategoryContent;
+export default MoimFindCategoryContent;

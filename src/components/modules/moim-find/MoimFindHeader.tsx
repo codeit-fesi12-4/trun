@@ -1,7 +1,7 @@
 import Image from "next/image";
-import GatheringCategory from "./GatheringCategory";
+import MoimFindCategory from "./MoimFindCategory";
 
-const SearchGatheringLayout = () => (
+const MoimFindHeader = () => (
   <div>
     <div className="mb-6 flex flex-row gap-4">
       <div className="h-[72px] w-[72px]">
@@ -14,8 +14,8 @@ const SearchGatheringLayout = () => (
         </h1>
       </div>
     </div>
-    <GatheringCategory />
+    <MoimFindCategory />
   </div>
 );
 
-export default SearchGatheringLayout;
+export default MoimFindHeader;
