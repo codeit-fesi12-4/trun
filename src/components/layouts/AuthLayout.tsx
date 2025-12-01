@@ -21,20 +21,20 @@ const AuthLayout = ({
   heroCopy = DEFAULT_HERO_COPY,
 }: AuthLayoutProps) => (
   <section className="bg-gray-100">
-    <div className="mobile:px-6 mobile:py-10 pc:px-10 pc:py-16 mx-auto flex min-h-screen max-w-[1220px] items-center justify-center px-4 py-8">
-      <div className="pc:grid-cols-[1.2fr_0.9fr] pc:gap-8 pc:justify-items-center grid w-full items-start justify-items-center gap-0">
-        <div className="pc:max-w-[588px] flex w-full max-w-[420px] flex-col items-center gap-2 text-center">
+    <div className="mx-auto flex min-h-screen max-w-[1220px] items-center justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-16">
+      <div className="grid w-full items-start justify-items-center gap-0 md:grid-cols-[1.2fr_0.9fr] md:justify-items-center md:gap-8">
+        <div className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center md:max-w-[588px]">
           <div className="space-y-2 text-center">
-            <p className="tablet:text-2xl pc:text-2xl text-xl font-semibold text-gray-800">
+            <p className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-2xl">
               {heroTitle}
             </p>
-            <div className="tablet:text-base pc:text-base text-sm leading-6 font-medium text-gray-800">
+            <div className="text-sm leading-6 font-medium text-gray-800 sm:text-base md:text-base">
               {heroCopy.map(line => (
                 <p key={line}>{line}</p>
               ))}
             </div>
           </div>
-          <div className="pc:max-w-[588px] tablet:max-w-[407px] relative mx-auto w-full max-w-[290px]">
+          <div className="relative mx-auto w-full max-w-[290px] sm:max-w-[407px] md:max-w-[588px]">
             <Image
               src="/images/img_login.png"
               alt="환영 일러스트"
@@ -47,9 +47,9 @@ const AuthLayout = ({
           </div>
         </div>
 
-        <Card className="mobile:max-w-[480px] pc:rounded-2xl mx-auto w-full max-w-[440px] border border-gray-200 bg-white shadow-xl">
+        <Card className="mx-auto w-full max-w-[440px] border border-gray-200 bg-white shadow-xl sm:max-w-[480px] md:rounded-2xl">
           <CardHeader className="pb-2 text-center">
-            <CardTitle className="tablet:text-2xl pc:text-2xl text-xl font-semibold text-gray-800">
+            <CardTitle className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-2xl">
               {formTitle}
             </CardTitle>
           </CardHeader>
