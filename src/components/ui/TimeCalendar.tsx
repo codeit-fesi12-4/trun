@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 
 // 시간 선택 컴포넌트
-interface ITimePickerProps {
+type TimePickerProps = {
   date: Date | undefined;
   onTimeChange: (newDate: Date) => void;
-}
+};
 
-function TimePicker({ date, onTimeChange }: ITimePickerProps) {
+function TimePicker({ date, onTimeChange }: TimePickerProps) {
   const hours = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0"));
   const minutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, "0"));
   const periods = ["AM", "PM"];
@@ -159,12 +159,12 @@ function TimePicker({ date, onTimeChange }: ITimePickerProps) {
   );
 }
 
-interface ITimeCalendarProps {
+type TimeCalendarProps = {
   date: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
-}
+};
 
-function TimeCalendar({ date, onDateChange }: ITimeCalendarProps) {
+function TimeCalendar({ date, onDateChange }: TimeCalendarProps) {
   const handleDateSelect = (selectedDate: Date | undefined) => {
     if (selectedDate) {
       const newDate = new Date(selectedDate);

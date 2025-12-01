@@ -8,14 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MoimLocationEnum } from "@/constants/moimLocation";
 
-interface IMoimPlaceSelectFieldProps {
+type MoimPlaceSelectFieldProps = {
   id: string;
   label: string;
   placeholder: string;
   value: string;
   onValueChange: (value: string) => void;
-}
+};
 
 const MoimPlaceSelectField = ({
   id,
@@ -23,7 +24,7 @@ const MoimPlaceSelectField = ({
   placeholder,
   value,
   onValueChange,
-}: IMoimPlaceSelectFieldProps) => (
+}: MoimPlaceSelectFieldProps) => (
   <div className="flex flex-col gap-2">
     <label htmlFor={id} className="text-sm font-semibold text-gray-700">
       {label}
@@ -43,10 +44,11 @@ const MoimPlaceSelectField = ({
         />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="건대입구">건대입구</SelectItem>
-        <SelectItem value="을지로3가">을지로3가</SelectItem>
-        <SelectItem value="신림">신림</SelectItem>
-        <SelectItem value="홍대입구">홍대입구</SelectItem>
+        {Object.values(MoimLocationEnum).map(location => (
+          <SelectItem key={location} value={location}>
+            {location}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   </div>
