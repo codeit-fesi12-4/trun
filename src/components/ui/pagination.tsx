@@ -2,7 +2,7 @@ import * as React from "react";
 import { MoreHorizontalIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -35,17 +35,15 @@ type PaginationLinkProps = {
 } & Pick<React.ComponentProps<typeof Button>, "size"> &
   React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-function PaginationLink({ className, isActive, size = "icon", ...props }: PaginationLinkProps) {
+function PaginationLink({ className, isActive, ...props }: PaginationLinkProps) {
   return (
     <button
       aria-current={isActive ? "page" : undefined}
       data-slot="pagination-link"
       data-state={isActive ? "active" : "inactive"}
       className={cn(
-        buttonVariants({
-          variant: isActive ? "outline" : "ghost",
-          size,
-        }),
+        "inline-flex items-center justify-center rounded-md px-3 py-1 font-semibold hover:text-gray-800 sm:mx-1",
+        isActive ? "border text-gray-800" : "text-gray-200",
         className,
       )}
       {...props}
@@ -57,13 +55,11 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
-      className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      className={cn("flex h-auto items-center justify-center gap-1 p-0", className)}
       {...props}
     >
       <svg
-        width="24"
-        height="24"
+        className="h-6 w-6 sm:h-8 sm:w-8"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +82,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
       {...props}
     >
       <svg
-        width="24"
-        height="24"
+        className="h-6 w-6 sm:h-8 sm:w-8"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
