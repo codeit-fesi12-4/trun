@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Status, TMyPageCardProps } from "./type";
 import { Badge } from "@/components/ui/badge";
+import { Status, TMyPageCardProps } from "@/types/mypage.type";
 
 const statusToClassName: Record<Status, string> = {
   "이용 예정": "bg-orange-100 text-orange-600",
@@ -56,12 +56,12 @@ const MyPageCard = ({ item, onClick, showButton }: MyPageCardProps) => {
         )} */}
         {item.status && (
           <div className="flex gap-2 pt-4 md:pt-0 md:pb-4">
-            {(Array.isArray(item.status) ? item.status : [item.status]).map(s => (
+            {(Array.isArray(item.status) ? item.status : [item.status]).map(status => (
               <Badge
-                key={s}
-                className={`${statusToClassName[s as Status]} h-8 w-[76px] text-sm font-medium`}
+                key={status}
+                className={`${statusToClassName[status as Status]} h-8 w-[76px] text-sm font-medium`}
               >
-                {s}
+                {status}
               </Badge>
             ))}
           </div>

@@ -1,5 +1,5 @@
+import { TMyPageCardProps } from "@/types/mypage.type";
 import MyPageCard from "./MyPageCard";
-import { TMyPageCardProps } from "./type";
 
 // 테스트용
 const MOCK_DATA: TMyPageCardProps[] = [

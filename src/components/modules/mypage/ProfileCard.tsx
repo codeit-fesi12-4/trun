@@ -1,7 +1,7 @@
 "use client";
 
+import { TProfileCardProps } from "@/types/mypage.type";
 import Image from "next/image";
-import { TProfileCardProps } from "./type";
 
 // 모달 테스트
 const onEditHandler = () => {

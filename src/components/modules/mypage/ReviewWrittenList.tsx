@@ -1,7 +1,7 @@
 "use client";
 
+import { TReviewCardProps } from "@/types/mypage.type";
 import ReviewCardWritten from "./ReviewCardWritten";
-import { TReviewCardProps } from "./type";
 
 const MOCK_DATA: TReviewCardProps[] = [
   {

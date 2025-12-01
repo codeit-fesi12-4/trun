@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { TReviewCardProps } from "./type";
 import { formatDateTime } from "./MyPageCard";
+import { TReviewCardProps } from "@/types/mypage.type";
 
 export type ReviewCardProps = {
   item: TReviewCardProps;
@@ -21,10 +21,10 @@ const ReviewCardWritten = ({ item }: ReviewCardProps) => {
       <div className="flex flex-col">
         {/* 별점 */}
         <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }).map((_, i) => (
+          {Array.from({ length: 5 }).map((_, score) => (
             <span
-              key={i}
-              className={`${i < (item.score ?? 0) ? "text-orange-600" : "text-gray-200"} text-lg`}
+              key={score}
+              className={`${score < (item.score ?? 0) ? "text-orange-600" : "text-gray-200"} text-lg`}
             >
               ♥
             </span>
