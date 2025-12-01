@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { MoimCardData } from "@/constants";
+import Link from "next/link";
 
 interface IMoimCardItemProps {
   item: MoimCardData;
@@ -105,8 +106,8 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
             className="h-1 w-full bg-orange-100 md:h-1.5 lg:h-2 [&>div]:bg-orange-500"
           />
         </div>
-        {/* 상세 버튼 */}
-        <div className="mr-0 md:mr-2 lg:mr-4">
+        {/* 상세 버튼 - 추후 Link에 동적으로 생성된 모임 아이디 붙이기*/}
+        <Link href={`/moim-find/1`} className="mr-0 md:mr-2 lg:mr-4">
           <Button
             variant="link"
             size="xs"
@@ -123,7 +124,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
               className="size-3.5 md:size-4 lg:size-5"
             />
           </Button>
-        </div>
+        </Link>
       </div>
     </div>
   );

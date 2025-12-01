@@ -6,11 +6,11 @@ import { type InputHTMLAttributes, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
+type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
   id: string;
   label: string;
   error?: string;
-}
+};
 
 export const AuthTextField = ({
   id,
@@ -33,7 +33,7 @@ export const AuthTextField = ({
       autoComplete={autoComplete}
       aria-invalid={Boolean(error)}
       className={cn(
-        "h-11 rounded-lg border border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:font-medium placeholder:text-gray-400",
+        "h-11 rounded-lg border border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
         "focus-visible:border-gray-400 focus-visible:ring-gray-200",
         error &&
           "border-2 border-red-600 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",
@@ -45,9 +45,9 @@ export const AuthTextField = ({
   </div>
 );
 
-interface PasswordFieldProps extends FieldProps {
+type PasswordFieldProps = FieldProps & {
   type?: never;
-}
+};
 
 export const AuthPasswordField = ({
   id,
@@ -73,7 +73,7 @@ export const AuthPasswordField = ({
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
           className={cn(
-            "h-11 rounded-lg border border-gray-200 bg-gray-50 pr-10 text-base font-medium text-gray-900 placeholder:font-medium placeholder:text-gray-400",
+            "h-11 rounded-lg border border-gray-200 bg-gray-50 pr-10 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
             "focus-visible:border-gray-400 focus-visible:ring-gray-200",
             error &&
               "border-2 border-red-500 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",

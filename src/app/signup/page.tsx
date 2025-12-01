@@ -1,33 +1,63 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { type ChangeEvent, FormEvent, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
-import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators";
+import { postSignup } from "@/hooks/api/auth";
+import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators.utils";
 
 const DUPLICATE_EMAILS = ["cheda@codeit.com"];
 
 const SignupPage = () => {
+  const router = useRouter();
   const [form, setForm] = useState<SignupForm>({
     name: "",
     email: "",
-    company: "",
+    companyName: "",
     password: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState<SignupErrors>({});
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const signupMutation = useMutation({
+    mutationFn: () =>
+      postSignup({
+        name: form.name,
+        email: form.email,
+        companyName: form.companyName,
+        password: form.password,
+      }),
+    onSuccess: () => {
+      setServerError(null);
+      router.push("/login");
+    },
+    onError: error => {
+      setServerError((error as Error).message);
+    },
+  });
 
   const handleChange = (field: keyof SignupForm) => (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setForm(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+    setServerError(null);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setErrors(validateSignup(form, DUPLICATE_EMAILS));
+    const validation = validateSignup(form, DUPLICATE_EMAILS);
+    setErrors(validation);
+    if (Object.keys(validation).length === 0) {
+      signupMutation.mutate();
+    }
   };
 
   return (
@@ -69,9 +99,9 @@ const SignupPage = () => {
           label="회사명"
           placeholder="회사명을 입력해주세요."
           autoComplete="organization"
-          value={form.company}
-          onChange={handleChange("company")}
-          error={errors.company}
+          value={form.companyName}
+          onChange={handleChange("companyName")}
+          error={errors.companyName}
         />
         <AuthPasswordField
           id="signup-password"
@@ -93,10 +123,12 @@ const SignupPage = () => {
         />
         <Button
           type="submit"
+          disabled={signupMutation.isPending}
           className="h-11 w-full rounded-lg bg-gray-500 text-base font-semibold text-white transition-colors hover:bg-gray-600"
         >
-          확인
+          {signupMutation.isPending ? "진행 중..." : "확인"}
         </Button>
+        {serverError ? <p className="text-sm font-semibold text-red-600">{serverError}</p> : null}
       </form>
     </AuthLayout>
   );
