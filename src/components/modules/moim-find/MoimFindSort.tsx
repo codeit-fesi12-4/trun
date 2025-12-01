@@ -1,39 +1,37 @@
+"use client";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+import { useState } from "react";
 
-const MoimFindSort = () => (
-  <DropdownMenu>
-    <DropdownMenuTrigger className="flex h-9 w-9 items-center justify-center gap-1 rounded-[12px] border-2 border-gray-100 bg-white text-sm font-medium sm:h-10 sm:w-[110px]">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M3 11L7 7M7 7L11 11M7 7V17"
-          stroke="#111827"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-        <path
-          d="M21 13L17 17M17 17L13 13M17 17V7"
-          stroke="#111827"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="hidden sm:block">마감 임박</span>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent>
-      <DropdownMenuItem className="data-highlighted:bg-orange-100">마감 임박</DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
-);
+const MoimFindSort = () => {
+  const [selectedSort, setSelectedSort] = useState("마감임박");
+
+  const options = ["마감임박", "참여 인원 순"];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="flex h-7 w-fit items-center justify-center text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=active]:border-0 sm:text-base">
+        <Image src="../icons/sort.svg" alt="정렬 아이콘" width={18} height={18} />
+        {selectedSort}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="ml-4 border-0">
+        {options.map(option => (
+          <DropdownMenuItem
+            key={option}
+            onSelect={() => setSelectedSort(option)}
+            className="text-sm font-medium data-highlighted:bg-green-200"
+          >
+            {option}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export default MoimFindSort;
