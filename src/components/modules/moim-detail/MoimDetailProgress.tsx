@@ -34,7 +34,7 @@ const MoimDetailProgress = ({ moim }: IMoimDetailProgress) => {
         />
         <div className="flex justify-between">
           <span className="text-xs font-medium">최소인원 5명</span>
-          <span className="text-xs font-medium">최대인원 20명</span>
+          <span className="text-xs font-medium">최대인원 {}명</span>
         </div>
       </div>
     </div>

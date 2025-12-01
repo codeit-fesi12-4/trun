@@ -11,34 +11,8 @@ import {
 } from "@/components/ui/pagination";
 import { FAKE_REVIEWLIST } from "@/constants/moimFakeData";
 import ReviewList from "./ReviewList";
-
-const PAGE_SIZE = 4;
-
-const getPagesInSmallView = (page: number, totalPages: number) => {
-  if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
-  if (page <= 3) return [1, 2, 3, "...", totalPages];
-  if (page >= totalPages - 2) return [1, "...", totalPages - 2, totalPages - 1, totalPages];
-  return [1, "...", page - 1, page, page + 1, "...", totalPages];
-};
-
-const getPagesInLargeView = (page: number, totalPages: number) => {
-  // Case 1) totalPages <= 7 → 전체 출력
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
-  // Case 2) page가 초반부 (1~4)
-  if (page <= 4) {
-    return [1, 2, 3, 4, 5, "...", totalPages];
-  }
-
-  // Case 3) page가 끝 부분 (totalPages - 3 이상)
-  if (page >= totalPages - 3) {
-    return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
-  }
-  // Case 4) 중간 영역
-  return [1, "...", page - 2, page - 1, page, page + 1, page + 2, "...", totalPages];
-};
+import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation";
+import { PAGE_SIZE } from "@/constants/pagenation";
 
 export default function MoimDetailReviewArea() {
   const [page, setPage] = useState(1);
