@@ -9,13 +9,13 @@ import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
 import { getUserProfile, postSignin } from "@/hooks/api/auth";
-import { useAuthStore } from "@/stores/authStore";
-import { validateLogin, LoginErrors as ValidationLoginErrors } from "@/utils/validators";
+import { useAuthStore } from "@/stores/auth.store";
+import { validateLogin, LoginErrors as ValidationLoginErrors } from "@/utils/validators.utils";
 
-interface LoginErrors {
+type LoginErrors = {
   email?: string;
   password?: string;
-}
+};
 
 const LoginPage = () => {
   const router = useRouter();

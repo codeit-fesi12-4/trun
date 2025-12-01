@@ -1,31 +1,31 @@
 const EMAIL_PATTERN =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-export interface LoginForm {
+export type LoginForm = {
   email: string;
   password: string;
-}
+};
 
-export interface LoginErrors {
+export type LoginErrors = {
   email?: string;
   password?: string;
-}
+};
 
-export interface SignupForm {
+export type SignupForm = {
   name: string;
   email: string;
   companyName: string;
   password: string;
   confirmPassword: string;
-}
+};
 
-export interface SignupErrors {
+export type SignupErrors = {
   name?: string;
   email?: string;
   companyName?: string;
   password?: string;
   confirmPassword?: string;
-}
+};
 
 export const validateLogin = (values: LoginForm): LoginErrors => {
   const nextErrors: LoginErrors = {};

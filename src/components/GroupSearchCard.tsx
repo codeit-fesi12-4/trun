@@ -6,13 +6,13 @@ import { GroupSearchCardData as GroupSearchCardItemType } from "@/constants";
 import GroupSearchCardItems from "@/components/GroupSearchCardItems";
 import { Badge } from "@/components/ui/badge";
 
-interface IGroupSearchCardProps {
+type GroupSearchCardProps = {
   item: GroupSearchCardItemType;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
-}
+};
 
-const GroupSearchCard = ({ item, onFavoriteToggle, onJoinClick }: IGroupSearchCardProps) => (
+const GroupSearchCard = ({ item, onFavoriteToggle, onJoinClick }: GroupSearchCardProps) => (
   <Card
     key={item.id}
     className="overflow-hidden border-[0.5px] py-0 shadow-none transition-shadow hover:border-transparent hover:shadow-[0px_10px_10px_0px_rgba(0,0,0,0.05),2px_2px_12px_0px_rgba(0,0,0,0.01)]"

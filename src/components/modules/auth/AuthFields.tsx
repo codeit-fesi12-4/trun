@@ -6,11 +6,11 @@ import { type InputHTMLAttributes, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
+type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
   id: string;
   label: string;
   error?: string;
-}
+};
 
 export const AuthTextField = ({
   id,
@@ -45,9 +45,9 @@ export const AuthTextField = ({
   </div>
 );
 
-interface PasswordFieldProps extends FieldProps {
+type PasswordFieldProps = FieldProps & {
   type?: never;
-}
+};
 
 export const AuthPasswordField = ({
   id,

@@ -8,10 +8,10 @@ type ApiErrorResponse = {
   [key: string]: unknown;
 };
 
-export interface ApiClientOptions extends RequestInit {
+export type ApiClientOptions = RequestInit & {
   path: string;
   timeoutMs?: number;
-}
+};
 
 const DEFAULT_HEADERS: HeadersInit = {
   "Content-Type": "application/json; charset=utf-8",

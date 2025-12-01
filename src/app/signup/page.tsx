@@ -9,7 +9,7 @@ import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
 import { postSignup } from "@/hooks/api/auth";
-import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators";
+import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators.utils";
 
 const DUPLICATE_EMAILS = ["cheda@codeit.com"];
 

@@ -3,13 +3,13 @@ import { ReactNode } from "react";
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface AuthLayoutProps {
+type AuthLayoutProps = {
   children: ReactNode;
   formTitle: string;
   footerSlot: ReactNode;
   heroTitle?: string;
   heroCopy?: string[];
-}
+};
 
 const DEFAULT_HERO_COPY = ["바쁜 일상 속 잠깐의 휴식,", "이제는 같이 달랭과 함께 해보세요"];
 

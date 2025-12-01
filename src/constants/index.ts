@@ -1,4 +1,4 @@
-export interface GroupSearchCardData {
+export type GroupSearchCardData = {
   id: string;
   imageUrl: string;
   deadlineText: string;
@@ -10,7 +10,7 @@ export interface GroupSearchCardData {
   maxParticipants: number;
   status?: "confirmed" | null;
   isFavorite: boolean;
-}
+};
 
 // 샘플 데이터 (UI 확인용)
 export const GROUP_SEARCH_CARD_SAMPLE_DATA: GroupSearchCardData[] = [

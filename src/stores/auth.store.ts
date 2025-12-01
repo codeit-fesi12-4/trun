@@ -3,13 +3,13 @@ import { devtools } from "zustand/middleware";
 
 import { UserProfile } from "@/types/auth";
 
-interface AuthState {
+type AuthState = {
   token: string | null;
   user: UserProfile | null;
   setToken: (token: string | null) => void;
   setUser: (user: UserProfile | null) => void;
   reset: () => void;
-}
+};
 
 const safeGetToken = () =>
   typeof window !== "undefined" ? window.localStorage.getItem("token") : null;

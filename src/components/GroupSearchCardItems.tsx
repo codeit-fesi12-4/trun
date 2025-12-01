@@ -6,17 +6,17 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { GroupSearchCardData } from "@/constants";
 
-interface IGroupSearchCardItemProps {
+type GroupSearchCardItemProps = {
   item: GroupSearchCardData;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
-}
+};
 
 const GroupSearchCardItems = ({
   item,
   onFavoriteToggle,
   onJoinClick,
-}: IGroupSearchCardItemProps) => {
+}: GroupSearchCardItemProps) => {
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
 
   return (
