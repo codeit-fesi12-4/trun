@@ -12,7 +12,7 @@ const MoimFindCategory = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="flex h-[53px] flex-col sm:flex-row sm:items-center sm:justify-between sm:border-b sm:border-gray-200">
+    <div className="flex h-[95px] flex-col sm:h-[53px] sm:flex-row sm:items-center sm:justify-between sm:border-b sm:border-gray-200">
       <Tabs defaultValue="달림핏">
         <TabsList className="flex w-full justify-between bg-transparent">
           <div className="flex w-full border-b border-gray-200 sm:border-0">
