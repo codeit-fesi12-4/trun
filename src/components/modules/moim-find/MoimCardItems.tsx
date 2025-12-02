@@ -18,7 +18,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
   const isFull = item.participants === item.maxParticipants;
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-1 p-5 sm:p-0">
+    <div className="flex flex-1 flex-col justify-between gap-1 p-5 md:p-0">
       {/* 상단: 제목, 위치, 좋아요 */}
       <div className="mt-1.5 flex items-start justify-between">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
