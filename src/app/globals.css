@@ -167,6 +167,37 @@ body {
   }
 }
 
+@layer utilities {
+  /* Gradient utilities */
+  .bg-gradient-100 {
+    background: var(--gradient-100);
+  }
+
+  .bg-gradient-500 {
+    background: var(--gradient-500);
+  }
+
+  .bg-gradient-600 {
+    background: var(--gradient-600);
+  }
+
+  .text-gradient-500 {
+    background: var(--gradient-500);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .text-gradient-600 {
+    background: var(--gradient-600);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
 @layer components {
   .nav-link {
     @apply text-xs font-medium text-gray-600 hover:font-semibold hover:text-green-600 sm:text-base;
