@@ -24,7 +24,7 @@ const formatTime = (dateString: string): string => {
 };
 
 // 모집 마감일을 "오늘 21시 마감" 형식으로 변환
-const formatDeadline = (registrationEnd: string): string => {
+export const formatDeadline = (registrationEnd: string): string => {
   try {
     const endDate = parseISO(registrationEnd);
     const now = new Date();
