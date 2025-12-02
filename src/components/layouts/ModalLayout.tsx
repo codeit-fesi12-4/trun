@@ -49,7 +49,7 @@ const ModalLayout = ({
 
       {children}
 
-      <DialogFooter className="flex gap-2 sm:gap-3">
+      <DialogFooter className="flex flex-row gap-2 sm:gap-3">
         {(showCancel && onCancel) || (showPrevious && onPrevious) ? (
           <>
             {showCancel && onCancel && (

@@ -176,7 +176,7 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="mb-3 flex flex-col gap-4 py-6">
+          <div className="mb-4 flex flex-col gap-4 py-6">
             <p className="text-sm text-gray-600">원하시는 서비스를 선택해주세요</p>
             <div className="flex flex-col gap-3">
               <ServieCheckboxField
@@ -200,7 +200,7 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
         );
       case 2:
         return (
-          <div className="mb-3 flex flex-col gap-6 py-4">
+          <div className="mb-6 flex flex-col gap-6 py-6">
             <MoimInputField
               id="title"
               label="모임 이름"
@@ -228,7 +228,7 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
         );
       case 3:
         return (
-          <div className="mb-3 flex flex-col gap-6 py-4">
+          <div className="mb-6 flex flex-col gap-6 py-6">
             <MoimDatePickerField
               label="모임 날짜"
               date={formData.meetingDate}
