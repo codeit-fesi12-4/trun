@@ -24,11 +24,23 @@ const formatTime = (dateString: string): string => {
 };
 
 // 모집 마감일을 "오늘 21시 마감" 형식으로 변환
-export const formatDeadline = (registrationEnd: string): string => {
+// 마감일이 지났거나 31일 이상 남았으면 빈 문자열 반환
+const formatDeadline = (registrationEnd: string): string => {
   try {
     const endDate = parseISO(registrationEnd);
     const now = new Date();
+
+    // 마감일이 지났는지 확인 (시간까지 포함)
+    if (endDate < now) {
+      return "";
+    }
+
     const daysDiff = differenceInDays(endDate, now);
+
+    // 31일 이상 남았으면 빈 문자열 반환
+    if (daysDiff >= 7) {
+      return "";
+    }
 
     if (isToday(endDate)) {
       return `오늘 ${format(endDate, "HH")}시 마감`;
@@ -40,15 +52,15 @@ export const formatDeadline = (registrationEnd: string): string => {
       return format(endDate, "M월 d일 HH시 마감", { locale: ko });
     }
   } catch {
-    return registrationEnd;
+    return "";
   }
 };
 
 // Moim 타입을 MoimCardData 타입으로 변환
 export const convertMoimToMoimCardData = (moim: Moim): MoimCardData => {
-  // 참가자 수가 정원과 같으면 확정, 취소되지 않았으면 확정, 아니면 null
+  // 참가자 수가 5명 이상이고 취소되지 않았으면 확정, 아니면 null
   const status: "confirmed" | null =
-    moim.canceledAt === null && moim.participantCount === moim.capacity ? "confirmed" : null;
+    moim.canceledAt === null && moim.participantCount >= 5 ? "confirmed" : null;
 
   return {
     id: String(moim.id),

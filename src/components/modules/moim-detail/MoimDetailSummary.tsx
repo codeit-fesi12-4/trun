@@ -6,7 +6,6 @@ import { useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { GetMoimResponse } from "@/types/moimDetail.type";
 import { format } from "date-fns";
-import { formatDeadline } from "@/utils/moim.util";
 
 type MoimDetailSummary = {
   moim: GetMoimResponse;
@@ -28,7 +27,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
           </Badge>
           <Badge className="h-5 rounded-[6px] bg-blue-100 pr-2 pl-1 text-xs font-semibold text-blue-600">
             <Image src="../icons/alarm.svg" alt="알람 아이콘" width={20} height={20} />
-            {formatDeadline(moim.registrationEnd)}
+            {/* {formatDeadline(moim.registrationEnd)} */}
           </Badge>
         </div>
         {/* 제목 */}

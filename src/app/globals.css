@@ -91,7 +91,7 @@ body {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #f6f7f9;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -167,9 +167,40 @@ body {
   }
 }
 
+@layer utilities {
+  /* Gradient utilities */
+  .bg-gradient-100 {
+    background: var(--gradient-100);
+  }
+
+  .bg-gradient-500 {
+    background: var(--gradient-500);
+  }
+
+  .bg-gradient-600 {
+    background: var(--gradient-600);
+  }
+
+  .text-gradient-500 {
+    background: var(--gradient-500);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .text-gradient-600 {
+    background: var(--gradient-600);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
 @layer components {
   .nav-link {
-    @apply text-sm font-semibold text-white hover:text-gray-900 md:text-base;
+    @apply text-xs font-medium text-gray-600 hover:font-semibold hover:text-green-600 sm:text-base;
   }
 
   .time-picker-scrollbar::-webkit-scrollbar {
