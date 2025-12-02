@@ -25,7 +25,7 @@ const formatTime = (dateString: string): string => {
 
 // 모집 마감일을 "오늘 21시 마감" 형식으로 변환
 // 마감일이 지났거나 31일 이상 남았으면 빈 문자열 반환
-const formatDeadline = (registrationEnd: string): string => {
+export const formatDeadline = (registrationEnd: string): string => {
   try {
     const endDate = parseISO(registrationEnd);
     const now = new Date();

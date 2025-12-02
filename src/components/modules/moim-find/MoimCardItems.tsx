@@ -88,7 +88,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
                 className="flex shrink-0 items-center rounded-md border-none bg-blue-100 px-1 py-0.5 pr-2 text-[12px] font-bold text-blue-400"
               >
                 <Image
-                  src="/icons/ic_alarm.svg"
+                  src="/icons/alarm.svg"
                   alt="alarm"
                   width={32}
                   height={32}

@@ -6,6 +6,7 @@ import { useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { GetMoimResponse } from "@/types/moimDetail.type";
 import { format } from "date-fns";
+import { formatDeadline } from "@/utils/moim.util";
 
 type MoimDetailSummary = {
   moim: GetMoimResponse;
@@ -25,14 +26,16 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
           <Badge className="bg h-5 rounded-[6px] border border-gray-200 bg-transparent px-2 text-xs font-medium text-gray-600">
             {format(new Date(moim.dateTime), "HH:mm")}
           </Badge>
-          <Badge className="h-5 rounded-[6px] bg-blue-100 pr-2 pl-1 text-xs font-semibold text-blue-600">
-            <Image src="../icons/alarm.svg" alt="알람 아이콘" width={20} height={20} />
-            {/* {formatDeadline(moim.registrationEnd)} */}
-          </Badge>
+          {formatDeadline(moim.registrationEnd) && (
+            <Badge className="h-5 rounded-[6px] bg-blue-100 pr-2 pl-1 text-xs font-semibold text-blue-600">
+              <Image src="../icons/alarm.svg" alt="알람 아이콘" width={20} height={20} />
+              {formatDeadline(moim.registrationEnd)}
+            </Badge>
+          )}
         </div>
         {/* 제목 */}
         <div>
-          <h1 className="text-lg font-semibold text-gray-900">{moim.name}</h1>
+          <h1 className="text-lg font-semibold text-gray-800">{moim.name}</h1>
           <p className="flex flex-row gap-2 text-sm font-medium text-gray-500">
             <span className="text-sm font-medium text-gray-400">위치</span> {moim.location}
           </p>
@@ -45,14 +48,10 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             }}
           >
             <Image
-              src={
-                isFavorite
-                  ? "/icons/size=large, state=active.svg"
-                  : "/icons/size=large, state=inactive.svg"
-              }
+              src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
               alt={isFavorite ? "좋아요" : "좋아요 취소"}
-              width={47}
-              height={47}
+              width={48}
+              height={48}
               className=""
             />
           </button>
