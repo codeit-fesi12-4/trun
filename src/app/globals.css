@@ -169,7 +169,7 @@ body {
 
 @layer components {
   .nav-link {
-    @apply text-sm font-semibold text-white hover:text-gray-900 md:text-base;
+    @apply text-xs font-medium text-gray-600 hover:font-semibold hover:text-green-600 sm:text-base;
   }
 
   .time-picker-scrollbar::-webkit-scrollbar {
