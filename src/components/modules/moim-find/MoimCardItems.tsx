@@ -15,9 +15,10 @@ interface IMoimCardItemProps {
 
 const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemProps) => {
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
+  const isFull = item.participants === item.maxParticipants;
 
   return (
-    <div className="flex flex-1 flex-col justify-between">
+    <div className="flex flex-1 flex-col justify-between gap-1 p-5 sm:p-0">
       {/* 상단: 제목, 위치, 좋아요 */}
       <div className="mt-1.5 flex items-start justify-between">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -68,7 +69,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
         {/* 왼쪽: 뱃지들과 진행바/인원수 */}
         <div className="flex min-w-0 flex-1 flex-col gap-3.5">
           {/* 뱃지들: 날짜, 시간, 데드라인 */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant="outline"
               className="shrink-0 rounded-md border-gray-100 bg-white px-2 py-0.5 text-[12px] text-gray-500"
@@ -118,17 +119,31 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
         </div>
 
         {/* 오른쪽: 참여하기 버튼 */}
-        <Link href={`/moim-find/1`} className="shrink-0">
-          <Button
-            variant="outline"
-            size="xs"
-            className="rounded-xl border-green-400 p-5 text-[14px] font-semibold text-green-500 hover:border-none hover:bg-green-500 hover:text-white"
-            onClick={() => onJoinClick?.(item.id)}
-            type="button"
-          >
-            참여하기
-          </Button>
-        </Link>
+        {isFull ? (
+          <div className="shrink-0">
+            <Button
+              variant="outline"
+              size="xs"
+              disabled
+              className="cursor-not-allowed rounded-xl border-gray-300 p-5 text-[14px] font-semibold text-gray-400"
+              type="button"
+            >
+              마감
+            </Button>
+          </div>
+        ) : (
+          <Link href={`/moim-find/1`} className="shrink-0">
+            <Button
+              variant="outline"
+              size="xs"
+              className="rounded-xl border-green-400 p-5 text-[14px] font-semibold text-green-500 hover:border-none hover:bg-green-500 hover:text-white"
+              onClick={() => onJoinClick?.(item.id)}
+              type="button"
+            >
+              참여하기
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   );

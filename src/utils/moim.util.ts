@@ -38,7 +38,7 @@ const formatDeadline = (registrationEnd: string): string => {
     const daysDiff = differenceInDays(endDate, now);
 
     // 31일 이상 남았으면 빈 문자열 반환
-    if (daysDiff >= 31) {
+    if (daysDiff >= 7) {
       return "";
     }
 
@@ -58,9 +58,9 @@ const formatDeadline = (registrationEnd: string): string => {
 
 // Moim 타입을 MoimCardData 타입으로 변환
 export const convertMoimToMoimCardData = (moim: Moim): MoimCardData => {
-  // 참가자 수가 정원과 같으면 확정, 취소되지 않았으면 확정, 아니면 null
+  // 참가자 수가 5명 이상이고 취소되지 않았으면 확정, 아니면 null
   const status: "confirmed" | null =
-    moim.canceledAt === null && moim.participantCount === moim.capacity ? "confirmed" : null;
+    moim.canceledAt === null && moim.participantCount >= 5 ? "confirmed" : null;
 
   return {
     id: String(moim.id),
