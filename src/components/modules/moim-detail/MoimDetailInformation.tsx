@@ -19,7 +19,7 @@ const MoimDetailInformation = ({ moimId }: MoimDetailInformationProps) => {
 
   return (
     <div>
-      <div className="flex w-full flex-col items-center gap-4 sm:h-60 sm:flex-row sm:justify-center md:h-[270px]">
+      <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center md:gap-5">
         <MoimDetailImage moim={data} />
         <MoimDetailSummary moim={data} />
       </div>

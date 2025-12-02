@@ -30,7 +30,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
               className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
             >
               <Image
-                src="/icons/size=large.svg"
+                src="/icons/secure_check.svg"
                 alt="check"
                 width={20}
                 height={20}
@@ -108,10 +108,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
               height={14}
               className="size-3.5 shrink-0"
             />
-            <Progress
-              value={participantPercentage}
-              className="h-1.5 flex-1 bg-[var(--color-green-100)] [&>div]:bg-[var(--color-green-400)]"
-            />
+            <Progress value={participantPercentage} className="h-1.5 flex-1 bg-gray-100" />
             <span className="shrink-0 text-[12px] font-semibold whitespace-nowrap text-gray-600">
               <span className="text-gradient-500">{item.participants}</span>/{item.maxParticipants}
             </span>

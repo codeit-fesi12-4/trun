@@ -1,10 +1,13 @@
-import { FAKE_PARTICIPANTS } from "@/constants/moimFakeData";
+"use client";
+import { GetParticipantsResponse } from "@/types/moimDetail.type";
 import Image from "next/image";
 
-const MoimDetailParticipantList = () => {
-  const participants = FAKE_PARTICIPANTS;
-  const isTooMany = participants.length > 4;
+type MoimDetailParticipantListProps = {
+  participants: GetParticipantsResponse;
+};
 
+const MoimDetailParticipantList = ({ participants }: MoimDetailParticipantListProps) => {
+  const isTooMany = participants.length > 4;
   const visibleParticipants = participants.slice(0, 4);
 
   return (
@@ -14,7 +17,7 @@ const MoimDetailParticipantList = () => {
           <li key={p.userId} className={idx === 0 ? "" : "-ml-2.5"}>
             <div className="h-[29px] w-[29px] overflow-hidden rounded-full">
               <Image
-                src={p.User.image}
+                src={p.User.image ? p.User.image : "../icons/default_profile.svg"}
                 alt={`${p.User.name}의 프로필사진`}
                 width={29}
                 height={29}
@@ -23,7 +26,7 @@ const MoimDetailParticipantList = () => {
           </li>
         ))}
         {isTooMany && (
-          <div className="-ml-2.5 flex h-[29px] w-[29px] items-center justify-center rounded-full bg-gray-100 text-sm font-semibold text-gray-800">
+          <div className="-ml-2.5 flex h-[29px] w-[29px] items-center justify-center rounded-full bg-white text-xs font-semibold text-gray-600">
             +{participants.length - 4}
           </div>
         )}
