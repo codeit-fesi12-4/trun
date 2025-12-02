@@ -1,4 +1,4 @@
-export interface IFakeMoimInformation {
+export type FakeMoimInformation = {
   teamId: string;
   id: number;
   type: string;
@@ -11,11 +11,11 @@ export interface IFakeMoimInformation {
   image: string;
   createdBy: number;
   canceledAt: string | null;
-}
+};
 
-export type IReviews = IReview[];
+export type Reviews = Review[];
 
-export interface IReview {
+export type Review = {
   teamId: string;
   id: number;
   score: number;
@@ -36,7 +36,7 @@ export interface IReview {
     name: string;
     image: string | null;
   };
-}
+};
 
 export const FAKE_MOIM_INFORMATION = {
   teamId: "trun",

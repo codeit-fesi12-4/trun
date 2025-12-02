@@ -1,16 +1,16 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { IFakeMoimInformation } from "@/constants/moimFakeData";
+import { FakeMoimInformation } from "@/constants/moimFakeData";
 import Image from "next/image";
 import { useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 
-interface IMoimDetailSummary {
-  moim: IFakeMoimInformation;
-}
+type MoimDetailSummary = {
+  moim: FakeMoimInformation;
+};
 
-const MoimDetailSummary = ({ moim }: IMoimDetailSummary) => {
+const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   return (

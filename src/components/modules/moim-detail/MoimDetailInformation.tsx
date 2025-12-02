@@ -2,10 +2,6 @@ import { FAKE_MOIM_INFORMATION } from "@/constants/moimFakeData";
 import MoimDetailImage from "./MoimDetailImage";
 import MoimDetailSummary from "./MoimDetailSummary";
 
-// interface IMoimDetailInformation {
-//   moimId: string;
-// }
-
 const MoimDetailInformation = () => {
   // 추후 실제 데이터로 변경
   const data = FAKE_MOIM_INFORMATION;

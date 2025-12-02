@@ -1,18 +1,10 @@
 ### interface 와 type
 
-- interface : 대부분 사용
-
-- type : 유니온 타입에 사용, 원시타입
-
-```
-type Status = 'pending' | 'approved' | 'rejected'
-
-type UserId = string
-```
-
-### 화살표 함수 사용 지향
-
-const
+- type 사용 하기
+  - interface가 할 수 있는 것 모두를 할 수 있음
+  - interface는 type 중 할 수 없는게 있음 ex) 유니온, 튜플
+  - 컴파일 시점에 interface, type 모두 사라진다. => 런타임엔 남지 않는다. (추가로 알아본 정보)
+  - type으로 설정해 둔것은 사용했을 때 호버하면 값을 바로 볼 수 있다. (생산성 증가)
 
 ### 함수이름
 

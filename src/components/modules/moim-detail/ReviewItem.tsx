@@ -1,11 +1,11 @@
-import { IReview } from "@/constants/moimFakeData";
+import { Review } from "@/constants/moimFakeData";
 import Image from "next/image";
 
-interface IReviewItem {
-  review: IReview;
-}
+type ReviewItem = {
+  review: Review;
+};
 
-const ReviewItem = ({ review }: IReviewItem) => {
+const ReviewItem = ({ review }: ReviewItem) => {
   const formatDate = (isoString: string) => {
     const date = new Date(isoString);
     const year = date.getFullYear();

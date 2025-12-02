@@ -1,13 +1,13 @@
-import { IReview, IReviews } from "@/constants/moimFakeData";
+import { Review, Reviews } from "@/constants/moimFakeData";
 import ReviewItem from "./ReviewItem";
 
-interface IReviewList {
-  reviewList: IReviews;
-}
+type ReviewList = {
+  reviewList: Reviews;
+};
 
-const ReviewList = ({ reviewList }: IReviewList) => (
+const ReviewList = ({ reviewList }: ReviewList) => (
   <ul className="mb-6 flex flex-col gap-4">
-    {reviewList.map((review: IReview) => (
+    {reviewList.map((review: Review) => (
       <li key={review.id}>
         <ReviewItem review={review} />
       </li>
