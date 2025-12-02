@@ -1,12 +1,12 @@
 import { Badge } from "@/components/ui/badge";
-import { IMoimInformation } from "@/constants/moimFakeData";
+import { FakeMoimInformation } from "@/constants/moimFakeData";
 import Image from "next/image";
 
-interface IMoimDetailImage {
-  moim: IMoimInformation;
-}
+type MoimDetailImage = {
+  moim: FakeMoimInformation;
+};
 
-const MoimDetailImage = ({ moim }: IMoimDetailImage) => (
+const MoimDetailImage = ({ moim }: MoimDetailImage) => (
   <div className="w-full sm:h-full sm:w-1/2">
     <div className="relative aspect-343/180 w-full overflow-hidden rounded-3xl border-2 border-gray-200 sm:aspect-auto sm:h-full">
       <Image src={moim.image} alt="모임 이미지" fill className="object-cover" />

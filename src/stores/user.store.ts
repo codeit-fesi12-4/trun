@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
-interface UserState {
+type UserState = {
   nickname: string;
   setNickname: (nickname: string) => void;
-}
+};
 
 const useUserStore = create<UserState>(set => ({
   nickname: "",

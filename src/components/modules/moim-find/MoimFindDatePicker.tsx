@@ -1,7 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import Image from "next/image";
 import { useState } from "react";
 
 const MoimFindDatePicker = () => {
@@ -20,32 +21,37 @@ const MoimFindDatePicker = () => {
         <Button
           variant="outline"
           data-empty={!date}
-          className="flex h-10 w-[110px] items-center justify-center gap-0.5 rounded-[12px] border-2 border-gray-100 text-sm font-medium shadow-none hover:bg-white data-[state=open]:bg-gray-900 data-[state=open]:text-white [&>svg]:h-6! [&>svg]:w-6!"
+          className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
         >
           {date ? formatDate(date) : <span>날짜 전체</span>}
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12.7151 15.4653C12.3975 15.7654 11.9008 15.7654 11.5832 15.4653L5.8047 10.006C5.26275 9.49404 5.6251 8.58286 6.37066 8.58286L17.9276 8.58286C18.6732 8.58286 19.0355 9.49404 18.4936 10.006L12.7151 15.4653Z"
-              fill="currentColor"
-            />
-          </svg>
+          <Image
+            src="../icons/down_arrow.svg"
+            alt="날짜 선택지 보기 아이콘"
+            width={17}
+            height={17}
+            className="sm:mb-1"
+          />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex h-fit w-[336px] flex-col items-center p-0">
-        <div className="scale-90">
-          <Calendar mode="single" selected={date} onSelect={setDate} className="" />
-        </div>
-        <div className="mb-6 flex justify-center gap-3">
-          <button className="h-10 w-[118px] rounded-[12px] border border-orange-600 text-sm font-semibold text-orange-600">
+      <PopoverContent side="bottom" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={setDate}
+          components={{
+            DayButton: props => (
+              <CalendarDayButton
+                {...props}
+                className="data-[selected-single=true]:text-bold data-[selected-single=true]:bg-green-200 data-[selected-single=true]:text-green-600"
+              />
+            ),
+          }}
+        />
+        <div className="flex justify-center gap-3">
+          <button className="h-10 w-1/2 rounded-[12px] border border-green-500 text-sm font-semibold text-green-600">
             초기화
           </button>
-          <button className="h-10 w-[118px] rounded-[12px] bg-orange-600 text-sm font-semibold text-white">
+          <button className="h-10 w-1/2 rounded-[12px] bg-green-500 text-sm font-semibold text-white">
             적용
           </button>
         </div>

@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/pagination";
 import { FAKE_REVIEWLIST } from "@/constants/moimFakeData";
 import ReviewList from "./ReviewList";
-import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation";
 import { PAGE_SIZE } from "@/constants/pagenation";
+import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
 
 export default function MoimDetailReviewArea() {
   const [page, setPage] = useState(1);
