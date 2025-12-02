@@ -17,38 +17,37 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
 
   return (
-    <div className="flex flex-1 flex-col gap-1 py-4 pr-4 pl-4 md:gap-1 md:py-4 md:pr-6 md:pl-6 lg:gap-2 lg:py-6 lg:pr-8 lg:pl-8">
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-1.5 md:gap-2 lg:gap-3">
-          {/* 제목 */}
-          <div className="flex flex-col gap-1">
-            <h3 className="flex flex-wrap items-center gap-2 text-sm font-semibold text-gray-800 md:text-base lg:text-lg">
-              <span>{item.title}</span>
-              <span className="text-gray-900">|</span>
-              <span className="text-xs text-gray-700 md:text-sm lg:text-base">{item.subtitle}</span>
-            </h3>
+    <div className="flex flex-1 flex-col justify-between gap-4">
+      {/* 상단: 제목, 위치, 좋아요 */}
+      <div className="mt-2 flex items-start justify-between gap-2">
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <h3 className="text-md truncate font-semibold text-gray-800">{item.title}</h3>
+            {item.status === "confirmed" && (
+              <Badge
+                variant="outline"
+                className="shrink-0 border-none px-1 py-0.5 text-[10px] text-[var(--color-green-600)]"
+              >
+                <Image
+                  src="/icons/Property 1=Variant2.svg"
+                  alt="check"
+                  width={12}
+                  height={12}
+                  className="mr-0.5 size-3"
+                />
+                개설확정
+              </Badge>
+            )}
           </div>
-          {/* 날짜/시간 */}
-          <div className="mb-3 flex gap-2 md:mb-4 lg:mb-5">
-            <Badge
-              variant="outline"
-              className="rounded-sm bg-black text-xs text-white md:text-sm lg:text-base"
-            >
-              {item.date}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="rounded-sm bg-black text-xs text-orange-600 md:text-sm lg:text-base"
-            >
-              {item.time}
-            </Badge>
-          </div>
+          <p className="truncate text-xs text-gray-500">
+            위치 <span className="text-gray-600">{item.subtitle}</span>
+          </p>
         </div>
-        {/* 좋아요 버튼 */}
         <button
           type="button"
           onClick={() => onFavoriteToggle?.(item.id)}
           aria-label={item.isFavorite ? "좋아요 취소" : "좋아요"}
+          className="shrink-0"
         >
           <Image
             src={
@@ -59,70 +58,75 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
             alt={item.isFavorite ? "좋아요" : "좋아요 취소"}
             width={36}
             height={36}
-            className="size-8 md:size-9 lg:size-10"
+            className="size-9"
           />
         </button>
       </div>
 
-      <div className="flex items-end justify-between gap-4 md:gap-6 lg:gap-8">
-        <div className="flex flex-1 flex-col gap-1">
-          <div className="flex items-center">
-            {/* 인원 수 및 확정 표시 */}
-            <div className="flex items-center gap-1">
-              <Image
-                src="/icons/person.svg"
-                alt="person"
-                width={14}
-                height={14}
-                className="size-3 md:size-3.5 lg:size-4"
-              />
-              <span className="text-xs font-semibold text-gray-600 md:text-sm lg:text-base">
-                {item.participants}/{item.maxParticipants}
-              </span>
-              {item.status === "confirmed" && (
-                <div className="flex items-center gap-1">
-                  <Badge
-                    variant="outline"
-                    className="border-none text-xs text-orange-600 md:text-sm lg:text-base"
-                  >
-                    <div className="">
-                      <Image
-                        src="/icons/Property 1=Variant2.svg"
-                        alt="check"
-                        width={20}
-                        height={20}
-                        className="size-4 md:size-5 lg:size-6"
-                      />
-                    </div>
-                    개설확정
-                  </Badge>
-                </div>
-              )}
-            </div>
+      {/* 하단: 왼쪽(뱃지+진행바) / 오른쪽(참여하기 버튼) */}
+      <div className="flex items-end justify-between gap-4">
+        {/* 왼쪽: 뱃지들과 진행바/인원수 */}
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          {/* 뱃지들: 날짜, 시간, 데드라인 */}
+          <div className="flex gap-1.5">
+            <Badge
+              variant="outline"
+              className="rounded-sm border-gray-100 bg-white px-1.5 py-0.5 text-[12px] text-gray-500"
+            >
+              {item.date}
+            </Badge>
+            <Badge
+              variant="outline"
+              className="rounded-sm border-gray-200 bg-white px-1.5 py-0.5 text-[12px] text-gray-500"
+            >
+              {item.time}
+            </Badge>
+            {item.deadlineText && (
+              <Badge
+                variant="outline"
+                className="flex items-center rounded-sm border-none bg-blue-100 p-0.5 pr-1 text-[12px] text-blue-400"
+              >
+                <Image
+                  src="/icons/alarm.svg"
+                  alt="alarm"
+                  width={32}
+                  height={32}
+                  className="size-5"
+                />
+                {item.deadlineText}
+              </Badge>
+            )}
           </div>
-          {/* 진행 상태 바 */}
-          <Progress
-            value={participantPercentage}
-            className="h-1 w-full bg-orange-100 md:h-1.5 lg:h-2 [&>div]:bg-orange-500"
-          />
+
+          {/* 진행바/인원 수 */}
+          <div className="flex min-w-0 items-center gap-2">
+            <Image
+              src="/icons/person.svg"
+              alt="person"
+              width={12}
+              height={12}
+              className="size-3 shrink-0"
+            />
+            <Progress
+              value={participantPercentage}
+              className="h-1 flex-1 bg-[var(--color-green-100)] [&>div]:bg-[var(--color-green-500)]"
+            />
+            <span className="shrink-0 text-[10px] font-semibold whitespace-nowrap text-gray-600">
+              <span className="text-green-500">{item.participants}</span>/{item.maxParticipants}
+            </span>
+          </div>
         </div>
-        {/* 상세 버튼 - 추후 Link에 동적으로 생성된 모임 아이디 붙이기*/}
-        <Link href={`/moim-find/1`} className="mr-0 md:mr-2 lg:mr-4">
+
+        {/* 오른쪽: 참여하기 버튼 */}
+        <Link href={`/moim-find/1`} className="shrink-0">
           <Button
-            variant="link"
+            variant="outline"
             size="xs"
-            className="bg-white p-0 text-xs font-semibold text-orange-500 md:text-sm lg:text-base"
+            className="rounded-xl border-green-400 p-4 text-[12px] font-semibold text-green-500 hover:bg-green-400 hover:text-white"
             onClick={() => onJoinClick?.(item.id)}
             type="button"
           >
-            join now
-            <Image
-              src="/icons/arrow_right.svg"
-              alt="arrow right"
-              width={16}
-              height={16}
-              className="size-3.5 md:size-4 lg:size-5"
-            />
+            참여하기
           </Button>
         </Link>
       </div>
