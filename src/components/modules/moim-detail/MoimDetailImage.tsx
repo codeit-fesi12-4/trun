@@ -7,7 +7,7 @@ type MoimDetailImage = {
 
 const MoimDetailImage = ({ moim }: MoimDetailImage) => (
   <div className="w-full sm:h-full sm:w-1/2">
-    <div className="relative aspect-343/241 w-full overflow-hidden rounded-3xl border-2 border-gray-200 sm:aspect-auto sm:h-full md:aspect-630/443 md:h-auto">
+    <div className="relative aspect-343/241 w-full overflow-hidden rounded-[12px] sm:aspect-auto sm:h-full md:aspect-630/443 md:h-auto">
       <Image src={moim.image} alt="모임 이미지" fill className="object-cover" />
     </div>
   </div>
