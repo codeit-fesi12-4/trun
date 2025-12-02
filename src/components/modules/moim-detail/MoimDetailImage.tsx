@@ -16,7 +16,7 @@ const MoimDetailImage = ({ moim }: MoimDetailImage) => (
           variant="outline"
           className="flex h-8 w-[123px] items-center gap-1 rounded-none rounded-bl-lg border-none bg-orange-600 py-0.5 pr-4 pl-2 text-xs font-medium text-white"
         >
-          <Image src="/icons/alarm.svg" alt="alarm" width={24} height={24} />
+          <Image src="/icons/ic_alarm.svg" alt="alarm" width={24} height={24} />
           {moim.registrationEnd}
         </Badge>
       </div>
