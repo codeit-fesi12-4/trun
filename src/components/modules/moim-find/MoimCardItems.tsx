@@ -136,7 +136,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
             <Button
               variant="outline"
               size="xs"
-              className="rounded-xl border-green-400 p-5 text-[14px] font-semibold text-green-500 hover:border-none hover:bg-green-500 hover:text-white"
+              className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-none hover:bg-green-500 hover:text-white"
               onClick={() => onJoinClick?.(item.id)}
               type="button"
             >
