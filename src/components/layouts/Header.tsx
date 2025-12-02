@@ -13,7 +13,7 @@ const Header = () => (
             alt="trun 로고"
             width={112}
             height={112}
-            className="w-18 sm:w-28"
+            className="h-auto w-18 sm:w-28"
           />
         </Link>
         <nav className="flex gap-4 md:gap-9">
