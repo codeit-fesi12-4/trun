@@ -5,13 +5,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SORT_OPTIONS } from "@/constants/moimFakeData";
 import Image from "next/image";
 import { useState } from "react";
 
 const MoimFindSort = () => {
   const [selectedSort, setSelectedSort] = useState("마감임박");
-
-  const options = ["마감임박", "참여 인원 순"];
 
   return (
     <DropdownMenu>
@@ -19,11 +18,11 @@ const MoimFindSort = () => {
         <Image src="../icons/sort.svg" alt="정렬 아이콘" width={18} height={18} />
         {selectedSort}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="ml-4 border-0">
-        {options.map(option => (
+      <DropdownMenuContent className="ml-15 border-0">
+        {SORT_OPTIONS.map(option => (
           <DropdownMenuItem
             key={option}
-            onSelect={() => setSelectedSort(option)}
+            onClick={() => setSelectedSort(option)}
             className="text-sm font-medium data-highlighted:bg-green-200"
           >
             {option}

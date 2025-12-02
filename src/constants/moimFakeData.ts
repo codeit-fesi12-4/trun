@@ -38,6 +38,10 @@ export type Review = {
   };
 };
 
+export const LOCATION_OPTIONS = ["지역 전체", "건대입구", "종로 3가"];
+
+export const SORT_OPTIONS = ["마감임박", "참여 인원 순"];
+
 export const FAKE_MOIM_INFORMATION = {
   teamId: "trun",
   id: 3654,

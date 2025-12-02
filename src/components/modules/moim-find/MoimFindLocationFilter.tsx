@@ -6,13 +6,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { LOCATION_OPTIONS } from "@/constants/moimFakeData";
 import Image from "next/image";
 import { useState } from "react";
 
 const MoimFindLocationFilter = () => {
   const [selectedLocation, setSelectedLocation] = useState("지역 전체");
-
-  const options = ["지역 전체", "건대입구", "종로 3가"];
 
   return (
     <DropdownMenu>
@@ -27,10 +26,10 @@ const MoimFindLocationFilter = () => {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="ml-4 border-0">
-        {options.map(option => (
+        {LOCATION_OPTIONS.map(option => (
           <DropdownMenuItem
             key={option}
-            onSelect={() => setSelectedLocation(option)}
+            onClick={() => setSelectedLocation(option)}
             className="text-sm font-medium data-highlighted:bg-green-200"
           >
             {option}
