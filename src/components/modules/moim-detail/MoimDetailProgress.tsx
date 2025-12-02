@@ -1,11 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { FakeMoimInformation, FAKE_PARTICIPANTS } from "@/constants/moimFakeData";
+import { FAKE_PARTICIPANTS } from "@/constants/moimFakeData";
 import Image from "next/image";
 import MoimDetailParticipantList from "./MoimDetailParticipantList";
+import { GetMoimResponse } from "@/types/moimDetail.type";
 
 type MoimDetailProgress = {
-  moim: FakeMoimInformation;
+  moim: GetMoimResponse;
 };
 
 const MoimDetailProgress = ({ moim }: MoimDetailProgress) => {

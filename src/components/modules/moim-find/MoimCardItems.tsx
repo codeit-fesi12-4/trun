@@ -107,7 +107,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
           />
         </div>
         {/* 상세 버튼 - 추후 Link에 동적으로 생성된 모임 아이디 붙이기*/}
-        <Link href={`/moim-find/1`} className="mr-0 md:mr-2 lg:mr-4">
+        <Link href={`/moim-find/${item.id}`} className="mr-0 md:mr-2 lg:mr-4">
           <Button
             variant="link"
             size="xs"
