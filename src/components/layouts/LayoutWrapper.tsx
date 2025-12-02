@@ -7,11 +7,10 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   return isAuthPage ? (
-    <>{children}</>
+    <div className="pt-[50px] md:pt-[88px]">{children}</div>
   ) : (
-    // max-w-[1350px] 임의로 조정한겁니다. 무시하셔도 됩니다
-    <main className="mx-auto min-h-screen max-w-[1350px] bg-gray-50 px-4 pt-20 md:px-6 md:pt-25 lg:px-25">
-      {children}
-    </main>
+    <div className="px-4 pt-[74px] pb-6 sm:px-6 sm:pt-[120px] sm:pb-8 md:pt-[136px] md:pb-12">
+      <main className="mx-auto max-w-[1200px]">{children}</main>
+    </div>
   );
 }
