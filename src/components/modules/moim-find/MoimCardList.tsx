@@ -14,7 +14,7 @@ const MoimCardList = ({
   onFavoriteToggle,
   onJoinClick,
 }: IMoimCardListProps) => (
-  <div className="mx-auto mt-6 flex w-full flex-col gap-4">
+  <div className="mx-auto mt-6 grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
     {items.map(item => (
       <MoimCard
         key={item.id}
