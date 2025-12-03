@@ -16,6 +16,12 @@ interface IModalLayoutProps {
   children: React.ReactNode;
   onConfirm: () => void;
   confirmText?: string;
+  onPrevious?: () => void;
+  previousText?: string;
+  showPrevious?: boolean;
+  onCancel?: () => void;
+  cancelText?: string;
+  showCancel?: boolean;
 }
 
 const ModalLayout = ({
@@ -25,22 +31,64 @@ const ModalLayout = ({
   children,
   onConfirm,
   confirmText = "확인",
+  onPrevious,
+  previousText = "이전",
+  showPrevious = false,
+  onCancel,
+  cancelText = "취소",
+  showCancel = false,
 }: IModalLayoutProps) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="max-w-sm p-6 sm:max-w-md md:max-w-lg [&>button[data-slot='dialog-close']]:top-5.5 [&>button[data-slot='dialog-close']]:right-5 [&>button[data-slot='dialog-close']]:hover:bg-gray-100 [&>button[data-slot='dialog-close']]:focus:bg-gray-100 [&>button[data-slot='dialog-close']]:focus:ring-0 [&>button[data-slot='dialog-close']]:focus:ring-offset-0 [&>button[data-slot='dialog-close']]:sm:top-5 [&>button[data-slot='dialog-close']]:sm:right-6 [&>button[data-slot='dialog-close']>svg]:size-6">
+    <DialogContent
+      showCloseButton={false}
+      className="max-w-sm rounded-4xl bg-white p-10 sm:max-w-md md:max-w-lg"
+    >
       <DialogHeader className="text-left">
         <DialogTitle>{title}</DialogTitle>
       </DialogHeader>
 
       {children}
 
-      <DialogFooter>
-        <Button
-          onClick={onConfirm}
-          className="w-full border-transparent bg-gray-500 font-semibold text-white hover:bg-gray-600"
-        >
-          {confirmText}
-        </Button>
+      <DialogFooter className="flex flex-row gap-2 sm:gap-3">
+        {(showCancel && onCancel) || (showPrevious && onPrevious) ? (
+          <>
+            {showCancel && onCancel && (
+              // 취소 버튼
+              <Button
+                onClick={onCancel}
+                variant="outline"
+                className="h-12 flex-1 rounded-xl border-gray-100 bg-white font-semibold text-gray-500 hover:bg-gray-50 hover:text-gray-600"
+              >
+                {cancelText}
+              </Button>
+            )}
+            {showPrevious && onPrevious && (
+              // 이전 버튼
+              <Button
+                onClick={onPrevious}
+                variant="outline"
+                className="h-12 flex-1 rounded-xl border-gray-100 bg-white font-semibold text-gray-500 hover:bg-gray-50"
+              >
+                {previousText}
+              </Button>
+            )}
+            {/* 확인 버튼 */}
+            <Button
+              onClick={onConfirm}
+              className="h-12 flex-1 rounded-xl border-transparent bg-green-500 font-semibold text-white hover:bg-green-600"
+            >
+              {confirmText}
+            </Button>
+          </>
+        ) : (
+          // 확인 버튼
+          <Button
+            onClick={onConfirm}
+            className="h-12 w-full border-transparent bg-gray-500 font-semibold text-white hover:bg-gray-600"
+          >
+            {confirmText}
+          </Button>
+        )}
       </DialogFooter>
     </DialogContent>
   </Dialog>

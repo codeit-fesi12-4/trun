@@ -106,7 +106,7 @@ function TimePicker({ date, onTimeChange }: TimePickerProps) {
               type="button"
               onClick={() => handleHourChange(hour)}
               className={`mx-2.5 flex items-center justify-center rounded-md py-1.5 text-xs font-semibold transition-colors ${
-                isSelected ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-gray-100"
+                isSelected ? "bg-green-500 text-white" : "text-gray-700 hover:bg-gray-50"
               }`}
             >
               {hour}
@@ -128,7 +128,7 @@ function TimePicker({ date, onTimeChange }: TimePickerProps) {
               type="button"
               onClick={() => handleMinuteChange(minute)}
               className={`mx-2.5 flex items-center justify-center rounded-md py-1.5 text-xs font-semibold transition-colors ${
-                isSelected ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-gray-100"
+                isSelected ? "bg-green-500 text-white" : "text-gray-700 hover:bg-gray-50"
               }`}
             >
               {minute}
@@ -147,7 +147,7 @@ function TimePicker({ date, onTimeChange }: TimePickerProps) {
               type="button"
               onClick={() => handlePeriodChange(period)}
               className={`mx-2 flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
-                isSelected ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-gray-100"
+                isSelected ? "bg-green-500 text-white" : "text-gray-700 hover:bg-gray-50"
               }`}
             >
               {period}
@@ -201,7 +201,7 @@ function TimeCalendar({ date, onDateChange }: TimeCalendarProps) {
       {...props}
       className={cn(
         props.className,
-        "data-[selected-single=true]:rounded-md data-[selected-single=true]:bg-orange-500 data-[selected-single=true]:text-white",
+        "data-[selected-single=true]:rounded-md data-[selected-single=true]:bg-green-500 data-[selected-single=true]:text-white",
       )}
     />
   );
