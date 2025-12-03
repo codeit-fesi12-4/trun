@@ -58,7 +58,7 @@ const LoginPage = () => {
           같이 달랭이 처음이신가요?{" "}
           <Link
             href="/signup"
-            className="text-base font-medium text-orange-600 underline underline-offset-4"
+            className="text-base font-medium text-green-600 underline underline-offset-4"
           >
             회원가입
           </Link>

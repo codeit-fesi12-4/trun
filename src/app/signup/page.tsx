@@ -68,7 +68,7 @@ const SignupPage = () => {
           이미 회원이신가요?{" "}
           <Link
             href="/login"
-            className="text-base font-medium text-orange-600 underline underline-offset-4"
+            className="text-base font-medium text-green-600 underline underline-offset-4"
           >
             로그인
           </Link>
