@@ -5,8 +5,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import Image from "next/image";
 import { useState } from "react";
 
-const MoimFindDatePicker = () => {
-  const [date, setDate] = useState<Date | undefined>(undefined);
+interface IMoimFindDatePickerProps {
+  selectedDate: Date | undefined;
+  onDateChange: (date: Date | undefined) => void;
+}
+
+const MoimFindDatePicker = ({ selectedDate, onDateChange }: IMoimFindDatePickerProps) => {
+  const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate);
+  const [isOpen, setIsOpen] = useState(false);
 
   const formatDate = (date: Date) => {
     const y = date.getFullYear();
@@ -15,15 +21,26 @@ const MoimFindDatePicker = () => {
     return `${y}/${m}/${d}`;
   };
 
+  const handleReset = () => {
+    setTempDate(undefined);
+    onDateChange(undefined);
+    setIsOpen(false);
+  };
+
+  const handleApply = () => {
+    onDateChange(tempDate);
+    setIsOpen(false);
+  };
+
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          data-empty={!date}
+          data-empty={!selectedDate}
           className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
         >
-          {date ? formatDate(date) : <span>날짜 전체</span>}
+          {selectedDate ? formatDate(selectedDate) : <span>날짜 전체</span>}
           <Image
             src="../icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"
@@ -36,8 +53,8 @@ const MoimFindDatePicker = () => {
       <PopoverContent side="bottom" align="center">
         <Calendar
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={tempDate}
+          onSelect={setTempDate}
           components={{
             DayButton: props => (
               <CalendarDayButton
@@ -48,10 +65,16 @@ const MoimFindDatePicker = () => {
           }}
         />
         <div className="flex justify-center gap-3">
-          <button className="h-10 w-1/2 rounded-[12px] border border-green-500 text-sm font-semibold text-green-600">
+          <button
+            onClick={handleReset}
+            className="h-10 w-1/2 rounded-[12px] border border-green-500 text-sm font-semibold text-green-600"
+          >
             초기화
           </button>
-          <button className="h-10 w-1/2 rounded-[12px] bg-green-500 text-sm font-semibold text-white">
+          <button
+            onClick={handleApply}
+            className="h-10 w-1/2 rounded-[12px] bg-green-500 text-sm font-semibold text-white"
+          >
             적용
           </button>
         </div>
