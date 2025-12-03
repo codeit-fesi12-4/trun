@@ -89,7 +89,7 @@ const MoimFindPage = () => {
           모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
         </div>
       )}
-      {!isLoading && !error && moimCardData && <MoimCardList items={moimCardData} />}
+      {!isLoading && !error && <MoimCardList items={moimCardData || []} />}
 
       {/* 우측 하단 고정된 모임 만들기 버튼 */}
       <button

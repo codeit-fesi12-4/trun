@@ -1,3 +1,5 @@
+import { MoimType } from "@/types/moim.type";
+
 export type TProfileCardProps = {
   teamId?: number;
   id?: number;
@@ -6,8 +8,6 @@ export type TProfileCardProps = {
   companyName: string;
   image: string;
 };
-
-import { MoimType } from "@/types/moim.type";
 
 export type Status = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
 export type TMyPageCardProps = {

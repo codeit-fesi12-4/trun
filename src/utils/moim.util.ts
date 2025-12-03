@@ -1,5 +1,4 @@
-import { Moim } from "@/types/moim.type";
-import { MoimCardData } from "@/constants";
+import { Moim, MoimCardData } from "@/types/moim.type";
 import { formatDate, formatTime, formatDeadline } from "@/utils/date.util";
 
 // Moim 타입을 MoimCardData 타입으로 변환
