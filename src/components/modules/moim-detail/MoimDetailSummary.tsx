@@ -7,9 +7,15 @@ import MoimDetailProgress from "./MoimDetailProgress";
 import { GetMoimResponse } from "@/types/moimDetail.type";
 import { format } from "date-fns";
 import { formatDeadline } from "@/utils/moim.util";
-import { useCancelMoim, useCreateJoin } from "@/hooks/api/moimDetail.api";
+import {
+  useCancelJoin,
+  useCancelMoim,
+  useCreateJoin,
+  useParticipants,
+} from "@/hooks/api/moimDetail.api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import ConfirmationJoin from "./ConfirmationJoin";
 
 type MoimDetailSummary = {
   moim: GetMoimResponse;
@@ -18,32 +24,53 @@ type MoimDetailSummary = {
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
+  const [isParticipant, setIsParticipant] = useState(false);
+  const [isFull, setIsFull] = useState(false);
 
-  const { mutateAsync: cancelMoim, isPending: isCanCelPending } = useCancelMoim();
+  const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoim();
   const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoin();
+  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoin();
+
+  const { data: participants } = useParticipants({ moimId: moim.id });
 
   const router = useRouter();
 
   const token = localStorage.getItem("token");
 
-  console.warn(token);
-
-  console.warn(moim.createdBy);
-
   useEffect(() => {
     const stored = localStorage.getItem("user");
     if (!stored) return;
 
+    const user = JSON.parse(stored);
+    const userId = Number(user.id);
+
     const distinguishCreator = () => {
-      const user = JSON.parse(stored);
-      const userId = Number(user.id);
       if (userId === moim.createdBy) {
         setIsCreator(true);
       }
     };
 
+    const distinguishParticipant = () => {
+      const participantsIds = participants?.map(p => p.userId);
+      if (participantsIds?.find(p => p === userId)) {
+        setIsParticipant(true);
+      } else {
+        setIsParticipant(false);
+      }
+    };
+
+    const distinguishFull = () => {
+      if (moim.capacity > moim.participantCount) {
+        setIsFull(false);
+      } else {
+        setIsFull(true);
+      }
+    };
+
     distinguishCreator();
-  }, [moim]);
+    distinguishParticipant();
+    distinguishFull();
+  }, [moim, participants]);
 
   const handleMoimCancel = async () => {
     try {
@@ -60,16 +87,24 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimJoin = async () => {
-    if (!token) {
-      toast.error("로그인이 필요합니다.");
-      return;
-    }
     try {
       await joinMoim(moim.id);
       toast.success("모임에 참여되었습니다.");
     } catch (error) {
       console.error(error);
       toast.error("모임 참여 실패", {
+        description: "잠시 후 다시 시도해주세요.",
+      });
+    }
+  };
+
+  const handleMoimLeave = async () => {
+    try {
+      await cancelJoin(moim.id);
+      toast.success("모임 참여가 취소되었습니다.");
+    } catch (error) {
+      console.error(error);
+      toast.error("모임 참여 취소 실패", {
         description: "잠시 후 다시 시도해주세요.",
       });
     }
@@ -127,23 +162,41 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               className="md:size-15"
             />
           </button>
+
           {isCreator ? (
             <div className="flex w-full gap-2 sm:h-12 md:h-15">
               <button
                 onClick={() => void handleMoimCancel()}
-                disabled={isCanCelPending}
+                disabled={isCanCelMoimPending}
                 className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 sm:text-base md:text-xl"
               >
-                {isCanCelPending ? "취소중..." : "취소하기"}
+                {isCanCelMoimPending ? "취소중..." : "취소하기"}
               </button>
               <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
                 공유하기
               </button>
             </div>
+          ) : !token ? (
+            <ConfirmationJoin />
+          ) : isParticipant ? (
+            <button
+              disabled={isCancelJoinPending}
+              onClick={() => void handleMoimLeave()}
+              className="w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+            >
+              {isJoinPending ? "취소중..." : "참여 취소하기"}
+            </button>
+          ) : isFull ? (
+            <button
+              disabled={isFull}
+              className="w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+            >
+              참여하기
+            </button>
           ) : (
             <button
-              onClick={() => void handleMoimJoin()}
               disabled={isJoinPending}
+              onClick={() => void handleMoimJoin()}
               className="w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "참여중..." : "참여하기"}

@@ -34,3 +34,7 @@ export type User = {
 export type PostJoinResponse = {
   message: string;
 };
+
+export type DeleteJoinResponse = {
+  message: string;
+};

@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { TEAM_NAME } from "@/constants";
 import { apiFetch } from "@/lib/apiClient";
 import {
+  DeleteJoinResponse,
   GetMoimResponse,
   GetParticipantsResponse,
   PostJoinResponse,
@@ -112,6 +113,35 @@ export const useCreateJoin = (teamName: string = TEAM_NAME) => {
 
     onError: err => {
       console.error("모임 참여 실패:", err);
+    },
+  });
+};
+
+// 모임 참여 취소
+export const deleteJoin = (moimId: number, teamName: string = TEAM_NAME, token?: string | null) =>
+  apiFetch<DeleteJoinResponse>({
+    path: buildMoimPath(`/${moimId}/leave`, teamName),
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${
+        token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
+      }`,
+    },
+  });
+export const useCancelJoin = (teamName: string = TEAM_NAME) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (moimId: number) => {
+      const token = localStorage.getItem("token");
+      return deleteJoin(moimId, teamName, token);
+    },
+    onSuccess: (_, moimId) => {
+      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
+    },
+
+    onError: err => {
+      console.error("모임 참여 취소 실패:", err);
     },
   });
 };
