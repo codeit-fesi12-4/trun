@@ -1,9 +1,9 @@
 "use client";
 
-import { TProfileCardProps } from "@/types/mypage.type";
+import { UserData } from "@/types/mypage.type";
 import Image from "next/image";
 
-const ProfileSection = ({ image, name, companyName, email }: TProfileCardProps) => (
+const ProfileSection = ({ image, name, companyName, email }: UserData) => (
   <section className="flex items-center rounded-2xl border border-green-300 bg-green-100 px-4 py-6 sm:px-7 sm:py-8 md:px-8 md:py-10 lg:flex-col">
     {/* 프로필 이미지 + 닉네임 */}
     <div className="flex items-center lg:flex-col">

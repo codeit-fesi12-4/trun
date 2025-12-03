@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { TReviewCardProps } from "@/types/mypage.type";
+import { ReviewCardData } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
 
 export type ReviewCardProps = {
-  item: TReviewCardProps;
+  item: ReviewCardData;
 };
 
 const ReviewCardWritten = ({ item }: ReviewCardProps) => {

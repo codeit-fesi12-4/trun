@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { TMyPageCardProps } from "@/types/mypage.type";
+import { MyPageCardData } from "@/types/mypage.type";
 import MyPageCardItem from "./MyPageCardItem";
 
 type MyPageCardProps = {
-  item: TMyPageCardProps;
+  item: MyPageCardData;
   onClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;

@@ -1,4 +1,4 @@
-import { TMyPageCardProps, TReviewCardProps } from "@/types/mypage.type";
+import { MyPageCardData, ReviewCardData } from "@/types/mypage.type";
 
 // 유저 MOCK 데이터
 export const TEST_USER_DATA = {
@@ -10,11 +10,11 @@ export const TEST_USER_DATA = {
 };
 
 // 나의 모임 카드 MOCK 데이터
-export const MOCK_DATA: TMyPageCardProps[] = [
+export const MOCK_DATA: MyPageCardData[] = [
   {
     teamId: 1,
     id: 1,
-    type: "DALLAEMFIT",
+    type: "MINDFULNESS",
     name: "러닝 모임",
     dateTime: "2025-11-28T05:34:19.967Z",
     registrationEnd: "",
@@ -65,11 +65,11 @@ export const MOCK_DATA: TMyPageCardProps[] = [
 ];
 
 // 나의 리뷰_내가 작성한 리뷰 카드 MOCK 데이터
-export const MOCK_REVIEW_WRITABLELIST: TMyPageCardProps[] = [
+export const MOCK_REVIEW_WRITABLELIST: MyPageCardData[] = [
   {
     teamId: 1,
     id: 1,
-    type: "DALLAEMFIT",
+    type: "MINDFULNESS",
     name: "러닝 모임",
     dateTime: "2025-11-28T05:34:19.967Z",
     registrationEnd: "",
@@ -101,7 +101,7 @@ export const MOCK_REVIEW_WRITABLELIST: TMyPageCardProps[] = [
 ];
 
 // 나의 리뷰_작성한 리뷰 카드 MOCK 데이터
-export const MOCK_REVIEW_WRITTENLIST: TReviewCardProps[] = [
+export const MOCK_REVIEW_WRITTENLIST: ReviewCardData[] = [
   {
     id: 1,
     image: "/images/running-1.png",
@@ -124,11 +124,11 @@ export const MOCK_REVIEW_WRITTENLIST: TReviewCardProps[] = [
 ];
 
 // 내가 만든 모임 카드 MOCK 데이터
-export const MOCK_CREATED_MOIM: TMyPageCardProps[] = [
+export const MOCK_CREATED_MOIM: MyPageCardData[] = [
   {
     teamId: 1,
     id: 1,
-    type: "DALLAEMFIT",
+    type: "MINDFULNESS",
     name: "러닝 모임",
     dateTime: "2025-11-28T05:34:19.967Z",
     registrationEnd: "",

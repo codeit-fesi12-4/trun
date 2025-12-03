@@ -1,6 +1,6 @@
 import { MoimType } from "@/types/moim.type";
 
-export type TProfileCardProps = {
+export type UserData = {
   teamId?: number;
   id?: number;
   email: string;
@@ -11,7 +11,7 @@ export type TProfileCardProps = {
 
 export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
 
-export type TMyPageCardProps = {
+export type MyPageCardData = {
   teamId: number;
   id: number;
   type: MoimType;
@@ -30,7 +30,7 @@ export type TMyPageCardProps = {
   isReviewed?: boolean;
 };
 
-export type TReviewCardProps = {
+export type ReviewCardData = {
   id: number;
   image: string;
   name: string;
