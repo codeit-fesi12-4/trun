@@ -1,5 +1,7 @@
 // 유니온 타입들 (type으로 정의)
-export type MoimType = "DALLAEMFIT" | "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
+// WORKATION = 런케이션 , MINDFULNESS = 달림핏
+// export type MoimType = "WORKATION" | "OFFICE_STRETCHING" | "MINDFULNESS";
+export type MoimType = "MINDFULNESS" | "WORKATION";
 export type MoimLocation = "건대입구" | "을지로3가" | "신림" | "홍대입구";
 export type SortBy = "dateTime" | "registrationEnd" | "participantCount";
 export type SortOrder = "asc" | "desc";

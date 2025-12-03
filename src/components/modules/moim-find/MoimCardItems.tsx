@@ -53,7 +53,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
           <Image
             src={
               item.isFavorite
-                ? "/icons/size=large, state=active.svg"
+                ? "/icons/state=active, size=large.svg"
                 : "/icons/size=large, state=inactive.svg"
             }
             alt={item.isFavorite ? "좋아요" : "좋아요 취소"}
@@ -136,7 +136,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
             <Button
               variant="outline"
               size="xs"
-              className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-none hover:bg-green-500 hover:text-white"
+              className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
               onClick={() => onJoinClick?.(item.id)}
               type="button"
             >
