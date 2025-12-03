@@ -17,7 +17,7 @@ const MoimFindDatePicker = () => {
           data-empty={!date}
           className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
         >
-          {date ? format(new Date(), "yyyy/MM/dd") : <span>날짜 전체</span>}
+          {date ? format(date, "yyyy/MM/dd") : <span>날짜 전체</span>}
           <Image
             src="../icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"

@@ -4,16 +4,16 @@ import { TEAM_NAME } from "@/constants";
 import { apiFetch } from "@/lib/apiClient";
 import {
   DeleteJoinResponse,
-  GetMoimResponse,
   GetParticipantsResponse,
   PostJoinResponse,
 } from "@/types/moimDetail.type";
+import { Moim } from "@/types/moim.type";
 
 const buildMoimPath = (path: string, teamName: string) => `/${teamName}/gatherings${path}`;
 
 // 모임 상세 조회
 export const getMoim = (moimId: number, teamName: string = TEAM_NAME) =>
-  apiFetch<GetMoimResponse>({
+  apiFetch<Moim>({
     path: buildMoimPath(`/${moimId}`, teamName),
     method: "GET",
   });
@@ -59,7 +59,7 @@ export const useParticipants = ({
 
 // 모임 취소
 export const putMoim = (moimId: number, teamName: string = TEAM_NAME, token?: string | null) =>
-  apiFetch<GetMoimResponse>({
+  apiFetch<Moim>({
     path: buildMoimPath(`/${moimId}/cancel`, teamName),
     method: "PUT",
     headers: {

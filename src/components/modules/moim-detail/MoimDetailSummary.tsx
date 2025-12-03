@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
-import { GetMoimResponse } from "@/types/moimDetail.type";
 import { format } from "date-fns";
 import { formatDeadline } from "@/utils/moim.util";
 import {
@@ -16,9 +15,10 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ConfirmationJoin from "./ConfirmationJoin";
+import { Moim } from "@/types/moim.type";
 
 type MoimDetailSummary = {
-  moim: GetMoimResponse;
+  moim: Moim;
 };
 
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
@@ -117,10 +117,10 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         <div className="flex h-8 justify-between">
           <div className="flex h-5 flex-row gap-2 md:h-6">
             <Badge className="bg h-full rounded-[6px] border border-gray-200 bg-transparent px-2 text-xs font-medium text-gray-600 md:text-sm">
-              {format(new Date(moim.dateTime), "MM월 dd일")}
+              {format(moim.dateTime, "MM월 dd일")}
             </Badge>
             <Badge className="bg h-full rounded-[6px] border border-gray-200 bg-transparent px-2 text-xs font-medium text-gray-600 md:text-sm">
-              {format(new Date(moim.dateTime), "HH:mm")}
+              {format(moim.dateTime, "HH:mm")}
             </Badge>
             {formatDeadline(moim.registrationEnd) && (
               <Badge className="h-full rounded-[6px] bg-blue-100 pr-2 pl-1 text-xs font-semibold text-blue-600 md:text-sm">
