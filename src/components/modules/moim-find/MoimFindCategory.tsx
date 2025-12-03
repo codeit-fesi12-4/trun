@@ -40,7 +40,7 @@ const MoimFindCategory = () => (
         </div>
       </TabsList>
     </Tabs>
-    <div className="mt-8 flex flex-row sm:mt-0">
+    <div className="mx-4 mt-8 flex flex-row sm:mt-0">
       <MoimFindLocationFilter />
       <MoimFindDatePicker />
       <MoimFindSort />
