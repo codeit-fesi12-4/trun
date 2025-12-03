@@ -4,16 +4,10 @@ import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Image from "next/image";
 import { useState } from "react";
+import { format } from "date-fns";
 
 const MoimFindDatePicker = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
-
-  const formatDate = (date: Date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-    return `${y}/${m}/${d}`;
-  };
 
   return (
     <Popover>
@@ -23,7 +17,7 @@ const MoimFindDatePicker = () => {
           data-empty={!date}
           className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
         >
-          {date ? formatDate(date) : <span>날짜 전체</span>}
+          {date ? format(date, "yyyy/MM/dd") : <span>날짜 전체</span>}
           <Image
             src="../icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"

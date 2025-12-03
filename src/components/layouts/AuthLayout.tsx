@@ -11,14 +11,12 @@ type AuthLayoutProps = {
   heroCopy?: string[];
 };
 
-const DEFAULT_HERO_COPY = ["바쁜 일상 속 잠깐의 휴식,", "이제는 같이 달랭과 함께 해보세요"];
-
 const AuthLayout = ({
   children,
   formTitle,
   footerSlot,
-  heroTitle = "Welcome to 같이 달랭!",
-  heroCopy = DEFAULT_HERO_COPY,
+  heroTitle = "",
+  heroCopy = [],
 }: AuthLayoutProps) => (
   <section className="bg-gray-100">
     <div className="mx-auto flex min-h-screen max-w-[1220px] items-center justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-16">
@@ -34,7 +32,7 @@ const AuthLayout = ({
               ))}
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-[290px] sm:max-w-[407px] md:max-w-[588px]">
+          <div className="relative mx-auto w-full max-w-[290px] pb-6 sm:max-w-[407px] sm:pb-0 md:max-w-[588px]">
             <Image
               src="/images/img_login.png"
               alt="환영 일러스트"

@@ -1,3 +1,2 @@
-const index = () => <div>index</div>;
-
-export default index;
+export { default as AllReviewHero } from "./AllReviewHero";
+export { default as AllReviewContent } from "./AllReviewContent";

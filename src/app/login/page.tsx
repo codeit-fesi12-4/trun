@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
@@ -19,7 +19,7 @@ type LoginErrors = {
 
 const LoginPage = () => {
   const router = useRouter();
-  const { setToken, setUser } = useAuthStore();
+  const { token, setToken, setUser } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
@@ -50,6 +50,16 @@ const LoginPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (token) {
+      router.replace("/");
+    }
+  }, [token, router]);
+
+  if (token) {
+    return null;
+  }
+
   return (
     <AuthLayout
       formTitle="로그인"
@@ -58,7 +68,7 @@ const LoginPage = () => {
           같이 달랭이 처음이신가요?{" "}
           <Link
             href="/signup"
-            className="text-base font-medium text-orange-600 underline underline-offset-4"
+            className="text-base font-medium text-green-600 underline underline-offset-4"
           >
             회원가입
           </Link>

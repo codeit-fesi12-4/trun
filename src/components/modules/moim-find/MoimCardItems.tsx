@@ -18,7 +18,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
   const isFull = item.participants === item.maxParticipants;
 
   return (
-    <div className="flex flex-1 flex-col justify-between gap-1 p-5 sm:p-0">
+    <div className="flex flex-1 flex-col justify-between gap-1 p-5 md:p-0">
       {/* 상단: 제목, 위치, 좋아요 */}
       <div className="mt-1.5 flex items-start justify-between">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
@@ -30,7 +30,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
               className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
             >
               <Image
-                src="/icons/size=large.svg"
+                src="/icons/secure_check.svg"
                 alt="check"
                 width={20}
                 height={20}
@@ -51,11 +51,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
           className="shrink-0"
         >
           <Image
-            src={
-              item.isFavorite
-                ? "/icons/size=large, state=active.svg"
-                : "/icons/size=large, state=inactive.svg"
-            }
+            src={item.isFavorite ? "/icons/full_heart.svg" : "../icons/empty_heart.svg"}
             alt={item.isFavorite ? "좋아요" : "좋아요 취소"}
             width={44}
             height={44}
@@ -88,7 +84,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
                 className="flex shrink-0 items-center rounded-md border-none bg-blue-100 px-1 py-0.5 pr-2 text-[12px] font-bold text-blue-400"
               >
                 <Image
-                  src="/icons/ic_alarm.svg"
+                  src="/icons/alarm.svg"
                   alt="alarm"
                   width={32}
                   height={32}
@@ -108,10 +104,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
               height={14}
               className="size-3.5 shrink-0"
             />
-            <Progress
-              value={participantPercentage}
-              className="h-1.5 flex-1 bg-[var(--color-green-100)] [&>div]:bg-[var(--color-green-400)]"
-            />
+            <Progress value={participantPercentage} className="h-1.5 flex-1 bg-gray-100" />
             <span className="shrink-0 text-[12px] font-semibold whitespace-nowrap text-gray-600">
               <span className="text-gradient-500">{item.participants}</span>/{item.maxParticipants}
             </span>
@@ -132,11 +125,11 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
             </Button>
           </div>
         ) : (
-          <Link href={`/moim-find/1`} className="shrink-0">
+          <Link href={`/moim-find/${item.id}`} className="shrink-0">
             <Button
               variant="outline"
               size="xs"
-              className="rounded-xl border-green-400 p-5 text-[14px] font-semibold text-green-500 hover:border-none hover:bg-green-500 hover:text-white"
+              className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
               onClick={() => onJoinClick?.(item.id)}
               type="button"
             >

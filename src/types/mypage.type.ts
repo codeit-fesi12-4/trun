@@ -1,3 +1,5 @@
+import { MoimType } from "@/types/moim.type";
+
 export type TProfileCardProps = {
   teamId?: number;
   id?: number;
@@ -6,8 +8,6 @@ export type TProfileCardProps = {
   companyName: string;
   image: string;
 };
-
-export type MoimType = "DALLAEMFIT" | "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
 
 export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
 
