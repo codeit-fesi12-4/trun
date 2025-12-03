@@ -7,11 +7,14 @@ export type TProfileCardProps = {
   image: string;
 };
 
-export type Status = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
+export type MoimType = "DALLAEMFIT" | "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
+
+export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
+
 export type TMyPageCardProps = {
   teamId: number;
   id: number;
-  type: "DALLAEMFIT" | "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
+  type: MoimType;
   name: string;
   dateTime: string;
   registrationEnd: string;
@@ -19,7 +22,7 @@ export type TMyPageCardProps = {
   participantCount: number;
   capacity: number;
   image: string;
-  status?: Status | Status[];
+  status?: MoimStatus | MoimStatus[];
   createdBy: number;
   canceledAt: string | null;
   joinedAt?: string;
