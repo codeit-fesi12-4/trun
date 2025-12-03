@@ -32,7 +32,7 @@ const MoimInputField = ({
   if (type === "image") {
     return (
       <div className="flex flex-col gap-2">
-        <label htmlFor={id} className="text-sm font-semibold text-gray-700">
+        <label htmlFor={id} className="text-sm font-semibold text-gray-600">
           {label}
         </label>
         <div className="flex gap-2">
@@ -48,7 +48,7 @@ const MoimInputField = ({
             <Button
               type="button"
               variant="outline"
-              className="cursor-pointer rounded-lg border-orange-600 px-2 py-1.5 text-xs font-semibold text-orange-600 hover:bg-orange-600 hover:text-white sm:px-3 sm:py-2 sm:text-sm"
+              className="cursor-pointer rounded-lg border-green-600 bg-white px-2 py-1.5 text-xs font-semibold text-green-600 hover:bg-green-600 hover:text-white sm:px-3 sm:py-2 sm:text-sm"
               asChild
             >
               <span>파일 찾기</span>
@@ -68,7 +68,7 @@ const MoimInputField = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={id} className="text-sm font-semibold text-gray-700">
+      <label htmlFor={id} className="text-sm font-semibold text-gray-600">
         {label}
       </label>
       <Input
