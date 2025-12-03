@@ -1,3 +1,4 @@
+import EmptyState from "./EmptyState";
 import MyPageCard from "./MyPageCard";
 import { MOCK_DATA } from "@/constants/mypageTestData";
 
@@ -8,9 +9,7 @@ const handleJoinClick = (id: number) => {
 const MyMoimTab = () => (
   <div className="flex flex-col gap-6">
     {MOCK_DATA.length === 0 ? (
-      <p className="flex h-40 items-center justify-center text-sm font-medium text-gray-500">
-        신청한 모임이 아직 없어요
-      </p>
+      <EmptyState text="신청한 모임이 아직 없어요" />
     ) : (
       MOCK_DATA.map(card => (
         <MyPageCard
