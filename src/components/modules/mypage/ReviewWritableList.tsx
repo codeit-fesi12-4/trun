@@ -1,4 +1,5 @@
 import { TMyPageCardProps } from "@/types/mypage.type";
+import { MOIM_TYPE } from "@/constants";
 import MyPageCard from "./MyPageCard";
 
 // 테스트용
@@ -6,7 +7,8 @@ const MOCK_DATA: TMyPageCardProps[] = [
   {
     teamId: 1,
     id: 1,
-    type: "DALLAEMFIT",
+    type: MOIM_TYPE.DALLIMFIT,
+    // type: "DALLAEMFIT",
     name: "러닝 모임",
     dateTime: "2025-11-28T05:34:19.967Z",
     registrationEnd: "",
@@ -22,7 +24,8 @@ const MOCK_DATA: TMyPageCardProps[] = [
   {
     teamId: 2,
     id: 2,
-    type: "MINDFULNESS",
+    type: MOIM_TYPE.DALLIMFIT,
+    // type: "MINDFULNESS",
     name: "명상 모임",
     dateTime: "2025-11-30T10:00:00.000Z",
     registrationEnd: "",

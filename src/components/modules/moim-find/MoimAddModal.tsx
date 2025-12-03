@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useCreateMoimMutation } from "@/hooks/api/moim.api";
 import { CreateMoimRequest, MoimType } from "@/types/moim.type";
+import { MOIM_TYPE } from "@/constants";
 import MoimDatePickerField from "./moim-add-modal/MoimDatePickerField";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import ServieCheckboxField from "./moim-add-modal/ServieCheckboxField";
@@ -52,8 +53,8 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
 
   // 서비스 선택을 MoimType으로 변환
   const convertServiceToType = (service: string): MoimType | null => {
-    if (service === "달림핏") return "MINDFULNESS";
-    if (service === "런케이션") return "WORKATION";
+    if (service === "달림핏") return MOIM_TYPE.DALLIMFIT;
+    if (service === "런케이션") return MOIM_TYPE.RUNCATION;
     return null;
   };
 
