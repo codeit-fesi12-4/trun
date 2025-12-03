@@ -1,55 +1,17 @@
 "use client";
 
-import { TMyPageCardProps } from "@/types/mypage.type";
-import { MOIM_TYPE } from "@/constants";
 import MyPageCard from "./MyPageCard";
-
-// 테스트용
-const MOCK_DATA: TMyPageCardProps[] = [
-  {
-    teamId: 1,
-    id: 1,
-    type: MOIM_TYPE.DALLIMFIT,
-    // type: "DALLAEMFIT",
-    name: "러닝 모임",
-    dateTime: "2025-11-28T05:34:19.967Z",
-    registrationEnd: "",
-    location: "부산 전체",
-    participantCount: 3,
-    capacity: 10,
-    image: "/images/running-1.png",
-    createdBy: 1,
-    canceledAt: null,
-    isCompleted: false,
-    isReviewed: false,
-  },
-  {
-    teamId: 2,
-    id: 2,
-    type: MOIM_TYPE.DALLIMFIT,
-    // type: "MINDFULNESS",
-    name: "명상 모임",
-    dateTime: "2025-11-30T10:00:00.000Z",
-    registrationEnd: "",
-    location: "서울 전체",
-    participantCount: 5,
-    capacity: 10,
-    image: "/images/img_login.png",
-    createdBy: 2,
-    canceledAt: null,
-    isCompleted: true,
-    isReviewed: false,
-  },
-];
+import { MOCK_CREATED_MOIM } from "@/constants/mypageTestData";
+import EmptyState from "./EmptyState";
 
 const CreatedMoimTab = () => (
   <div className="flex flex-col gap-6">
-    {MOCK_DATA.length === 0 ? (
-      <p className="flex h-40 items-center justify-center text-sm font-medium text-gray-500">
-        아직 만든 모임이 없어요
-      </p>
+    {MOCK_CREATED_MOIM.length === 0 ? (
+      <EmptyState text="아직 만든 모임이 없어요" />
     ) : (
-      MOCK_DATA.map(card => <MyPageCard key={card.id} item={card} showButton={false} />)
+      MOCK_CREATED_MOIM.map(card => (
+        <MyPageCard key={card.id} item={card} showButton={false} isCreatedMoimTab={true} />
+      ))
     )}
   </div>
 );
