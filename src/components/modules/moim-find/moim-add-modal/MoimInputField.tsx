@@ -24,6 +24,7 @@ const MoimInputField = ({
   min,
   fileName,
 }: IMoimInputFieldProps) => {
+  // 파일 입력 처리 이벤트 핸들러
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     onChange(file);

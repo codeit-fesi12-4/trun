@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -8,35 +8,35 @@ import { TimeCalendar } from "@/components/ui/TimeCalendar";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 
-interface IMoimDatePickerFieldProps {
+type MoimDatePickerFieldProps = {
   label: string;
   date: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
-}
+};
 
-const MoimDatePickerField = ({ label, date, onDateChange }: IMoimDatePickerFieldProps) => {
-  const [sideOffset, setSideOffset] = useState(320);
+const MoimDatePickerField = ({ label, date, onDateChange }: MoimDatePickerFieldProps) => {
+  // const [sideOffset, setSideOffset] = useState(320);
 
-  useEffect(() => {
-    const handleResize = () => {
-      // md 브레이크포인트 (768px) 기준
-      if (window.innerWidth >= 768) {
-        setSideOffset(290); // 데스크톱
-      } else {
-        setSideOffset(470); // 모바일/태블릿
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     // md 브레이크포인트 (768px) 기준
+  //     if (window.innerWidth >= 768) {
+  //       setSideOffset(290); // 데스크톱
+  //     } else {
+  //       setSideOffset(470); // 모바일/태블릿
+  //     }
+  //   };
 
-    // 초기값 설정
-    handleResize();
+  //   // 초기값 설정
+  //   handleResize();
 
-    // 리사이즈 이벤트 리스너 추가
-    window.addEventListener("resize", handleResize);
+  //   // 리사이즈 이벤트 리스너 추가
+  //   window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   const formatDateTime = (dateValue: Date | undefined) => {
     if (!dateValue) return "";
@@ -71,8 +71,8 @@ const MoimDatePickerField = ({ label, date, onDateChange }: IMoimDatePickerField
         <PopoverContent
           className="fixed z-[60] w-auto border-transparent p-0"
           align="start"
-          side="top"
-          sideOffset={sideOffset}
+          side="bottom"
+          // sideOffset={sideOffset}
           onOpenAutoFocus={e => e.preventDefault()}
         >
           <TimeCalendar date={date} onDateChange={onDateChange} />
