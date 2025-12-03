@@ -36,7 +36,7 @@ const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageC
                 >
                   {status === "개설 확정" && (
                     <Image
-                      src="/icons/ic_mypage_check.svg"
+                      src="/icons/ic_check.svg"
                       alt="개설 확정 아이콘"
                       width={24}
                       height={24}
