@@ -7,37 +7,41 @@ import MyReviewsTab from "./MyReviewsTab";
 import CreatedMoimTab from "./CreatedMoimTab";
 
 const TabsSection = () => (
-  <Tabs defaultValue="myMoim" className="border-t-2 border-gray-900 bg-white px-4 py-6 md:px-6">
-    <TabsList className="bg-transparen flex gap-3">
-      <TabsTrigger
-        value="myMoim"
-        className="rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 text-center text-lg font-semibold text-gray-400 shadow-none hover:text-gray-900 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-black data-[state=active]:text-black data-[state=active]:shadow-none"
-      >
-        나의 모임
-      </TabsTrigger>
-      <TabsTrigger
-        value="myReviews"
-        className="rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 text-center text-lg font-semibold text-gray-400 shadow-none hover:text-gray-900 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-black data-[state=active]:text-black data-[state=active]:shadow-none"
-      >
-        나의 리뷰
-      </TabsTrigger>
-      <TabsTrigger
-        value="createdMoim"
-        className="rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 text-center text-lg font-semibold text-gray-400 shadow-none hover:text-gray-900 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-black data-[state=active]:text-black data-[state=active]:shadow-none"
-      >
-        내가 만든 모임
-      </TabsTrigger>
-    </TabsList>
+  <Tabs defaultValue="myMoim">
+    <div className="flex w-full justify-start border-b">
+      <TabsList className="bg-transparen w-full p-0 sm:w-auto">
+        <TabsTrigger
+          value="myMoim"
+          className="flex-1 rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
+        >
+          나의 모임
+        </TabsTrigger>
+        <TabsTrigger
+          value="myReviews"
+          className="flex-1 rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
+        >
+          나의 리뷰
+        </TabsTrigger>
+        <TabsTrigger
+          value="createdMoim"
+          className="flex-1 rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
+        >
+          내가 만든 모임
+        </TabsTrigger>
+      </TabsList>
+    </div>
 
-    <TabsContent value="myMoim" className="pt-3">
-      <MyMoimTab />
-    </TabsContent>
-    <TabsContent value="myReviews" className="pt-3">
-      <MyReviewsTab />
-    </TabsContent>
-    <TabsContent value="createdMoim" className="pt-3">
-      <CreatedMoimTab />
-    </TabsContent>
+    <div className="pt-3.5">
+      <TabsContent value="myMoim">
+        <MyMoimTab />
+      </TabsContent>
+      <TabsContent value="myReviews">
+        <MyReviewsTab />
+      </TabsContent>
+      <TabsContent value="createdMoim">
+        <CreatedMoimTab />
+      </TabsContent>
+    </div>
   </Tabs>
 );
 
