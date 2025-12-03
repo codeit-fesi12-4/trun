@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { TEAM_NAME } from "@/constants";
 import { apiFetch } from "@/lib/apiClient";
@@ -6,15 +6,10 @@ import { GetMoimResponse, GetParticipantsResponse } from "@/types/moimDetail.typ
 
 const buildMoimPath = (path: string, teamName: string) => `/${teamName}/gatherings${path}`;
 
+// 모임 상세 조회
 export const getMoim = (moimId: number, teamName: string = TEAM_NAME) =>
   apiFetch<GetMoimResponse>({
     path: buildMoimPath(`/${moimId}`, teamName),
-    method: "GET",
-  });
-
-export const getParticipants = (moimId: number, teamName: string = TEAM_NAME) =>
-  apiFetch<GetParticipantsResponse>({
-    path: buildMoimPath(`/${moimId}/participants`, teamName),
     method: "GET",
   });
 
@@ -34,6 +29,13 @@ export const useMoim = ({
     enabled,
   });
 
+// 특정 모임의 참가자 목록 조회
+export const getParticipants = (moimId: number, teamName: string = TEAM_NAME) =>
+  apiFetch<GetParticipantsResponse>({
+    path: buildMoimPath(`/${moimId}/participants`, teamName),
+    method: "GET",
+  });
+
 export const useParticipants = ({
   teamName = TEAM_NAME,
   moimId,
@@ -49,3 +51,27 @@ export const useParticipants = ({
     staleTime: 1000 * 60,
     enabled,
   });
+
+// 모임 취소
+export const putMoim = (moimId: number, teamName: string = TEAM_NAME) =>
+  apiFetch<GetMoimResponse>({
+    path: buildMoimPath(`/${moimId}/cancel`, teamName),
+    method: "PUT",
+  });
+
+export const useCancelMoim = (teamName: string = TEAM_NAME) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (moimId: number) => putMoim(moimId, teamName),
+
+    onSuccess: (_, moimId) => {
+      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
+    },
+
+    onError: err => {
+      console.error("모임 취소 실패:", err);
+    },
+  });
+};
