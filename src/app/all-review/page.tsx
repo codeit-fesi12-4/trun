@@ -1,3 +1,11 @@
-const AllReviewPage = () => <div>AllReviewPage</div>;
+import AllReviewContent from "@/components/modules/all-review/AllReviewContent";
+import AllReviewHero from "@/components/modules/all-review/AllReviewHero";
 
-export default AllReviewPage;
+const AllReview = () => (
+  <section>
+    <AllReviewHero />
+    <AllReviewContent />
+  </section>
+);
+
+export default AllReview;

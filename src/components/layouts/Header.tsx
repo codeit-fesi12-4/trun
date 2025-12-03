@@ -23,7 +23,7 @@ const Header = () => (
           <Link href="/moim-save" className="nav-link">
             찜한 모임
           </Link>
-          <Link href="/moim-review" className="nav-link">
+          <Link href="/all-review" className="nav-link">
             모든 리뷰
           </Link>
         </nav>
