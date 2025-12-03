@@ -55,6 +55,32 @@ const MoimFindPage = () => {
     return params;
   }, [filters.category, filters.location, filters.sort]);
 
+  // 지역 목록 추출을 위한 쿼리 (카테고리만 필터링)
+  const categoryOnlyParams: GetMoimsParams = useMemo(
+    () => ({
+      type: convertCategoryToMoimType(filters.category),
+      sortBy: convertSortToSortBy(filters.sort),
+      sortOrder: filters.sort === "마감임박" ? "asc" : "desc",
+    }),
+    [filters.category, filters.sort],
+  );
+
+  const { data: moimsForLocation } = useMoimsQuery({
+    params: categoryOnlyParams,
+  });
+
+  // 선택된 카테고리의 모임들에서 실제 존재하는 지역 목록 추출
+  const availableLocations = useMemo(() => {
+    if (!moimsForLocation) return ["지역 전체"];
+    const locations = new Set<string>();
+    moimsForLocation.forEach(moim => {
+      if (moim.location) {
+        locations.add(moim.location);
+      }
+    });
+    return ["지역 전체", ...Array.from(locations).sort()];
+  }, [moimsForLocation]);
+
   const { data: moims, isLoading, error } = useMoimsQuery({ params: queryParams });
 
   // 날짜 필터링 (클라이언트 사이드) - 원본 Moim 데이터 사용
@@ -80,7 +106,7 @@ const MoimFindPage = () => {
 
   return (
     <>
-      <MoimFindHeader onFilterChange={handleFilterChange} />
+      <MoimFindHeader onFilterChange={handleFilterChange} availableLocations={availableLocations} />
       {isLoading && (
         <div className="mt-6 text-center text-gray-500">모임 목록을 불러오는 중...</div>
       )}

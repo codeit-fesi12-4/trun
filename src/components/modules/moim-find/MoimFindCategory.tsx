@@ -16,9 +16,10 @@ export type MoimFilterValues = {
 
 interface IMoimFindCategoryProps {
   onFilterChange?: (filters: MoimFilterValues) => void;
+  availableLocations?: string[];
 }
 
-const MoimFindCategory = ({ onFilterChange }: IMoimFindCategoryProps) => {
+const MoimFindCategory = ({ onFilterChange, availableLocations }: IMoimFindCategoryProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">("달림핏");
   const [location, setLocation] = useState("지역 전체");
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -33,8 +34,24 @@ const MoimFindCategory = ({ onFilterChange }: IMoimFindCategoryProps) => {
   const handleCategoryChange = (value: string) => {
     const newCategory = value as "달림핏" | "런케이션";
     setCategory(newCategory);
-    onFilterChange?.({ category: newCategory, location, date, sort });
+    // 카테고리 변경 시 선택된 지역이 새로운 카테고리에 존재하지 않으면 "지역 전체"로 리셋
+    const newLocation = availableLocations?.includes(location) ? location : "지역 전체";
+    setLocation(newLocation);
+    onFilterChange?.({ category: newCategory, location: newLocation, date, sort });
   };
+
+  // availableLocations가 변경될 때 선택된 지역이 목록에 없으면 리셋
+  useEffect(() => {
+    if (
+      availableLocations &&
+      availableLocations.length > 0 &&
+      !availableLocations.includes(location)
+    ) {
+      setLocation("지역 전체");
+      onFilterChange?.({ category, location: "지역 전체", date, sort });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availableLocations]);
 
   const handleLocationChange = (newLocation: string) => {
     setLocation(newLocation);
@@ -89,6 +106,7 @@ const MoimFindCategory = ({ onFilterChange }: IMoimFindCategoryProps) => {
         <MoimFindLocationFilter
           selectedLocation={location}
           onLocationChange={handleLocationChange}
+          availableLocations={availableLocations}
         />
         <MoimFindDatePicker selectedDate={date} onDateChange={handleDateChange} />
         <MoimFindSort selectedSort={sort} onSortChange={handleSortChange} />
