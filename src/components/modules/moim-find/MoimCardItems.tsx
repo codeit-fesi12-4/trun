@@ -51,11 +51,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
           className="shrink-0"
         >
           <Image
-            src={
-              item.isFavorite
-                ? "/icons/state=active, size=large.svg"
-                : "/icons/size=large, state=inactive.svg"
-            }
+            src={item.isFavorite ? "/icons/full_heart.svg" : "../icons/empty_heart.svg"}
             alt={item.isFavorite ? "좋아요" : "좋아요 취소"}
             width={44}
             height={44}
