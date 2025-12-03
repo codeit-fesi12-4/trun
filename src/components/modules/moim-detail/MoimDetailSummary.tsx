@@ -7,7 +7,9 @@ import MoimDetailProgress from "./MoimDetailProgress";
 import { GetMoimResponse } from "@/types/moimDetail.type";
 import { format } from "date-fns";
 import { formatDeadline } from "@/utils/moim.util";
-import { useCancelMoim } from "@/hooks/api/moimDetail.api";
+import { useCancelMoim, useCreateJoin } from "@/hooks/api/moimDetail.api";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type MoimDetailSummary = {
   moim: GetMoimResponse;
@@ -17,7 +19,16 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
 
-  const { mutate: cancelMoim, isPending } = useCancelMoim();
+  const { mutateAsync: cancelMoim, isPending: isCanCelPending } = useCancelMoim();
+  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoin();
+
+  const router = useRouter();
+
+  const token = localStorage.getItem("token");
+
+  console.warn(token);
+
+  console.warn(moim.createdBy);
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -34,8 +45,34 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
     distinguishCreator();
   }, [moim]);
 
-  const handleMoimCancel = () => {
-    cancelMoim(moim.id);
+  const handleMoimCancel = async () => {
+    try {
+      await cancelMoim(moim.id);
+      await router.replace("/moim-find");
+
+      toast.success("모임이 취소되었습니다.");
+    } catch (error) {
+      console.error(error);
+      toast.error("모임 취소 실패", {
+        description: "잠시 후 다시 시도해주세요.",
+      });
+    }
+  };
+
+  const handleMoimJoin = async () => {
+    if (!token) {
+      toast.error("로그인이 필요합니다.");
+      return;
+    }
+    try {
+      await joinMoim(moim.id);
+      toast.success("모임에 참여되었습니다.");
+    } catch (error) {
+      console.error(error);
+      toast.error("모임 참여 실패", {
+        description: "잠시 후 다시 시도해주세요.",
+      });
+    }
   };
 
   return (
@@ -93,19 +130,23 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
           {isCreator ? (
             <div className="flex w-full gap-2 sm:h-12 md:h-15">
               <button
-                onClick={handleMoimCancel}
-                disabled={isPending}
+                onClick={() => void handleMoimCancel()}
+                disabled={isCanCelPending}
                 className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 sm:text-base md:text-xl"
               >
-                {isPending ? "취소중..." : "취소하기"}
+                {isCanCelPending ? "취소중..." : "취소하기"}
               </button>
               <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
                 공유하기
               </button>
             </div>
           ) : (
-            <button className="w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
-              참여하기
+            <button
+              onClick={() => void handleMoimJoin()}
+              disabled={isJoinPending}
+              className="w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+            >
+              {isJoinPending ? "참여중..." : "참여하기"}
             </button>
           )}
         </div>

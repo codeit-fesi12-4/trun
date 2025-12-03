@@ -30,3 +30,7 @@ export type User = {
   companyName: string;
   image: string | null;
 };
+
+export type PostJoinResponse = {
+  message: string;
+};
