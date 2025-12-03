@@ -25,7 +25,7 @@ const MoimFindLocationFilter = () => {
           className="sm:mb-1"
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="ml-4 border-0">
+      <DropdownMenuContent className="mr-10 border-0">
         {LOCATION_OPTIONS.map(option => (
           <DropdownMenuItem
             key={option}

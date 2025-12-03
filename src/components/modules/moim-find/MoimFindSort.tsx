@@ -18,7 +18,7 @@ const MoimFindSort = () => {
         <Image src="../icons/sort.svg" alt="정렬 아이콘" width={18} height={18} />
         {selectedSort}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="ml-15 border-0">
+      <DropdownMenuContent className="mr-8 border-0">
         {SORT_OPTIONS.map(option => (
           <DropdownMenuItem
             key={option}

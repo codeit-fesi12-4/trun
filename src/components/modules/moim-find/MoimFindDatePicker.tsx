@@ -33,7 +33,7 @@ const MoimFindDatePicker = () => {
           />
         </Button>
       </PopoverTrigger>
-      <PopoverContent side="bottom" align="start">
+      <PopoverContent side="bottom" align="center">
         <Calendar
           mode="single"
           selected={date}

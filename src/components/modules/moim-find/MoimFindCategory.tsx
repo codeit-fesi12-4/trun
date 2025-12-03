@@ -18,7 +18,7 @@ const MoimFindCategory = () => {
           <div className="flex w-full border-b border-gray-200 sm:border-0">
             <TabsTrigger
               value="달림핏"
-              className="h-[53px] w-1/2 gap-2 bg-transparent! text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:text-xl"
+              className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:text-xl"
             >
               <Image
                 src="../icons/dallimfit.svg"
@@ -31,7 +31,7 @@ const MoimFindCategory = () => {
             </TabsTrigger>
             <TabsTrigger
               value="런케이션"
-              className="h-[53px] w-1/2 gap-2 bg-transparent! text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:text-xl"
+              className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:text-xl"
             >
               <Image
                 src="../icons/runcation.svg"
@@ -45,7 +45,7 @@ const MoimFindCategory = () => {
           </div>
         </TabsList>
       </Tabs>
-      <div className="mt-8 flex flex-row sm:mt-0">
+      <div className="mt-8 flex flex-row sm:mt-0 sm:px-3">
         <MoimFindLocationFilter />
         <MoimFindDatePicker />
         <MoimFindSort />
