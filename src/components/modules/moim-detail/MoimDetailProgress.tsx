@@ -4,11 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import MoimDetailParticipantList from "./MoimDetailParticipantList";
-import { GetMoimResponse } from "@/types/moimDetail.type";
 import { useParticipants } from "@/hooks/api/moimDetail.api";
+import { Moim } from "@/types/moim.type";
 
 type MoimDetailProgress = {
-  moim: GetMoimResponse;
+  moim: Moim;
 };
 
 const MoimDetailProgress = ({ moim }: MoimDetailProgress) => {
@@ -20,7 +20,7 @@ const MoimDetailProgress = ({ moim }: MoimDetailProgress) => {
   if (!participants) return null;
 
   return (
-    <div className="bg-gradient-100 flex flex-col gap-3 rounded-[12px] border border-[#BEEDE7] px-5 pt-4 pb-6 sm:h-[113px] sm:rounded-[20px] sm:px-6 sm:pt-5 sm:pb-[22px] md:h-[141px] md:rounded-[32px]">
+    <div className="bg-gradient-100 flex flex-col gap-3 rounded-[12px] border border-[#BEEDE7] px-5 pt-4 pb-6 sm:h-[113px] sm:rounded-[20px] sm:px-6 sm:pt-5 sm:pb-[22px] md:h-[141px] md:rounded-4xl">
       <div className="flex justify-between">
         <div className="flex flex-row items-center gap-3">
           <span className="text-sm font-semibold text-gray-900 md:text-lg">

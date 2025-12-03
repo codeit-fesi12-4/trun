@@ -39,52 +39,51 @@ export default function MoimDetailReviewArea() {
   }, [page, totalPages]);
 
   return (
-    <div className="flex h-fit w-full flex-col gap-2.5 border-t-2 border-gray-200 bg-white px-6 pt-6 pb-[158px] sm:pb-[209px]">
-      <h3 className="text-base font-semibold text-gray-900">
-        이용자들은 이 프로그램을 이렇게 느꼈어요!
-      </h3>
-
+    <div className="mt-2">
+      <h3 className="text-lg font-semibold text-black">리뷰 모아보기</h3>
       <ReviewList reviewList={paginatedList} />
 
       {/* 페이지네이션 */}
-      <Pagination>
-        <PaginationContent>
-          {/* PREVIOUS  */}
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => setPage(Math.max(page - 1, 1))}
-              disabled={page === 1}
-              className="text-gray-200 hover:bg-transparent data-[state=active]:text-gray-800"
-            />
-          </PaginationItem>
-
-          {/* PAGE NUMBERS + ELLIPSIS */}
-          {pages.map((p, i) => (
-            <PaginationItem key={typeof p === "number" ? `page-${p}` : `ellipsis-${i}`}>
-              {p === "..." ? (
-                <PaginationEllipsis className="text-gray-200" />
-              ) : (
-                <PaginationLink
-                  isActive={page === p}
-                  onClick={() => typeof p === "number" && setPage(p)}
-                  className="text-gray-200 hover:bg-transparent data-[state=active]:border-0 data-[state=active]:bg-transparent data-[state=active]:text-gray-800 data-[state=active]:shadow-none"
-                >
-                  {p}
-                </PaginationLink>
-              )}
+      {reviewList.length !== 0 && (
+        <Pagination>
+          <PaginationContent>
+            {/* PREVIOUS  */}
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() => setPage(Math.max(page - 1, 1))}
+                disabled={page === 1}
+                className="text-gray-200 hover:bg-transparent data-[state=active]:text-gray-800"
+              />
             </PaginationItem>
-          ))}
 
-          {/* NEXT */}
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => setPage(Math.min(page + 1, totalPages))}
-              disabled={page === totalPages}
-              className="text-gray-200 hover:bg-transparent data-[state=active]:text-gray-800"
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            {/* PAGE NUMBERS + ELLIPSIS */}
+            {pages.map((p, i) => (
+              <PaginationItem key={typeof p === "number" ? `page-${p}` : `ellipsis-${i}`}>
+                {p === "..." ? (
+                  <PaginationEllipsis className="text-gray-200" />
+                ) : (
+                  <PaginationLink
+                    isActive={page === p}
+                    onClick={() => typeof p === "number" && setPage(p)}
+                    className="text-gray-200 hover:bg-transparent data-[state=active]:border-0 data-[state=active]:bg-transparent data-[state=active]:text-gray-800 data-[state=active]:shadow-none"
+                  >
+                    {p}
+                  </PaginationLink>
+                )}
+              </PaginationItem>
+            ))}
+
+            {/* NEXT */}
+            <PaginationItem>
+              <PaginationNext
+                onClick={() => setPage(Math.min(page + 1, totalPages))}
+                disabled={page === totalPages}
+                className="text-gray-200 hover:bg-transparent data-[state=active]:text-gray-800"
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }
