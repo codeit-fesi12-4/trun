@@ -24,3 +24,9 @@ export type MoimFilterValues = {
   date: Date | undefined;
   sort: "마감임박 순" | "참여 인원 순";
 };
+
+// 모임 필터 관련 공통 props 타입
+export type MoimFilterProps = {
+  onFilterChange?: (filters: MoimFilterValues) => void;
+  availableLocations?: string[];
+};

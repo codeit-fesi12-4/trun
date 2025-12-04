@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
-import { type MoimFilterValues } from "@/types/moimFind.type";
+import { type MoimFilterValues, type MoimFilterProps } from "@/types/moimFind.type";
 import { FILTER_CATEGORY, MOIM_LOCATION, FILTER_SORT } from "@/constants/moim";
 
-type UseMoimFilterProps = {
-  onFilterChange?: (filters: MoimFilterValues) => void;
-  availableLocations?: string[];
-};
+type UseMoimFilterProps = MoimFilterProps;
 
 export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFilterProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);

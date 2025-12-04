@@ -6,12 +6,10 @@ import MoimFindDatePicker from "./MoimFindDatePicker";
 import MoimFindSort from "./MoimFindSort";
 import Image from "next/image";
 import { useMoimFilter } from "@/hooks/useMoimFilter";
-import { type MoimFilterValues } from "@/types/moimFind.type";
+import { type MoimFilterProps } from "@/types/moimFind.type";
+import { FILTER_CATEGORY } from "@/constants/moim";
 
-type MoimFindCategoryProps = {
-  onFilterChange?: (filters: MoimFilterValues) => void;
-  availableLocations?: string[];
-};
+type MoimFindCategoryProps = MoimFilterProps;
 
 const MoimFindCategory = ({ onFilterChange, availableLocations }: MoimFindCategoryProps) => {
   const {
@@ -32,7 +30,7 @@ const MoimFindCategory = ({ onFilterChange, availableLocations }: MoimFindCatego
         <TabsList className="flex w-full justify-between bg-transparent">
           <div className="flex w-full border-b border-gray-200 md:border-0">
             <TabsTrigger
-              value="달림핏"
+              value={FILTER_CATEGORY.DALLIMFIT}
               className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
             >
               <Image
@@ -45,7 +43,7 @@ const MoimFindCategory = ({ onFilterChange, availableLocations }: MoimFindCatego
               달림핏
             </TabsTrigger>
             <TabsTrigger
-              value="런케이션"
+              value={FILTER_CATEGORY.RUNCATION}
               className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
             >
               <Image

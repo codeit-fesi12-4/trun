@@ -2,7 +2,7 @@ import MoimDatePickerField from "./MoimDatePickerField";
 import ServieCheckboxField from "./ServieCheckboxField";
 import MoimInputField from "./MoimInputField";
 import MoimPlaceSelectField from "./MoimPlaceSelectField";
-import { MOIM_TYPE } from "@/constants/moim";
+import { FILTER_CATEGORY, MIN_CAPACITY, MOIM_TYPE } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
 
 type MoimAddChapterProps = {
@@ -28,16 +28,16 @@ export const MoimAddChapter = ({
           <p className="text-sm text-gray-600">원하시는 서비스를 선택해주세요</p>
           <div className="flex flex-col gap-3">
             <ServieCheckboxField
-              title="달림핏"
-              service="달림핏"
+              title={FILTER_CATEGORY.DALLIMFIT}
+              service={FILTER_CATEGORY.DALLIMFIT}
               isSelected={formData.type === MOIM_TYPE.DALLIMFIT}
               onServiceChange={onServiceChange}
               iconSrc="/icons/dallimfit.svg"
               iconAlt="달림핏 아이콘"
             />
             <ServieCheckboxField
-              title="런케이션"
-              service="런케이션"
+              title={FILTER_CATEGORY.RUNCATION}
+              service={FILTER_CATEGORY.RUNCATION}
               isSelected={formData.type === MOIM_TYPE.RUNCATION}
               onServiceChange={onServiceChange}
               iconSrc="/icons/runcation.svg"
@@ -90,11 +90,11 @@ export const MoimAddChapter = ({
           <MoimInputField
             id="capacity"
             label="모집 정원"
-            placeholder="최소 5인 이상 입력해주세요."
+            placeholder={`최소 ${MIN_CAPACITY}인 이상 입력해주세요.`}
             value={formData.capacity}
             onChange={value => onFieldChange("capacity", value)}
             type="number"
-            min="5"
+            min={MIN_CAPACITY.toString()}
           />
         </div>
       );

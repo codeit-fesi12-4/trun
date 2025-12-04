@@ -10,6 +10,7 @@ import { MoimCardActions } from "@/types/moimFind.type";
 import { formatDate, formatTime } from "@/utils/date.util";
 import { formatDeadline } from "@/utils/moim.util";
 import Link from "next/link";
+import { MIN_CAPACITY } from "@/constants/moim";
 
 type MoimCardItemsProps = {
   item: Moim;
@@ -33,7 +34,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-center gap-2">
             <h3 className="truncate text-lg font-semibold text-gray-800">{item.name}</h3>
-            {item.participantCount >= 5 && (
+            {item.participantCount >= MIN_CAPACITY && (
               <Badge
                 variant="outline"
                 className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
