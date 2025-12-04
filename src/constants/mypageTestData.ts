@@ -1,14 +1,5 @@
 import { MyPageCardData, ReviewCardData } from "@/types/mypage.type";
 
-// 유저 MOCK 데이터
-export const TEST_USER_DATA = {
-  id: 1,
-  name: "낭만 러닝",
-  companyName: "러닝 크루",
-  email: "test1@test.com",
-  image: "/icons/default_profile.svg",
-};
-
 // 나의 모임 카드 MOCK 데이터
 export const MOCK_DATA: MyPageCardData[] = [
   {
