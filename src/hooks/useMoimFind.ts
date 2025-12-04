@@ -4,7 +4,7 @@ import { GetMoimsParams, MoimType, MoimLocation, SortBy, SortOrder } from "@/typ
 import {
   MOIM_TYPE,
   FILTER_CATEGORY,
-  FILTER_LOCATION,
+  MOIM_LOCATION,
   FILTER_SORT,
   SORT_BY,
   SORT_ORDER,
@@ -16,7 +16,7 @@ export const useMoimFind = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<MoimFilterValues>({
     category: FILTER_CATEGORY.DALLIMFIT,
-    location: FILTER_LOCATION.ALL,
+    location: MOIM_LOCATION.ALL,
     date: undefined,
     sort: FILTER_SORT.DEADLINE,
   });
@@ -29,7 +29,7 @@ export const useMoimFind = () => {
 
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
-    if (location === FILTER_LOCATION.ALL) return undefined;
+    if (location === MOIM_LOCATION.ALL) return undefined;
     return location as MoimLocation;
   };
 
@@ -70,14 +70,14 @@ export const useMoimFind = () => {
 
   // 선택된 카테고리의 모임들에서 실제 존재하는 지역 목록 추출
   const availableLocations = useMemo(() => {
-    if (!moimsForLocation) return [FILTER_LOCATION.ALL];
+    if (!moimsForLocation) return [MOIM_LOCATION.ALL];
     const locations = new Set<string>();
     moimsForLocation.forEach(moim => {
       if (moim.location) {
         locations.add(moim.location);
       }
     });
-    return [FILTER_LOCATION.ALL, ...Array.from(locations).sort()];
+    return [MOIM_LOCATION.ALL, ...Array.from(locations).sort()];
   }, [moimsForLocation]);
 
   const { data: moims, isLoading, error } = useMoimsQuery({ params: queryParams });

@@ -12,9 +12,6 @@ export const TOTAL_STEPS = 3;
 // 최소 모집 정원
 export const MIN_CAPACITY = 5;
 
-// 최종 단계
-export const FINAL_STEP = 3;
-
 // 폼 초기값 상수
 export const INITIAL_FORM_DATA: MoimFormData = {
   type: "",
@@ -30,11 +27,6 @@ export const INITIAL_FORM_DATA: MoimFormData = {
 export const FILTER_CATEGORY = {
   DALLIMFIT: "달림핏",
   RUNCATION: "런케이션",
-} as const;
-
-// 필터 지역 상수
-export const FILTER_LOCATION = {
-  ALL: "지역 전체",
 } as const;
 
 // 필터 정렬 상수
@@ -56,8 +48,9 @@ export const SORT_ORDER = {
   DESC: "desc",
 } as const;
 
-// 모임 지역 상수
+// 모임 지역 상수 (필터 "전체" 옵션 포함)
 export const MOIM_LOCATION = {
+  ALL: "지역 전체",
   KONKUK_UNIV: "건대입구",
   EULJIRO_3GA: "을지로3가",
   SINRIM: "신림",

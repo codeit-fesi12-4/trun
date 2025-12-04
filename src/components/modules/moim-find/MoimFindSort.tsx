@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SORT_OPTIONS } from "@/constants/moimFakeData";
+import { FILTER_SORT } from "@/constants/moim";
 import Image from "next/image";
 
 type MoimFindSortProps = {
@@ -20,7 +20,7 @@ const MoimFindSort = ({ selectedSort, onSortChange }: MoimFindSortProps) => (
       {selectedSort}
     </DropdownMenuTrigger>
     <DropdownMenuContent className="mr-8 border-0">
-      {SORT_OPTIONS.map(option => (
+      {Object.values(FILTER_SORT).map(option => (
         <DropdownMenuItem
           key={option}
           onClick={() => onSortChange(option as "마감임박 순" | "참여 인원 순")}

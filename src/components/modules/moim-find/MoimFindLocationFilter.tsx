@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LOCATION_OPTIONS } from "@/constants/moimFakeData";
+import { MOIM_LOCATION } from "@/constants/moim";
 import Image from "next/image";
 
 type MoimFindLocationFilterProps = {
@@ -20,9 +20,10 @@ const MoimFindLocationFilter = ({
   onLocationChange,
   availableLocations,
 }: MoimFindLocationFilterProps) => {
-  // availableLocations가 제공되면 사용, 없으면 기본 LOCATION_OPTIONS 사용
+  // availableLocations가 제공되면 사용, 없으면 기본 지역 목록 사용
+  const defaultLocations = Object.values(MOIM_LOCATION);
   const locationOptions =
-    availableLocations && availableLocations.length > 0 ? availableLocations : LOCATION_OPTIONS;
+    availableLocations && availableLocations.length > 0 ? availableLocations : defaultLocations;
 
   return (
     <DropdownMenu>

@@ -7,7 +7,7 @@ import {
   TOTAL_STEPS,
   INITIAL_FORM_DATA,
   MIN_CAPACITY,
-  FINAL_STEP,
+  FILTER_CATEGORY,
 } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
 
@@ -32,8 +32,8 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
 
   // 서비스 문자열을 MoimType으로 변환
   const convertServiceToType = (service: string): MoimType | null => {
-    if (service === "달림핏") return MOIM_TYPE.DALLIMFIT;
-    if (service === "런케이션") return MOIM_TYPE.RUNCATION;
+    if (service === FILTER_CATEGORY.DALLIMFIT) return MOIM_TYPE.DALLIMFIT;
+    if (service === FILTER_CATEGORY.RUNCATION) return MOIM_TYPE.RUNCATION;
     return null;
   };
 
@@ -72,7 +72,7 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
       }
       return true;
     }
-    if (step === FINAL_STEP) {
+    if (step === TOTAL_STEPS) {
       if (!formData.dateTime || !formData.image) {
         alert("모든 항목을 입력해주세요.");
         return false;
@@ -107,7 +107,7 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
 
   const handleSubmit = () => {
     // 최종 유효성 검사
-    if (!validateStep(FINAL_STEP)) {
+    if (!validateStep(TOTAL_STEPS)) {
       return;
     }
 

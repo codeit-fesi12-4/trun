@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { type MoimFilterValues } from "@/types/moimFind.type";
-import { FILTER_CATEGORY, FILTER_LOCATION, FILTER_SORT } from "@/constants/moim";
+import { FILTER_CATEGORY, MOIM_LOCATION, FILTER_SORT } from "@/constants/moim";
 
 type UseMoimFilterProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
@@ -9,7 +9,7 @@ type UseMoimFilterProps = {
 
 export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFilterProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
-  const [location, setLocation] = useState<string>(FILTER_LOCATION.ALL);
+  const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(FILTER_SORT.DEADLINE);
 
@@ -23,7 +23,7 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
 
   // 지역 리셋 로직 공통화
   const resetLocationIfInvalid = (currentLocation: string): string =>
-    availableLocations?.includes(currentLocation) ? currentLocation : FILTER_LOCATION.ALL;
+    availableLocations?.includes(currentLocation) ? currentLocation : MOIM_LOCATION.ALL;
 
   // 초기 필터 값 전달
   useEffect(() => {
@@ -47,7 +47,7 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
       availableLocations.length > 0 &&
       !availableLocations.includes(location)
     ) {
-      const newLocation = FILTER_LOCATION.ALL;
+      const newLocation = MOIM_LOCATION.ALL;
       setLocation(newLocation);
       onFilterChange?.({ ...createFilterValues(), location: newLocation });
     }
