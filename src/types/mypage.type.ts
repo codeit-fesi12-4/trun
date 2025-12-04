@@ -1,14 +1,5 @@
 import { MoimType } from "@/types/moim.type";
 
-export type UserData = {
-  teamId?: number;
-  id?: number;
-  email: string;
-  name: string;
-  companyName: string;
-  image: string;
-};
-
 export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
 
 export type MyPageCardData = {
