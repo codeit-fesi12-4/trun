@@ -1,9 +1,9 @@
-import { Review } from "@/constants/moimFakeData";
+import { Data } from "@/types/moinReview.type";
 import { format } from "date-fns";
 import Image from "next/image";
 
 type ReviewItem = {
-  review: Review;
+  review: Data;
   index: number;
   length: number;
 };

@@ -13,7 +13,7 @@ const MoimDetailPage = async ({ params }: MoimDetailPage) => {
   return (
     <div className="flex flex-col gap-4">
       <MoimDetailInformation moimId={moimId} />
-      <MoimDetailReviewArea />
+      <MoimDetailReviewArea moimId={moimId} />
     </div>
   );
 };

@@ -9,20 +9,39 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
-import { FAKE_REVIEWLIST } from "@/constants/moimFakeData";
 import ReviewList from "./ReviewList";
 import { PAGE_SIZE } from "@/constants/pagenation";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
+import { TEAM_NAME } from "@/constants";
+import { useMoimReview } from "@/hooks/api/moinReview.api";
 
-export default function MoimDetailReviewArea() {
+type MoimDetailReviewAreaProps = {
+  moimId: string;
+};
+
+export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaProps) {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState<(number | string)[]>([]);
-  const reviewList = FAKE_REVIEWLIST.data;
-  const totalPages = Math.ceil(reviewList.length / PAGE_SIZE);
 
-  const paginatedList = reviewList.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const NumberMoimId = Number(moimId);
+
+  const { data, isLoading } = useMoimReview({
+    moimId: NumberMoimId,
+    teamName: TEAM_NAME,
+    limit: PAGE_SIZE,
+    offset: (page - 1) * PAGE_SIZE,
+  });
+
+  const reviews = data?.data;
+
+  console.warn("reviews", reviews);
+
+  const totalPages = data?.totalPages ?? 1;
+
+  console.warn("reviews", reviews);
 
   useEffect(() => {
+    if (!reviews) return;
     const mediaQuery = window.matchMedia("(min-width: 1024px)"); // lg 기준
 
     const updatePages = () => {
@@ -33,18 +52,22 @@ export default function MoimDetailReviewArea() {
       }
     };
 
-    updatePages(); // 초기 실행
+    updatePages();
+
     mediaQuery.addEventListener("change", updatePages);
     return () => mediaQuery.removeEventListener("change", updatePages);
-  }, [page, totalPages]);
+  }, [page, reviews, totalPages]);
+
+  if (isLoading) return <div>로딩중</div>;
+  if (!reviews) return null;
 
   return (
     <div className="mt-2">
       <h3 className="text-lg font-semibold text-black">리뷰 모아보기</h3>
-      <ReviewList reviewList={paginatedList} />
+      <ReviewList reviewList={reviews} />
 
       {/* 페이지네이션 */}
-      {reviewList.length !== 0 && (
+      {totalPages > 1 && (
         <Pagination>
           <PaginationContent>
             {/* PREVIOUS  */}

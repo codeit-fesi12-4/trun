@@ -22,18 +22,20 @@ const MoimDetailProgress = ({ moim }: MoimDetailProgress) => {
   return (
     <div className="bg-gradient-100 flex flex-col gap-3 rounded-[12px] border border-[#BEEDE7] px-5 pt-4 pb-6 sm:h-[113px] sm:rounded-[20px] sm:px-6 sm:pt-5 sm:pb-[22px] md:h-[141px] md:rounded-4xl">
       <div className="flex justify-between">
-        <div className="flex flex-row items-center gap-3">
-          <span className="text-sm font-semibold text-gray-900 md:text-lg">
-            <span className="font-bold text-green-600">{participants.length}</span>명 참여
-          </span>
-          <MoimDetailParticipantList participants={participants} />
+        <div className="flex w-full justify-between">
+          <div className="flex flex-row items-center gap-3">
+            <span className="text-sm font-semibold text-gray-900 md:text-lg">
+              <span className="font-bold text-green-600">{participants.length}</span>명 참여
+            </span>
+            <MoimDetailParticipantList participants={participants} />
+          </div>
+          {moim.participantCount >= 5 && (
+            <Badge className="gap-0 bg-transparent p-0 text-xs font-medium text-green-600 md:text-base md:font-semibold">
+              <Image src="/icons/secure_check.svg" alt="check" width={18} height={18} />
+              개설 확정
+            </Badge>
+          )}
         </div>
-        {participants.length < 5 && (
-          <Badge className="gap-0 bg-transparent p-0 text-xs font-medium text-green-600 md:text-base md:font-semibold">
-            <Image src="/icons/secure_check.svg" alt="check" width={18} height={18} />
-            개설 확정
-          </Badge>
-        )}
       </div>
       <div className="flex flex-col gap-2 md:gap-4">
         <div className="flex justify-end">

@@ -1,12 +1,12 @@
-import { Review, Reviews } from "@/constants/moimFakeData";
 import ReviewItem from "./ReviewItem";
 import Image from "next/image";
+import { Data } from "@/types/moinReview.type";
 
-type ReviewList = {
-  reviewList: Reviews;
+type ReviewListProps = {
+  reviewList: Data[];
 };
 
-const ReviewList = ({ reviewList }: ReviewList) => (
+const ReviewList = ({ reviewList }: ReviewListProps) => (
   <div className="mt-2 mb-10 h-fit rounded-2xl bg-white px-5 py-6 pb-10 sm:mt-4 sm:rounded-4xl sm:px-10 sm:pt-8 md:mt-6 md:px-12 md:pt-10 md:pb-10">
     {reviewList.length === 0 ? (
       <div className="flex h-[250px] flex-col items-center justify-center">
@@ -15,7 +15,7 @@ const ReviewList = ({ reviewList }: ReviewList) => (
       </div>
     ) : (
       <ul className="flex flex-col gap-8">
-        {reviewList.map((review: Review, index: number) => (
+        {reviewList.map((review: Data, index: number) => (
           <li key={review.id}>
             <ReviewItem review={review} index={index} length={reviewList.length} />
           </li>
