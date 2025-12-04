@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { API_BASE_URL, TEAM_NAME } from "@/constants";
-import { GetMoimReviewResponse } from "@/types/moinReview.type";
+import { GetMoimReviewResponse } from "@/types/moimReview.type";
 
 // 모입별 리뷰 목록 조회
 export const getMoimReview = async ({

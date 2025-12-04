@@ -1,6 +1,6 @@
+import { Data } from "@/types/moimReview.type";
 import ReviewItem from "./ReviewItem";
 import Image from "next/image";
-import { Data } from "@/types/moinReview.type";
 
 type ReviewListProps = {
   reviewList: Data[];

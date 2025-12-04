@@ -1,4 +1,4 @@
-import { Data } from "@/types/moinReview.type";
+import { Data } from "@/types/moimReview.type";
 import { format } from "date-fns";
 import Image from "next/image";
 
