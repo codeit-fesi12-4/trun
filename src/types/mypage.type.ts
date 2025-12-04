@@ -1,4 +1,6 @@
-export type TProfileCardProps = {
+import { MoimType } from "@/types/moim.type";
+
+export type UserData = {
   teamId?: number;
   id?: number;
   email: string;
@@ -7,10 +9,9 @@ export type TProfileCardProps = {
   image: string;
 };
 
-import { MoimType } from "@/types/moim.type";
+export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
 
-export type Status = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
-export type TMyPageCardProps = {
+export type MyPageCardData = {
   teamId: number;
   id: number;
   type: MoimType;
@@ -21,7 +22,7 @@ export type TMyPageCardProps = {
   participantCount: number;
   capacity: number;
   image: string;
-  status?: Status | Status[];
+  status?: MoimStatus | MoimStatus[];
   createdBy: number;
   canceledAt: string | null;
   joinedAt?: string;
@@ -29,7 +30,7 @@ export type TMyPageCardProps = {
   isReviewed?: boolean;
 };
 
-export type TReviewCardProps = {
+export type ReviewCardData = {
   id: number;
   image: string;
   name: string;

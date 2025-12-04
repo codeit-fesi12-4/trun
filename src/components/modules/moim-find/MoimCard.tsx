@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { MoimCardData as MoimCardItemType } from "@/constants";
+import { MoimCardData as MoimCardItemType } from "@/types/moim.type";
 import MoimCardItems from "./MoimCardItems";
 
 interface IMoimCardProps {

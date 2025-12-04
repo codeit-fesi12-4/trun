@@ -8,10 +8,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LOCATION_OPTIONS } from "@/constants/moimFakeData";
 import Image from "next/image";
-import { useState } from "react";
 
-const MoimFindLocationFilter = () => {
-  const [selectedLocation, setSelectedLocation] = useState("지역 전체");
+interface IMoimFindLocationFilterProps {
+  selectedLocation: string;
+  onLocationChange: (location: string) => void;
+  availableLocations?: string[];
+}
+
+const MoimFindLocationFilter = ({
+  selectedLocation,
+  onLocationChange,
+  availableLocations,
+}: IMoimFindLocationFilterProps) => {
+  // availableLocations가 제공되면 사용, 없으면 기본 LOCATION_OPTIONS 사용
+  const locationOptions =
+    availableLocations && availableLocations.length > 0 ? availableLocations : LOCATION_OPTIONS;
 
   return (
     <DropdownMenu>
@@ -25,11 +36,11 @@ const MoimFindLocationFilter = () => {
           className="sm:mb-1"
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="ml-4 border-0">
-        {LOCATION_OPTIONS.map(option => (
+      <DropdownMenuContent className="mr-10 border-0">
+        {locationOptions.map(option => (
           <DropdownMenuItem
             key={option}
-            onClick={() => setSelectedLocation(option)}
+            onClick={() => onLocationChange(option)}
             className="text-sm font-medium data-highlighted:bg-green-200"
           >
             {option}

@@ -4,6 +4,7 @@ import Providers from "./providers";
 import { pretendard } from "./font";
 import Header from "@/components/layouts/Header";
 import LayoutWrapper from "@/components/layouts/LayoutWrapper";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "같이달림 | 함께 달리는 즐거움",
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <Header />
           <LayoutWrapper>{children}</LayoutWrapper>
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>

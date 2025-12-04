@@ -92,11 +92,11 @@ function TimePicker({ date, onTimeChange }: TimePickerProps) {
   };
 
   return (
-    <div className="flex gap-2 border-gray-200 py-4">
+    <div className="flex gap-2 border-gray-200 py-1 sm:py-4">
       {/* 시간 컬럼 */}
       <div
         ref={hourColumnRef}
-        className="time-picker-scrollbar flex h-[160px] w-16 flex-col gap-4 overflow-y-auto md:h-[250px]"
+        className="time-picker-scrollbar flex h-[100px] w-16 flex-col gap-4 overflow-y-auto sm:h-[250px]"
       >
         {hours.map(hour => {
           const isSelected = parseInt(hour) === currentHour;
@@ -118,7 +118,7 @@ function TimePicker({ date, onTimeChange }: TimePickerProps) {
       {/* 분 컬럼 */}
       <div
         ref={minuteColumnRef}
-        className="time-picker-scrollbar flex h-[160px] w-16 flex-col gap-4 overflow-y-auto md:h-[250px]"
+        className="time-picker-scrollbar flex h-[100px] w-16 flex-col gap-4 overflow-y-auto sm:h-[250px]"
       >
         {minutes.map(minute => {
           const isSelected = parseInt(minute) === currentMinute;
@@ -138,7 +138,7 @@ function TimePicker({ date, onTimeChange }: TimePickerProps) {
       </div>
 
       {/* AM/PM 컬럼 */}
-      <div className="flex h-[160px] w-14 flex-col gap-4 md:h-[250px]">
+      <div className="flex h-[100px] w-14 flex-col gap-4 sm:h-[250px]">
         {periods.map(period => {
           const isSelected = period === currentPeriod;
           return (
@@ -207,7 +207,7 @@ function TimeCalendar({ date, onDateChange }: TimeCalendarProps) {
   );
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col sm:flex-row">
       <div className="max-h-[275px] overflow-y-auto">
         <Calendar
           mode="single"

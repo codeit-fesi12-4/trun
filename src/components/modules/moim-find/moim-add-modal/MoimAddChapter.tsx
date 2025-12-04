@@ -1,0 +1,109 @@
+import MoimDatePickerField from "./MoimDatePickerField";
+import ServieCheckboxField from "./ServieCheckboxField";
+import MoimInputField from "./MoimInputField";
+import MoimPlaceSelectField from "./MoimPlaceSelectField";
+
+type FormData = {
+  title: string;
+  location: string;
+  image: File | null;
+  service: string;
+  meetingDate: Date | undefined;
+  deadlineDate: Date | undefined;
+  maxParticipants: string;
+};
+
+type MoimAddChapterProps = {
+  currentStep: number;
+  formData: FormData;
+  onFieldChange: (field: string, value: string | File | null | Date | undefined) => void;
+  onServiceChange: (service: string) => void;
+};
+
+export const MoimAddChapter = ({
+  currentStep,
+  formData,
+  onFieldChange,
+  onServiceChange,
+}: MoimAddChapterProps) => {
+  switch (currentStep) {
+    case 1:
+      return (
+        <div className="mb-4 flex flex-col gap-4 py-6">
+          <p className="text-sm text-gray-600">원하시는 서비스를 선택해주세요</p>
+          <div className="flex flex-col gap-3">
+            <ServieCheckboxField
+              title="달림핏"
+              service="달림핏"
+              isSelected={formData.service === "달림핏"}
+              onServiceChange={onServiceChange}
+              iconSrc="/icons/dallimfit.svg"
+              iconAlt="달림핏 아이콘"
+            />
+            <ServieCheckboxField
+              title="런케이션"
+              service="런케이션"
+              isSelected={formData.service === "런케이션"}
+              onServiceChange={onServiceChange}
+              iconSrc="/icons/runcation.svg"
+              iconAlt="런케이션 아이콘"
+            />
+          </div>
+        </div>
+      );
+    case 2:
+      return (
+        <div className="mb-6 flex flex-col gap-6 py-6">
+          <MoimInputField
+            id="title"
+            label="모임 이름"
+            placeholder="모임 이름을 작성해주세요"
+            value={formData.title}
+            onChange={value => onFieldChange("title", value)}
+            type="text"
+          />
+          <MoimPlaceSelectField
+            id="location"
+            label="장소"
+            placeholder="장소를 선택해주세요"
+            value={formData.location}
+            onValueChange={value => onFieldChange("location", value)}
+          />
+          <MoimInputField
+            id="image"
+            label="이미지"
+            placeholder="이미지를 첨부해주세요"
+            onChange={value => onFieldChange("image", value)}
+            type="image"
+            fileName={formData.image?.name}
+          />
+        </div>
+      );
+    case 3:
+      return (
+        <div className="mb-6 flex flex-col gap-6 py-6">
+          <MoimDatePickerField
+            label="모임 날짜"
+            date={formData.meetingDate}
+            onDateChange={date => onFieldChange("meetingDate", date)}
+          />
+          <MoimDatePickerField
+            label="마감 날짜"
+            date={formData.deadlineDate}
+            onDateChange={date => onFieldChange("deadlineDate", date)}
+          />
+          <MoimInputField
+            id="maxParticipants"
+            label="모집 정원"
+            placeholder="최소 5인 이상 입력해주세요."
+            value={formData.maxParticipants}
+            onChange={value => onFieldChange("maxParticipants", value)}
+            type="number"
+            min="5"
+          />
+        </div>
+      );
+    default:
+      return null;
+  }
+};
