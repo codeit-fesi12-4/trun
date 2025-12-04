@@ -1,19 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MoimFindLocationFilter from "./MoimFindLocationFilter";
 import MoimFindDatePicker from "./MoimFindDatePicker";
 import MoimFindSort from "./MoimFindSort";
 import Image from "next/image";
-
-// 타입 파일로 분리 예정
-export type MoimFilterValues = {
-  category: "달림핏" | "런케이션";
-  location: string;
-  date: Date | undefined;
-  sort: "마감임박" | "참여 인원 순";
-};
+import { useMoimFilter, MoimFilterValues } from "@/hooks/useMoimFilter";
 
 type MoimFindCategoryProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
@@ -21,53 +13,16 @@ type MoimFindCategoryProps = {
 };
 
 const MoimFindCategory = ({ onFilterChange, availableLocations }: MoimFindCategoryProps) => {
-  const [category, setCategory] = useState<"달림핏" | "런케이션">("달림핏");
-  const [location, setLocation] = useState("지역 전체");
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [sort, setSort] = useState<"마감임박" | "참여 인원 순">("마감임박");
-
-  // 초기 필터 값 전달
-  useEffect(() => {
-    onFilterChange?.({ category, location, date, sort });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleCategoryChange = (value: string) => {
-    const newCategory = value as "달림핏" | "런케이션";
-    setCategory(newCategory);
-    // 카테고리 변경 시 선택된 지역이 새로운 카테고리에 존재하지 않으면 "지역 전체"로 리셋
-    const newLocation = availableLocations?.includes(location) ? location : "지역 전체";
-    setLocation(newLocation);
-    onFilterChange?.({ category: newCategory, location: newLocation, date, sort });
-  };
-
-  // availableLocations가 변경될 때 선택된 지역이 목록에 없으면 리셋
-  useEffect(() => {
-    if (
-      availableLocations &&
-      availableLocations.length > 0 &&
-      !availableLocations.includes(location)
-    ) {
-      setLocation("지역 전체");
-      onFilterChange?.({ category, location: "지역 전체", date, sort });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [availableLocations]);
-
-  const handleLocationChange = (newLocation: string) => {
-    setLocation(newLocation);
-    onFilterChange?.({ category, location: newLocation, date, sort });
-  };
-
-  const handleDateChange = (newDate: Date | undefined) => {
-    setDate(newDate);
-    onFilterChange?.({ category, location, date: newDate, sort });
-  };
-
-  const handleSortChange = (newSort: "마감임박" | "참여 인원 순") => {
-    setSort(newSort);
-    onFilterChange?.({ category, location, date, sort: newSort });
-  };
+  const {
+    category,
+    location,
+    date,
+    sort,
+    handleCategoryChange,
+    handleLocationChange,
+    handleDateChange,
+    handleSortChange,
+  } = useMoimFilter({ onFilterChange, availableLocations });
 
   return (
     <div className="flex h-[95px] flex-col md:h-[53px] md:flex-row md:items-center md:justify-between md:border-b md:border-gray-200">

@@ -11,6 +11,14 @@ export const formatDatePicker = (dateValue: Date | undefined): string => {
   return format(dateValue, "yyyy-MM-dd hh:mm a", { locale: ko });
 };
 
+// Date 객체를 "yyyy/MM/dd" 형식으로 변환 (필터용)
+export const formatDateWithSlash = (date: Date): string => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}/${m}/${d}`;
+};
+
 // ISO 8601 날짜 문자열을 "1월 7일" 형식으로 변환
 export const formatDate = (dateString: string): string => {
   try {
