@@ -41,13 +41,21 @@ export type GetMoimsResponse = Moim[];
 
 // 모임 생성 API
 // 요청 타입 (multipart/form-data)
-export type CreateMoimRequest = Omit<
-  Moim,
-  "teamId" | "id" | "participantCount" | "createdBy" | "canceledAt"
-> & {
+export type CreateMoimRequest = {
+  type: MoimType;
+  name: string;
+  dateTime: string;
+  location: string;
+  capacity: number;
   image: File;
   registrationEnd?: string;
 };
 
 // 응답 타입 (canceledAt 제외)
 export type CreateMoimResponse = Omit<Moim, "canceledAt">;
+
+// 모임 카드 컴포넌트에서 공통으로 사용하는 액션 핸들러 타입
+export type MoimCardActions = {
+  onFavoriteToggle?: (id: number) => void;
+  onJoinClick?: (id: number) => void;
+};

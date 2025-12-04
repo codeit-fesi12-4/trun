@@ -2,17 +2,15 @@
 
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Moim } from "@/types/moim.type";
+import { Moim, MoimCardActions } from "@/types/moim.type";
 import MoimCardItems from "./MoimCardItems";
 
 type MoimCardProps = {
   item: Moim;
-  onFavoriteToggle?: (id: number) => void;
-  onJoinClick?: (id: number) => void;
-};
+} & MoimCardActions;
 
 const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
-  <Card key={item.id} className="overflow-hidden rounded-4xl border-[0.5px] p-0 shadow-none md:p-5">
+  <Card className="overflow-hidden rounded-4xl border-[0.5px] p-0 shadow-none md:p-5">
     <CardContent className="p-0">
       <div className="flex flex-col items-stretch md:flex-row md:gap-6">
         {/* 이미지 영역 */}

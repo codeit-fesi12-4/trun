@@ -66,7 +66,6 @@ const MoimFindCategory = ({ onFilterChange, availableLocations }: MoimFindCatego
           onLocationChange={handleLocationChange}
           availableLocations={availableLocations}
         />
-        {/* 이름 변경 필요 */}
         <MoimFindDatePicker selectedDate={date} onDateChange={handleDateChange} />
         <MoimFindSort selectedSort={sort} onSortChange={handleSortChange} />
       </div>

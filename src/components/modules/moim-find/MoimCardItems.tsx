@@ -1,23 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Moim } from "@/types/moim.type";
-import { formatDate, formatTime, formatDeadline } from "@/utils/date.util";
+import { Moim, MoimCardActions } from "@/types/moim.type";
+import { formatDate, formatTime } from "@/utils/date.util";
+import { formatDeadline } from "@/utils/moim.util";
 import Link from "next/link";
 
 type MoimCardItemsProps = {
   item: Moim;
-  onFavoriteToggle?: (id: number) => void;
-  onJoinClick?: (id: number) => void;
-};
+} & MoimCardActions;
 
 const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
+  const [isFavorite, setIsFavorite] = useState(false);
   const participantPercentage = (item.participantCount / item.capacity) * 100;
   const isFull = item.participantCount === item.capacity;
   const deadlineText = formatDeadline(item.registrationEnd);
+
+  const handleFavoriteClick = () => {
+    setIsFavorite(prev => !prev);
+    onFavoriteToggle?.(item.id);
+  };
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-1 p-5 md:p-0">
@@ -26,7 +32,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-center gap-2">
             <h3 className="truncate text-lg font-semibold text-gray-800">{item.name}</h3>
-            {item.canceledAt === null && item.participantCount >= 5 && (
+            {item.participantCount >= 5 && (
               <Badge
                 variant="outline"
                 className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
@@ -48,13 +54,13 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
         </div>
         <button
           type="button"
-          onClick={() => onFavoriteToggle?.(item.id)}
-          aria-label="좋아요"
+          onClick={handleFavoriteClick}
+          aria-label={isFavorite ? "좋아요 취소" : "좋아요"}
           className="shrink-0"
         >
           <Image
-            src="../icons/empty_heart.svg"
-            alt="좋아요"
+            src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
+            alt={isFavorite ? "좋아요 취소" : "좋아요"}
             width={44}
             height={44}
             className="size-11"
