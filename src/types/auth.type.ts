@@ -3,7 +3,6 @@ export type SignupRequest = {
   password: string;
   name: string;
   companyName: string;
-  image: string | null;
 };
 
 export type SigninRequest = {
