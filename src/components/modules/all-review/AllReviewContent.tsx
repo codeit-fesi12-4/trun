@@ -64,11 +64,9 @@ const buildDistribution = (
   { score: 1, count: scores?.oneStar ?? 0 },
 ];
 
-const CATEGORY_MAP: Record<string, MoimType> = {
+const CATEGORY_MAP: Record<MoimFilterValues["category"], MoimType> = {
   달림핏: "MINDFULNESS",
   런케이션: "WORKATION",
-  MINDFULNESS: "MINDFULNESS",
-  WORKATION: "WORKATION",
 };
 
 const DEFAULT_LOCATION = "지역 전체";
@@ -76,13 +74,6 @@ const DEFAULT_LOCATION = "지역 전체";
 const normalizeLocation = (location: string | undefined) => {
   if (!location || location === DEFAULT_LOCATION) return DEFAULT_LOCATION;
   return location;
-};
-
-const normalizeCategory = (category: string | undefined) => {
-  if (!category) return "달림핏";
-  if (category === "MINDFULNESS") return "달림핏";
-  if (category === "WORKATION") return "런케이션";
-  return category;
 };
 
 const AllReviewContent = () => {
@@ -95,10 +86,9 @@ const AllReviewContent = () => {
   });
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const activeCategory = useMemo(() => normalizeCategory(filters.category), [filters.category]);
   const activeReviewType = useMemo<MoimType>(
-    () => CATEGORY_MAP[activeCategory] ?? "MINDFULNESS",
-    [activeCategory],
+    () => CATEGORY_MAP[filters.category] as MoimType,
+    [filters.category],
   );
 
   const reviewQueryParams = useMemo<GetReviewsParams>(() => {
@@ -122,12 +112,13 @@ const AllReviewContent = () => {
     () => [
       "reviews",
       TEAM_NAME,
-      activeReviewType ?? "all",
+      activeReviewType,
       normalizeLocation(filters.location),
       filters.date ? format(filters.date, "yyyy-MM-dd") : "all",
+      filters.sort,
       PAGE_SIZE,
     ],
-    [activeReviewType, filters.date, filters.location],
+    [activeReviewType, filters.date, filters.location, filters.sort],
   );
 
   const reviewScoreParams = useMemo(
@@ -164,10 +155,10 @@ const AllReviewContent = () => {
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
       const pageSize = reviewQueryParams.limit ?? PAGE_SIZE;
-      const lastCount = lastPage.data.length;
+      const lastCount = lastPage?.data?.length ?? 0;
       if (lastCount < pageSize) return undefined;
 
-      const loaded = pages.reduce((sum, p) => sum + p.data.length, 0);
+      const loaded = pages.reduce((sum, p) => sum + (p?.data?.length ?? 0), 0);
       return loaded; // 다음 offset
     },
   });
@@ -198,7 +189,7 @@ const AllReviewContent = () => {
   const onFilterChange = (next: MoimFilterValues) => {
     setFilters({
       ...next,
-      category: normalizeCategory(next.category) as "달림핏" | "런케이션",
+      category: next.category,
       location: normalizeLocation(next.location),
     });
   };
