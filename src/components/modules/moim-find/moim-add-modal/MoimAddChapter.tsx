@@ -2,21 +2,16 @@ import MoimDatePickerField from "./MoimDatePickerField";
 import ServieCheckboxField from "./ServieCheckboxField";
 import MoimInputField from "./MoimInputField";
 import MoimPlaceSelectField from "./MoimPlaceSelectField";
-
-type FormData = {
-  title: string;
-  location: string;
-  image: File | null;
-  service: string;
-  meetingDate: Date | undefined;
-  deadlineDate: Date | undefined;
-  maxParticipants: string;
-};
+import { MOIM_TYPE } from "@/constants/moim";
+import { type MoimFormData } from "@/types/moimFind.type";
 
 type MoimAddChapterProps = {
   currentStep: number;
-  formData: FormData;
-  onFieldChange: (field: string, value: string | File | null | Date | undefined) => void;
+  formData: MoimFormData;
+  onFieldChange: (
+    field: keyof MoimFormData,
+    value: string | File | null | Date | undefined,
+  ) => void;
   onServiceChange: (service: string) => void;
 };
 
@@ -35,7 +30,7 @@ export const MoimAddChapter = ({
             <ServieCheckboxField
               title="달림핏"
               service="달림핏"
-              isSelected={formData.service === "달림핏"}
+              isSelected={formData.type === MOIM_TYPE.DALLIMFIT}
               onServiceChange={onServiceChange}
               iconSrc="/icons/dallimfit.svg"
               iconAlt="달림핏 아이콘"
@@ -43,7 +38,7 @@ export const MoimAddChapter = ({
             <ServieCheckboxField
               title="런케이션"
               service="런케이션"
-              isSelected={formData.service === "런케이션"}
+              isSelected={formData.type === MOIM_TYPE.RUNCATION}
               onServiceChange={onServiceChange}
               iconSrc="/icons/runcation.svg"
               iconAlt="런케이션 아이콘"
@@ -55,11 +50,11 @@ export const MoimAddChapter = ({
       return (
         <div className="mb-6 flex flex-col gap-6 py-6">
           <MoimInputField
-            id="title"
+            id="name"
             label="모임 이름"
             placeholder="모임 이름을 작성해주세요"
-            value={formData.title}
-            onChange={value => onFieldChange("title", value)}
+            value={formData.name}
+            onChange={value => onFieldChange("name", value)}
             type="text"
           />
           <MoimPlaceSelectField
@@ -84,20 +79,20 @@ export const MoimAddChapter = ({
         <div className="mb-6 flex flex-col gap-6 py-6">
           <MoimDatePickerField
             label="모임 날짜"
-            date={formData.meetingDate}
-            onDateChange={date => onFieldChange("meetingDate", date)}
+            date={formData.dateTime}
+            onDateChange={date => onFieldChange("dateTime", date)}
           />
           <MoimDatePickerField
             label="마감 날짜"
-            date={formData.deadlineDate}
-            onDateChange={date => onFieldChange("deadlineDate", date)}
+            date={formData.registrationEnd}
+            onDateChange={date => onFieldChange("registrationEnd", date)}
           />
           <MoimInputField
-            id="maxParticipants"
+            id="capacity"
             label="모집 정원"
             placeholder="최소 5인 이상 입력해주세요."
-            value={formData.maxParticipants}
-            onChange={value => onFieldChange("maxParticipants", value)}
+            value={formData.capacity}
+            onChange={value => onFieldChange("capacity", value)}
             type="number"
             min="5"
           />

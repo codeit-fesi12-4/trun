@@ -1,7 +1,8 @@
 "use client";
 
 import MoimCard from "@/components/modules/moim-find/MoimCard";
-import { Moim, MoimCardActions } from "@/types/moim.type";
+import { Moim } from "@/types/moim.type";
+import { MoimCardActions } from "@/types/moimFind.type";
 
 type MoimCardListProps = {
   items: Moim[];

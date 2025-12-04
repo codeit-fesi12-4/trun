@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MoimLocationEnum } from "@/constants/moimLocation";
+import { MOIM_LOCATION } from "@/constants/moim";
 
 type MoimPlaceSelectFieldProps = {
   id: string;
@@ -44,7 +44,7 @@ const MoimPlaceSelectField = ({
         />
       </SelectTrigger>
       <SelectContent>
-        {Object.values(MoimLocationEnum).map(location => (
+        {Object.values(MOIM_LOCATION).map(location => (
           <SelectItem key={location} value={location}>
             {location}
           </SelectItem>

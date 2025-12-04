@@ -1,6 +1,7 @@
 "use client";
 
-import { useMoimAddModal, TOTAL_STEPS } from "@/hooks/useMoimAddModal";
+import { useMoimAddModal } from "@/hooks/useMoimAddModal";
+import { TOTAL_STEPS } from "@/constants/moim";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { MoimAddChapter } from "./moim-add-modal/MoimAddChapter";
 

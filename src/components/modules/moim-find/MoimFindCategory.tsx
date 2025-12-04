@@ -5,7 +5,8 @@ import MoimFindLocationFilter from "./MoimFindLocationFilter";
 import MoimFindDatePicker from "./MoimFindDatePicker";
 import MoimFindSort from "./MoimFindSort";
 import Image from "next/image";
-import { useMoimFilter, MoimFilterValues } from "@/hooks/useMoimFilter";
+import { useMoimFilter } from "@/hooks/useMoimFilter";
+import { type MoimFilterValues } from "@/types/moimFind.type";
 
 type MoimFindCategoryProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;

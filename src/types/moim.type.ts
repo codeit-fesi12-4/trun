@@ -1,10 +1,10 @@
-import { MOIM_TYPE } from "@/constants";
+import { MOIM_TYPE, SORT_BY, SORT_ORDER, MOIM_LOCATION } from "@/constants/moim";
 
 // 공통으로 사용되는 유니온 타입
 export type MoimType = (typeof MOIM_TYPE)[keyof typeof MOIM_TYPE];
-export type MoimLocation = "건대입구" | "을지로3가" | "신림" | "홍대입구";
-export type SortBy = "dateTime" | "registrationEnd" | "participantCount";
-export type SortOrder = "asc" | "desc";
+export type MoimLocation = (typeof MOIM_LOCATION)[keyof typeof MOIM_LOCATION];
+export type SortBy = (typeof SORT_BY)[keyof typeof SORT_BY];
+export type SortOrder = (typeof SORT_ORDER)[keyof typeof SORT_ORDER];
 
 // 모임 기본 타입
 export type Moim = {
@@ -53,9 +53,3 @@ export type CreateMoimRequest = {
 
 // 응답 타입 (canceledAt 제외)
 export type CreateMoimResponse = Omit<Moim, "canceledAt">;
-
-// 모임 카드 컴포넌트에서 공통으로 사용하는 액션 핸들러 타입
-export type MoimCardActions = {
-  onFavoriteToggle?: (id: number) => void;
-  onJoinClick?: (id: number) => void;
-};

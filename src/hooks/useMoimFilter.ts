@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
-
-export type MoimFilterValues = {
-  category: "달림핏" | "런케이션";
-  location: string;
-  date: Date | undefined;
-  sort: "마감임박" | "참여 인원 순";
-};
+import { type MoimFilterValues } from "@/types/moimFind.type";
+import { FILTER_CATEGORY, FILTER_LOCATION, FILTER_SORT } from "@/constants/moim";
 
 type UseMoimFilterProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
@@ -13,14 +8,26 @@ type UseMoimFilterProps = {
 };
 
 export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFilterProps) => {
-  const [category, setCategory] = useState<"달림핏" | "런케이션">("달림핏");
-  const [location, setLocation] = useState("지역 전체");
+  const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
+  const [location, setLocation] = useState<string>(FILTER_LOCATION.ALL);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [sort, setSort] = useState<"마감임박" | "참여 인원 순">("마감임박");
+  const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(FILTER_SORT.DEADLINE);
+
+  // 필터 객체 생성 헬퍼 함수
+  const createFilterValues = (): MoimFilterValues => ({
+    category,
+    location,
+    date,
+    sort,
+  });
+
+  // 지역 리셋 로직 공통화
+  const resetLocationIfInvalid = (currentLocation: string): string =>
+    availableLocations?.includes(currentLocation) ? currentLocation : FILTER_LOCATION.ALL;
 
   // 초기 필터 값 전달
   useEffect(() => {
-    onFilterChange?.({ category, location, date, sort });
+    onFilterChange?.(createFilterValues());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -28,9 +35,9 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
     const newCategory = value as "달림핏" | "런케이션";
     setCategory(newCategory);
     // 카테고리 변경 시 선택된 지역이 새로운 카테고리에 존재하지 않으면 "지역 전체"로 리셋
-    const newLocation = availableLocations?.includes(location) ? location : "지역 전체";
+    const newLocation = resetLocationIfInvalid(location);
     setLocation(newLocation);
-    onFilterChange?.({ category: newCategory, location: newLocation, date, sort });
+    onFilterChange?.({ ...createFilterValues(), category: newCategory, location: newLocation });
   };
 
   // availableLocations가 변경될 때 선택된 지역이 목록에 없으면 리셋
@@ -40,25 +47,26 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
       availableLocations.length > 0 &&
       !availableLocations.includes(location)
     ) {
-      setLocation("지역 전체");
-      onFilterChange?.({ category, location: "지역 전체", date, sort });
+      const newLocation = FILTER_LOCATION.ALL;
+      setLocation(newLocation);
+      onFilterChange?.({ ...createFilterValues(), location: newLocation });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availableLocations]);
 
   const handleLocationChange = (newLocation: string) => {
     setLocation(newLocation);
-    onFilterChange?.({ category, location: newLocation, date, sort });
+    onFilterChange?.({ ...createFilterValues(), location: newLocation });
   };
 
   const handleDateChange = (newDate: Date | undefined) => {
     setDate(newDate);
-    onFilterChange?.({ category, location, date: newDate, sort });
+    onFilterChange?.({ ...createFilterValues(), date: newDate });
   };
 
-  const handleSortChange = (newSort: "마감임박" | "참여 인원 순") => {
+  const handleSortChange = (newSort: "마감임박 순" | "참여 인원 순") => {
     setSort(newSort);
-    onFilterChange?.({ category, location, date, sort: newSort });
+    onFilterChange?.({ ...createFilterValues(), sort: newSort });
   };
 
   return {
@@ -73,6 +81,7 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
   };
 };
 
+// =================================================================================
 // DatePicker용 커스텀 훅
 type UseDatePickerProps = {
   selectedDate: Date | undefined;

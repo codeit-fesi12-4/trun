@@ -1,5 +1,6 @@
 import Image from "next/image";
-import MoimFindCategory, { MoimFilterValues } from "./MoimFindCategory";
+import MoimFindCategory from "./MoimFindCategory";
+import { type MoimFilterValues } from "@/types/moimFind.type";
 
 type MoimFindHeaderProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
