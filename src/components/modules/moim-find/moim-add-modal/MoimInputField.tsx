@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-interface IMoimInputFieldProps {
+type MoimInputFieldProps = {
   id: string;
   label: string;
   placeholder: string;
@@ -12,7 +12,7 @@ interface IMoimInputFieldProps {
   type?: "text" | "number" | "image";
   min?: string;
   fileName?: string;
-}
+};
 
 const MoimInputField = ({
   id,
@@ -23,7 +23,8 @@ const MoimInputField = ({
   type = "text",
   min,
   fileName,
-}: IMoimInputFieldProps) => {
+}: MoimInputFieldProps) => {
+  // 파일 입력 처리 이벤트 핸들러
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     onChange(file);

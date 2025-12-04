@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { MoimCardData } from "@/constants";
+import { MoimCardData } from "@/types/moim.type";
 import Link from "next/link";
 
 interface IMoimCardItemProps {
