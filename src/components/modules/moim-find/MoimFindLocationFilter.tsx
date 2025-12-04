@@ -9,17 +9,17 @@ import {
 import { LOCATION_OPTIONS } from "@/constants/moimFakeData";
 import Image from "next/image";
 
-interface IMoimFindLocationFilterProps {
+type MoimFindLocationFilterProps = {
   selectedLocation: string;
   onLocationChange: (location: string) => void;
   availableLocations?: string[];
-}
+};
 
 const MoimFindLocationFilter = ({
   selectedLocation,
   onLocationChange,
   availableLocations,
-}: IMoimFindLocationFilterProps) => {
+}: MoimFindLocationFilterProps) => {
   // availableLocations가 제공되면 사용, 없으면 기본 LOCATION_OPTIONS 사용
   const locationOptions =
     availableLocations && availableLocations.length > 0 ? availableLocations : LOCATION_OPTIONS;

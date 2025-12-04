@@ -7,13 +7,13 @@ import { Progress } from "@/components/ui/progress";
 import { MoimCardData } from "@/types/moim.type";
 import Link from "next/link";
 
-interface IMoimCardItemProps {
+type MoimCardItemsProps = {
   item: MoimCardData;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
-}
+};
 
-const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemProps) => {
+const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
   const participantPercentage = (item.participants / item.maxParticipants) * 100;
   const isFull = item.participants === item.maxParticipants;
 

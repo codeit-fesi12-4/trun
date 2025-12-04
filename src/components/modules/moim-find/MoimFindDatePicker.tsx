@@ -4,14 +4,14 @@ import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Image from "next/image";
 import { useState } from "react";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 
-interface IMoimFindDatePickerProps {
+type MoimFindDatePickerProps = {
   selectedDate: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
-}
+};
 
-const MoimFindDatePicker = ({ selectedDate, onDateChange }: IMoimFindDatePickerProps) => {
+const MoimFindDatePicker = ({ selectedDate, onDateChange }: MoimFindDatePickerProps) => {
   const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate);
   const [isOpen, setIsOpen] = useState(false);
 

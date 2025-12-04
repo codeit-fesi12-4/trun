@@ -8,12 +8,12 @@ import {
 import { SORT_OPTIONS } from "@/constants/moimFakeData";
 import Image from "next/image";
 
-interface IMoimFindSortProps {
+type MoimFindSortProps = {
   selectedSort: "마감임박" | "참여 인원 순";
   onSortChange: (sort: "마감임박" | "참여 인원 순") => void;
-}
+};
 
-const MoimFindSort = ({ selectedSort, onSortChange }: IMoimFindSortProps) => (
+const MoimFindSort = ({ selectedSort, onSortChange }: MoimFindSortProps) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="flex h-7 w-fit items-center justify-center text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=active]:border-0 sm:text-base">
       <Image src="../icons/sort.svg" alt="정렬 아이콘" width={18} height={18} />

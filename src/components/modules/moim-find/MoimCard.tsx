@@ -5,13 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { MoimCardData as MoimCardItemType } from "@/types/moim.type";
 import MoimCardItems from "./MoimCardItems";
 
-interface IMoimCardProps {
+type MoimCardProps = {
   item: MoimCardItemType;
   onFavoriteToggle?: (id: string) => void;
   onJoinClick?: (id: string) => void;
-}
+};
 
-const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardProps) => (
+const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
   <Card key={item.id} className="overflow-hidden rounded-4xl border-[0.5px] p-0 shadow-none md:p-5">
     <CardContent className="p-0">
       <div className="flex flex-col items-stretch md:flex-row md:gap-6">

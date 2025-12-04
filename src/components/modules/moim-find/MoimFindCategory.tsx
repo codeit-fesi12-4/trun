@@ -7,6 +7,7 @@ import MoimFindDatePicker from "./MoimFindDatePicker";
 import MoimFindSort from "./MoimFindSort";
 import Image from "next/image";
 
+// 타입 파일로 분리 예정
 export type MoimFilterValues = {
   category: "달림핏" | "런케이션";
   location: string;
@@ -14,12 +15,12 @@ export type MoimFilterValues = {
   sort: "마감임박" | "참여 인원 순";
 };
 
-interface IMoimFindCategoryProps {
+type MoimFindCategoryProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
   availableLocations?: string[];
-}
+};
 
-const MoimFindCategory = ({ onFilterChange, availableLocations }: IMoimFindCategoryProps) => {
+const MoimFindCategory = ({ onFilterChange, availableLocations }: MoimFindCategoryProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">("달림핏");
   const [location, setLocation] = useState("지역 전체");
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -70,6 +71,7 @@ const MoimFindCategory = ({ onFilterChange, availableLocations }: IMoimFindCateg
 
   return (
     <div className="flex h-[95px] flex-col md:h-[53px] md:flex-row md:items-center md:justify-between md:border-b md:border-gray-200">
+      {/* 카테고리 탭 영역 */}
       <Tabs value={category} onValueChange={handleCategoryChange}>
         <TabsList className="flex w-full justify-between bg-transparent">
           <div className="flex w-full border-b border-gray-200 md:border-0">
@@ -102,12 +104,14 @@ const MoimFindCategory = ({ onFilterChange, availableLocations }: IMoimFindCateg
           </div>
         </TabsList>
       </Tabs>
+      {/* 필터 영역 */}
       <div className="mt-8 flex flex-row md:mt-0 md:gap-3 md:px-3">
         <MoimFindLocationFilter
           selectedLocation={location}
           onLocationChange={handleLocationChange}
           availableLocations={availableLocations}
         />
+        {/* 이름 변경 필요 */}
         <MoimFindDatePicker selectedDate={date} onDateChange={handleDateChange} />
         <MoimFindSort selectedSort={sort} onSortChange={handleSortChange} />
       </div>
