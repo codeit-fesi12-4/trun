@@ -1,14 +1,20 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { format } from "date-fns";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 import ReviewListItem from "@/components/modules/all-review/ReviewListItem";
-import MoimFindCategory from "@/components/modules/moim-find/MoimFindCategory";
+import MoimFindCategory, {
+  MoimFilterValues,
+} from "@/components/modules/moim-find/MoimFindCategory";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { TEAM_NAME } from "@/constants";
-import { useReviewsQuery, useReviewScoresQuery } from "@/hooks/api/review.api";
+import { getReviews, useReviewScoresQuery } from "@/hooks/api/review.api";
+import { GetReviewsParams } from "@/types/review.type";
+import { MoimType } from "@/types/moim.type";
 
 type ReviewDistribution = { score: number; count: number };
 
@@ -58,24 +64,128 @@ const buildDistribution = (
   { score: 1, count: scores?.oneStar ?? 0 },
 ];
 
+const CATEGORY_MAP: Record<string, MoimType> = {
+  달림핏: "MINDFULNESS",
+  런케이션: "WORKATION",
+  MINDFULNESS: "MINDFULNESS",
+  WORKATION: "WORKATION",
+};
+
+const DEFAULT_LOCATION = "지역 전체";
+
+const normalizeLocation = (location: string | undefined) => {
+  if (!location || location === DEFAULT_LOCATION) return DEFAULT_LOCATION;
+  return location;
+};
+
+const normalizeCategory = (category: string | undefined) => {
+  if (!category) return "달림핏";
+  if (category === "MINDFULNESS") return "달림핏";
+  if (category === "WORKATION") return "런케이션";
+  return category;
+};
+
 const AllReviewContent = () => {
+  const PAGE_SIZE = 5;
+  const [filters, setFilters] = useState<MoimFilterValues>({
+    category: "달림핏",
+    location: DEFAULT_LOCATION,
+    date: undefined,
+    sort: "마감임박",
+  });
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const activeCategory = useMemo(() => normalizeCategory(filters.category), [filters.category]);
+  const activeReviewType = useMemo<MoimType>(
+    () => CATEGORY_MAP[activeCategory] ?? "MINDFULNESS",
+    [activeCategory],
+  );
+
+  const reviewQueryParams = useMemo<GetReviewsParams>(() => {
+    const params: GetReviewsParams = {
+      teamId: TEAM_NAME,
+      limit: PAGE_SIZE,
+      type: activeReviewType,
+    };
+
+    const normalizedLocation = normalizeLocation(filters.location);
+    if (normalizedLocation !== DEFAULT_LOCATION) params.location = normalizedLocation;
+
+    if (filters.date) {
+      params.date = format(filters.date, "yyyy-MM-dd");
+    }
+
+    return params;
+  }, [activeReviewType, filters.date, filters.location]);
+
+  const reviewQueryKey = useMemo(
+    () => [
+      "reviews",
+      TEAM_NAME,
+      activeReviewType ?? "all",
+      normalizeLocation(filters.location),
+      filters.date ? format(filters.date, "yyyy-MM-dd") : "all",
+      PAGE_SIZE,
+    ],
+    [activeReviewType, filters.date, filters.location],
+  );
+
+  const reviewScoreParams = useMemo(
+    () => ({
+      teamId: TEAM_NAME,
+      type: activeReviewType,
+    }),
+    [activeReviewType],
+  );
+
   const { data: scoresData } = useReviewScoresQuery({
-    params: { teamId: TEAM_NAME },
+    params: reviewScoreParams,
   });
 
   const {
-    data: reviewsData,
+    data: reviewsPages,
     isLoading: isReviewsLoading,
     isError: isReviewsError,
-  } = useReviewsQuery({
-    params: {
-      teamId: TEAM_NAME,
-      limit: 10,
-      offset: 0,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: reviewQueryKey,
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await getReviews({
+        ...reviewQueryParams,
+        offset: pageParam,
+      });
+      if (Array.isArray(res)) {
+        return { data: res, totalItemCount: res.length, currentPage: 1, totalPages: 1 };
+      }
+      return res;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      const pageSize = reviewQueryParams.limit ?? PAGE_SIZE;
+      const lastCount = lastPage.data.length;
+      if (lastCount < pageSize) return undefined;
+
+      const loaded = pages.reduce((sum, p) => sum + p.data.length, 0);
+      return loaded; // 다음 offset
     },
   });
 
-  const reviewList = Array.isArray(reviewsData) ? reviewsData : (reviewsData?.data ?? []);
+  const { reviewList, totalItemCount } = useMemo(() => {
+    const pages = reviewsPages?.pages ?? [];
+    const flattened = pages.flatMap(page => page.data);
+    const total = pages[0]?.totalItemCount ?? flattened.length;
+    return { reviewList: flattened, totalItemCount: total };
+  }, [reviewsPages]);
+
+  const availableLocations = useMemo(() => {
+    const locations = new Set<string>();
+    reviewList.forEach(review => {
+      if (review.Gathering?.location) locations.add(review.Gathering.location);
+    });
+    return [DEFAULT_LOCATION, ...Array.from(locations).sort()];
+  }, [reviewList]);
 
   const distribution = useMemo(() => buildDistribution(scoresData), [scoresData]);
   const totalReviews = useMemo(
@@ -85,9 +195,54 @@ const AllReviewContent = () => {
   const averageScore = scoresData?.averageScore ?? 0;
   const heartFillFor = (index: number) => Math.max(0, Math.min(1, averageScore - index));
 
+  const onFilterChange = (next: MoimFilterValues) => {
+    setFilters({
+      ...next,
+      category: normalizeCategory(next.category) as "달림핏" | "런케이션",
+      location: normalizeLocation(next.location),
+    });
+  };
+
+  // IntersectionObserver로 무한 스크롤
+  useEffect(() => {
+    const target = loadMoreRef.current;
+
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const entry = entries[0];
+        if (
+          entry.isIntersecting &&
+          !isReviewsLoading &&
+          !isReviewsError &&
+          hasNextPage &&
+          !isFetchingNextPage
+        ) {
+          void fetchNextPage();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isReviewsError, isReviewsLoading, isFetchingNextPage]);
+
+  // 초기 로드 직후 센티널이 이미 뷰포트 안에 있을 때 추가 호출
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasNextPage || isReviewsLoading || isFetchingNextPage) return;
+
+    const rect = target.getBoundingClientRect();
+    const isVisible = rect.top <= window.innerHeight + 200;
+    if (isVisible) {
+      void fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isReviewsLoading, reviewList.length]);
+
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4">
-      <MoimFindCategory />
+      <MoimFindCategory onFilterChange={onFilterChange} availableLocations={availableLocations} />
 
       <Card className="bg-gradient-100 border-0 shadow-none">
         <CardContent className="flex flex-col gap-5 rounded-xl px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-6 sm:py-7">
@@ -101,7 +256,7 @@ const AllReviewContent = () => {
               ))}
             </div>
             <p className="text-xs font-medium text-emerald-700">
-              {scoresData === undefined ? "집계 중..." : `총 ${totalReviews}명 참여`}
+              {scoresData === undefined ? "집계 중.." : `총 ${totalItemCount}명 참여`}
             </p>
           </div>
 
@@ -130,7 +285,9 @@ const AllReviewContent = () => {
       <div className="flex flex-col gap-3">
         {isReviewsLoading ? (
           <Card className="border border-gray-100 bg-white shadow-sm">
-            <CardContent className="p-5 text-sm text-gray-500">리뷰를 불러오는 중...</CardContent>
+            <CardContent className="p-5 text-sm text-gray-500">
+              리뷰를 불러오는 중입니다...
+            </CardContent>
           </Card>
         ) : isReviewsError ? (
           <Card className="border border-gray-100 bg-white shadow-sm">
@@ -155,6 +312,10 @@ const AllReviewContent = () => {
           </Card>
         )}
       </div>
+      <div id="review-load-more-sentinel" ref={loadMoreRef} className="h-6 w-full" aria-hidden />
+      {isFetchingNextPage ? (
+        <div className="text-center text-sm text-gray-500">추가 로딩 중...</div>
+      ) : null}
     </div>
   );
 };
