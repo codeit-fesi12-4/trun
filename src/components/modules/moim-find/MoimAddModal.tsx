@@ -31,7 +31,7 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
       confirmText={currentStep === TOTAL_STEPS ? "모임 만들기" : "다음"}
       onPrevious={currentStep > 1 ? handlePrevious : undefined}
       showPrevious={currentStep > 1}
-      onCancel={currentStep === 1 ? () => onOpenChange(false) : undefined}
+      onCancel={currentStep === 1 ? () => handleModalOpenChange(false) : undefined}
       showCancel={currentStep === 1}
     >
       <MoimAddChapter
