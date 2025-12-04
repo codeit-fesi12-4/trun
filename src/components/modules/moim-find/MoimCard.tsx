@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { MoimCardData as MoimCardItemType } from "@/types/moim.type";
+import { Moim } from "@/types/moim.type";
 import MoimCardItems from "./MoimCardItems";
 
 type MoimCardProps = {
-  item: MoimCardItemType;
-  onFavoriteToggle?: (id: string) => void;
-  onJoinClick?: (id: string) => void;
+  item: Moim;
+  onFavoriteToggle?: (id: number) => void;
+  onJoinClick?: (id: number) => void;
 };
 
 const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
@@ -18,8 +18,8 @@ const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
         {/* 이미지 영역 */}
         <div className="relative aspect-video h-45 w-full shrink-0 md:aspect-auto md:h-36 md:w-36">
           <Image
-            src={item.imageUrl}
-            alt={item.title}
+            src={item.image}
+            alt={item.name}
             fill
             className="rounded-b-none object-cover md:rounded-3xl"
           />

@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { useMoimsQuery } from "@/hooks/api/moim.api";
-import { convertMoimsToMoimCardData } from "@/utils/moim.util";
 import { GetMoimsParams, MoimType, SortBy } from "@/types/moim.type";
 import { MOIM_TYPE } from "@/constants";
 import { parseISO, isSameDay } from "date-fns";
@@ -91,9 +90,6 @@ export const useMoimFind = () => {
     });
   }, [moims, filters.date]);
 
-  // 필터링된 Moim 데이터를 MoimCardData로 변환
-  const moimCardData = filteredMoims ? convertMoimsToMoimCardData(filteredMoims) : undefined;
-
   const handleFilterChange = (newFilters: MoimFilterValues) => {
     setFilters(newFilters);
   };
@@ -101,7 +97,7 @@ export const useMoimFind = () => {
   return {
     isModalOpen,
     setIsModalOpen,
-    moimCardData: moimCardData || [],
+    moimCardData: filteredMoims || [],
     availableLocations,
     isLoading,
     error,

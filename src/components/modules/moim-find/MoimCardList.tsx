@@ -1,12 +1,12 @@
 "use client";
 
 import MoimCard from "@/components/modules/moim-find/MoimCard";
-import { MoimCardData } from "@/types/moim.type";
+import { Moim } from "@/types/moim.type";
 
 type MoimCardListProps = {
-  items: MoimCardData[];
-  onFavoriteToggle?: (id: string) => void;
-  onJoinClick?: (id: string) => void;
+  items: Moim[];
+  onFavoriteToggle?: (id: number) => void;
+  onJoinClick?: (id: number) => void;
 };
 
 const MoimCardList = ({ items, onFavoriteToggle, onJoinClick }: MoimCardListProps) => (

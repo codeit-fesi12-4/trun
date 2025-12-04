@@ -8,6 +8,7 @@ export type Participant = {
   User: User;
 };
 
+// auth.type.ts 참고
 export type User = {
   id: number;
   email: string;
