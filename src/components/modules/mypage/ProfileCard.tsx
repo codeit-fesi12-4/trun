@@ -1,14 +1,14 @@
 "use client";
 
-import { UserData } from "@/types/mypage.type";
+import { UserProfile } from "@/types/auth.type";
 import Image from "next/image";
 
-const ProfileSection = ({ image, name, companyName, email }: UserData) => (
+const ProfileSection = ({ image, name, companyName, email }: UserProfile) => (
   <section className="flex items-center rounded-2xl border border-green-300 bg-green-100 px-4 py-6 sm:px-7 sm:py-8 md:px-8 md:py-10 lg:flex-col">
     {/* 프로필 이미지 + 닉네임 */}
     <div className="flex items-center lg:flex-col">
       <Image
-        src={image}
+        src={image ?? "/icons/default_profile.svg"}
         alt="내 프로필 이미지"
         width={114}
         height={114}
