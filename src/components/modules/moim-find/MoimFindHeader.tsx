@@ -1,8 +1,13 @@
 import Image from "next/image";
-import MoimFindCategory from "./MoimFindCategory";
+import MoimFindCategory, { MoimFilterValues } from "./MoimFindCategory";
 
-const MoimFindHeader = () => (
-  <div className="-mx-4 -mt-6 sm:mx-0 sm:mt-0">
+interface IMoimFindHeaderProps {
+  onFilterChange?: (filters: MoimFilterValues) => void;
+  availableLocations?: string[];
+}
+
+const MoimFindHeader = ({ onFilterChange, availableLocations }: IMoimFindHeaderProps) => (
+  <div>
     <div className="relative mb-6 h-48 w-full overflow-hidden bg-[#9DEBCD] sm:h-[244px] sm:rounded-4xl">
       <div className="absolute -right-30 -bottom-17 h-[254px] w-[435px] sm:-right-25 sm:-bottom-10 sm:h-[273px] sm:w-[468px] md:right-0 md:-bottom-17 md:h-[313px] md:w-[536px]">
         <Image src="/images/img_moim_find.svg" alt="모임찾기이미지" fill className="object-cover" />
@@ -14,7 +19,7 @@ const MoimFindHeader = () => (
         <h1 className="text-lg font-semibold text-black sm:text-3xl">지금 모임에 참여해보세요</h1>
       </div>
     </div>
-    <MoimFindCategory />
+    <MoimFindCategory onFilterChange={onFilterChange} availableLocations={availableLocations} />
   </div>
 );
 

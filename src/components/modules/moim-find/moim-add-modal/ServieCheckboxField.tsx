@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-interface IServieCheckboxFieldProps {
+type ServieCheckboxFieldProps = {
   title: string;
   subtitle?: string;
   service: string;
@@ -10,7 +10,7 @@ interface IServieCheckboxFieldProps {
   onServiceChange: (service: string) => void;
   iconSrc?: string;
   iconAlt?: string;
-}
+};
 
 const ServieCheckboxField = ({
   title,
@@ -20,7 +20,7 @@ const ServieCheckboxField = ({
   onServiceChange,
   iconSrc,
   iconAlt,
-}: IServieCheckboxFieldProps) => (
+}: ServieCheckboxFieldProps) => (
   <button
     type="button"
     onClick={() => onServiceChange(service)}
