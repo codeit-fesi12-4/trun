@@ -1,17 +1,15 @@
-export type ReviewType = "DALLAEMFIT" | "OFFICE_STRETCHING" | "MINDFULNESS" | "WORKATION";
-export type ReviewSortBy = "createdAt" | "score" | "participantCount";
-export type ReviewSortOrder = "asc" | "desc";
+import { MoimType, SortBy, SortOrder } from "./moim.type";
 
 export type GetReviewsParams = {
   teamId: string;
   gatheringId?: number;
   userId?: number;
-  type?: ReviewType;
+  type?: MoimType;
   location?: string;
   date?: string;
   registrationEnd?: string;
-  sortBy?: ReviewSortBy;
-  sortOrder?: ReviewSortOrder;
+  sortBy?: SortBy;
+  sortOrder?: SortOrder;
   limit?: number;
   offset?: number;
 };
@@ -19,7 +17,7 @@ export type GetReviewsParams = {
 export type ReviewGathering = {
   teamId: number;
   id: number;
-  type: ReviewType;
+  type: MoimType;
   name: string;
   dateTime: string;
   location: string;
@@ -53,13 +51,13 @@ export type GetReviewsResponse = {
 export type ReviewScoresParams = {
   teamId: string;
   gatheringId?: number;
-  type?: ReviewType;
+  type?: MoimType;
 };
 
 export type ReviewScore = {
   teamId: number;
   gatheringId: number | null;
-  type: ReviewType | null;
+  type: MoimType | null;
   averageScore: number;
   oneStar: number;
   twoStars: number;
