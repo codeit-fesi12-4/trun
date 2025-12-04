@@ -42,8 +42,8 @@ function PaginationLink({ className, isActive, ...props }: PaginationLinkProps) 
       data-slot="pagination-link"
       data-state={isActive ? "active" : "inactive"}
       className={cn(
-        "inline-flex items-center justify-center rounded-md px-3 py-1 font-semibold hover:text-gray-800 sm:mx-1",
-        isActive ? "border text-gray-800" : "text-gray-200",
+        "inline-flex items-center justify-center rounded-md px-3 py-1 font-semibold sm:mx-1",
+        isActive ? "h-8 w-8 rounded-[8px] text-green-600" : "text-gray-200",
         className,
       )}
       {...props}

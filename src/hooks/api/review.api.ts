@@ -12,7 +12,7 @@ import {
 
 const buildReviewsPath = (params: GetReviewsParams) => {
   const { teamId, ...rest } = params;
-  const basePath = `/${teamId ?? TEAM_NAME}/reviews`;
+  const basePath = `/${teamId && TEAM_NAME}/reviews`;
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
@@ -51,7 +51,7 @@ export const useReviewsQuery = ({
 
 const buildReviewScoresPath = (params: ReviewScoresParams) => {
   const { teamId, ...rest } = params;
-  const basePath = `/${teamId ?? TEAM_NAME}/reviews/scores`;
+  const basePath = `/${teamId && TEAM_NAME}/reviews/scores`;
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
