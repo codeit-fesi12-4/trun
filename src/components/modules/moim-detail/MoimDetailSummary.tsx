@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
-import { formatDeadline } from "@/utils/moim.util";
+
 import {
   useCancelJoin,
   useCancelMoim,
@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ConfirmationJoin from "./ConfirmationJoin";
 import { Moim } from "@/types/moim.type";
+import { formatDeadline } from "@/utils/date.util";
 
 type MoimDetailSummary = {
   moim: Moim;
