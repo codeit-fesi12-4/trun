@@ -1,7 +1,6 @@
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { MypageField } from "./MypageField";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { UserProfile } from "@/types/auth.type";
 import { UpdateProfileErrors, validateUpdateProfile } from "@/utils/validators.utils";
@@ -61,6 +60,17 @@ const ProfileEditModal = ({
     alert("유효성 검사 테스트");
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    if (!file) return;
+
+    setForm(prev => ({
+      ...prev,
+      image: URL.createObjectURL(file), // 미리보기
+      file, // 서버 전송용
+    }));
+  };
+
   return (
     <ModalLayout
       open={open}
@@ -74,9 +84,28 @@ const ProfileEditModal = ({
       {/* 폼 */}
       <div className="flex flex-col">
         <div className="flex justify-center pt-4 pb-8">
-          <Button className="hover:bg-0 h-28 w-28 cursor-pointer bg-transparent p-0 text-green-600">
-            <Image src="/icons/ic_profile_edit.svg" alt="내정보" width={112} height={112} />
-          </Button>
+          <input
+            type="file"
+            id="profile-image"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
+          <label htmlFor="profile-image" className="cursor-pointer">
+            <div className="h-28 w-28">
+              {form.image ? (
+                <Image
+                  src={form.image}
+                  alt="프로필 이미지"
+                  className="h-28 w-28 rounded-full object-cover"
+                  width={112}
+                  height={112}
+                />
+              ) : (
+                <Image src="/icons/ic_profile_edit.svg" alt="내정보" width={112} height={112} />
+              )}
+            </div>
+          </label>
         </div>
         <form className="space-y-4 pb-4" noValidate>
           <MypageField
