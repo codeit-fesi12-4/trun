@@ -11,6 +11,7 @@ import {
 } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
+import { useAuthStore } from "@/stores/auth.store";
 
 export const useMoimFind = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,31 +83,64 @@ export const useMoimFind = () => {
 
   const { data: moims, isLoading, error } = useMoimsQuery({ params: queryParams });
 
-  // 날짜 필터링 (클라이언트 사이드) - 원본 Moim 데이터 사용
+  // 날짜 필터링 및 마감일이 지난 모임 제거 (클라이언트 사이드) - 원본 Moim 데이터 사용
   const filteredMoims = useMemo(() => {
-    if (!moims || !filters.date) return moims;
+    if (!moims) return [];
 
-    return moims.filter(moim => {
+    const now = new Date();
+
+    // 마감일이 지난 모임 필터링
+    let validMoims = moims.filter(moim => {
+      // registrationEnd가 없으면 필터링하지 않음 (마감일이 없는 모임)
+      if (!moim.registrationEnd) return true;
+
       try {
-        const moimDate = parseISO(moim.dateTime);
-        return isSameDay(moimDate, filters.date!);
+        const registrationEndDate = parseISO(moim.registrationEnd);
+        // 마감일이 현재 시간보다 이후인 모임만 포함
+        return registrationEndDate > now;
       } catch {
+        // 파싱 실패 시 포함하지 않음
         return false;
       }
     });
+
+    // 날짜 필터링 (사용자가 특정 날짜를 선택한 경우)
+    if (filters.date) {
+      validMoims = validMoims.filter(moim => {
+        try {
+          const moimDate = parseISO(moim.dateTime);
+          return isSameDay(moimDate, filters.date!);
+        } catch {
+          return false;
+        }
+      });
+    }
+
+    return validMoims;
   }, [moims, filters.date]);
 
   const handleFilterChange = (newFilters: MoimFilterValues) => {
     setFilters(newFilters);
   };
 
+  const token = useAuthStore(state => state.token);
+
+  const handleCreateMoimClick = () => {
+    if (!token) {
+      alert("로그인이 필요한 서비스입니다. 먼저 로그인해주세요.");
+      return;
+    }
+    setIsModalOpen(true);
+  };
+
   return {
     isModalOpen,
     setIsModalOpen,
-    moimCardData: filteredMoims || [],
+    moimCardData: filteredMoims,
     availableLocations,
     isLoading,
     error,
     handleFilterChange,
+    handleCreateMoimClick,
   };
 };

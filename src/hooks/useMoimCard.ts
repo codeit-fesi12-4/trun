@@ -5,6 +5,7 @@ import { isFavoriteMoim, toggleFavoriteMoim } from "@/utils/favorite.util";
 import { formatDeadline } from "@/utils/moim.util";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
+import { useAuthStore } from "@/stores/auth.store";
 
 /**
  * MoimCard 컴포넌트에서 사용하는 로직을 관리하는 훅
@@ -60,8 +61,14 @@ export const useMoimCard = (
     return newFavoriteState;
   };
 
+  const token = useAuthStore(state => state.token);
+
   // 하트 클릭 핸들러
   const handleFavoriteClick = () => {
+    if (!token) {
+      alert("로그인이 필요한 서비스입니다. 먼저 로그인해주세요.");
+      return;
+    }
     toggleFavorite();
     onFavoriteToggle?.(item.id);
   };
