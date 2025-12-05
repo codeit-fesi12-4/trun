@@ -6,15 +6,14 @@ import { format } from "date-fns";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import ReviewListItem from "@/components/modules/all-review/ReviewListItem";
-import MoimFindCategory, {
-  MoimFilterValues,
-} from "@/components/modules/moim-find/MoimFindCategory";
+import MoimFindCategory from "@/components/modules/moim-find/MoimFindCategory";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { TEAM_NAME } from "@/constants";
 import { getReviews, useReviewScoresQuery } from "@/hooks/api/review.api";
 import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
+import { MoimFilterValues } from "@/types/moimFind.type";
 
 type ReviewDistribution = { score: number; count: number };
 
@@ -37,12 +36,12 @@ const HeartIcon = ({ fillPercent }: { fillPercent: number }) => {
 
   return (
     <span className="relative block h-5 w-5 sm:h-6 sm:w-6" aria-hidden>
-      <HeartSvg className="absolute inset-0 text-gray-300" />
+      <HeartSvg className="absolute inset-0 text-[#DAE3E3]" />
       <span
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${clipRight} 0 0)` }}
       >
-        <HeartSvg className="text-orange-400" />
+        <HeartSvg className="text-green-500" />
       </span>
     </span>
   );
@@ -82,7 +81,7 @@ const AllReviewContent = () => {
     category: "달림핏",
     location: DEFAULT_LOCATION,
     date: undefined,
-    sort: "마감임박",
+    sort: "마감임박 순",
   });
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -232,11 +231,11 @@ const AllReviewContent = () => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, isReviewsLoading, reviewList.length]);
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4">
+    <div className="flex flex-col gap-3 rounded-xl p-3 sm:p-4">
       <MoimFindCategory onFilterChange={onFilterChange} availableLocations={availableLocations} />
-
-      <Card className="bg-gradient-100 border-0 shadow-none">
-        <CardContent className="flex flex-col gap-5 rounded-xl px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-6 sm:py-7">
+      {/* 평균 평점 박스 */}
+      <Card className="bg-gradient-100 rounded-3xl border border-green-300 shadow-none sm:rounded-4xl">
+        <CardContent className="flex flex-col gap-5 rounded-xl px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-6 sm:py-7">
           <div className="flex flex-col items-center gap-2 text-center sm:w-2/5">
             <span className="text-3xl font-semibold text-gray-900 sm:text-4xl">
               {averageScore.toFixed(1)}
@@ -246,7 +245,7 @@ const AllReviewContent = () => {
                 <HeartIcon key={idx} fillPercent={heartFillFor(idx)} />
               ))}
             </div>
-            <p className="text-xs font-medium text-emerald-700">
+            <p className="text-sm font-medium text-green-600 sm:text-base">
               {scoresData === undefined ? "집계 중.." : `총 ${totalItemCount}명 참여`}
             </p>
           </div>
@@ -257,14 +256,14 @@ const AllReviewContent = () => {
           <div className="grid w-full gap-2 sm:w-3/5 sm:gap-2.5">
             {distribution.map(item => (
               <div key={item.score} className="flex items-center gap-3">
-                <span className="w-8 text-xs font-medium text-gray-700 sm:w-10 sm:text-sm">
+                <span className="w-8 text-xs font-medium text-gray-500 sm:w-10 sm:text-sm">
                   {item.score}점
                 </span>
                 <Progress
                   value={totalReviews === 0 ? 0 : (item.count / totalReviews) * 100}
-                  className="bg-white/60"
+                  className="bg-[#DAE3E3]"
                 />
-                <span className="w-6 text-right text-xs font-medium text-gray-700 sm:w-8 sm:text-sm">
+                <span className="w-6 text-right text-xs font-medium text-gray-500 sm:w-8 sm:text-sm">
                   {item.count}
                 </span>
               </div>
