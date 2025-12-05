@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { format } from "date-fns";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import ReviewListItem from "@/components/modules/all-review/ReviewListItem";
+import ReviewListItem from "@/components/modules/all-review/AllReviewItem";
 import MoimFindCategory from "@/components/modules/moim-find/MoimFindCategory";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -14,6 +13,7 @@ import { getReviews, useReviewScoresQuery } from "@/hooks/api/review.api";
 import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
 import { MoimFilterValues } from "@/types/moimFind.type";
+import EmptyReview from "@/components/common/EmptyReview";
 
 type ReviewDistribution = { score: number; count: number };
 
@@ -272,7 +272,7 @@ const AllReviewContent = () => {
         </CardContent>
       </Card>
 
-      <div className="flex flex-col gap-3">
+      <div className="mt-2 mb-10 h-fit rounded-2xl bg-white px-5 py-6 pb-10 sm:mt-4 sm:rounded-4xl sm:px-10 sm:pt-8 md:mt-6 md:px-12 md:pt-10 md:pb-10">
         {isReviewsLoading ? (
           <Card className="border border-gray-100 bg-white shadow-sm">
             <CardContent className="p-5 text-sm text-gray-500">
@@ -286,20 +286,18 @@ const AllReviewContent = () => {
             </CardContent>
           </Card>
         ) : reviewList.length > 0 ? (
-          reviewList.map(review => <ReviewListItem key={review.id} review={review} />)
-        ) : (
-          <Card className="border border-dashed border-gray-200 bg-white shadow-sm">
-            <CardContent className="flex flex-col items-center justify-center gap-3 py-12 text-gray-600 sm:py-14">
-              <Image
-                src="/icons/review/blank_review.svg"
-                alt="blank review"
-                width={140}
-                height={120}
-                className="h-auto w-28 sm:w-32"
+          <ul className="flex flex-col gap-8">
+            {reviewList.map((review, index: number) => (
+              <ReviewListItem
+                key={review.id}
+                review={review}
+                index={index}
+                length={reviewList.length}
               />
-              <p className="text-base font-medium sm:text-lg">아직 리뷰가 없어요</p>
-            </CardContent>
-          </Card>
+            ))}
+          </ul>
+        ) : (
+          <EmptyReview />
         )}
       </div>
       <div id="review-load-more-sentinel" ref={loadMoreRef} className="h-6 w-full" aria-hidden />
