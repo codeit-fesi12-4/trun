@@ -39,7 +39,7 @@ const Header = () => {
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <Link href="/moim-save" className="nav-link">
+            <Link href="/moim-favorite" className="nav-link">
               찜한 모임
             </Link>
             <Link href="/all-review" className="nav-link">
