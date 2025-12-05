@@ -1,17 +1,11 @@
 import { useState, useMemo } from "react";
 import { useMoimsQuery } from "@/hooks/api/moim.api";
-import { GetMoimsParams, MoimType, MoimLocation, SortBy, SortOrder } from "@/types/moim.type";
-import {
-  MOIM_TYPE,
-  FILTER_CATEGORY,
-  MOIM_LOCATION,
-  FILTER_SORT,
-  SORT_BY,
-  SORT_ORDER,
-} from "@/constants/moim";
+import { GetMoimsParams, MoimType, MoimLocation } from "@/types/moim.type";
+import { MOIM_TYPE, FILTER_CATEGORY, MOIM_LOCATION, FILTER_SORT } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { useAuthStore } from "@/stores/auth.store";
+import { formatDateWithDash } from "@/utils/date.util";
 
 export const useMoimFind = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,35 +28,25 @@ export const useMoimFind = () => {
     return location as MoimLocation;
   };
 
-  // 정렬을 SortBy로 변환
-  const convertSortToSortBy = (sort: "마감임박 순" | "참여 인원 순"): SortBy => {
-    if (sort === FILTER_SORT.DEADLINE) return SORT_BY.REGISTRATION_END;
-    return SORT_BY.PARTICIPANT_COUNT;
-  };
-
-  // 정렬 순서 변환 헬퍼 함수
-  const convertSortToSortOrder = (sort: "마감임박 순" | "참여 인원 순"): SortOrder =>
-    sort === FILTER_SORT.DEADLINE ? SORT_ORDER.ASC : SORT_ORDER.DESC;
-
-  // API 파라미터 생성
+  // API 파라미터 생성 (정렬은 클라이언트 사이드에서 처리)
   const queryParams: GetMoimsParams = useMemo(() => {
     const params: GetMoimsParams = {
       type: convertCategoryToMoimType(filters.category),
       location: convertLocationToMoimLocation(filters.location),
-      sortBy: convertSortToSortBy(filters.sort),
-      sortOrder: convertSortToSortOrder(filters.sort),
+      date: formatDateWithDash(filters.date),
+      limit: 100, // 전체 데이터를 가져오기 위해 큰 값 설정
+      // 정렬 파라미터 제거 - 클라이언트 사이드에서 정렬 처리
     };
     return params;
-  }, [filters.category, filters.location, filters.sort]);
+  }, [filters.category, filters.location, filters.date]);
 
-  // 지역 목록 추출을 위한 쿼리 (카테고리만 필터링)
+  // 지역 목록 추출을 위한 쿼리 (카테고리만 필터링, 정렬 불필요)
   const categoryOnlyParams: GetMoimsParams = useMemo(
     () => ({
       type: convertCategoryToMoimType(filters.category),
-      sortBy: convertSortToSortBy(filters.sort),
-      sortOrder: convertSortToSortOrder(filters.sort),
+      limit: 100, // 전체 데이터를 가져오기 위해 큰 값 설정
     }),
-    [filters.category, filters.sort],
+    [filters.category],
   );
 
   const { data: moimsForLocation } = useMoimsQuery({
@@ -83,7 +67,7 @@ export const useMoimFind = () => {
 
   const { data: moims, isLoading, error } = useMoimsQuery({ params: queryParams });
 
-  // 날짜 필터링 및 마감일이 지난 모임 제거 (클라이언트 사이드) - 원본 Moim 데이터 사용
+  // 날짜 필터링, 마감일이 지난 모임 제거, 정렬 (클라이언트 사이드) - 원본 Moim 데이터 사용
   const filteredMoims = useMemo(() => {
     if (!moims) return [];
 
@@ -116,8 +100,27 @@ export const useMoimFind = () => {
       });
     }
 
-    return validMoims;
-  }, [moims, filters.date]);
+    // 정렬 처리 (클라이언트 사이드)
+    const sortedMoims = [...validMoims].sort((a, b) => {
+      if (filters.sort === FILTER_SORT.DEADLINE) {
+        // 마감임박 순: registrationEnd 오름차순
+        if (!a.registrationEnd) return 1;
+        if (!b.registrationEnd) return -1;
+        try {
+          const dateA = parseISO(a.registrationEnd).getTime();
+          const dateB = parseISO(b.registrationEnd).getTime();
+          return dateA - dateB;
+        } catch {
+          return 0;
+        }
+      } else {
+        // 참여 인원 순: participantCount 내림차순
+        return b.participantCount - a.participantCount;
+      }
+    });
+
+    return sortedMoims;
+  }, [moims, filters.date, filters.sort]);
 
   const handleFilterChange = (newFilters: MoimFilterValues) => {
     setFilters(newFilters);

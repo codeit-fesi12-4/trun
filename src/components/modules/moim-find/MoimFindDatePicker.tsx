@@ -4,7 +4,7 @@ import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Image from "next/image";
 import { useDatePicker } from "@/hooks/useMoimFilter";
-import { formatDateWithSlash } from "@/utils/date.util";
+import { formatDateWithDash } from "@/utils/date.util";
 
 type MoimFindDatePickerProps = {
   selectedDate: Date | undefined;
@@ -25,7 +25,7 @@ const MoimFindDatePicker = ({ selectedDate, onDateChange }: MoimFindDatePickerPr
           data-empty={!selectedDate}
           className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
         >
-          {selectedDate ? formatDateWithSlash(selectedDate) : <span>날짜 전체</span>}
+          {formatDateWithDash(selectedDate) || <span>날짜 전체</span>}
           <Image
             src="../icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"
