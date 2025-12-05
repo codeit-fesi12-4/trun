@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
 import { formatDate, formatTime } from "@/utils/date.util";
-import { formatDeadline } from "@/utils/moim.util";
+import { useMoimCard } from "@/hooks/useMoimCard";
 import Link from "next/link";
 import { MIN_CAPACITY } from "@/constants/moim";
 
@@ -17,15 +16,14 @@ type MoimCardItemsProps = {
 } & MoimCardActions;
 
 const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const participantPercentage = (item.participantCount / item.capacity) * 100;
-  const isFull = item.participantCount === item.capacity;
-  const deadlineText = formatDeadline(item.registrationEnd);
-
-  const handleFavoriteClick = () => {
-    setIsFavorite(prev => !prev);
-    onFavoriteToggle?.(item.id);
-  };
+  const {
+    isFavorite,
+    handleFavoriteClick,
+    handleJoinClick,
+    participantPercentage,
+    isFull,
+    deadlineText,
+  } = useMoimCard(item, onFavoriteToggle, onJoinClick);
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-1 p-5 md:p-0">
@@ -140,7 +138,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
               variant="outline"
               size="xs"
               className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
-              onClick={() => onJoinClick?.(item.id)}
+              onClick={handleJoinClick}
               type="button"
             >
               참여하기
