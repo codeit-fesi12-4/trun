@@ -92,7 +92,7 @@ const ProfileEditModal = ({
             onChange={handleImageChange}
           />
           <label htmlFor="profile-image" className="cursor-pointer">
-            <div className="h-28 w-28">
+            <div className="relative h-28 w-28">
               {form.image ? (
                 <Image
                   src={form.image}
@@ -102,8 +102,15 @@ const ProfileEditModal = ({
                   height={112}
                 />
               ) : (
-                <Image src="/icons/ic_profile_edit.svg" alt="내정보" width={112} height={112} />
+                <Image src="/icons/default_profile.svg" alt="내정보" width={112} height={112} />
               )}
+              <Image
+                src="/icons/ic_mypage_modal_edit.svg"
+                alt="edit button"
+                width={40}
+                height={40}
+                className="absolute right-0 bottom-0"
+              />
             </div>
           </label>
         </div>
