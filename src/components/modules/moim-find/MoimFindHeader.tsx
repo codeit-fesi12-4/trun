@@ -1,12 +1,10 @@
 import Image from "next/image";
-import MoimFindCategory, { MoimFilterValues } from "./MoimFindCategory";
+import MoimFindCategory from "./MoimFindCategory";
+import { type MoimFilterProps } from "@/types/moimFind.type";
 
-interface IMoimFindHeaderProps {
-  onFilterChange?: (filters: MoimFilterValues) => void;
-  availableLocations?: string[];
-}
+type MoimFindHeaderProps = MoimFilterProps;
 
-const MoimFindHeader = ({ onFilterChange, availableLocations }: IMoimFindHeaderProps) => (
+const MoimFindHeader = ({ onFilterChange, availableLocations }: MoimFindHeaderProps) => (
   <div>
     <div className="relative mb-6 h-48 w-full overflow-hidden bg-[#9DEBCD] sm:h-[244px] sm:rounded-4xl">
       <div className="absolute -right-30 -bottom-17 h-[254px] w-[435px] sm:-right-25 sm:-bottom-10 sm:h-[273px] sm:w-[468px] md:right-0 md:-bottom-17 md:h-[313px] md:w-[536px]">

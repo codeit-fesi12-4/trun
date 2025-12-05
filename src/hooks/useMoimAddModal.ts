@@ -1,21 +1,15 @@
 import { useState } from "react";
 import { useCreateMoimMutation } from "@/hooks/api/moim.api";
 import { CreateMoimRequest, MoimType } from "@/types/moim.type";
-import { MOIM_TYPE } from "@/constants";
 import { dateToISO } from "@/utils/date.util";
-
-// 모임 생성 챕터
-export const TOTAL_STEPS = 3;
-
-type FormData = {
-  title: string;
-  location: string;
-  image: File | null;
-  service: string;
-  meetingDate: Date | undefined;
-  deadlineDate: Date | undefined;
-  maxParticipants: string;
-};
+import {
+  MOIM_TYPE,
+  TOTAL_STEPS,
+  INITIAL_FORM_DATA,
+  MIN_CAPACITY,
+  FILTER_CATEGORY,
+} from "@/constants/moim";
+import { type MoimFormData } from "@/types/moimFind.type";
 
 type UseMoimAddModalProps = {
   onOpenChange: (open: boolean) => void;
@@ -25,85 +19,71 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
   const createMoimMutation = useCreateMoimMutation();
   const [currentStep, setCurrentStep] = useState(1);
 
-  const [formData, setFormData] = useState<FormData>({
-    title: "",
-    location: "",
-    image: null,
-    service: "",
-    meetingDate: undefined,
-    deadlineDate: undefined,
-    maxParticipants: "",
-  });
+  const [formData, setFormData] = useState<MoimFormData>(INITIAL_FORM_DATA);
 
   const handleModalOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);
     if (!isOpen) {
       // 모달이 닫힐 때 초기화
       setCurrentStep(1);
-      setFormData({
-        title: "",
-        location: "",
-        image: null,
-        service: "",
-        meetingDate: undefined,
-        deadlineDate: undefined,
-        maxParticipants: "",
-      });
-    } else {
-      // 모달이 열릴 때 1단계로 초기화
-      setCurrentStep(1);
+      setFormData(INITIAL_FORM_DATA);
     }
   };
 
-  // 서비스 선택을 MoimType으로 변환
+  // 서비스 문자열을 MoimType으로 변환
   const convertServiceToType = (service: string): MoimType | null => {
-    if (service === "달림핏") return MOIM_TYPE.DALLIMFIT;
-    if (service === "런케이션") return MOIM_TYPE.RUNCATION;
+    if (service === FILTER_CATEGORY.DALLIMFIT) return MOIM_TYPE.DALLIMFIT;
+    if (service === FILTER_CATEGORY.RUNCATION) return MOIM_TYPE.RUNCATION;
     return null;
   };
 
-  const handleFieldChange = (field: string, value: string | File | null | Date | undefined) => {
+  const handleFieldChange = (
+    field: keyof MoimFormData,
+    value: string | File | null | Date | undefined,
+  ) => {
     setFormData(prev => ({
       ...prev,
-      [field]: value,
+      [field]: value as MoimFormData[keyof MoimFormData],
     }));
   };
 
   const handleServiceChange = (service: string) => {
+    const selectedType = convertServiceToType(service);
     setFormData(prev => ({
       ...prev,
-      service: prev.service === service ? "" : service,
+      type: prev.type === selectedType ? "" : (selectedType ?? ""),
     }));
   };
 
   // 단계별 유효성 검사
+  // 추후 alert -> toast 변경 예정
   const validateStep = (step: number): boolean => {
     if (step === 1) {
-      if (!formData.service) {
+      if (!formData.type) {
         alert("서비스를 선택해주세요.");
         return false;
       }
       return true;
     }
     if (step === 2) {
-      if (!formData.title.trim() || !formData.location || !formData.image) {
+      if (!formData.name.trim() || !formData.location || !formData.image) {
         alert("모든 항목을 입력해주세요.");
         return false;
       }
       return true;
     }
-    if (step === 3) {
-      if (!formData.meetingDate) {
+    if (step === TOTAL_STEPS) {
+      if (!formData.dateTime || !formData.image) {
         alert("모든 항목을 입력해주세요.");
         return false;
       }
       // 마감 날짜가 모임 날짜보다 이후인지 검증
-      if (formData.deadlineDate && formData.deadlineDate >= formData.meetingDate) {
+      if (formData.registrationEnd && formData.registrationEnd >= formData.dateTime) {
         alert("마감 날짜는 모임 날짜보다 이전이어야 합니다.");
         return false;
       }
-      if (!formData.maxParticipants || Number(formData.maxParticipants) < 5) {
-        alert("모집 정원은 최소 5인 이상 입력해주세요.");
+      if (!formData.capacity || Number(formData.capacity) < MIN_CAPACITY) {
+        alert(`모집 정원은 최소 ${MIN_CAPACITY}인 이상 입력해주세요.`);
         return false;
       }
       return true;
@@ -127,38 +107,30 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
 
   const handleSubmit = () => {
     // 최종 유효성 검사
-    if (!validateStep(3)) {
+    if (!validateStep(TOTAL_STEPS)) {
       return;
     }
 
-    // 서비스를 type으로 변환
-    const selectedType = convertServiceToType(formData.service);
-    if (!selectedType) {
-      alert("유효한 서비스를 선택해주세요.");
-      return;
-    }
-
-    // CreateMoimRequest 형식으로 변환
-    if (!formData.meetingDate || !formData.image) {
-      alert("필수 항목이 누락되었습니다.");
+    // validateStep(3)에서 이미 검증했지만, 타입 가드를 위해 한 번 더 확인
+    if (!formData.dateTime || !formData.image || !formData.type) {
       return;
     }
 
     const payload: CreateMoimRequest = {
-      name: formData.title,
+      name: formData.name,
       location: formData.location,
-      type: selectedType,
-      dateTime: dateToISO(formData.meetingDate),
-      capacity: Number(formData.maxParticipants),
+      type: formData.type,
+      dateTime: dateToISO(formData.dateTime),
+      capacity: Number(formData.capacity),
       image: formData.image,
-      registrationEnd: formData.deadlineDate ? dateToISO(formData.deadlineDate) : undefined,
+      registrationEnd: formData.registrationEnd ? dateToISO(formData.registrationEnd) : undefined,
     };
 
     void createMoimMutation
       .mutateAsync(payload)
       .then(() => {
         alert("모임이 성공적으로 생성되었습니다!");
-        onOpenChange(false);
+        handleModalOpenChange(false);
       })
       .catch(error => {
         alert(`모임 생성에 실패했습니다: ${error.message}`);
@@ -168,7 +140,6 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
   return {
     formData,
     currentStep,
-    TOTAL_STEPS,
     handleModalOpenChange,
     handleFieldChange,
     handleServiceChange,

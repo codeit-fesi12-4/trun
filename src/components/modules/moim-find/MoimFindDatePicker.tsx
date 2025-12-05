@@ -3,34 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Image from "next/image";
-import { useState } from "react";
+import { useDatePicker } from "@/hooks/useMoimFilter";
+import { formatDateWithSlash } from "@/utils/date.util";
 
-interface IMoimFindDatePickerProps {
+type MoimFindDatePickerProps = {
   selectedDate: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
-}
+};
 
-const MoimFindDatePicker = ({ selectedDate, onDateChange }: IMoimFindDatePickerProps) => {
-  const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const formatDate = (date: Date) => {
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-    return `${y}/${m}/${d}`;
-  };
-
-  const handleReset = () => {
-    setTempDate(undefined);
-    onDateChange(undefined);
-    setIsOpen(false);
-  };
-
-  const handleApply = () => {
-    onDateChange(tempDate);
-    setIsOpen(false);
-  };
+const MoimFindDatePicker = ({ selectedDate, onDateChange }: MoimFindDatePickerProps) => {
+  const { tempDate, setTempDate, isOpen, setIsOpen, handleReset, handleApply } = useDatePicker({
+    selectedDate,
+    onDateChange,
+  });
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -40,7 +25,7 @@ const MoimFindDatePicker = ({ selectedDate, onDateChange }: IMoimFindDatePickerP
           data-empty={!selectedDate}
           className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
         >
-          {selectedDate ? formatDate(selectedDate) : <span>날짜 전체</span>}
+          {selectedDate ? formatDateWithSlash(selectedDate) : <span>날짜 전체</span>}
           <Image
             src="../icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"
