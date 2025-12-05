@@ -31,6 +31,7 @@ const MoimInputField = ({
   };
 
   if (type === "image") {
+    const fileInputId = `${id}-file`;
     return (
       <div className="flex flex-col gap-2">
         <label htmlFor={id} className="text-sm font-semibold text-gray-600">
@@ -45,7 +46,7 @@ const MoimInputField = ({
             readOnly
             className="flex-1 border-transparent text-sm font-semibold placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-gray-300/20 sm:text-base"
           />
-          <label htmlFor="file-input">
+          <label htmlFor={fileInputId}>
             <Button
               type="button"
               variant="outline"
@@ -55,7 +56,7 @@ const MoimInputField = ({
               <span>파일 찾기</span>
             </Button>
             <input
-              id="file-input"
+              id={fileInputId}
               type="file"
               accept="image/*"
               onChange={handleFileChange}

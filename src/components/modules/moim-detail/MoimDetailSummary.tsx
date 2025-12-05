@@ -16,7 +16,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ConfirmationJoin from "./ConfirmationJoin";
 import { Moim } from "@/types/moim.type";
-import { formatDeadline } from "@/utils/date.util";
+import { formatDeadline } from "@/utils/moim.util";
 
 type MoimDetailSummary = {
   moim: Moim;

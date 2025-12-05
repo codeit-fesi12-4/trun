@@ -1,21 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { MoimCardData } from "@/types/moim.type";
+import { Moim } from "@/types/moim.type";
+import { MoimCardActions } from "@/types/moimFind.type";
+import { formatDate, formatTime } from "@/utils/date.util";
+import { formatDeadline } from "@/utils/moim.util";
 import Link from "next/link";
+import { MIN_CAPACITY } from "@/constants/moim";
 
-interface IMoimCardItemProps {
-  item: MoimCardData;
-  onFavoriteToggle?: (id: string) => void;
-  onJoinClick?: (id: string) => void;
-}
+type MoimCardItemsProps = {
+  item: Moim;
+} & MoimCardActions;
 
-const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemProps) => {
-  const participantPercentage = (item.participants / item.maxParticipants) * 100;
-  const isFull = item.participants === item.maxParticipants;
+const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const participantPercentage = (item.participantCount / item.capacity) * 100;
+  const isFull = item.participantCount === item.capacity;
+  const deadlineText = formatDeadline(item.registrationEnd);
+
+  const handleFavoriteClick = () => {
+    setIsFavorite(prev => !prev);
+    onFavoriteToggle?.(item.id);
+  };
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-1 p-5 md:p-0">
@@ -23,36 +33,36 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
       <div className="mt-1.5 flex items-start justify-between">
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-center gap-2">
-            <h3 className="truncate text-lg font-semibold text-gray-800">{item.title}</h3>
-            {/* {item.status === "confirmed" && ( */}
-            <Badge
-              variant="outline"
-              className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
-            >
-              <Image
-                src="/icons/secure_check.svg"
-                alt="check"
-                width={20}
-                height={20}
-                className="size-5"
-              />
-              개설확정
-            </Badge>
-            {/* )} */}
+            <h3 className="truncate text-lg font-semibold text-gray-800">{item.name}</h3>
+            {item.participantCount >= MIN_CAPACITY && (
+              <Badge
+                variant="outline"
+                className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
+              >
+                <Image
+                  src="/icons/secure_check.svg"
+                  alt="check"
+                  width={20}
+                  height={20}
+                  className="size-5"
+                />
+                개설확정
+              </Badge>
+            )}
           </div>
           <p className="truncate text-sm text-gray-500">
-            위치 <span className="text-gray-600">{item.subtitle}</span>
+            위치 <span className="text-gray-600">{item.location}</span>
           </p>
         </div>
         <button
           type="button"
-          onClick={() => onFavoriteToggle?.(item.id)}
-          aria-label={item.isFavorite ? "좋아요 취소" : "좋아요"}
+          onClick={handleFavoriteClick}
+          aria-label={isFavorite ? "좋아요 취소" : "좋아요"}
           className="shrink-0"
         >
           <Image
-            src={item.isFavorite ? "/icons/full_heart.svg" : "../icons/empty_heart.svg"}
-            alt={item.isFavorite ? "좋아요" : "좋아요 취소"}
+            src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
+            alt={isFavorite ? "좋아요 취소" : "좋아요"}
             width={44}
             height={44}
             className="size-11"
@@ -70,15 +80,15 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
               variant="outline"
               className="shrink-0 rounded-md border-gray-100 bg-white px-2 py-0.5 text-[12px] text-gray-500"
             >
-              {item.date}
+              {formatDate(item.dateTime)}
             </Badge>
             <Badge
               variant="outline"
               className="shrink-0 rounded-md border-gray-200 bg-white px-2 py-0.5 text-[12px] text-gray-500"
             >
-              {item.time}
+              {formatTime(item.dateTime)}
             </Badge>
-            {item.deadlineText && (
+            {deadlineText && (
               <Badge
                 variant="outline"
                 className="flex shrink-0 items-center rounded-md border-none bg-blue-100 px-1 py-0.5 pr-2 text-[12px] font-bold text-blue-400"
@@ -90,7 +100,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
                   height={32}
                   className="size-5"
                 />
-                {item.deadlineText}
+                {deadlineText}
               </Badge>
             )}
           </div>
@@ -106,7 +116,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: IMoimCardItemPro
             />
             <Progress value={participantPercentage} className="h-1.5 flex-1 bg-gray-100" />
             <span className="shrink-0 text-[12px] font-semibold whitespace-nowrap text-gray-600">
-              <span className="text-gradient-500">{item.participants}</span>/{item.maxParticipants}
+              <span className="text-gradient-500">{item.participantCount}</span>/{item.capacity}
             </span>
           </div>
         </div>
