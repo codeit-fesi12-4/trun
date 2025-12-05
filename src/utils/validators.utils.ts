@@ -27,6 +27,18 @@ export type SignupErrors = {
   confirmPassword?: string;
 };
 
+export type UpdateProfileForm = {
+  name: string;
+  email: string;
+  companyName: string;
+};
+
+export type UpdateProfileErrors = {
+  name?: string;
+  email?: string;
+  companyName?: string;
+};
+
 export const validateLogin = (values: LoginForm): LoginErrors => {
   const nextErrors: LoginErrors = {};
   if (!values.email.trim()) {
@@ -66,5 +78,25 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
   } else if (values.password && values.confirmPassword !== values.password) {
     nextErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
   }
+  return nextErrors;
+};
+
+export const validateUpdateProfile = (values: UpdateProfileForm): UpdateProfileErrors => {
+  const nextErrors: UpdateProfileErrors = {};
+
+  if (!values.name.trim()) {
+    nextErrors.name = "이름을 입력해주세요.";
+  }
+
+  if (!values.companyName.trim()) {
+    nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
+  }
+
+  if (!values.email.trim()) {
+    nextErrors.email = "아이디를 입력해주세요.";
+  } else if (!EMAIL_PATTERN.test(values.email)) {
+    nextErrors.email = "올바른 이메일을 입력해주세요.";
+  }
+
   return nextErrors;
 };

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { UserProfile } from "@/types/auth.type";
+import { UpdateProfileErrors, validateUpdateProfile } from "@/utils/validators.utils";
 
 const ProfileEditModal = ({
   open,
@@ -20,6 +21,7 @@ const ProfileEditModal = ({
     email: "",
     image: "",
   });
+  const [errors, setErrors] = useState<UpdateProfileErrors>({});
 
   useEffect(() => {
     if (!open || !user) return;
@@ -30,15 +32,41 @@ const ProfileEditModal = ({
         email: (user.email && user.email) || "",
         image: (user.image && user.image) || "",
       });
+      setErrors({});
     }, 0);
   }, [open, user]);
+
+  const handleChange =
+    (field: "name" | "companyName" | "email") => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setForm(prev => ({ ...prev, [field]: value }));
+
+      // 해당 필드 에러 제거
+      if (errors[field]) {
+        setErrors(prev => ({ ...prev, [field]: undefined }));
+      }
+    };
+
+  const handleSubmit = () => {
+    const nextErrors = validateUpdateProfile({
+      name: form.name,
+      email: form.email,
+      companyName: form.companyName,
+    });
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) return;
+
+    alert("유효성 검사 테스트");
+  };
 
   return (
     <ModalLayout
       open={open}
       onOpenChange={onOpenChange}
       title="프로필 수정하기"
-      onConfirm={() => alert("수정하기 버튼 클릭")}
+      onConfirm={handleSubmit}
       confirmText="수정하기"
       onCancel={() => onOpenChange(false)}
       showCancel
@@ -57,7 +85,8 @@ const ProfileEditModal = ({
             placeholder="이름을 입력해주세요."
             autoComplete="name"
             value={form.name}
-            onChange={e => setForm({ ...form, name: e.target.value })}
+            onChange={handleChange("name")}
+            error={errors.name}
           />
           <MypageField
             id="signup-company"
@@ -65,7 +94,8 @@ const ProfileEditModal = ({
             placeholder="회사명을 입력해주세요."
             autoComplete="organization"
             value={form.companyName}
-            onChange={e => setForm({ ...form, companyName: e.target.value })}
+            onChange={handleChange("companyName")}
+            error={errors.companyName}
           />
           <MypageField
             id="signup-email"
@@ -73,7 +103,8 @@ const ProfileEditModal = ({
             placeholder="이메일을 입력해주세요."
             autoComplete="email"
             value={form.email}
-            onChange={e => setForm({ ...form, email: e.target.value })}
+            onChange={handleChange("email")}
+            error={errors.email}
           />
         </form>
       </div>
