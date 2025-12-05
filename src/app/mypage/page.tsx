@@ -50,7 +50,7 @@ const Mypage = () => {
       </div>
 
       {/* 프로필 수정 모달 */}
-      <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} />
+      <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />
     </main>
   );
 };
