@@ -14,39 +14,18 @@ import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
 import { MoimFilterValues } from "@/types/moimFind.type";
 import EmptyReview from "@/components/common/EmptyReview";
+import { HeartIcon } from "./HeartIcon";
+import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 
 type ReviewDistribution = { score: number; count: number };
 
-const HeartSvg = ({ className }: { className?: string }) => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 32 28"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-    fill="currentColor"
-  >
-    <path d="M31.825 9.65833C31.6667 4.275 27.3917 0 22.0083 0C20.2667 0 17.575 1.26667 16.4667 3.325C16.3083 3.8 15.675 3.8 15.5167 3.325C14.25 1.425 11.7167 0.158333 9.81667 0.158333C4.59167 0.158333 0.158333 4.43333 0 9.65833V9.975C0 12.6667 1.10833 15.2 3.00833 17.1C3.00833 17.1 3.00833 17.1 3.00833 17.2583C3.16667 17.4167 10.7667 24.0667 14.25 27.075C15.2 27.8667 16.625 27.8667 17.575 27.075C21.0583 24.0667 28.5 17.4167 28.8167 17.2583C28.8167 17.2583 28.8167 17.2583 28.8167 17.1C30.7167 15.3583 31.825 12.825 31.825 9.975V9.65833Z" />
-  </svg>
-);
-
-const HeartIcon = ({ fillPercent }: { fillPercent: number }) => {
-  const clamped = Math.max(0, Math.min(1, fillPercent));
-  const clipRight = `${100 - clamped * 100}%`;
-
-  return (
-    <span className="relative block h-5 w-5 sm:h-6 sm:w-6" aria-hidden>
-      <HeartSvg className="absolute inset-0 text-[#DAE3E3]" />
-      <span
-        className="absolute inset-0 overflow-hidden"
-        style={{ clipPath: `inset(0 ${clipRight} 0 0)` }}
-      >
-        <HeartSvg className="text-green-500" />
-      </span>
-    </span>
-  );
-};
-
+// 평균 평점의 형식을 변환해준다.
+// buildDistribution({ fiveStars: 1, fourStars: 2, threeStars: 3, twoStars: 4, oneStar: 5 }) =>
+// 0 : {score: 5, count: 1}
+// 1 : {score: 4, count: 2}
+// 2 : {score: 3, count: 3}
+// 3 : {score: 2, count: 4}
+// 4 : {score: 1, count: 5}
 const buildDistribution = (
   scores?: {
     fiveStars: number;
@@ -63,42 +42,35 @@ const buildDistribution = (
   { score: 1, count: scores?.oneStar ?? 0 },
 ];
 
+// 카테고리에 달림핏, 런케이션을 백엔드가 정한 정식 명칭으로 바꿔준다.
+//  CATEGORY_MAP["달림핏"] => "MINDFULNESS"
 const CATEGORY_MAP: Record<MoimFilterValues["category"], MoimType> = {
   달림핏: "MINDFULNESS",
   런케이션: "WORKATION",
 };
 
+// 기본 지역 설정
 const DEFAULT_LOCATION = "지역 전체";
 
-const normalizeLocation = (location: string | undefined) => {
-  if (!location || location === DEFAULT_LOCATION) return DEFAULT_LOCATION;
-  return location;
-};
-
 const AllReviewContent = () => {
-  const PAGE_SIZE = 5;
+  // 필터의 값을 변경하는 useState와 초기값
   const [filters, setFilters] = useState<MoimFilterValues>({
     category: "달림핏",
     location: DEFAULT_LOCATION,
     date: undefined,
     sort: "마감임박 순",
   });
+
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const activeReviewType = useMemo<MoimType>(
-    () => CATEGORY_MAP[filters.category] as MoimType,
-    [filters.category],
-  );
+  const activeReviewType: MoimType = CATEGORY_MAP[filters.category];
 
   const reviewQueryParams = useMemo<GetReviewsParams>(() => {
     const params: GetReviewsParams = {
       teamId: TEAM_NAME,
-      limit: PAGE_SIZE,
+      limit: REVIEW_PAGE_SIZE.SCROLL,
       type: activeReviewType,
     };
-
-    const normalizedLocation = normalizeLocation(filters.location);
-    if (normalizedLocation !== DEFAULT_LOCATION) params.location = normalizedLocation;
 
     if (filters.date) {
       params.date = format(filters.date, "yyyy-MM-dd");
@@ -112,10 +84,10 @@ const AllReviewContent = () => {
       "reviews",
       TEAM_NAME,
       activeReviewType,
-      normalizeLocation(filters.location),
+      filters.location,
       filters.date ? format(filters.date, "yyyy-MM-dd") : "all",
       filters.sort,
-      PAGE_SIZE,
+      REVIEW_PAGE_SIZE.SCROLL,
     ],
     [activeReviewType, filters.date, filters.location, filters.sort],
   );
@@ -153,7 +125,7 @@ const AllReviewContent = () => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
-      const pageSize = reviewQueryParams.limit ?? PAGE_SIZE;
+      const pageSize = reviewQueryParams.limit ?? REVIEW_PAGE_SIZE.SCROLL;
       const lastCount = lastPage?.data?.length ?? 0;
       if (lastCount < pageSize) return undefined;
 
@@ -185,11 +157,13 @@ const AllReviewContent = () => {
   const averageScore = scoresData?.averageScore ?? 0;
   const heartFillFor = (index: number) => Math.max(0, Math.min(1, averageScore - index));
 
+  // 필터들을 변경하면 setFilters를 변경해준다.
+  // onFilterChange(next)를 하면 setFilter(next)해준다.
   const onFilterChange = (next: MoimFilterValues) => {
     setFilters({
       ...next,
       category: next.category,
-      location: normalizeLocation(next.location),
+      location: next.location,
     });
   };
 
@@ -272,6 +246,7 @@ const AllReviewContent = () => {
         </CardContent>
       </Card>
 
+      {/* 리뷰들 */}
       <div className="mt-2 mb-10 h-fit rounded-2xl bg-white px-5 py-6 pb-10 sm:mt-4 sm:rounded-4xl sm:px-10 sm:pt-8 md:mt-6 md:px-12 md:pt-10 md:pb-10">
         {isReviewsLoading ? (
           <Card className="border border-gray-100 bg-white shadow-sm">

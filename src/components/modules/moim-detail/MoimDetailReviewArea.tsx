@@ -10,10 +10,10 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import ReviewList from "./ReviewList";
-import { PAGE_SIZE } from "@/constants/pagenation";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
 import { TEAM_NAME } from "@/constants";
 import { useMoimReview } from "@/hooks/api/moimReview.api";
+import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 
 type MoimDetailReviewAreaProps = {
   moimId: string;
@@ -28,8 +28,8 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
   const { data, isLoading } = useMoimReview({
     moimId: NumberMoimId,
     teamName: TEAM_NAME,
-    limit: PAGE_SIZE,
-    offset: (page - 1) * PAGE_SIZE,
+    limit: REVIEW_PAGE_SIZE.PAGINATION,
+    offset: (page - 1) * REVIEW_PAGE_SIZE.PAGINATION,
   });
 
   const reviews = data?.data;
