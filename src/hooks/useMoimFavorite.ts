@@ -3,11 +3,15 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { getFavoriteMoims } from "@/utils/favorite.util";
+import { useAuthStore } from "@/stores/auth.store";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
   const previousFavoriteMoimIdsRef = useRef<number[]>([]);
   const isInitialMountRef = useRef(true);
+
+  const user = useAuthStore(state => state.user);
+  const userId = user?.id ?? null;
 
   const {
     moimCardData: allMoims,
@@ -22,7 +26,7 @@ export const useMoimFavorite = () => {
     const loadFavoriteMoims = () => {
       setFavoriteMoimIds(prevIds => {
         previousFavoriteMoimIdsRef.current = prevIds;
-        return getFavoriteMoims();
+        return getFavoriteMoims(userId);
       });
     };
 
@@ -40,7 +44,7 @@ export const useMoimFavorite = () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("favoriteMoimsChanged", handleStorageChange);
     };
-  }, []);
+  }, [userId]);
 
   // 찜한 모임이 제거되었을 때 알림 표시 (추후 sonnar 적용 예정)
   useEffect(() => {

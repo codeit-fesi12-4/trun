@@ -40,11 +40,11 @@ const ModalLayout = ({
 }: IModalLayoutProps) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent
-      showCloseButton={false}
-      className="max-w-sm rounded-4xl bg-white p-10 sm:max-w-md md:max-w-lg"
+      showCloseButton={true}
+      className="max-w-sm rounded-4xl bg-white p-10 sm:max-w-md md:max-w-lg [&_[data-slot=dialog-close]]:top-9.5 [&_[data-slot=dialog-close]]:right-10 [&_[data-slot=dialog-close]]:rounded-full [&_[data-slot=dialog-close]]:p-1 [&_[data-slot=dialog-close]]:hover:bg-gray-50 [&_[data-slot=dialog-close]>svg]:!size-5"
     >
-      <DialogHeader className="text-left">
-        <DialogTitle>{title}</DialogTitle>
+      <DialogHeader className="flex flex-row items-center justify-between text-left">
+        <DialogTitle className="flex-1">{title}</DialogTitle>
       </DialogHeader>
 
       {children}
