@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useMoimsQuery } from "@/hooks/api/moim.api";
+import { useMoimsQuery } from "@/api/moim.api";
 import { GetMoimsParams, MoimType, MoimLocation, SortBy, SortOrder } from "@/types/moim.type";
 import {
   MOIM_TYPE,
