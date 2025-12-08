@@ -6,12 +6,7 @@ import { useEffect, useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
 
-import {
-  useCancelJoin,
-  useCancelMoim,
-  useCreateJoin,
-  useParticipants,
-} from "@/hooks/api/moimDetail.api";
+import { useCancelJoin, useCancelMoim, useCreateJoin, useParticipants } from "@/api/moimDetail.api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ConfirmationJoin from "./ConfirmationJoin";

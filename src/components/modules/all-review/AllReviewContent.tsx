@@ -12,7 +12,7 @@ import MoimFindCategory, {
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { TEAM_NAME } from "@/constants";
-import { getReviews, useReviewScoresQuery } from "@/hooks/api/review.api";
+import { getReviews, useReviewScoresQuery } from "@/api/review.api";
 import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
 

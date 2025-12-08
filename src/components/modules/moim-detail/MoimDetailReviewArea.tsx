@@ -13,7 +13,7 @@ import ReviewList from "./ReviewList";
 import { PAGE_SIZE } from "@/constants/pagenation";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
 import { TEAM_NAME } from "@/constants";
-import { useMoimReview } from "@/hooks/api/moimReview.api";
+import { useMoimReview } from "@/api/moimReview.api";
 
 type MoimDetailReviewAreaProps = {
   moimId: string;
