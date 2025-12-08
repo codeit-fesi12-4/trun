@@ -17,7 +17,7 @@ export type Data = {
   teamId: string;
 };
 
-export type GetMoimReviewResponse = {
+export type GetMoimReviewsResponse = {
   data: Data[];
   totalItemCount: number;
   totalPages: number;

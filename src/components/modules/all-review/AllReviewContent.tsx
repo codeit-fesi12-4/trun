@@ -6,15 +6,15 @@ import { format } from "date-fns";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import ReviewListItem from "@/components/modules/all-review/ReviewListItem";
-import MoimFindCategory, {
-  MoimFilterValues,
-} from "@/components/modules/moim-find/MoimFindCategory";
+import MoimFindCategory from "@/components/modules/moim-find/MoimFindCategory";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { TEAM_NAME } from "@/constants";
-import { getReviews, useReviewScoresQuery } from "@/hooks/api/review.api";
+import { getReviews } from "@/api/review.api";
 import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
+import { useReviewScoresQuery } from "@/hooks/useReview";
+import { MoimFilterValues } from "@/types/moimFind.type";
 
 type ReviewDistribution = { score: number; count: number };
 
@@ -82,7 +82,7 @@ const AllReviewContent = () => {
     category: "달림핏",
     location: DEFAULT_LOCATION,
     date: undefined,
-    sort: "마감임박",
+    sort: "마감임박 순",
   });
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 

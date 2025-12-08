@@ -1,8 +1,8 @@
 "use client";
 
+import { useMoim } from "@/hooks/useMoimDetail";
 import MoimDetailImage from "./MoimDetailImage";
 import MoimDetailSummary from "./MoimDetailSummary";
-import { useMoim } from "@/hooks/api/moimDetail.api";
 
 type MoimDetailInformationProps = {
   moimId: string;

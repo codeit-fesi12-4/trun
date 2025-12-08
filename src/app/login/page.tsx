@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
-import { getUserProfile, postSignin } from "@/hooks/api/auth";
+import { getUserProfile, postSignin } from "@/api/auth";
 import { useAuthStore } from "@/stores/auth.store";
 import { validateLogin, LoginErrors as ValidationLoginErrors } from "@/utils/validators.utils";
 

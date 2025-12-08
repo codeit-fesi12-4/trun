@@ -13,7 +13,7 @@ import ReviewList from "./ReviewList";
 import { PAGE_SIZE } from "@/constants/pagenation";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
 import { TEAM_NAME } from "@/constants";
-import { useMoimReview } from "@/hooks/api/moimReview.api";
+import { useMoimReviews } from "@/hooks/useReview";
 
 type MoimDetailReviewAreaProps = {
   moimId: string;
@@ -25,7 +25,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
 
   const NumberMoimId = Number(moimId);
 
-  const { data, isLoading } = useMoimReview({
+  const { data, isLoading } = useMoimReviews({
     moimId: NumberMoimId,
     teamName: TEAM_NAME,
     limit: PAGE_SIZE,
@@ -34,11 +34,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
 
   const reviews = data?.data;
 
-  console.warn("reviews", reviews);
-
   const totalPages = data?.totalPages ?? 1;
-
-  console.warn("reviews", reviews);
 
   useEffect(() => {
     if (!reviews) return;
