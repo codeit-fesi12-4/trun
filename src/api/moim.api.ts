@@ -34,7 +34,7 @@ const buildMoimsPath = (teamName: string, params?: GetMoimsParams) => {
 };
 
 // 모임 목록 조회 함수
-export const getMoims = async (
+export const getMoimList = async (
   params?: GetMoimsParams,
   teamName: string = TEAM_NAME,
 ): Promise<GetMoimsResponse> => {
@@ -65,7 +65,7 @@ export const getMoims = async (
 };
 
 // 모임 생성 함수 (multipart/form-data)
-export const createMoim = async (
+export const postMoim = async (
   payload: CreateMoimRequest,
   teamName: string = TEAM_NAME,
 ): Promise<CreateMoimResponse> => {
