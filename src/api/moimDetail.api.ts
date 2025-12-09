@@ -1,147 +1,145 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { API_BASE_URL, TEAM_NAME } from "@/constants";
+import { logout } from "@/utils/logout.util";
+import { toast } from "sonner";
 
-import { TEAM_NAME } from "@/constants";
-import { apiFetch } from "@/lib/apiClient";
-import {
-  DeleteJoinResponse,
-  GetParticipantsResponse,
-  PostJoinResponse,
-} from "@/types/moimDetail.type";
-import { Moim } from "@/types/moim.type";
-
-const buildMoimPath = (path: string, teamName: string) => `/${teamName}/gatherings${path}`;
+const buildMoimPath = (path: string, teamName: string) =>
+  `${API_BASE_URL}${teamName}/gatherings${path}`;
 
 // 모임 상세 조회
-export const getMoim = (moimId: number, teamName: string = TEAM_NAME) =>
-  apiFetch<Moim>({
-    path: buildMoimPath(`/${moimId}`, teamName),
-    method: "GET",
-  });
+export const getMoim = async (moimId: number, teamName: string = TEAM_NAME) => {
+  try {
+    const response = await fetch(buildMoimPath(`/${moimId}`, teamName), {
+      method: "GET",
+    });
 
-export const useMoim = ({
-  teamName = TEAM_NAME,
-  moimId,
-  enabled = true,
-}: {
-  teamName?: string;
-  moimId: number;
-  enabled?: boolean;
-}) =>
-  useQuery({
-    queryKey: ["moim", teamName, moimId],
-    queryFn: () => getMoim(moimId, teamName),
-    staleTime: 1000 * 60,
-    enabled,
-  });
+    const result = await response.json();
+
+    if (!response.ok) {
+      toast.error(result.message);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("데이터 가져오기 오류:", error);
+    return null;
+  }
+};
 
 // 특정 모임의 참가자 목록 조회
-export const getParticipants = (moimId: number, teamName: string = TEAM_NAME) =>
-  apiFetch<GetParticipantsResponse>({
-    path: buildMoimPath(`/${moimId}/participants`, teamName),
-    method: "GET",
-  });
+export const getParticipants = async (moimId: number, teamName: string = TEAM_NAME) => {
+  try {
+    const response = await fetch(buildMoimPath(`/${moimId}/participants`, teamName), {
+      method: "GET",
+    });
 
-export const useParticipants = ({
-  teamName = TEAM_NAME,
-  moimId,
-  enabled = true,
-}: {
-  teamName?: string;
-  moimId: number;
-  enabled?: boolean;
-}) =>
-  useQuery({
-    queryKey: ["participants", teamName, moimId],
-    queryFn: () => getParticipants(moimId, teamName),
-    staleTime: 1000 * 60,
-    enabled,
-  });
+    const result = await response.json();
 
-// 모임 취소
-export const putMoim = (moimId: number, teamName: string = TEAM_NAME, token?: string | null) =>
-  apiFetch<Moim>({
-    path: buildMoimPath(`/${moimId}/cancel`, teamName),
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${
-        token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-      }`,
-    },
-  });
+    if (!response.ok) {
+      toast.error(result.message);
+    }
 
-export const useCancelMoim = (teamName: string = TEAM_NAME) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = localStorage.getItem("token");
-      return putMoim(moimId, teamName, token);
-    },
-    onSuccess: (_, moimId) => {
-      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
-    },
-
-    onError: err => {
-      console.error("모임 취소 실패:", err);
-    },
-  });
+    return result;
+  } catch (error) {
+    console.error("데이터 가져오기 오류:", error);
+    return null;
+  }
 };
 
 // 모임 참여
-export const postJoin = (moimId: number, teamName: string = TEAM_NAME, token?: string | null) =>
-  apiFetch<PostJoinResponse>({
-    path: buildMoimPath(`/${moimId}/join`, teamName),
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${
-        token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-      }`,
-    },
-  });
-export const useCreateJoin = (teamName: string = TEAM_NAME) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = localStorage.getItem("token");
-      return postJoin(moimId, teamName, token);
-    },
-    onSuccess: (_, moimId) => {
-      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
-    },
+export const postJoin = async (
+  moimId: number,
+  teamName: string = TEAM_NAME,
+  token?: string | null,
+) => {
+  try {
+    const response = await fetch(buildMoimPath(`/${moimId}/join`, teamName), {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${
+          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
+        }`,
+      },
+    });
 
-    onError: err => {
-      console.error("모임 참여 실패:", err);
-    },
-  });
+    const result = await response.json();
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        await logout();
+        return null;
+      }
+      toast.error(result.message);
+    } else {
+      toast.success(result.message);
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+// 모임 취소
+export const putMoim = async (
+  moimId: number,
+  teamName: string = TEAM_NAME,
+  token?: string | null,
+) => {
+  try {
+    const response = await fetch(buildMoimPath(`/${moimId}/cancel`, teamName), {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${
+          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
+        }`,
+      },
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        await logout();
+        return null;
+      }
+      toast.error(result.message);
+      return null;
+    }
+    toast.success("모임이 취소되었습니다.");
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 // 모임 참여 취소
-export const deleteJoin = (moimId: number, teamName: string = TEAM_NAME, token?: string | null) =>
-  apiFetch<DeleteJoinResponse>({
-    path: buildMoimPath(`/${moimId}/leave`, teamName),
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${
-        token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-      }`,
-    },
-  });
-export const useCancelJoin = (teamName: string = TEAM_NAME) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = localStorage.getItem("token");
-      return deleteJoin(moimId, teamName, token);
-    },
-    onSuccess: (_, moimId) => {
-      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
-    },
+export const deleteJoin = async (
+  moimId: number,
+  teamName: string = TEAM_NAME,
+  token?: string | null,
+) => {
+  try {
+    const response = await fetch(buildMoimPath(`/${moimId}/leave`, teamName), {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${
+          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
+        }`,
+      },
+    });
 
-    onError: err => {
-      console.error("모임 참여 취소 실패:", err);
-    },
-  });
+    const result = await response.json();
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        await logout();
+        return null;
+      }
+      toast.error(result.message);
+      return null;
+    }
+    toast.success(result.message);
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };

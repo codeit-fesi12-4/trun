@@ -15,6 +15,7 @@ const MoimFindPage = () => {
     isLoading,
     error,
     handleFilterChange,
+    handleCreateMoimClick,
   } = useMoimFind();
 
   return (
@@ -33,7 +34,7 @@ const MoimFindPage = () => {
 
       {/* 우측 하단 고정된 모임 생성 버튼 */}
       <button
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleCreateMoimClick}
         className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center gap-2 rounded-full bg-green-500 text-white shadow-lg transition-all hover:bg-green-600 sm:right-8 sm:bottom-8 sm:h-auto sm:w-auto sm:rounded-2xl sm:px-6 sm:py-3"
         aria-label="모임 만들기"
       >

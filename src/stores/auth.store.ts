@@ -1,7 +1,6 @@
+import { UserProfile } from "@/types/user.type";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-
-import { UserProfile } from "@/types/auth.type";
 
 type AuthState = {
   token: string | null;
@@ -55,6 +54,8 @@ export const useAuthStore = create<AuthState>()(
         if (typeof window !== "undefined") {
           window.localStorage.removeItem("token");
           window.localStorage.removeItem("user");
+          // 찜 목록 변경 이벤트 발생시켜 UI 업데이트
+          window.dispatchEvent(new Event("favoriteMoimsChanged"));
         }
       },
     }),
