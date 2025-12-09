@@ -33,7 +33,7 @@ export const getReviews = async (params: GetReviewsParams) => {
     const result = await response.json();
 
     if (!response.ok) {
-      toast.error(`${result.errors[0].message}`);
+      toast.error(result.errors[0].message);
     }
 
     return result;
@@ -70,7 +70,7 @@ export const getMoimReviews = async ({
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(`${result.errors[0].message}`);
+      throw new Error(result.errors[0].message);
     }
 
     return result;
@@ -103,7 +103,7 @@ export const getReviewScores = async (params: ReviewScoresParams) => {
     const result = await response.json();
 
     if (!response.ok) {
-      toast.error(`${result.message}`);
+      toast.error(result.message);
     }
 
     return result;

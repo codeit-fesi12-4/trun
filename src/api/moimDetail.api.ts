@@ -15,7 +15,7 @@ export const getMoim = async (moimId: number, teamName: string = TEAM_NAME) => {
     const result = await response.json();
 
     if (!response.ok) {
-      toast.error(`${result.message}`);
+      toast.error(result.message);
     }
 
     return result;
@@ -35,7 +35,7 @@ export const getParticipants = async (moimId: number, teamName: string = TEAM_NA
     const result = await response.json();
 
     if (!response.ok) {
-      toast.error(`${result.message}`);
+      toast.error(result.message);
     }
 
     return result;
@@ -68,9 +68,9 @@ export const postJoin = async (
         await logout();
         return null;
       }
-      toast.error(`${result.message}`);
+      toast.error(result.message);
     } else {
-      toast.success(`${result.message}`);
+      toast.success(result.message);
     }
   } catch (error) {
     console.error(error);
@@ -101,7 +101,7 @@ export const putMoim = async (
         await logout();
         return null;
       }
-      toast.error(`${result.message}`);
+      toast.error(result.message);
       return null;
     }
     toast.success("모임이 취소되었습니다.");
@@ -134,10 +134,10 @@ export const deleteJoin = async (
         await logout();
         return null;
       }
-      toast.error(`${result.message}`);
+      toast.error(result.message);
       return null;
     }
-    toast.success(`${result.message}`);
+    toast.success(result.message);
   } catch (error) {
     console.error(error);
     return null;
