@@ -1,7 +1,6 @@
+import { UserProfile } from "@/types/user.type";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-
-import { UserProfile } from "@/types/auth.type";
 
 type AuthState = {
   token: string | null;
