@@ -1,36 +1,85 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { TEAM_NAME } from "@/constants";
+import { API_BASE_URL, TEAM_NAME } from "@/constants";
 import { apiFetch } from "@/lib/apiClient";
-import {
-  LoginResponse,
-  SigninRequest,
-  SignupRequest,
-  SignupResponse,
-  UserProfile,
-} from "@/types/auth.type";
+import { SigninRequest, SignupRequest, UserProfile } from "@/types/auth.type";
+import { toast } from "sonner";
 
-const buildAuthPath = (path: string, teamName: string) => `/${teamName}/auths${path}`;
+const buildAuthPath = (path: string, teamName: string) => `${API_BASE_URL}${teamName}/auths${path}`;
 
-export const postSignup = (payload: SignupRequest, teamName: string = TEAM_NAME) =>
-  apiFetch<SignupResponse>({
-    path: buildAuthPath("/signup", teamName),
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+// 회원가입
+export const postSignup = async (payload: SignupRequest, teamName: string = TEAM_NAME) => {
+  try {
+    const response = await fetch(buildAuthPath("/signup", teamName), {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
 
-export const postSignin = (payload: SigninRequest, teamName: string = TEAM_NAME) =>
-  apiFetch<LoginResponse>({
-    path: buildAuthPath("/signin", teamName),
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+    const result = await response.json();
 
-export const postSignout = (teamName: string = TEAM_NAME) =>
-  apiFetch<void>({
-    path: buildAuthPath("/signout", teamName),
-    method: "POST",
-  });
+    if (!response.ok) {
+      throw new Error(result.message);
+    }
+
+    toast.success(result.message);
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
+};
+
+// 로그인
+export const postSignin = async (payload: SigninRequest, teamName: string = TEAM_NAME) => {
+  try {
+    const response = await fetch(buildAuthPath("/signin", teamName), {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message);
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
+};
+
+// 로그아웃
+export const postSignout = async (teamName: string = TEAM_NAME) => {
+  try {
+    const response = await fetch(buildAuthPath("/signout", teamName), {
+      method: "POST",
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message);
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+  }
+};
 
 export const getUserProfile = (teamName: string = TEAM_NAME, token?: string | null) =>
   apiFetch<UserProfile>({

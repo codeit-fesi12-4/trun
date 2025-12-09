@@ -11,13 +11,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { postSignout } from "@/api";
 
 const Header = () => {
   const user = useAuthStore(state => state.user);
   const reset = useAuthStore(state => state.reset);
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await postSignout();
     reset();
     router.push("/");
   };
@@ -67,7 +69,7 @@ const Header = () => {
                     <DropdownMenuItem>마이페이지</DropdownMenuItem>
                   </Link>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>로그아웃</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => void handleLogout()}>로그아웃</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
