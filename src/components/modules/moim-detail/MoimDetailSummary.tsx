@@ -12,11 +12,11 @@ import ConfirmationJoin from "./ConfirmationJoin";
 import { Moim } from "@/types/moim.type";
 import { formatDeadline } from "@/utils/moim.util";
 import {
-  useCancelJoin,
-  useCancelMoim,
-  useCreateJoin,
-  useParticipants,
-} from "@/hooks/useMoimDetail";
+  useCancelJoinMutaion,
+  useCancelMoimMutation,
+  useCreateJoinMutaiton,
+  useParticipantsQuery,
+} from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 
 type MoimDetailSummary = {
@@ -29,11 +29,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
 
-  const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoim();
-  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoin();
-  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoin();
+  const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
+  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutaiton();
+  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
 
-  const { data: participants } = useParticipants({ moimId: moim.id });
+  const { data: participants } = useParticipantsQuery({ moimId: moim.id });
 
   const router = useRouter();
 

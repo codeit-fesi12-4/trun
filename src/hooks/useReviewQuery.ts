@@ -1,4 +1,4 @@
-import { getMoimReviews, getReviews, getReviewScores } from "@/api";
+import { getMoimReviews, getReviews, getReviewScores } from "@/api/review.api";
 import { TEAM_NAME } from "@/constants";
 import { GetReviewsParams, ReviewScore, ReviewScoresParams } from "@/types/review.type";
 import { useQuery } from "@tanstack/react-query";
@@ -18,7 +18,7 @@ export const useReviewsQuery = ({
   });
 
 // 모임별 리뷰 가져오기
-export const useMoimReviews = ({
+export const useMoimReviewsQuery = ({
   teamName = TEAM_NAME,
   moimId,
   limit,

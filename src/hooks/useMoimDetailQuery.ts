@@ -3,7 +3,7 @@ import { TEAM_NAME } from "@/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // 모임 상세 정보 가져오기
-export const useMoim = ({
+export const useMoimQuery = ({
   teamName = TEAM_NAME,
   moimId,
   enabled = true,
@@ -20,7 +20,7 @@ export const useMoim = ({
   });
 
 // 참여자 정보 가져오기
-export const useParticipants = ({
+export const useParticipantsQuery = ({
   teamName = TEAM_NAME,
   moimId,
   enabled = true,
@@ -37,7 +37,7 @@ export const useParticipants = ({
   });
 
 // 모임 참여하기
-export const useCreateJoin = (teamName: string = TEAM_NAME) => {
+export const useCreateJoinMutaiton = (teamName: string = TEAM_NAME) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => {
@@ -56,7 +56,7 @@ export const useCreateJoin = (teamName: string = TEAM_NAME) => {
 };
 
 // 모임 취소하기 (방장)
-export const useCancelMoim = (teamName: string = TEAM_NAME) => {
+export const useCancelMoimMutation = (teamName: string = TEAM_NAME) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -75,7 +75,8 @@ export const useCancelMoim = (teamName: string = TEAM_NAME) => {
   });
 };
 
-export const useCancelJoin = (teamName: string = TEAM_NAME) => {
+// 모임 참여 취소하기 (참여자)
+export const useCancelJoinMutaion = (teamName: string = TEAM_NAME) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => {

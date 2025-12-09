@@ -13,7 +13,7 @@ import { TEAM_NAME } from "@/constants";
 import { getReviews } from "@/api/review.api";
 import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
-import { useReviewScoresQuery } from "@/hooks/useReview";
+import { useReviewScoresQuery } from "@/hooks/useReviewQuery";
 import { MoimFilterValues } from "@/types/moimFind.type";
 
 type ReviewDistribution = { score: number; count: number };

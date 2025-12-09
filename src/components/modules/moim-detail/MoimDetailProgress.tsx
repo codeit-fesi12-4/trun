@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import MoimDetailParticipantList from "./MoimDetailParticipantList";
 import { Moim } from "@/types/moim.type";
-import { useParticipants } from "@/hooks/useMoimDetail";
+import { useParticipantsQuery } from "@/hooks/useMoimDetailQuery";
 
 type MoimDetailProgress = {
   moim: Moim;
@@ -13,7 +13,11 @@ type MoimDetailProgress = {
 
 const MoimDetailProgress = ({ moim }: MoimDetailProgress) => {
   const participantPercentage = (moim.participantCount / moim.capacity) * 100;
-  const { data: participants, isLoading, error } = useParticipants({ moimId: Number(moim.id) });
+  const {
+    data: participants,
+    isLoading,
+    error,
+  } = useParticipantsQuery({ moimId: Number(moim.id) });
 
   if (isLoading) return <div>로딩중</div>;
   if (error) return <div>에러발생</div>;

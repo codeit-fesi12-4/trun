@@ -1,6 +1,6 @@
 "use client";
 
-import { useMoim } from "@/hooks/useMoimDetail";
+import { useMoimQuery } from "@/hooks/useMoimDetailQuery";
 import MoimDetailImage from "./MoimDetailImage";
 import MoimDetailSummary from "./MoimDetailSummary";
 
@@ -11,7 +11,7 @@ type MoimDetailInformationProps = {
 const MoimDetailInformation = ({ moimId }: MoimDetailInformationProps) => {
   // 추후 실제 데이터로 변경
 
-  const { data, isLoading, error } = useMoim({ moimId: Number(moimId) });
+  const { data, isLoading, error } = useMoimQuery({ moimId: Number(moimId) });
 
   if (isLoading) return <div>로딩중</div>;
   if (error) return <div>에러발생</div>;
