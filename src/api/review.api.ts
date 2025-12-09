@@ -1,18 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { API_BASE_URL, TEAM_NAME } from "@/constants";
+import { GetReviewsParams, ReviewScoresParams } from "@/types/review.type";
+import { toast } from "sonner";
 
-import { TEAM_NAME } from "@/constants";
-import { apiFetch } from "@/lib/apiClient";
-import {
-  GetReviewsParams,
-  GetReviewsResponse,
-  ReviewScore,
-  ReviewScoresParams,
-  ReviewScoresResponse,
-} from "@/types/review.type";
-
+// 모든 리뷰 Path
 const buildReviewsPath = (params: GetReviewsParams) => {
   const { teamId, ...rest } = params;
-  const basePath = `/${teamId && TEAM_NAME}/reviews`;
+  const basePath = `${API_BASE_URL}${teamId && TEAM_NAME}/reviews`;
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
@@ -30,28 +23,67 @@ const buildReviewsPath = (params: GetReviewsParams) => {
   return queryString ? `${basePath}?${queryString}` : basePath;
 };
 
-export const getReviews = (params: GetReviewsParams) =>
-  apiFetch<GetReviewsResponse>({
-    path: buildReviewsPath(params),
-    method: "GET",
-  });
+// 모든 리뷰 가져오기
+export const getReviews = async (params: GetReviewsParams) => {
+  try {
+    const response = await fetch(buildReviewsPath(params), {
+      method: "GET",
+    });
 
-export const useReviewsQuery = ({
-  params,
-  enabled = true,
+    const result = await response.json();
+
+    if (!response.ok) {
+      toast.error(result.errors[0].message);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("데이터 가져오기 오류:", error);
+    return null;
+  }
+};
+
+// 모임별 리뷰 가져오기
+export const getMoimReviews = async ({
+  moimId,
+  teamName = TEAM_NAME,
+  limit,
+  offset,
 }: {
-  params: GetReviewsParams;
-  enabled?: boolean;
-}) =>
-  useQuery({
-    queryKey: ["reviews", params],
-    queryFn: () => getReviews(params),
-    enabled,
-  });
+  moimId: number;
+  teamName: string;
+  limit: number;
+  offset: number;
+}) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}${teamName}/reviews?gatheringId=${moimId}&limit=${limit}&offset=${offset}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+    );
 
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.errors[0].message);
+    }
+
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 리뷰 평점 Path
 const buildReviewScoresPath = (params: ReviewScoresParams) => {
   const { teamId, ...rest } = params;
-  const basePath = `/${teamId && TEAM_NAME}/reviews/scores`;
+  const basePath = `${API_BASE_URL}${teamId && TEAM_NAME}/reviews/scores`;
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
@@ -61,25 +93,22 @@ const buildReviewScoresPath = (params: ReviewScoresParams) => {
   return queryString ? `${basePath}?${queryString}` : basePath;
 };
 
-export const getReviewScores = (params: ReviewScoresParams) =>
-  apiFetch<ReviewScoresResponse>({
-    path: buildReviewScoresPath(params),
-    method: "GET",
-  });
+// 리뷰 평점 가져오기
+export const getReviewScores = async (params: ReviewScoresParams) => {
+  try {
+    const response = await fetch(buildReviewScoresPath(params), {
+      method: "GET",
+    });
 
-export const useReviewScoresQuery = ({
-  params,
-  enabled = true,
-}: {
-  params: ReviewScoresParams;
-  enabled?: boolean;
-}) =>
-  useQuery<ReviewScore | null>({
-    queryKey: ["reviewScores", params],
-    queryFn: async () => {
-      const res = await getReviewScores(params);
-      if (Array.isArray(res) && res.length > 0) return res[0];
-      return null;
-    },
-    enabled,
-  });
+    const result = await response.json();
+
+    if (!response.ok) {
+      toast.error(result.message);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("데이터 가져오기 오류:", error);
+    return null;
+  }
+};
