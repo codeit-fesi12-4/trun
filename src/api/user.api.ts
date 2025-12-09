@@ -31,11 +31,12 @@ export const getUserProfile = async (teamName: string = TEAM_NAME, token?: strin
 // 회원 정보 수정
 export const updateProfile = async (
   formData: FormData,
+  teamName: string = TEAM_NAME,
   token?: string | null,
 ): Promise<UserProfile> => {
   const Token = token ?? (typeof window !== "undefined" ? localStorage.getItem("token") : "") ?? "";
 
-  const res = await fetch(`${API_BASE_URL}${TEAM_NAME}/auths/user`, {
+  const res = await fetch(buildAuthPath("/user", teamName), {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${Token}`,
