@@ -17,11 +17,3 @@ export type LoginResponse = {
 export type SignupResponse = {
   token?: string;
 };
-
-export type UserProfile = {
-  id: string;
-  email: string;
-  name: string;
-  companyName: string;
-  image: string | null;
-};
