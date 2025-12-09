@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useMoimsQuery } from "@/api/moim.api";
+import { useMoimsQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimType, MoimLocation } from "@/types/moim.type";
 import { MOIM_TYPE, FILTER_CATEGORY, MOIM_LOCATION, FILTER_SORT } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";

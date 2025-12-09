@@ -1,6 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TEAM_NAME, API_BASE_URL } from "@/constants";
-import { apiFetch } from "@/lib/apiClient";
 import {
   CreateMoimRequest,
   CreateMoimResponse,
@@ -36,82 +34,82 @@ const buildMoimsPath = (teamName: string, params?: GetMoimsParams) => {
 };
 
 // 모임 목록 조회 함수
-export const getMoims = (params?: GetMoimsParams, teamName: string = TEAM_NAME) =>
-  apiFetch<GetMoimsResponse>({
-    path: buildMoimsPath(teamName, params),
-    method: "GET",
-  });
+export const getMoims = async (
+  params?: GetMoimsParams,
+  teamName: string = TEAM_NAME,
+): Promise<GetMoimsResponse> => {
+  try {
+    const path = buildMoimsPath(teamName, params);
+    const endpoint = new URL(path, API_BASE_URL).toString();
 
-// React Query 훅
-export const useMoimsQuery = ({
-  params,
-  teamName = TEAM_NAME,
-  enabled = true,
-}: {
-  params?: GetMoimsParams;
-  teamName?: string;
-  enabled?: boolean;
-}) =>
-  useQuery({
-    queryKey: ["moims", teamName, params],
-    queryFn: () => getMoims(params, teamName),
-    staleTime: 1000 * 60, // 1분
-    enabled,
-  });
+    const token = typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
+
+    const response = await fetch(endpoint, {
+      method: "GET",
+      ...(token && { headers: { Authorization: `Bearer ${token}` } }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || `API Error: ${response.status}`);
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("모임 목록 조회 중 오류가 발생했습니다.");
+  }
+};
 
 // 모임 생성 함수 (multipart/form-data)
 export const createMoim = async (
   payload: CreateMoimRequest,
   teamName: string = TEAM_NAME,
 ): Promise<CreateMoimResponse> => {
-  const formData = new FormData();
+  try {
+    const formData = new FormData();
 
-  formData.append("location", payload.location);
-  formData.append("type", payload.type);
-  formData.append("name", payload.name);
-  formData.append("dateTime", payload.dateTime);
-  formData.append("capacity", payload.capacity.toString());
-  formData.append("image", payload.image);
+    formData.append("location", payload.location);
+    formData.append("type", payload.type);
+    formData.append("name", payload.name);
+    formData.append("dateTime", payload.dateTime);
+    formData.append("capacity", payload.capacity.toString());
+    formData.append("image", payload.image);
 
-  if (payload.registrationEnd) {
-    formData.append("registrationEnd", payload.registrationEnd);
+    if (payload.registrationEnd) {
+      formData.append("registrationEnd", payload.registrationEnd);
+    }
+
+    const endpoint = new URL(`/${teamName}/gatherings`, API_BASE_URL).toString();
+
+    const token = typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
+
+    if (!token) {
+      throw new Error("로그인이 필요합니다. 먼저 로그인해주세요.");
+    }
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || `API Error: ${response.status}`);
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("모임 생성 중 오류가 발생했습니다.");
   }
-
-  const endpoint = new URL(`/${teamName}/gatherings`, API_BASE_URL).toString();
-
-  const token = typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
-
-  if (!token) {
-    throw new Error("로그인이 필요합니다. 먼저 로그인해주세요.");
-  }
-
-  const headers: HeadersInit = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers,
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ message: response.statusText }));
-    throw new Error(errorData.message || `API Error: ${response.status}`);
-  }
-
-  const result = await response.json();
-  return result;
-};
-
-// React Query Mutation 훅
-export const useCreateMoimMutation = (teamName: string = TEAM_NAME) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (payload: CreateMoimRequest) => createMoim(payload, teamName),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["moims", teamName] });
-    },
-  });
 };
