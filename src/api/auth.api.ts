@@ -1,7 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { API_BASE_URL, TEAM_NAME } from "@/constants";
-import { apiFetch } from "@/lib/apiClient";
-import { SigninRequest, SignupRequest, UserProfile } from "@/types/auth.type";
+import { SigninRequest, SignupRequest } from "@/types/auth.type";
 import { toast } from "sonner";
 
 const buildAuthPath = (path: string, teamName: string) => `${API_BASE_URL}${teamName}/auths${path}`;
@@ -65,30 +63,3 @@ export const postSignout = async (teamName: string = TEAM_NAME) => {
     method: "POST",
   });
 };
-
-export const getUserProfile = (teamName: string = TEAM_NAME, token?: string | null) =>
-  apiFetch<UserProfile>({
-    path: buildAuthPath("/user", teamName),
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${
-        token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-      }`,
-    },
-  });
-
-export const useUserProfileQuery = ({
-  teamName = TEAM_NAME,
-  token,
-  enabled = true,
-}: {
-  teamName?: string;
-  token?: string | null;
-  enabled?: boolean;
-}) =>
-  useQuery({
-    queryKey: ["userProfile", teamName, token ?? "guest"],
-    queryFn: () => getUserProfile(teamName, token),
-    staleTime: 1000 * 60,
-    enabled,
-  });
