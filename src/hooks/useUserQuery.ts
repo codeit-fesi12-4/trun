@@ -21,7 +21,7 @@ export const useUserProfileQuery = ({
   });
 
 // 유저 프로필을 수정하기 훅
-export const useUpdateProfileMutation = () => {
+export const useUpdateProfileMutationQuery = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ formData, token }: { formData: FormData; token?: string | null }) =>
