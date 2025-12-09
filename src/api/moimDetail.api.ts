@@ -65,8 +65,7 @@ export const postJoin = async (
 
     if (!response.ok) {
       if (response.status === 401) {
-        logout();
-        toast.error("로그인이 필요합니다.");
+        await logout();
         return null;
       }
       toast.error(`${result.message}`);
@@ -99,8 +98,7 @@ export const putMoim = async (
 
     if (!response.ok) {
       if (response.status === 401) {
-        logout();
-        toast.error("로그인이 필요합니다.");
+        await logout();
         return null;
       }
       toast.error(`${result.message}`);
@@ -133,8 +131,7 @@ export const deleteJoin = async (
 
     if (!response.ok) {
       if (response.status === 401) {
-        logout();
-        toast.error("로그인이 필요합니다.");
+        await logout();
         return null;
       }
       toast.error(`${result.message}`);

@@ -11,7 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
-import { postSignout } from "@/api";
+import { toast } from "sonner";
+import { postSignout } from "@/api/auth.api";
 
 const Header = () => {
   const user = useAuthStore(state => state.user);
@@ -22,6 +23,7 @@ const Header = () => {
     await postSignout();
     reset();
     router.push("/");
+    toast.success("로그아웃 성공");
   };
 
   return (

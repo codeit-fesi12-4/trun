@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { API_BASE_URL, TEAM_NAME } from "@/constants";
 import { apiFetch } from "@/lib/apiClient";
 import { SigninRequest, SignupRequest, UserProfile } from "@/types/auth.type";
@@ -62,23 +61,9 @@ export const postSignin = async (payload: SigninRequest, teamName: string = TEAM
 
 // 로그아웃
 export const postSignout = async (teamName: string = TEAM_NAME) => {
-  try {
-    const response = await fetch(buildAuthPath("/signout", teamName), {
-      method: "POST",
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(result.message);
-    }
-
-    return result;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-  }
+  await fetch(buildAuthPath("/signout", teamName), {
+    method: "POST",
+  });
 };
 
 export const getUserProfile = (teamName: string = TEAM_NAME, token?: string | null) =>

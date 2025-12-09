@@ -1,4 +1,0 @@
-export { apiFetch } from "@/lib/apiClient";
-export * from "./auth";
-export * from "./moim.api";
-export * from "./review.api";
