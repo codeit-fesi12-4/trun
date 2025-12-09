@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { postSignin } from "@/api/auth.api";
 import { useAuthStore } from "@/stores/auth.store";
 import { validateLogin, LoginErrors as ValidationLoginErrors } from "@/utils/validators.utils";
-import { getUserProfile } from "@/api/userProfile.api";
+import { getUserProfile } from "@/api/user.api";
 
 type LoginErrors = {
   email?: string;
