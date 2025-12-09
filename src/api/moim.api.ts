@@ -55,7 +55,15 @@ export const getMoims = async (
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: response.statusText }));
-    throw new Error(errorData.message || `API Error: ${response.status}`);
+    const error = new Error(errorData.message || `API Error: ${response.status}`) as Error & {
+      status?: number;
+      code?: string;
+      parameter?: string;
+    };
+    error.status = response.status;
+    if (errorData.code) error.code = errorData.code;
+    if (errorData.parameter) error.parameter = errorData.parameter;
+    throw error;
   }
 
   const result = await response.json();
@@ -100,7 +108,15 @@ export const createMoim = async (
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ message: response.statusText }));
-    throw new Error(errorData.message || `API Error: ${response.status}`);
+    const error = new Error(errorData.message || `API Error: ${response.status}`) as Error & {
+      status?: number;
+      code?: string;
+      parameter?: string;
+    };
+    error.status = response.status;
+    if (errorData.code) error.code = errorData.code;
+    if (errorData.parameter) error.parameter = errorData.parameter;
+    throw error;
   }
 
   const result = await response.json();
