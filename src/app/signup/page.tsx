@@ -8,7 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
-import { postSignup } from "@/hooks/api/auth";
+import { postSignup } from "@/api/auth.api";
 import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators.utils";
 
 const DUPLICATE_EMAILS = ["cheda@codeit.com"];
@@ -55,6 +55,7 @@ const SignupPage = () => {
     e.preventDefault();
     const validation = validateSignup(form, DUPLICATE_EMAILS);
     setErrors(validation);
+    console.warn(validation);
     if (Object.keys(validation).length === 0) {
       signupMutation.mutate();
     }

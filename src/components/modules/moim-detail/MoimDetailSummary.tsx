@@ -6,17 +6,18 @@ import { useEffect, useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
 
-import {
-  useCancelJoin,
-  useCancelMoim,
-  useCreateJoin,
-  useParticipants,
-} from "@/hooks/api/moimDetail.api";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ConfirmationJoin from "./ConfirmationJoin";
 import { Moim } from "@/types/moim.type";
 import { formatDeadline } from "@/utils/moim.util";
+import {
+  useCancelJoinMutaion,
+  useCancelMoimMutation,
+  useCreateJoinMutaiton,
+  useParticipantsQuery,
+} from "@/hooks/useMoimDetailQuery";
+import { Participant } from "@/types/moimDetail.type";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -28,11 +29,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
 
-  const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoim();
-  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoin();
-  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoin();
+  const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
+  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutaiton();
+  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
 
-  const { data: participants } = useParticipants({ moimId: moim.id });
+  const { data: participants } = useParticipantsQuery({ moimId: moim.id });
 
   const router = useRouter();
 
@@ -52,8 +53,8 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
     };
 
     const distinguishParticipant = () => {
-      const participantsIds = participants?.map(p => p.userId);
-      if (participantsIds?.find(p => p === userId)) {
+      const participantsIds = participants?.map((p: Participant) => p.userId);
+      if (participantsIds?.find((p: number) => p === userId)) {
         setIsParticipant(true);
       } else {
         setIsParticipant(false);
@@ -90,7 +91,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const handleMoimJoin = async () => {
     try {
       await joinMoim(moim.id);
-      toast.success("모임에 참여되었습니다.");
     } catch (error) {
       console.error(error);
       toast.error("모임 참여 실패", {
@@ -102,12 +102,8 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const handleMoimLeave = async () => {
     try {
       await cancelJoin(moim.id);
-      toast.success("모임 참여가 취소되었습니다.");
     } catch (error) {
       console.error(error);
-      toast.error("모임 참여 취소 실패", {
-        description: "잠시 후 다시 시도해주세요.",
-      });
     }
   };
 

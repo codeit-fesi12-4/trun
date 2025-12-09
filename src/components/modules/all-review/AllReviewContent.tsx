@@ -9,13 +9,14 @@ import MoimFindCategory from "@/components/modules/moim-find/MoimFindCategory";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { TEAM_NAME } from "@/constants";
-import { getReviews, useReviewScoresQuery } from "@/hooks/api/review.api";
+import { getReviews } from "@/api/review.api";
 import { GetReviewsParams } from "@/types/review.type";
 import { MoimType } from "@/types/moim.type";
 import { MoimFilterValues } from "@/types/moimFind.type";
 import EmptyReview from "@/components/common/EmptyReview";
 import { HeartIcon } from "./HeartIcon";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
+import { useReviewScoresQuery } from "@/hooks/useReviewQuery";
 
 type ReviewDistribution = { score: number; count: number };
 

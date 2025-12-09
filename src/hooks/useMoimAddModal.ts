@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCreateMoimMutation } from "@/hooks/api/moim.api";
+import { useCreateMoimMutation } from "@/hooks/useMoimFindQuery";
 import { CreateMoimRequest, MoimType } from "@/types/moim.type";
 import { dateToISO } from "@/utils/date.util";
 import {

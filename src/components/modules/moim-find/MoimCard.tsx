@@ -22,6 +22,17 @@ const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
             fill
             className="rounded-b-none object-cover md:rounded-3xl"
           />
+          {item.participantCount >= item.capacity && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-b-none bg-black/50 md:rounded-3xl">
+              <Image
+                src="/icons/모집 마감.svg"
+                alt="인원 마감"
+                width={86}
+                height={20}
+                className="h-5 w-auto"
+              />
+            </div>
+          )}
         </div>
 
         {/* 내용 영역 */}
