@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import MoimDetailParticipantList from "./MoimDetailParticipantList";
-import { useParticipants } from "@/hooks/api/moimDetail.api";
+import { useParticipants } from "@/api/moimDetail.api";
 import { Moim } from "@/types/moim.type";
 
 type MoimDetailProgress = {

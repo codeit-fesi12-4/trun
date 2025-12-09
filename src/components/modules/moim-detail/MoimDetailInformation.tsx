@@ -2,7 +2,7 @@
 
 import MoimDetailImage from "./MoimDetailImage";
 import MoimDetailSummary from "./MoimDetailSummary";
-import { useMoim } from "@/hooks/api/moimDetail.api";
+import { useMoim } from "@/api/moimDetail.api";
 
 type MoimDetailInformationProps = {
   moimId: string;
