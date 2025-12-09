@@ -56,10 +56,3 @@ export const postSignin = async (payload: SigninRequest, teamName: string = TEAM
     }
   }
 };
-
-// 로그아웃
-export const postSignout = async (teamName: string = TEAM_NAME) => {
-  await fetch(buildAuthPath("/signout", teamName), {
-    method: "POST",
-  });
-};
