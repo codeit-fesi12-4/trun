@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getUserProfile, postSignin } from "@/api/auth.api";
+import { postSignin } from "@/api/auth.api";
+import { getUserProfile } from "@/api/user.api";
 import type { NextAuthOptions } from "next-auth";
 import { TEAM_NAME } from "@/constants";
 
@@ -34,7 +35,7 @@ export const authOptions: NextAuthOptions = {
           }
 
           return {
-            id: userProfile.id,
+            id: String(userProfile.id),
             email: userProfile.email,
             name: userProfile.name,
             companyName: userProfile.companyName,
@@ -62,11 +63,12 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user && token.email && token.name && token.companyName) {
-        session.user.id = token.id || "";
-        session.user.email = token.email;
-        session.user.name = token.name;
-        session.user.companyName = token.companyName;
-        session.user.image = token.image ?? null;
+        const user = session.user;
+        user.id = Number(token.id) || 0;
+        user.email = token.email;
+        user.name = token.name;
+        user.companyName = token.companyName;
+        user.image = token.image ?? null;
       }
       session.token = token.accessToken;
       return session;
