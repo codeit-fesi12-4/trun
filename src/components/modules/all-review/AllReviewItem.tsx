@@ -1,7 +1,4 @@
-"use client";
-
 import Image from "next/image";
-
 import { ReviewItem } from "@/types/review.type";
 import { format } from "date-fns";
 

@@ -58,7 +58,7 @@ const CategoryShell = ({
       </TabsList>
     </Tabs>
     {/* 필터 영역 */}
-    <div className="mt-8 flex flex-row md:mt-0 md:gap-3 md:px-3">
+    <div className="mt-8 ml-4 flex flex-row md:mt-0 md:gap-3 md:px-3">
       {LocationSlot && <div className="flex">{LocationSlot}</div>}
       {DateSlot && <div className="flex">{DateSlot}</div>}
       {SortSlot && <div className="flex">{SortSlot}</div>}
