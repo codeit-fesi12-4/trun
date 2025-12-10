@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import MoimCardList from "@/components/modules/moim-find/MoimCardList";
-import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 import MoimAddModal from "@/components/modules/moim-find/MoimAddModal";
+import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
 const MoimFindPage = () => {
   const {

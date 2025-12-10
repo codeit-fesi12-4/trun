@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useMoimsQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimType, MoimLocation } from "@/types/moim.type";
-import { MOIM_TYPE, FILTER_CATEGORY, MOIM_LOCATION, FILTER_SORT } from "@/constants/moim";
+import { MOIM_TYPE, FILTER_CATEGORY, MOIM_LOCATION, MOIM_FILTER_SORT } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { useAuthStore } from "@/stores/auth.store";
@@ -13,7 +13,7 @@ export const useMoimFind = () => {
     category: FILTER_CATEGORY.DALLIMFIT,
     location: MOIM_LOCATION.ALL,
     date: undefined,
-    sort: FILTER_SORT.DEADLINE,
+    sort: MOIM_FILTER_SORT.DEADLINE,
   });
 
   // 카테고리를 MoimType으로 변환
@@ -102,7 +102,7 @@ export const useMoimFind = () => {
 
     // 정렬 처리 (클라이언트 사이드)
     const sortedMoims = [...validMoims].sort((a, b) => {
-      if (filters.sort === FILTER_SORT.DEADLINE) {
+      if (filters.sort === MOIM_FILTER_SORT.DEADLINE) {
         // 마감임박 순: registrationEnd 오름차순
         if (!a.registrationEnd) return 1;
         if (!b.registrationEnd) return -1;

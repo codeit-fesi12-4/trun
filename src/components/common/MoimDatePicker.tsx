@@ -6,12 +6,12 @@ import Image from "next/image";
 import { useDatePicker } from "@/hooks/useMoimFilter";
 import { formatDateWithDash } from "@/utils/date.util";
 
-type MoimFindDatePickerProps = {
+type MoimDatePickerProps = {
   selectedDate: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
 };
 
-const MoimFindDatePicker = ({ selectedDate, onDateChange }: MoimFindDatePickerProps) => {
+const MoimDatePicker = ({ selectedDate, onDateChange }: MoimDatePickerProps) => {
   const { tempDate, setTempDate, isOpen, setIsOpen, handleReset, handleApply } = useDatePicker({
     selectedDate,
     onDateChange,
@@ -27,7 +27,7 @@ const MoimFindDatePicker = ({ selectedDate, onDateChange }: MoimFindDatePickerPr
         >
           {formatDateWithDash(selectedDate) || <span>날짜 전체</span>}
           <Image
-            src="../icons/down_arrow.svg"
+            src="/icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"
             width={17}
             height={17}
@@ -68,4 +68,4 @@ const MoimFindDatePicker = ({ selectedDate, onDateChange }: MoimFindDatePickerPr
   );
 };
 
-export default MoimFindDatePicker;
+export default MoimDatePicker;

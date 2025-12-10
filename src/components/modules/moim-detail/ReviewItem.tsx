@@ -2,13 +2,13 @@ import { Data } from "@/types/moimReview.type";
 import { format } from "date-fns";
 import Image from "next/image";
 
-type ReviewItem = {
+type ReviewItemProps = {
   review: Data;
   index: number;
   length: number;
 };
 
-const ReviewItem = ({ review, index, length }: ReviewItem) => (
+const ReviewItem = ({ review, index, length }: ReviewItemProps) => (
   <div className="flex w-full flex-col gap-6">
     {/* 프로필 이미지 */}
     <div className="flex flex-row items-center gap-[13px]">

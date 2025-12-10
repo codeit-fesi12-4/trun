@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 
-const ConfirmationJoin = () => (
+const ConfirmationJoinModal = () => (
   <Dialog>
     <DialogTrigger asChild>
       <button className="w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
@@ -38,4 +38,4 @@ const ConfirmationJoin = () => (
   </Dialog>
 );
 
-export default ConfirmationJoin;
+export default ConfirmationJoinModal;

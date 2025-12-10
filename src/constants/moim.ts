@@ -29,8 +29,8 @@ export const FILTER_CATEGORY = {
   RUNCATION: "런케이션",
 } as const;
 
-// 필터 정렬 상수
-export const FILTER_SORT = {
+// 모임 필터 정렬 상수
+export const MOIM_FILTER_SORT = {
   DEADLINE: "마감임박 순",
   PARTICIPANTS: "참여 인원 순",
 } as const;
