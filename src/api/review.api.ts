@@ -5,21 +5,24 @@ import { toast } from "sonner";
 // 모든 리뷰 Path
 const buildReviewsPath = (params: GetReviewsParams) => {
   const { teamId, ...rest } = params;
+
   const basePath = `${API_BASE_URL}${teamId && TEAM_NAME}/reviews`;
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
   if (rest.userId !== undefined) searchParams.append("userId", String(rest.userId));
   if (rest.type) searchParams.append("type", rest.type);
-  if (rest.location) searchParams.append("location", rest.location);
+  if (rest.location && rest.location !== "지역 전체")
+    searchParams.append("location", rest.location);
   if (rest.date) searchParams.append("date", rest.date);
   if (rest.registrationEnd) searchParams.append("registrationEnd", rest.registrationEnd);
   if (rest.sortBy) searchParams.append("sortBy", rest.sortBy);
-  if (rest.sortOrder) searchParams.append("sortOrder", rest.sortOrder);
+  if (rest.sortBy) searchParams.append("sortOrder", "desc");
   if (rest.limit !== undefined) searchParams.append("limit", String(rest.limit));
   if (rest.offset !== undefined) searchParams.append("offset", String(rest.offset));
 
   const queryString = searchParams.toString();
+
   return queryString ? `${basePath}?${queryString}` : basePath;
 };
 
@@ -29,6 +32,7 @@ export const getReviews = async (params: GetReviewsParams) => {
     const response = await fetch(buildReviewsPath(params), {
       method: "GET",
     });
+    console.warn("fetch", params.sortBy);
 
     const result = await response.json();
 
