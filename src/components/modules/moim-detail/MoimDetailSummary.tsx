@@ -7,7 +7,6 @@ import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import ConfirmationJoin from "./ConfirmationJoin";
 import { Moim } from "@/types/moim.type";
 import { formatDeadline } from "@/utils/moim.util";
 import {
@@ -17,6 +16,7 @@ import {
   useParticipantsQuery,
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
+import ConfirmationJoinModal from "./ConfirmationJoinModal";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -173,7 +173,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               </button>
             </div>
           ) : !token ? (
-            <ConfirmationJoin />
+            <ConfirmationJoinModal />
           ) : isParticipant ? (
             <button
               disabled={isCancelJoinPending}
