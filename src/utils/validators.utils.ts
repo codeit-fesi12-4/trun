@@ -28,15 +28,15 @@ export type SignupErrors = {
 };
 
 export type UpdateProfileForm = {
-  name: string;
-  email: string;
   companyName: string;
+  image?: string;
+  file?: File | null;
 };
 
 export type UpdateProfileErrors = {
-  name?: string;
-  email?: string;
   companyName?: string;
+  image?: string;
+  file?: string;
 };
 
 export const validateLogin = (values: LoginForm): LoginErrors => {
@@ -84,18 +84,16 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
 export const validateUpdateProfile = (values: UpdateProfileForm): UpdateProfileErrors => {
   const nextErrors: UpdateProfileErrors = {};
 
-  if (!values.name.trim()) {
-    nextErrors.name = "이름을 입력해주세요.";
-  }
-
   if (!values.companyName.trim()) {
     nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
   }
-
-  if (!values.email.trim()) {
-    nextErrors.email = "아이디를 입력해주세요.";
-  } else if (!EMAIL_PATTERN.test(values.email)) {
-    nextErrors.email = "올바른 이메일을 입력해주세요.";
+  if (values.file) {
+    const validTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+    if (!validTypes.includes(values.file.type)) {
+      nextErrors.image = "지원하지 않는 이미지 형식입니다.";
+    } else if (values.file.size > 5 * 1024 * 1024) {
+      nextErrors.image = "이미지 파일은 5MB 이하로 업로드해주세요.";
+    }
   }
 
   return nextErrors;
