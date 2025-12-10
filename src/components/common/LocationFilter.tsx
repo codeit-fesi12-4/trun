@@ -9,17 +9,17 @@ import {
 import { MOIM_LOCATION } from "@/constants/moim";
 import Image from "next/image";
 
-type MoimFindLocationFilterProps = {
+type LocationFilterProps = {
   selectedLocation: string;
   onLocationChange: (location: string) => void;
   availableLocations?: string[];
 };
 
-const MoimFindLocationFilter = ({
+const LocationFilter = ({
   selectedLocation,
   onLocationChange,
   availableLocations,
-}: MoimFindLocationFilterProps) => {
+}: LocationFilterProps) => {
   // availableLocations가 제공되면 사용, 없으면 기본 지역 목록 사용
   const defaultLocations = Object.values(MOIM_LOCATION);
   const locationOptions =
@@ -52,4 +52,4 @@ const MoimFindLocationFilter = ({
   );
 };
 
-export default MoimFindLocationFilter;
+export default LocationFilter;

@@ -1,7 +1,7 @@
 import CategoryShell from "@/components/common/CategoryShell";
 import { ReviewFilterValues } from "@/types/review.type";
-import MoimFindLocationFilter from "@/components/modules/moim-find/MoimFindLocationFilter";
 import AllReviewSort from "./AllReviewSort";
+import LocationFilter from "@/components/common/LocationFilter";
 
 type AllReviewHeaderProps = {
   filters: ReviewFilterValues;
@@ -17,7 +17,7 @@ const AllReviewHeader = ({ filters, onFilterChange, availableLocations }: AllRev
       category={filters.category}
       onCategoryChange={category => update({ category })}
       LocationSlot={
-        <MoimFindLocationFilter
+        <LocationFilter
           selectedLocation={filters.location}
           onLocationChange={location => update({ location })}
           availableLocations={availableLocations}

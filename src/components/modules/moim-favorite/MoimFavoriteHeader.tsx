@@ -2,10 +2,10 @@
 import Image from "next/image";
 import { type MoimFilterProps } from "@/types/moimFind.type";
 import { useMoimFilter } from "@/hooks/useMoimFilter";
-import MoimFindLocationFilter from "@/components/modules/moim-find/MoimFindLocationFilter";
-import MoimFindDatePicker from "@/components/modules/moim-find/MoimFindDatePicker";
-import MoimFindSort from "@/components/modules/moim-find/MoimFindSort";
+import MoimDatePicker from "@/components/common/MoimDatePicker";
 import CategoryShell from "@/components/common/CategoryShell";
+import LocationFilter from "@/components/common/LocationFilter";
+import MoimSort from "@/components/common/MoimSort";
 
 const MoimFavoriteHeader = ({ onFilterChange, availableLocations }: MoimFilterProps) => {
   const {
@@ -40,14 +40,14 @@ const MoimFavoriteHeader = ({ onFilterChange, availableLocations }: MoimFilterPr
           category={category}
           onCategoryChange={handleCategoryChange}
           LocationSlot={
-            <MoimFindLocationFilter
+            <LocationFilter
               selectedLocation={location}
               onLocationChange={handleLocationChange}
               availableLocations={availableLocations}
             />
           }
-          DateSlot={<MoimFindDatePicker selectedDate={date} onDateChange={handleDateChange} />}
-          SortSlot={<MoimFindSort selectedSort={sort} onSortChange={handleSortChange} />}
+          DateSlot={<MoimDatePicker selectedDate={date} onDateChange={handleDateChange} />}
+          SortSlot={<MoimSort selectedSort={sort} onSortChange={handleSortChange} />}
         />
       </div>
     </div>

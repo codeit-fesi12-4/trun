@@ -8,12 +8,12 @@ import {
 import { MOIM_FILTER_SORT } from "@/constants/moim";
 import Image from "next/image";
 
-type MoimFindSortProps = {
+type MoimSortProps = {
   selectedSort: "마감임박 순" | "참여 인원 순";
   onSortChange: (sort: "마감임박 순" | "참여 인원 순") => void;
 };
 
-const MoimFindSort = ({ selectedSort, onSortChange }: MoimFindSortProps) => (
+const MoimSort = ({ selectedSort, onSortChange }: MoimSortProps) => (
   <DropdownMenu>
     <DropdownMenuTrigger className="flex h-7 w-fit items-center justify-center gap-1 text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=active]:border-0 sm:text-base">
       <Image src="../icons/sort.svg" alt="정렬 아이콘" width={18} height={18} />
@@ -33,4 +33,4 @@ const MoimFindSort = ({ selectedSort, onSortChange }: MoimFindSortProps) => (
   </DropdownMenu>
 );
 
-export default MoimFindSort;
+export default MoimSort;

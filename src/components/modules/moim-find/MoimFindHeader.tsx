@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { type MoimFilterProps } from "@/types/moimFind.type";
-import MoimFindLocationFilter from "./MoimFindLocationFilter";
 import { useMoimFilter } from "@/hooks/useMoimFilter";
-import MoimFindDatePicker from "./MoimFindDatePicker";
-import MoimFindSort from "./MoimFindSort";
 import CategoryShell from "@/components/common/CategoryShell";
+import LocationFilter from "@/components/common/LocationFilter";
+import MoimSort from "@/components/common/MoimSort";
+import MoimFindDatePicker from "@/components/common/MoimDatePicker";
 
 const MoimFindHeader = ({ onFilterChange, availableLocations }: MoimFilterProps) => {
   const {
@@ -39,14 +39,14 @@ const MoimFindHeader = ({ onFilterChange, availableLocations }: MoimFilterProps)
         category={category}
         onCategoryChange={handleCategoryChange}
         LocationSlot={
-          <MoimFindLocationFilter
+          <LocationFilter
             selectedLocation={location}
             onLocationChange={handleLocationChange}
             availableLocations={availableLocations}
           />
         }
         DateSlot={<MoimFindDatePicker selectedDate={date} onDateChange={handleDateChange} />}
-        SortSlot={<MoimFindSort selectedSort={sort} onSortChange={handleSortChange} />}
+        SortSlot={<MoimSort selectedSort={sort} onSortChange={handleSortChange} />}
       />
     </div>
   );
