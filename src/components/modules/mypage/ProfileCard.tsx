@@ -1,6 +1,6 @@
 "use client";
 
-import { UserProfile } from "@/types/auth.type";
+import { UserProfile } from "@/types/user.type";
 import Image from "next/image";
 
 const ProfileSection = ({ image, name, companyName, email }: UserProfile) => (

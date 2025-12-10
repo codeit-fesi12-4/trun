@@ -2,8 +2,14 @@ import ModalLayout from "@/components/layouts/ModalLayout";
 import { MypageField } from "./MypageField";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { UserProfile } from "@/types/auth.type";
-import { UpdateProfileErrors, validateUpdateProfile } from "@/utils/validators.utils";
+import {
+  UpdateProfileErrors,
+  UpdateProfileForm,
+  validateUpdateProfile,
+} from "@/utils/validators.utils";
+import { UserProfile } from "@/types/user.type";
+import { useUpdateProfileMutationQuery } from "@/hooks/useUserQuery";
+import { toast } from "sonner";
 
 const ProfileEditModal = ({
   open,
@@ -14,61 +20,83 @@ const ProfileEditModal = ({
   onOpenChange: (open: boolean) => void;
   user: UserProfile | null;
 }) => {
-  const [form, setForm] = useState({
-    name: "",
+  const [form, setForm] = useState<UpdateProfileForm>({
     companyName: "",
-    email: "",
     image: "",
+    file: null,
   });
   const [errors, setErrors] = useState<UpdateProfileErrors>({});
 
+  // 모달 open 유저 정보가 바뀌면 폼 초기화
   useEffect(() => {
     if (!open || !user) return;
     setTimeout(() => {
       setForm({
-        name: (user.name && user.name) || "",
         companyName: (user.companyName && user.companyName) || "",
-        email: (user.email && user.email) || "",
         image: (user.image && user.image) || "",
+        file: null,
       });
       setErrors({});
     }, 0);
   }, [open, user]);
 
-  const handleChange =
-    (field: "name" | "companyName" | "email") => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setForm(prev => ({ ...prev, [field]: value }));
+  // input 변경 처리
+  const handleChange = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setForm(prev => ({ ...prev, [field]: value }));
 
-      // 해당 필드 에러 제거
-      if (errors[field]) {
-        setErrors(prev => ({ ...prev, [field]: undefined }));
-      }
-    };
-
-  const handleSubmit = () => {
-    const nextErrors = validateUpdateProfile({
-      name: form.name,
-      email: form.email,
-      companyName: form.companyName,
-    });
-
-    setErrors(nextErrors);
-
-    if (Object.keys(nextErrors).length > 0) return;
-
-    alert("유효성 검사 테스트");
+    // 해당 필드 에러 제거
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
+    const file = e.target.files?.[0];
     if (!file) return;
 
+    // validateUpdateProfile로 검사
+    const tempForm: UpdateProfileForm = { companyName: form.companyName, file };
+    const nextErrors = validateUpdateProfile(tempForm);
+
+    if (nextErrors.image) {
+      toast(nextErrors.image);
+      return;
+    }
+
+    // 에러 없으면 상태 업데이트
     setForm(prev => ({
       ...prev,
-      image: URL.createObjectURL(file), // 미리보기
-      file, // 서버 전송용
+      image: URL.createObjectURL(file),
+      file,
     }));
+
+    if (errors.image) {
+      setErrors(prev => ({ ...prev, image: undefined }));
+    }
+  };
+
+  // 회원정보 업데이트
+  const updateProfileMutation = useUpdateProfileMutationQuery();
+  const handleSubmit = () => {
+    const nextErrors = validateUpdateProfile({
+      companyName: form.companyName,
+      file: form.file,
+    });
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
+    // FormData 생성
+    const formData = new FormData();
+    formData.append("companyName", form.companyName);
+    if (form.file) formData.append("image", form.file);
+
+    updateProfileMutation.mutate(
+      { formData },
+      {
+        onSuccess: () => onOpenChange(false),
+      },
+    );
   };
 
   return (
@@ -120,9 +148,7 @@ const ProfileEditModal = ({
             label="이름"
             placeholder="이름을 입력해주세요."
             autoComplete="name"
-            value={form.name}
-            onChange={handleChange("name")}
-            error={errors.name}
+            disabled
           />
           <MypageField
             id="signup-company"
@@ -138,9 +164,7 @@ const ProfileEditModal = ({
             label="이메일"
             placeholder="이메일을 입력해주세요."
             autoComplete="email"
-            value={form.email}
-            onChange={handleChange("email")}
-            error={errors.email}
+            disabled
           />
         </form>
       </div>
