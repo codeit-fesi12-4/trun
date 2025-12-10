@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useMoimsInfiniteQuery, useMoimsQuery } from "@/hooks/useMoimFindQuery";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimType, MoimLocation, Moim } from "@/types/moim.type";
 import {
   MOIM_TYPE,
@@ -72,98 +72,75 @@ export const useMoimFind = () => {
     pageSize: 8,
   });
 
-  // 모든 페이지의 모임 데이터를 평탄화
+  // 모든 페이지의 모임 데이터를 하나의 배열로 통합
   const allMoims = useMemo<Moim[]>(() => {
     if (!moimsPages?.pages) return [];
     return moimsPages.pages.flatMap(page => page.data);
   }, [moimsPages]);
 
-  // 지역 목록 추출을 위한 별도 쿼리 (카테고리만 필터링, 지역 필터 제외)
-  // 항상 모든 지역 목록을 보여주기 위해 필터링되지 않은 데이터에서 추출
+  // 지역 목록 추출을 위한 별도 무한 스크롤 쿼리
   const locationQueryParams = useMemo(
     () => ({
       type: convertCategoryToMoimType(filters.category),
-      limit: 1000, // 충분히 많은 데이터를 가져와서 모든 지역 포함
     }),
     [filters.category],
   );
 
-  const { data: moimsForLocation } = useMoimsQuery({
+  const {
+    data: locationMoimsPages,
+    fetchNextPage: fetchNextLocationPage,
+    hasNextPage: hasNextLocationPage,
+    isFetchingNextPage: isFetchingNextLocationPage,
+  } = useMoimsInfiniteQuery({
     params: locationQueryParams,
+    pageSize: 8,
   });
 
-  // 선택된 카테고리의 모임들에서 실제 존재하는 지역 목록 추출
-  // 지역 필터를 제외한 전체 데이터에서 지역 목록 추출 (항상 모든 지역 표시)
+  const allLocationMoims = useMemo<Moim[]>(() => {
+    if (!locationMoimsPages?.pages) return [];
+    return locationMoimsPages.pages.flatMap(page => page.data);
+  }, [locationMoimsPages]);
+
+  const isAutoLoadingRef = useRef(false);
+
+  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
+  useEffect(() => {
+    if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
+      isAutoLoadingRef.current = true;
+      void fetchNextLocationPage().finally(() => {
+        isAutoLoadingRef.current = false;
+      });
+    }
+  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage]);
+
   const availableLocations = useMemo(() => {
-    if (!moimsForLocation || moimsForLocation.length === 0) return [MOIM_LOCATION.ALL];
+    if (allLocationMoims.length === 0) return [MOIM_LOCATION.ALL];
     const locations = new Set<string>();
-    moimsForLocation.forEach(moim => {
+    allLocationMoims.forEach(moim => {
       if (moim.location) {
         locations.add(moim.location);
       }
     });
     return [MOIM_LOCATION.ALL, ...Array.from(locations).sort()];
-  }, [moimsForLocation]);
+  }, [allLocationMoims]);
 
-  // 날짜 필터링, 마감일이 지난 모임 제거
   const filteredMoims = useMemo(() => {
     if (allMoims.length === 0) return [];
 
-    const now = new Date();
-
-    // 마감일이 지난 모임 필터링 (무한 스크롤 테스트를 위해 임시로 비활성화)
-    const ENABLE_EXPIRED_FILTER = false; // 테스트 완료 후 true로 변경
-
-    let validMoims = ENABLE_EXPIRED_FILTER
-      ? allMoims.filter(moim => {
-          // registrationEnd가 없으면 필터링하지 않음 (마감일이 없는 모임)
-          if (!moim.registrationEnd) return true;
-
-          try {
-            const registrationEndDate = parseISO(moim.registrationEnd);
-            // 마감일이 현재 시간보다 이후인 모임만 포함
-            return registrationEndDate > now;
-          } catch {
-            // 파싱 실패 시 포함하지 않음
-            return false;
-          }
-        })
-      : allMoims; // 필터링 비활성화 시 모든 모임 포함
-
-    // 날짜 필터링 (사용자가 특정 날짜를 선택한 경우)
     if (filters.date) {
-      validMoims = validMoims.filter(moim => {
+      const selectedDate = filters.date;
+      return allMoims.filter(moim => {
         try {
           const moimDate = parseISO(moim.dateTime);
-          return isSameDay(moimDate, filters.date!);
+          return isSameDay(moimDate, selectedDate);
         } catch {
           return false;
         }
       });
     }
 
-    // 서버에서 정렬된 데이터를 받아오므로, 클라이언트에서는 필터링만 수행
-    // 단, 마감일이 없는 모임의 경우 정렬 순서를 유지하기 위해 추가 정렬 필요
-    const sortedMoims = [...validMoims].sort((a, b) => {
-      if (filters.sort === FILTER_SORT.DEADLINE) {
-        // 마감임박 순: registrationEnd 오름차순 (마감일 없는 모임은 뒤로)
-        if (!a.registrationEnd) return 1;
-        if (!b.registrationEnd) return -1;
-        try {
-          const dateA = parseISO(a.registrationEnd).getTime();
-          const dateB = parseISO(b.registrationEnd).getTime();
-          return dateA - dateB;
-        } catch {
-          return 0;
-        }
-      } else {
-        // 참여 인원 순: participantCount 내림차순
-        return b.participantCount - a.participantCount;
-      }
-    });
-
-    return sortedMoims;
-  }, [allMoims, filters.date, filters.sort]);
+    return allMoims;
+  }, [allMoims, filters.date]);
 
   const handleFilterChange = (newFilters: MoimFilterValues) => {
     setFilters(newFilters);
