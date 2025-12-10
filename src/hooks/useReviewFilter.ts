@@ -1,20 +1,20 @@
+import { FILTER_CATEGORY, MOIM_LOCATION } from "@/constants/moim";
+import { ReviewFilterProps, ReviewFilterValues } from "@/types/review.type";
 import { useState, useEffect } from "react";
-import { type MoimFilterValues, type MoimFilterProps } from "@/types/moimFind.type";
-import { FILTER_CATEGORY, MOIM_LOCATION, MOIM_FILTER_SORT } from "@/constants/moim";
 
-type UseMoimFilterProps = MoimFilterProps;
+type UseReviewFilterProps = ReviewFilterProps;
 
-export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFilterProps) => {
+export const useReviewFilter = ({ onFilterChange, availableLocations }: UseReviewFilterProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
   const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(MOIM_FILTER_SORT.DEADLINE);
+  const [sort, setSort] = useState<"최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순">(
+    "최신 리뷰 순",
+  );
 
   // 필터 객체 생성 헬퍼 함수
-  const createFilterValues = (): MoimFilterValues => ({
+  const createFilterValues = (): ReviewFilterValues => ({
     category,
     location,
-    date,
     sort,
   });
 
@@ -56,12 +56,7 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
     onFilterChange?.({ ...createFilterValues(), location: newLocation });
   };
 
-  const handleDateChange = (newDate: Date | undefined) => {
-    setDate(newDate);
-    onFilterChange?.({ ...createFilterValues(), date: newDate });
-  };
-
-  const handleSortChange = (newSort: "마감임박 순" | "참여 인원 순") => {
+  const handleSortChange = (newSort: "최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순") => {
     setSort(newSort);
     onFilterChange?.({ ...createFilterValues(), sort: newSort });
   };
@@ -69,48 +64,9 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
   return {
     category,
     location,
-    date,
     sort,
     handleCategoryChange,
     handleLocationChange,
-    handleDateChange,
     handleSortChange,
-  };
-};
-
-// =================================================================================
-// DatePicker용 커스텀 훅
-type UseDatePickerProps = {
-  selectedDate: Date | undefined;
-  onDateChange: (date: Date | undefined) => void;
-};
-
-export const useDatePicker = ({ selectedDate, onDateChange }: UseDatePickerProps) => {
-  const [tempDate, setTempDate] = useState<Date | undefined>(selectedDate);
-  const [isOpen, setIsOpen] = useState(false);
-
-  // selectedDate가 변경되면 tempDate도 업데이트
-  useEffect(() => {
-    setTempDate(selectedDate);
-  }, [selectedDate]);
-
-  const handleReset = () => {
-    setTempDate(undefined);
-    onDateChange(undefined);
-    setIsOpen(false);
-  };
-
-  const handleApply = () => {
-    onDateChange(tempDate);
-    setIsOpen(false);
-  };
-
-  return {
-    tempDate,
-    setTempDate,
-    isOpen,
-    setIsOpen,
-    handleReset,
-    handleApply,
   };
 };

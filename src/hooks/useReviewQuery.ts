@@ -1,20 +1,35 @@
 import { getMoimReviews, getReviews, getReviewScores } from "@/api/review.api";
 import { TEAM_NAME } from "@/constants";
+import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { GetReviewsParams, ReviewScore, ReviewScoresParams } from "@/types/review.type";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 // 모든 리뷰 가져오기
-export const useReviewsQuery = ({
-  params,
-  enabled = true,
-}: {
-  params: GetReviewsParams;
-  enabled?: boolean;
-}) =>
-  useQuery({
-    queryKey: ["reviews", params],
-    queryFn: () => getReviews(params),
-    enabled,
+export const useAllReviewQuery = (params: GetReviewsParams) =>
+  useInfiniteQuery({
+    queryKey: ["reviews", params.teamId, params.type, params.location, params.sortBy, params.limit],
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await getReviews({ ...params, offset: pageParam });
+
+      console.warn("query", params);
+
+      if (Array.isArray(res)) {
+        return {
+          data: res,
+          totalItemCount: res.length,
+        };
+      }
+      return res;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, pages) => {
+      const pageSize = params.limit ?? REVIEW_PAGE_SIZE.SCROLL;
+      const lastCount = lastPage?.data?.length ?? 0;
+
+      if (lastCount < pageSize) return undefined;
+
+      return pages.reduce((sum, p) => sum + (p?.data?.length ?? 0), 0);
+    },
   });
 
 // 모임별 리뷰 가져오기

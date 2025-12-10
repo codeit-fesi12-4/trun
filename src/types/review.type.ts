@@ -1,4 +1,6 @@
-import { MoimType, SortBy, SortOrder } from "./moim.type";
+import { MoimType, SortOrder } from "./moim.type";
+
+export type ReviewSortBy = "createdAt" | "score" | "participantCount";
 
 export type GetReviewsParams = {
   teamId: string;
@@ -8,7 +10,7 @@ export type GetReviewsParams = {
   location?: string;
   date?: string;
   registrationEnd?: string;
-  sortBy?: SortBy;
+  sortBy?: ReviewSortBy;
   sortOrder?: SortOrder;
   limit?: number;
   offset?: number;
@@ -67,3 +69,17 @@ export type ReviewScore = {
 };
 
 export type ReviewScoresResponse = ReviewScore[];
+
+// 리뷰 필터 값 타입
+export type ReviewFilterValues = {
+  category: "달림핏" | "런케이션";
+  location: string;
+  sortBy: "최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순";
+};
+
+export type ReviewFilterProps = {
+  onFilterChange?: (filters: ReviewFilterValues) => void;
+  availableLocations?: string[];
+};
+
+export type ReviewDistribution = { score: number; count: number };
