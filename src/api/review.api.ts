@@ -33,7 +33,6 @@ export const getReviews = async (params: GetReviewsParams) => {
     const response = await fetch(buildReviewsPath(params), {
       method: "GET",
     });
-    console.warn("fetch", params.sortBy);
 
     const result = await response.json();
 
