@@ -1,6 +1,6 @@
 "use client";
 
-import { UserProfile } from "@/types/auth.type";
+import { UserProfile } from "@/types/user.type";
 import Image from "next/image";
 
 const ProfileSection = ({ image, name, companyName, email }: UserProfile) => (
@@ -12,7 +12,7 @@ const ProfileSection = ({ image, name, companyName, email }: UserProfile) => (
         alt="내 프로필 이미지"
         width={114}
         height={114}
-        className="h-auto w-10 sm:w-14 lg:w-28 lg:pt-5"
+        className="aspect-square h-auto w-10 rounded-full object-cover sm:w-14 lg:mt-5 lg:w-28"
       />
       <h1 className="pl-2 text-sm font-semibold text-gray-800 sm:text-lg sm:font-semibold lg:pt-5">
         {name}

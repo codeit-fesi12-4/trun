@@ -6,6 +6,7 @@ import { toast } from "sonner";
 const buildReviewsPath = (params: GetReviewsParams) => {
   const { teamId, ...rest } = params;
   const basePath = `${API_BASE_URL}${teamId && TEAM_NAME}/reviews`;
+
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
@@ -84,6 +85,7 @@ export const getMoimReviews = async ({
 const buildReviewScoresPath = (params: ReviewScoresParams) => {
   const { teamId, ...rest } = params;
   const basePath = `${API_BASE_URL}${teamId && TEAM_NAME}/reviews/scores`;
+
   const searchParams = new URLSearchParams();
 
   if (rest.gatheringId !== undefined) searchParams.append("gatheringId", String(rest.gatheringId));
