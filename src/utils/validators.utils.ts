@@ -27,6 +27,18 @@ export type SignupErrors = {
   confirmPassword?: string;
 };
 
+export type UpdateProfileForm = {
+  companyName: string;
+  image?: string;
+  file?: File | null;
+};
+
+export type UpdateProfileErrors = {
+  companyName?: string;
+  image?: string;
+  file?: string;
+};
+
 export const validateLogin = (values: LoginForm): LoginErrors => {
   const nextErrors: LoginErrors = {};
   if (!values.email.trim()) {
@@ -66,5 +78,23 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
   } else if (values.password && values.confirmPassword !== values.password) {
     nextErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
   }
+  return nextErrors;
+};
+
+export const validateUpdateProfile = (values: UpdateProfileForm): UpdateProfileErrors => {
+  const nextErrors: UpdateProfileErrors = {};
+
+  if (!values.companyName.trim()) {
+    nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
+  }
+  if (values.file) {
+    const validTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];
+    if (!validTypes.includes(values.file.type)) {
+      nextErrors.image = "지원하지 않는 이미지 형식입니다.";
+    } else if (values.file.size > 5 * 1024 * 1024) {
+      nextErrors.image = "이미지 파일은 5MB 이하로 업로드해주세요.";
+    }
+  }
+
   return nextErrors;
 };

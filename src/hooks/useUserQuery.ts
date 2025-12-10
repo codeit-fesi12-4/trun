@@ -1,5 +1,6 @@
 import { getUserProfile, updateProfile } from "@/api/user.api";
 import { TEAM_NAME } from "@/constants";
+import { useAuthStore } from "@/stores/auth.store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -25,15 +26,19 @@ export const useUpdateProfileMutationQuery = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ formData, token }: { formData: FormData; token?: string | null }) =>
-      updateProfile(formData, token),
+      updateProfile(formData, TEAM_NAME, token),
 
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+    onSuccess: async data => {
+      useAuthStore.getState().setUser(data);
+      await queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      toast("프로필이 수정되었습니다");
     },
 
     onError: error => {
       if (error instanceof Error) {
         toast(error.message);
+      } else {
+        toast("프로필 업데이트 중 오류가 발생했습니다");
       }
     },
   });

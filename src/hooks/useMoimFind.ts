@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
+import { useMoimsQuery, useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimType, MoimLocation, Moim } from "@/types/moim.type";
 import {
   MOIM_TYPE,
@@ -20,7 +20,7 @@ export const useMoimFind = () => {
     category: FILTER_CATEGORY.DALLIMFIT,
     location: MOIM_LOCATION.ALL,
     date: undefined,
-    sort: FILTER_SORT.DEADLINE,
+    sort: MOIM_FILTER_SORT.DEADLINE,
   });
 
   // 카테고리를 MoimType으로 변환

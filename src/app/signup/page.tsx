@@ -55,7 +55,6 @@ const SignupPage = () => {
     e.preventDefault();
     const validation = validateSignup(form, DUPLICATE_EMAILS);
     setErrors(validation);
-    console.warn(validation);
     if (Object.keys(validation).length === 0) {
       signupMutation.mutate();
     }

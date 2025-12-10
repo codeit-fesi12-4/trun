@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { type MoimFilterValues, type MoimFilterProps } from "@/types/moimFind.type";
-import { FILTER_CATEGORY, MOIM_LOCATION, FILTER_SORT } from "@/constants/moim";
+import { FILTER_CATEGORY, MOIM_LOCATION, MOIM_FILTER_SORT } from "@/constants/moim";
 
 type UseMoimFilterProps = MoimFilterProps;
 
@@ -8,7 +8,7 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
   const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
   const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
   const [date, setDate] = useState<Date | undefined>(undefined);
-  const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(FILTER_SORT.DEADLINE);
+  const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(MOIM_FILTER_SORT.DEADLINE);
 
   // 필터 객체 생성 헬퍼 함수
   const createFilterValues = (): MoimFilterValues => ({

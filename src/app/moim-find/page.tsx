@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import MoimCardList from "@/components/modules/moim-find/MoimCardList";
-import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 import MoimAddModal from "@/components/modules/moim-find/MoimAddModal";
 import { Spinner } from "@/components/ui/spinner";
+import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
 const MoimFindPage = () => {
   const {
