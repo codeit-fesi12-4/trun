@@ -24,6 +24,7 @@ type MoimDetailSummary = {
 
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isHeartAnimating, setIsHeartAnimating] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
@@ -37,6 +38,19 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const router = useRouter();
 
   const token = localStorage.getItem("token");
+
+  const handleFavoriteClick = () => {
+    setIsFavorite(prev => !prev);
+    if (isFavorite) {
+      setIsFavorite(false);
+      setIsHeartAnimating(false);
+      return;
+    }
+  };
+
+  const handleHeartAnimating = () => {
+    if (!isFavorite) setIsHeartAnimating(!isHeartAnimating);
+  };
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -146,16 +160,17 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         {/* 좋아요 버튼, 참여하기 버튼 */}
         <div className="mt-3 flex flex-row gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
           <button
-            onClick={() => {
-              setIsFavorite(!isFavorite);
-            }}
+            onClick={handleFavoriteClick}
+            onMouseDown={handleHeartAnimating}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100"
           >
             <Image
               src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
               alt={isFavorite ? "좋아요" : "좋아요 취소"}
-              width={48}
-              height={48}
-              className="md:size-15"
+              width={20}
+              height={20}
+              className={`${isHeartAnimating && "heart-pop"} md:size-15`}
+              onAnimationEnd={() => setIsHeartAnimating(false)}
             />
           </button>
 
