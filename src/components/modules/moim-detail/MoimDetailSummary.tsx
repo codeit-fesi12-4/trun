@@ -131,7 +131,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               </Badge>
             )}
           </div>
-          {isCreator && <Image src="../icons/crown.svg" alt="방장 아이콘" width={32} height={32} />}
+          {isCreator && <Image src="/icons/crown.svg" alt="방장 아이콘" width={32} height={32} />}
         </div>
 
         {/* 제목 */}

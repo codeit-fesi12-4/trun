@@ -33,7 +33,7 @@ const CategoryShell = ({
             className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
           >
             <Image
-              src="../icons/dallimfit.svg"
+              src="/icons/dallimfit.svg"
               alt="달림핏 아이콘"
               width={32}
               height={32}
@@ -46,7 +46,7 @@ const CategoryShell = ({
             className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
           >
             <Image
-              src="../icons/runcation.svg"
+              src="/icons/runcation.svg"
               alt="런케이션 아이콘"
               width={40}
               height={40}

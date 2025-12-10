@@ -27,7 +27,7 @@ const MoimDatePicker = ({ selectedDate, onDateChange }: MoimDatePickerProps) => 
         >
           {formatDateWithDash(selectedDate) || <span>날짜 전체</span>}
           <Image
-            src="../icons/down_arrow.svg"
+            src="/icons/down_arrow.svg"
             alt="날짜 선택지 보기 아이콘"
             width={17}
             height={17}
