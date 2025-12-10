@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
+import { useMoimsInfiniteQuery, useMoimsQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimType, MoimLocation, Moim } from "@/types/moim.type";
 import {
   MOIM_TYPE,
@@ -78,18 +78,32 @@ export const useMoimFind = () => {
     return moimsPages.pages.flatMap(page => page.data);
   }, [moimsPages]);
 
+  // 지역 목록 추출을 위한 별도 쿼리 (카테고리만 필터링, 지역 필터 제외)
+  // 항상 모든 지역 목록을 보여주기 위해 필터링되지 않은 데이터에서 추출
+  const locationQueryParams = useMemo(
+    () => ({
+      type: convertCategoryToMoimType(filters.category),
+      limit: 1000, // 충분히 많은 데이터를 가져와서 모든 지역 포함
+    }),
+    [filters.category],
+  );
+
+  const { data: moimsForLocation } = useMoimsQuery({
+    params: locationQueryParams,
+  });
+
   // 선택된 카테고리의 모임들에서 실제 존재하는 지역 목록 추출
-  // 무한 스크롤 쿼리의 데이터를 사용하여 지역 목록 추출
+  // 지역 필터를 제외한 전체 데이터에서 지역 목록 추출 (항상 모든 지역 표시)
   const availableLocations = useMemo(() => {
-    if (allMoims.length === 0) return [MOIM_LOCATION.ALL];
+    if (!moimsForLocation || moimsForLocation.length === 0) return [MOIM_LOCATION.ALL];
     const locations = new Set<string>();
-    allMoims.forEach(moim => {
+    moimsForLocation.forEach(moim => {
       if (moim.location) {
         locations.add(moim.location);
       }
     });
     return [MOIM_LOCATION.ALL, ...Array.from(locations).sort()];
-  }, [allMoims]);
+  }, [moimsForLocation]);
 
   // 날짜 필터링, 마감일이 지난 모임 제거
   const filteredMoims = useMemo(() => {
