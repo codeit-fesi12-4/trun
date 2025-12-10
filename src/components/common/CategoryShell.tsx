@@ -21,7 +21,11 @@ const CategoryShell = ({
 }: CategoryShellProps) => (
   <div className="flex h-[95px] flex-col md:h-[53px] md:flex-row md:items-center md:justify-between md:border-b md:border-gray-200">
     {/* 카테고리 탭 영역 */}
-    <Tabs value={category} onValueChange={v => onCategoryChange(v as "달림핏" | "런케이션")}>
+    <Tabs
+      value={category}
+      onValueChange={v => onCategoryChange(v as "달림핏" | "런케이션")}
+      className="-mx-6 sm:mx-0"
+    >
       <TabsList className="flex w-full justify-between bg-transparent">
         <div className="flex w-full border-b border-gray-200 md:border-0">
           <TabsTrigger

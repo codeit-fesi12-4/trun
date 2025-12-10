@@ -11,8 +11,6 @@ export const useAllReviewQuery = (params: GetReviewsParams) =>
     queryFn: async ({ pageParam = 0 }) => {
       const res = await getReviews({ ...params, offset: pageParam });
 
-      console.warn("query", params);
-
       if (Array.isArray(res)) {
         return {
           data: res,

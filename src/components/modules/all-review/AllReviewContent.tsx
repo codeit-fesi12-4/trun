@@ -10,7 +10,6 @@ import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/useReviewQuery"
 import { CATEGORY_MAP, SORTBY_MAP } from "@/utils/category.util";
 import { buildDistribution } from "@/utils/review.util";
 import { ReviewFilterValues } from "@/types/review.type";
-import { MOIM_LOCATION } from "@/constants/moim";
 
 const AllReviewContent = () => {
   const [filters, setFilters] = useState<ReviewFilterValues>({
@@ -44,8 +43,6 @@ const AllReviewContent = () => {
 
   const reviewList = useMemo(() => reviewsPages?.pages.flatMap(p => p.data) ?? [], [reviewsPages]);
 
-  const availableLocations = useMemo(() => [...Object.values(MOIM_LOCATION)], []);
-
   const { data: scoresData } = useReviewScoresQuery({
     params: { teamId: TEAM_NAME, type: activeReviewType },
   });
@@ -74,11 +71,7 @@ const AllReviewContent = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <AllReviewHeader
-        filters={filters}
-        onFilterChange={setFilters}
-        availableLocations={availableLocations}
-      />
+      <AllReviewHeader filters={filters} onFilterChange={setFilters} />
 
       <AllReviewStats averageScore={averageScore} distribution={distribution} />
 

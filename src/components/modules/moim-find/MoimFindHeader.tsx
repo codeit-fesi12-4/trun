@@ -18,7 +18,7 @@ const MoimFindHeader = ({ onFilterChange, availableLocations }: MoimFilterProps)
     handleSortChange,
   } = useMoimFilter({ onFilterChange, availableLocations });
   return (
-    <div>
+    <div className="-mx-6 -mt-6 sm:mx-0 sm:mt-2">
       <div className="relative mb-6 h-48 w-full overflow-hidden bg-[#9DEBCD] sm:h-[244px] sm:rounded-4xl">
         <div className="absolute -right-30 -bottom-17 h-[254px] w-[435px] sm:-right-25 sm:-bottom-10 sm:h-[273px] sm:w-[468px] md:right-0 md:-bottom-17 md:h-[313px] md:w-[536px]">
           <Image

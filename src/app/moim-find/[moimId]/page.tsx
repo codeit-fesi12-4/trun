@@ -11,10 +11,10 @@ const MoimDetailPage = async ({ params }: MoimDetailPage) => {
   const { moimId } = await params;
 
   return (
-    <div className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4">
       <MoimDetailInformation moimId={moimId} />
       <MoimDetailReviewArea moimId={moimId} />
-    </div>
+    </section>
   );
 };
 
