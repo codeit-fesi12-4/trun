@@ -20,7 +20,7 @@ const MoimDatePicker = ({ selectedDate, onDateChange }: MoimDatePickerProps) => 
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger
         data-empty={!selectedDate}
-        className="flex h-7 w-26 items-center justify-center text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=open]:text-black sm:text-base"
+        className="flex h-7 w-27 items-center justify-center text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 sm:text-base"
       >
         <span>{formatDateWithDash(selectedDate) || "날짜 전체"}</span>
         <Image

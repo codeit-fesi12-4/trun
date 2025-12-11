@@ -39,7 +39,26 @@ const MoimFindPage = () => {
           모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
         </div>
       )}
-      {!error && <MoimCardList items={moimCardData} isLoading={isLoading} />}
+      {!error && (
+        <>
+          {!isLoading && moimCardData.length === 0 && (
+            <div className="mt-25 flex flex-col items-center justify-center gap-3">
+              <Image
+                src="/icons/empty_moim.svg"
+                alt="모임이 없음"
+                width={171}
+                height={136}
+                className="h-auto w-auto"
+              />
+              <p className="flex flex-col items-center gap-1 text-base font-bold text-gray-400">
+                <span>아직 모임이 없어요</span>
+                <span>지금 바로 모임을 만들어보세요!</span>
+              </p>
+            </div>
+          )}
+          <MoimCardList items={moimCardData} isLoading={isLoading} />
+        </>
+      )}
 
       {/* 무한 스크롤 센티널 */}
       <div id="moim-load-more-sentinel" ref={loadMoreRef} className="h-6 w-full" aria-hidden />
