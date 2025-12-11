@@ -151,6 +151,7 @@ export const useMoimFind = () => {
   const handleCreateMoimClick = () => {
     if (!token) {
       alert("로그인이 필요한 서비스입니다. 먼저 로그인해주세요.");
+      window.location.href = "/login";
       return;
     }
     setIsModalOpen(true);

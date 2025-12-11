@@ -106,6 +106,11 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
   };
 
   const handleSubmit = () => {
+    // 중복 제출 방지: 이미 제출 중이면 무시
+    if (createMoimMutation.isPending) {
+      return;
+    }
+
     // 최종 유효성 검사
     if (!validateStep(TOTAL_STEPS)) {
       return;
@@ -146,5 +151,6 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
     handleNext,
     handlePrevious,
     handleSubmit,
+    isSubmitting: createMoimMutation.isPending,
   };
 };
