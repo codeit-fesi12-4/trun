@@ -3,7 +3,9 @@
 import { useAuthStore } from "@/stores/auth.store";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type FavoriteButtonProps = {
   moimId: number;
@@ -13,6 +15,7 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const user = useAuthStore(state => state.user);
   const userId = user?.id.toString();
+  const router = useRouter();
 
   useEffect(() => {
     if (userId) {
@@ -25,12 +28,25 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   }, [moimId, userId]);
 
   const handleFavoriteClick = () => {
-    setIsFavorite((prev: boolean) => !prev);
-    if (!isFavorite) {
-      addFavoriteMoim(moimId, userId);
-    } else {
-      removeFavoriteMoim(moimId, userId);
+    if (!userId) {
+      toast("로그인이 필요합니다. 로그인할까요?", {
+        action: {
+          label: "이동",
+          onClick: () => router.push("/login"),
+        },
+      });
+      return;
     }
+
+    setIsFavorite((prev: boolean) => {
+      const next = !prev;
+      if (next) {
+        addFavoriteMoim(moimId, userId);
+      } else {
+        removeFavoriteMoim(moimId, userId);
+      }
+      return next;
+    });
   };
   return (
     <button
