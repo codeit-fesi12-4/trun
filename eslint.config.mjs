@@ -88,8 +88,6 @@ export default [
 
       "func-style": "off",
       "arrow-body-style": ["warn", "as-needed"],
-      // Next.js hydration 체크를 위한 useEffect 내 setState 허용
-      "react-hooks/set-state-in-effect": "warn",
     },
   },
 ];

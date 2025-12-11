@@ -23,7 +23,10 @@ const Header = () => {
 
   // 클라이언트 마운트 체크
   useEffect(() => {
-    setIsMounted(true);
+    const handleMount = () => {
+      setIsMounted(true);
+    };
+    handleMount();
   }, []);
 
   const handleLogout = async () => {
