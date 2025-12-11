@@ -17,14 +17,14 @@ import {
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 import ConfirmationJoinModal from "./ConfirmationJoinModal";
+import FavoriteButton from "@/components/common/FavoriteButton";
 
 type MoimDetailSummary = {
   moim: Moim;
 };
 
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isHeartAnimating, setIsHeartAnimating] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
@@ -39,35 +39,27 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
   const token = localStorage.getItem("token");
 
-  const handleFavoriteClick = () => {
-    setIsFavorite(prev => !prev);
-    if (isFavorite) {
-      setIsFavorite(false);
-      setIsHeartAnimating(false);
-      return;
-    }
-  };
-
-  const handleHeartAnimating = () => {
-    if (!isFavorite) setIsHeartAnimating(!isHeartAnimating);
-  };
-
   useEffect(() => {
     const stored = localStorage.getItem("user");
     if (!stored) return;
 
     const user = JSON.parse(stored);
-    const userId = Number(user.id);
+
+    const storedUserId = user.id;
+
+    const distinguishUserId = () => {
+      setUserId(storedUserId);
+    };
 
     const distinguishCreator = () => {
-      if (userId === moim.createdBy) {
+      if (storedUserId === moim.createdBy) {
         setIsCreator(true);
       }
     };
 
     const distinguishParticipant = () => {
       const participantsIds = participants?.map((p: Participant) => p.userId);
-      if (participantsIds?.find((p: number) => p === userId)) {
+      if (participantsIds?.find((p: number) => p === storedUserId)) {
         setIsParticipant(true);
       } else {
         setIsParticipant(false);
@@ -82,10 +74,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
       }
     };
 
+    distinguishUserId();
     distinguishCreator();
     distinguishParticipant();
     distinguishFull();
-  }, [moim, participants]);
+  }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
     try {
@@ -159,20 +152,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
         {/* 좋아요 버튼, 참여하기 버튼 */}
         <div className="mt-3 flex flex-row gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
-          <button
-            onClick={handleFavoriteClick}
-            onMouseDown={handleHeartAnimating}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100"
-          >
-            <Image
-              src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
-              alt={isFavorite ? "좋아요" : "좋아요 취소"}
-              width={20}
-              height={20}
-              className={`${isHeartAnimating && "heart-pop"} md:size-15`}
-              onAnimationEnd={() => setIsHeartAnimating(false)}
-            />
-          </button>
+          <FavoriteButton moimId={moim.id} userId={userId} />
 
           {isCreator ? (
             <div className="flex w-full gap-2 sm:h-12 md:h-15">
