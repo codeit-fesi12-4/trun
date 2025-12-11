@@ -62,7 +62,7 @@ const Header = () => {
                     alt="내정보"
                     width={42}
                     height={42}
-                    className="h-8 w-8 cursor-pointer sm:h-11 sm:w-11"
+                    className="h-8 w-8 cursor-pointer rounded-full object-cover sm:h-11 sm:w-11"
                   />
                 </DropdownMenuTrigger>
 
