@@ -32,7 +32,6 @@ const MyMoimTab = () => {
             item={item}
             onClick={() => handleJoinClick(item.id)}
             showButton={true}
-            isCreatedMoimTab={false}
           />
         ))
       )}

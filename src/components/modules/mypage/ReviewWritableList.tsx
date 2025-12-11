@@ -29,6 +29,7 @@ const ReviewWritableList = () => {
             item={card}
             onClick={() => handleJoinClick(card.id)}
             showButton={true}
+            isReviewedMoimTab={true}
           />
         ))
       )}

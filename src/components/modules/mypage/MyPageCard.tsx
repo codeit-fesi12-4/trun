@@ -9,9 +9,16 @@ type MyPageCardProps = {
   onClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;
+  isReviewedMoimTab?: boolean;
 };
 
-const MyPageCard = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageCardProps) => (
+const MyPageCard = ({
+  item,
+  onClick,
+  showButton,
+  isCreatedMoimTab,
+  isReviewedMoimTab,
+}: MyPageCardProps) => (
   <div
     key={item.id}
     className="relative box-border flex w-full flex-col overflow-hidden rounded-3xl bg-white sm:flex-row sm:items-stretch sm:p-6"
@@ -27,6 +34,7 @@ const MyPageCard = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageCardP
       onClick={onClick}
       showButton={showButton}
       isCreatedMoimTab={isCreatedMoimTab}
+      isReviewedMoimTab={isReviewedMoimTab}
     />
 
     {/* 모집 취소 오버레이: 내가 참여한 모임이 생성자에 의해 취소된 경우 */}
