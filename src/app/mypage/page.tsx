@@ -1,4 +1,4 @@
-import MypageClient from "@/components/modules/mypage/mypageClient";
+import MypageClient from "@/components/modules/mypage/MypageClient";
 
 const Mypage = () => <MypageClient />;
 
