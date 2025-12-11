@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoimStatus, MyPageCardData } from "@/types/mypage.type";
+import { MoimStatus, MypageMoim } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
 import Image from "next/image";
 
@@ -12,7 +12,7 @@ const statusToClassName: Record<MoimStatus, string> = {
 };
 
 type MyPageCardItemProps = {
-  item: MyPageCardData;
+  item: MypageMoim;
   onClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;
