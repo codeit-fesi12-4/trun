@@ -14,12 +14,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { postSignout } from "@/api/auth.api";
 import { useEffect, useState } from "react";
+import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 
 const Header = () => {
   const user = useAuthStore(state => state.user);
   const reset = useAuthStore(state => state.reset);
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
+  const [open, setOpen] = useState(false);
 
   // 클라이언트 마운트 체크
   useEffect(() => {
@@ -34,6 +36,14 @@ const Header = () => {
     reset();
     router.push("/");
     toast.success("로그아웃 성공");
+  };
+
+  const handleFavoritePage = () => {
+    if (!user) {
+      setOpen(true);
+      return;
+    }
+    router.push("/moim-favorite");
   };
 
   return (
@@ -53,9 +63,9 @@ const Header = () => {
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <Link href="/moim-favorite" className="nav-link">
+            <button onClick={handleFavoritePage} className="nav-link">
               찜한 모임
-            </Link>
+            </button>
             <Link href="/all-review" className="nav-link">
               모든 리뷰
             </Link>
@@ -96,6 +106,7 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </header>
   );
 };

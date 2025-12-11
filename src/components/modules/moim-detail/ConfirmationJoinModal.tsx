@@ -6,15 +6,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ReactNode } from "react";
 
-type ConfirmationJoinModalProps = { children?: ReactNode };
+type ConfirmationJoinModalProps = {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+};
 
-const ConfirmationJoinModal = ({ children }: ConfirmationJoinModalProps) => {
+const ConfirmationJoinModal = ({ open, onOpenChange }: ConfirmationJoinModalProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -24,8 +25,7 @@ const ConfirmationJoinModal = ({ children }: ConfirmationJoinModalProps) => {
     router.push(`/login?redirect=${encodeURIComponent(current)}`);
   };
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="h-[216px] max-w-[342px] gap-0 rounded-3xl p-6 sm:h-[289px] sm:max-w-[600px] sm:rounded-[40px] sm:p-10"
         showCloseButton={false}
