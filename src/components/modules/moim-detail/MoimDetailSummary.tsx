@@ -145,7 +145,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         <div className="mt-3 flex flex-row items-center gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
           <FavoriteButton moimId={moim.id} />
           {isCreator ? (
-            <div className="flex w-full gap-2 sm:h-12 md:h-15">
+            <div className="flex h-10 w-full gap-2 sm:h-12 md:h-15">
               <button
                 onClick={() => void handleMoimCancel()}
                 disabled={isCanCelMoimPending}

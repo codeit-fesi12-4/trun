@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/stores/auth.store";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -16,6 +16,8 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const user = useAuthStore(state => state.user);
   const userId = user?.id.toString();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (userId) {
@@ -28,11 +30,13 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   }, [moimId, userId]);
 
   const handleFavoriteClick = () => {
+    const current = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
+
     if (!userId) {
       toast("로그인이 필요합니다. 로그인할까요?", {
         action: {
           label: "이동",
-          onClick: () => router.push("/login"),
+          onClick: () => router.push(`/login?redirect=${encodeURIComponent(current)}`),
         },
       });
       return;
