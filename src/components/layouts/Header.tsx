@@ -13,11 +13,18 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { postSignout } from "@/api/auth.api";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const user = useAuthStore(state => state.user);
   const reset = useAuthStore(state => state.reset);
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // 클라이언트 마운트 체크
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleLogout = async () => {
     await postSignout();
@@ -54,7 +61,11 @@ const Header = () => {
 
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
-            {user ? (
+            {!isMounted ? (
+              <Link href="/login" className="nav-link">
+                로그인
+              </Link>
+            ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Image
