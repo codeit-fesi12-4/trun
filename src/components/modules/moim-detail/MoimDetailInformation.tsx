@@ -2,18 +2,26 @@
 
 import { useMoimQuery } from "@/hooks/useMoimDetailQuery";
 import MoimDetailImage from "./MoimDetailImage";
+import MoimDetailImageSkeleton from "./detail-skeleton/MoimDetailImageSkeleton";
 import MoimDetailSummary from "./MoimDetailSummary";
+import MoimDetailSummarySkeleton from "./detail-skeleton/MoimDetailSummarySkeleton";
 
 type MoimDetailInformationProps = {
   moimId: string;
 };
 
 const MoimDetailInformation = ({ moimId }: MoimDetailInformationProps) => {
-  // 추후 실제 데이터로 변경
-
   const { data, isLoading, error } = useMoimQuery({ moimId: Number(moimId) });
 
-  if (isLoading) return <div>로딩중</div>;
+  if (isLoading)
+    return (
+      <div>
+        <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:justify-center md:gap-5">
+          <MoimDetailImageSkeleton />
+          <MoimDetailSummarySkeleton />
+        </div>
+      </div>
+    );
   if (error) return <div>에러발생</div>;
   if (!data) return null;
 

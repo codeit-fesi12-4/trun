@@ -55,13 +55,19 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
     return () => mediaQuery.removeEventListener("change", updatePages);
   }, [page, reviews, totalPages]);
 
-  if (isLoading) return <div>로딩중</div>;
+  if (isLoading)
+    return (
+      <div className="mt-4">
+        <h3 className="ml-2 text-xl font-semibold text-black">리뷰 모아보기</h3>
+        <ReviewList reviewList={[]} isLoading={true} />
+      </div>
+    );
   if (!reviews) return null;
 
   return (
-    <div className="mt-2">
-      <h3 className="text-lg font-semibold text-black">리뷰 모아보기</h3>
-      <ReviewList reviewList={reviews} />
+    <div className="mt-4">
+      <h3 className="ml-2 text-xl font-semibold text-black">리뷰 모아보기</h3>
+      <ReviewList reviewList={reviews} isLoading={false} />
 
       {/* 페이지네이션 */}
       {totalPages > 1 && (
