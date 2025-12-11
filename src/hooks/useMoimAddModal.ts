@@ -10,6 +10,7 @@ import {
   FILTER_CATEGORY,
 } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
+import { toast } from "sonner";
 
 type UseMoimAddModalProps = {
   onOpenChange: (open: boolean) => void;
@@ -56,34 +57,33 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
   };
 
   // 단계별 유효성 검사
-  // 추후 alert -> toast 변경 예정
   const validateStep = (step: number): boolean => {
     if (step === 1) {
       if (!formData.type) {
-        alert("서비스를 선택해주세요.");
+        toast.error("서비스를 선택해주세요.");
         return false;
       }
       return true;
     }
     if (step === 2) {
       if (!formData.name.trim() || !formData.location || !formData.image) {
-        alert("모든 항목을 입력해주세요.");
+        toast.error("모든 항목을 입력해주세요.");
         return false;
       }
       return true;
     }
     if (step === TOTAL_STEPS) {
       if (!formData.dateTime || !formData.image) {
-        alert("모든 항목을 입력해주세요.");
+        toast.error("모든 항목을 입력해주세요.");
         return false;
       }
       // 마감 날짜가 모임 날짜보다 이후인지 검증
       if (formData.registrationEnd && formData.registrationEnd >= formData.dateTime) {
-        alert("마감 날짜는 모임 날짜보다 이전이어야 합니다.");
+        toast.error("마감 날짜는 모임 날짜보다 이전이어야 합니다.");
         return false;
       }
       if (!formData.capacity || Number(formData.capacity) < MIN_CAPACITY) {
-        alert(`모집 정원은 최소 ${MIN_CAPACITY}인 이상 입력해주세요.`);
+        toast.error(`모집 정원은 최소 ${MIN_CAPACITY}인 이상 입력해주세요.`);
         return false;
       }
       return true;
@@ -134,11 +134,11 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
     void createMoimMutation
       .mutateAsync(payload)
       .then(() => {
-        alert("모임이 성공적으로 생성되었습니다!");
+        toast.success("모임이 성공적으로 생성되었습니다!");
         handleModalOpenChange(false);
       })
       .catch(error => {
-        alert(`모임 생성에 실패했습니다: ${error.message}`);
+        toast.error(`모임 생성에 실패했습니다: ${error.message}`);
       });
   };
 

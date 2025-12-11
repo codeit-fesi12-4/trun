@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useAuthStore } from "@/stores/auth.store";
+import { toast } from "sonner";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
@@ -11,7 +12,7 @@ export const useMoimFavorite = () => {
   const isInitialMountRef = useRef(true);
 
   const user = useAuthStore(state => state.user);
-  const userId = user?.id ?? null;
+  const userId = user?.id.toString() ?? null;
 
   const {
     moimCardData: allMoims,
@@ -66,7 +67,7 @@ export const useMoimFavorite = () => {
         const removedMoim = allMoims.find(moim => removedIds.includes(moim.id));
 
         if (removedMoim) {
-          alert(`"${removedMoim.name}" 모임이 찜한 목록에서 제거되었습니다.`);
+          toast.success(`"${removedMoim.name}" 모임이 찜한 목록에서 제거되었습니다.`);
         }
       }
     }
