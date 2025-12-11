@@ -158,7 +158,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               </button>
             </div>
           ) : !token ? (
-            <ConfirmationJoinModal />
+            <ConfirmationJoinModal>
+              <button className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
+                참여하기
+              </button>
+            </ConfirmationJoinModal>
           ) : isParticipant ? (
             <button
               disabled={isCancelJoinPending}
