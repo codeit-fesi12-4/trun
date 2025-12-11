@@ -34,16 +34,12 @@ const MoimFindPage = () => {
   return (
     <>
       <MoimFindHeader onFilterChange={handleFilterChange} availableLocations={availableLocations} />
-      {/* 카드 컴포넌트 렌더링 전 로딩 상태 표시 (추후 스켈레톤 적용 예정) */}
-      {isLoading && (
-        <div className="mt-6 text-center text-gray-500">모임 목록을 불러오는 중...</div>
-      )}
       {error && (
         <div className="mt-6 text-center text-red-500">
           모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
         </div>
       )}
-      {!isLoading && !error && <MoimCardList items={moimCardData} />}
+      {!error && <MoimCardList items={moimCardData} isLoading={isLoading} />}
 
       {/* 무한 스크롤 센티널 */}
       <div id="moim-load-more-sentinel" ref={loadMoreRef} className="h-6 w-full" aria-hidden />
