@@ -1,5 +1,6 @@
 import { deleteJoin, getMoim, getParticipants, postJoin, putMoim } from "@/api/moimDetail.api";
 import { TEAM_NAME } from "@/constants";
+import { useAuthStore } from "@/stores/auth.store";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // 모임 상세 정보 가져오기
@@ -41,7 +42,7 @@ export const useCreateJoinMutaiton = (teamName: string = TEAM_NAME) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => {
-      const token = localStorage.getItem("token");
+      const token = useAuthStore.getState().token;
       return postJoin(moimId, teamName, token);
     },
     onSuccess: (_, moimId) => {
@@ -61,7 +62,7 @@ export const useCancelMoimMutation = (teamName: string = TEAM_NAME) => {
 
   return useMutation({
     mutationFn: (moimId: number) => {
-      const token = localStorage.getItem("token");
+      const token = useAuthStore.getState().token;
       return putMoim(moimId, teamName, token);
     },
     onSuccess: (_, moimId) => {
@@ -80,7 +81,7 @@ export const useCancelJoinMutaion = (teamName: string = TEAM_NAME) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => {
-      const token = localStorage.getItem("token");
+      const token = useAuthStore.getState().token;
       return deleteJoin(moimId, teamName, token);
     },
     onSuccess: (_, moimId) => {

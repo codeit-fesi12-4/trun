@@ -18,13 +18,13 @@ import {
 import { Participant } from "@/types/moimDetail.type";
 import ConfirmationJoinModal from "./ConfirmationJoinModal";
 import FavoriteButton from "@/components/common/FavoriteButton";
+import { useAuthStore } from "@/stores/auth.store";
 
 type MoimDetailSummary = {
   moim: Moim;
 };
 
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
-  const [userId, setUserId] = useState<string | null>(null);
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
@@ -37,29 +37,20 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
   const router = useRouter();
 
-  const token = localStorage.getItem("token");
+  const token = useAuthStore(state => state.user);
+  const user = useAuthStore(state => state.user);
+  const userId = user?.id;
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (!stored) return;
-
-    const user = JSON.parse(stored);
-
-    const storedUserId = user.id;
-
-    const distinguishUserId = () => {
-      setUserId(storedUserId);
-    };
-
     const distinguishCreator = () => {
-      if (storedUserId === moim.createdBy) {
+      if (userId === moim.createdBy) {
         setIsCreator(true);
       }
     };
 
     const distinguishParticipant = () => {
       const participantsIds = participants?.map((p: Participant) => p.userId);
-      if (participantsIds?.find((p: number) => p === storedUserId)) {
+      if (participantsIds?.find((p: number) => p === userId)) {
         setIsParticipant(true);
       } else {
         setIsParticipant(false);
@@ -74,7 +65,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
       }
     };
 
-    distinguishUserId();
+    // distinguishUserId();
     distinguishCreator();
     distinguishParticipant();
     distinguishFull();
@@ -151,9 +142,8 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         </div>
 
         {/* 좋아요 버튼, 참여하기 버튼 */}
-        <div className="mt-3 flex flex-row gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
-          <FavoriteButton moimId={moim.id} userId={userId} />
-
+        <div className="mt-3 flex flex-row items-center gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
+          <FavoriteButton moimId={moim.id} />
           {isCreator ? (
             <div className="flex w-full gap-2 sm:h-12 md:h-15">
               <button
