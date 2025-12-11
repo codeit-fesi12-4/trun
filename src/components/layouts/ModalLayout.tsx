@@ -16,6 +16,7 @@ interface IModalLayoutProps {
   children: React.ReactNode;
   onConfirm: () => void;
   confirmText?: string;
+  confirmDisabled?: boolean;
   onPrevious?: () => void;
   previousText?: string;
   showPrevious?: boolean;
@@ -31,6 +32,7 @@ const ModalLayout = ({
   children,
   onConfirm,
   confirmText = "확인",
+  confirmDisabled = false,
   onPrevious,
   previousText = "이전",
   showPrevious = false,
@@ -75,7 +77,8 @@ const ModalLayout = ({
             {/* 확인 버튼 */}
             <Button
               onClick={onConfirm}
-              className="h-12 flex-1 rounded-xl border-transparent bg-green-500 font-semibold text-white hover:bg-green-600"
+              disabled={confirmDisabled}
+              className="h-12 flex-1 rounded-xl border-transparent bg-green-500 font-semibold text-white hover:bg-green-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {confirmText}
             </Button>
@@ -84,7 +87,8 @@ const ModalLayout = ({
           // 확인 버튼
           <Button
             onClick={onConfirm}
-            className="h-12 w-full border-transparent bg-gray-500 font-semibold text-white hover:bg-gray-600"
+            disabled={confirmDisabled}
+            className="h-12 w-full border-transparent bg-gray-500 font-semibold text-white hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {confirmText}
           </Button>

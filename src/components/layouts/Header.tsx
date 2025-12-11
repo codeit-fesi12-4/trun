@@ -13,11 +13,21 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { postSignout } from "@/api/auth.api";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const user = useAuthStore(state => state.user);
   const reset = useAuthStore(state => state.reset);
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // 클라이언트 마운트 체크
+  useEffect(() => {
+    const handleMount = () => {
+      setIsMounted(true);
+    };
+    handleMount();
+  }, []);
 
   const handleLogout = async () => {
     await postSignout();
@@ -54,7 +64,11 @@ const Header = () => {
 
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
-            {user ? (
+            {!isMounted ? (
+              <Link href="/login" className="nav-link">
+                로그인
+              </Link>
+            ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Image
@@ -62,7 +76,7 @@ const Header = () => {
                     alt="내정보"
                     width={42}
                     height={42}
-                    className="h-8 w-8 cursor-pointer sm:h-11 sm:w-11"
+                    className="h-8 w-8 cursor-pointer rounded-full object-cover sm:h-11 sm:w-11"
                   />
                 </DropdownMenuTrigger>
 
