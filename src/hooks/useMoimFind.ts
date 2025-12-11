@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import { useMoimsQuery, useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
+import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimType, MoimLocation, Moim } from "@/types/moim.type";
 import {
   MOIM_TYPE,
   FILTER_CATEGORY,
   MOIM_LOCATION,
-  FILTER_SORT,
+  MOIM_FILTER_SORT,
   SORT_BY,
   SORT_ORDER,
 } from "@/constants/moim";
@@ -39,7 +39,7 @@ export const useMoimFind = () => {
   const infiniteQueryParams = useMemo(() => {
     // 정렬 기준을 API 파라미터로 변환
     const sortParams =
-      filters.sort === FILTER_SORT.DEADLINE
+      filters.sort === MOIM_FILTER_SORT.DEADLINE
         ? {
             sortBy: SORT_BY.REGISTRATION_END,
             sortOrder: SORT_ORDER.ASC,
