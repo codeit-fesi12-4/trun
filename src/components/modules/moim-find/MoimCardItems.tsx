@@ -10,20 +10,18 @@ import { formatDate, formatTime } from "@/utils/date.util";
 import { useMoimCard } from "@/hooks/useMoimCard";
 import Link from "next/link";
 import { MIN_CAPACITY } from "@/constants/moim";
+import FavoriteButton from "@/components/common/FavoriteButton";
 
 type MoimCardItemsProps = {
   item: Moim;
 } & MoimCardActions;
 
 const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
-  const {
-    isFavorite,
-    handleFavoriteClick,
-    handleJoinClick,
-    participantPercentage,
-    isFull,
-    deadlineText,
-  } = useMoimCard(item, onFavoriteToggle, onJoinClick);
+  const { handleJoinClick, participantPercentage, isFull, deadlineText } = useMoimCard(
+    item,
+    onFavoriteToggle,
+    onJoinClick,
+  );
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-1 p-5 md:p-0">
@@ -35,7 +33,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
             {item.participantCount >= MIN_CAPACITY && (
               <Badge
                 variant="outline"
-                className="shrink-0 border-none text-[13px] font-semibold text-[var(--color-green-600)]"
+                className="shrink-0 border-none text-[13px] font-semibold text-green-600"
               >
                 <Image
                   src="/icons/secure_check.svg"
@@ -52,20 +50,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
             위치 <span className="text-gray-600">{item.location}</span>
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleFavoriteClick}
-          aria-label={isFavorite ? "좋아요 취소" : "좋아요"}
-          className="shrink-0"
-        >
-          <Image
-            src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
-            alt={isFavorite ? "좋아요 취소" : "좋아요"}
-            width={44}
-            height={44}
-            className="size-11"
-          />
-        </button>
+        <FavoriteButton moimId={item.id} />
       </div>
 
       {/* 하단: 왼쪽(뱃지+진행바) / 오른쪽(참여하기 버튼) */}

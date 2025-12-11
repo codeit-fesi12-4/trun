@@ -17,13 +17,14 @@ import {
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 import ConfirmationJoinModal from "./ConfirmationJoinModal";
+import FavoriteButton from "@/components/common/FavoriteButton";
+import { useAuthStore } from "@/stores/auth.store";
 
 type MoimDetailSummary = {
   moim: Moim;
 };
 
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
-  const [isFavorite, setIsFavorite] = useState(false);
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
@@ -36,15 +37,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
   const router = useRouter();
 
-  const token = localStorage.getItem("token");
+  const token = useAuthStore(state => state.user);
+  const user = useAuthStore(state => state.user);
+  const userId = user?.id;
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (!stored) return;
-
-    const user = JSON.parse(stored);
-    const userId = Number(user.id);
-
     const distinguishCreator = () => {
       if (userId === moim.createdBy) {
         setIsCreator(true);
@@ -68,10 +65,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
       }
     };
 
+    // distinguishUserId();
     distinguishCreator();
     distinguishParticipant();
     distinguishFull();
-  }, [moim, participants]);
+  }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
     try {
@@ -144,21 +142,8 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         </div>
 
         {/* 좋아요 버튼, 참여하기 버튼 */}
-        <div className="mt-3 flex flex-row gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
-          <button
-            onClick={() => {
-              setIsFavorite(!isFavorite);
-            }}
-          >
-            <Image
-              src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
-              alt={isFavorite ? "좋아요" : "좋아요 취소"}
-              width={48}
-              height={48}
-              className="md:size-15"
-            />
-          </button>
-
+        <div className="mt-3 flex flex-row items-center gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
+          <FavoriteButton moimId={moim.id} />
           {isCreator ? (
             <div className="flex w-full gap-2 sm:h-12 md:h-15">
               <button

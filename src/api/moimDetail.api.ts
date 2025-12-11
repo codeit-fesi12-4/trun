@@ -55,9 +55,7 @@ export const postJoin = async (
     const response = await fetch(buildMoimPath(`/${moimId}/join`, teamName), {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${
-          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-        }`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -88,9 +86,7 @@ export const putMoim = async (
     const response = await fetch(buildMoimPath(`/${moimId}/cancel`, teamName), {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${
-          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-        }`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -121,9 +117,7 @@ export const deleteJoin = async (
     const response = await fetch(buildMoimPath(`/${moimId}/leave`, teamName), {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${
-          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-        }`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
