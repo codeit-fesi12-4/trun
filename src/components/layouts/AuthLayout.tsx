@@ -18,9 +18,9 @@ const AuthLayout = ({
   heroTitle = "",
   heroCopy = [],
 }: AuthLayoutProps) => (
-  <section className="bg-gray-100">
-    <div className="mx-auto flex min-h-screen max-w-[1220px] items-center justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-16">
-      <div className="grid w-full items-start justify-items-center gap-0 md:grid-cols-[1.2fr_0.9fr] md:justify-items-center md:gap-8">
+  <section className="bg-background">
+    <div className="mx-auto flex max-h-screen max-w-[1220px] items-center justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-36">
+      <div className="grid w-full items-start justify-items-center gap-0 sm:gap-8 md:grid-cols-[1.2fr_0.9fr] md:justify-items-center">
         <div className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center md:max-w-[588px]">
           <div className="space-y-2 text-center">
             <p className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-2xl">
@@ -32,7 +32,7 @@ const AuthLayout = ({
               ))}
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-[290px] pb-6 sm:max-w-[407px] sm:pb-0 md:max-w-[588px]">
+          <div className="relative mx-auto w-full max-w-[250px] pb-6 sm:max-w-[350px] sm:pb-0 md:max-w-[500px]">
             <Image
               src="/images/img_login.png"
               alt="환영 일러스트"
@@ -45,7 +45,7 @@ const AuthLayout = ({
           </div>
         </div>
 
-        <Card className="mx-auto w-full max-w-[440px] border border-gray-200 bg-white shadow-xl sm:max-w-[480px] md:rounded-2xl">
+        <Card className="mx-auto w-full max-w-[440px] border border-gray-50 bg-white shadow-xl sm:max-w-[480px] md:rounded-2xl">
           <CardHeader className="pb-2 text-center">
             <CardTitle className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-2xl">
               {formTitle}

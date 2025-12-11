@@ -33,8 +33,8 @@ export const AuthTextField = ({
       autoComplete={autoComplete}
       aria-invalid={Boolean(error)}
       className={cn(
-        "h-11 rounded-lg border border-gray-200 bg-gray-50 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
-        "focus-visible:border-gray-400 focus-visible:ring-gray-200",
+        "h-11 rounded-lg border border-gray-50 bg-white text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
+        "focus-visible:border-gray-50 focus-visible:ring-gray-50",
         error &&
           "border-2 border-red-600 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",
         className,
@@ -73,8 +73,8 @@ export const AuthPasswordField = ({
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
           className={cn(
-            "h-11 rounded-lg border border-gray-200 bg-gray-50 pr-10 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
-            "focus-visible:border-gray-400 focus-visible:ring-gray-200",
+            "h-11 rounded-lg border border-gray-50 bg-white pr-10 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
+            "focus-visible:border-gray-50 focus-visible:ring-gray-50",
             error &&
               "border-2 border-red-500 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",
             className,
@@ -84,13 +84,13 @@ export const AuthPasswordField = ({
         <button
           type="button"
           onClick={() => setVisible(prev => !prev)}
-          className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 transition-colors hover:text-gray-700"
+          className="absolute top-1/2 right-4 -translate-y-1/2 font-bold text-gray-500 transition-colors hover:text-gray-700"
         >
           <Image
             src={visible ? "/icons/auth/visibility_on.svg" : "/icons/auth/visibility_off.svg"}
             alt={visible ? "비밀번호 숨기기" : "비밀번호 표시"}
-            width={16}
-            height={16}
+            width={20}
+            height={20}
             className="opacity-80"
             priority={false}
           />

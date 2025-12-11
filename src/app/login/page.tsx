@@ -61,6 +61,8 @@ const LoginPage = () => {
     return null;
   }
 
+  const isFormValid = email.trim() !== "" && password.trim() !== "";
+
   return (
     <AuthLayout
       formTitle="로그인"
@@ -105,8 +107,10 @@ const LoginPage = () => {
         />
         <Button
           type="submit"
-          disabled={signinMutation.isPending}
-          className="h-11 w-full rounded-lg bg-gray-500 text-base font-semibold text-white transition-colors hover:bg-gray-600 disabled:opacity-50"
+          disabled={!isFormValid || signinMutation.isPending}
+          className={`h-11 w-full rounded-lg text-base font-semibold transition-colors disabled:opacity-50 ${
+            isFormValid ? "bg-green-600 text-white hover:bg-green-800" : "bg-gray-100 text-gray-400"
+          }`}
         >
           {signinMutation.isPending ? "로그인 중..." : "로그인"}
         </Button>
