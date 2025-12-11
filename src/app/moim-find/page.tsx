@@ -34,16 +34,31 @@ const MoimFindPage = () => {
   return (
     <>
       <MoimFindHeader onFilterChange={handleFilterChange} availableLocations={availableLocations} />
-      {/* 카드 컴포넌트 렌더링 전 로딩 상태 표시 (추후 스켈레톤 적용 예정) */}
-      {isLoading && (
-        <div className="mt-6 text-center text-gray-500">모임 목록을 불러오는 중...</div>
-      )}
       {error && (
         <div className="mt-6 text-center text-red-500">
           모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
         </div>
       )}
-      {!isLoading && !error && <MoimCardList items={moimCardData} />}
+      {!error && (
+        <>
+          {!isLoading && moimCardData.length === 0 && (
+            <div className="mt-25 flex flex-col items-center justify-center gap-3">
+              <Image
+                src="/icons/empty_moim.svg"
+                alt="모임이 없음"
+                width={171}
+                height={136}
+                className="h-auto w-auto"
+              />
+              <p className="flex flex-col items-center gap-1 text-base font-bold text-gray-400">
+                <span>아직 모임이 없어요</span>
+                <span>지금 바로 모임을 만들어보세요!</span>
+              </p>
+            </div>
+          )}
+          <MoimCardList items={moimCardData} isLoading={isLoading} />
+        </>
+      )}
 
       {/* 무한 스크롤 센티널 */}
       <div id="moim-load-more-sentinel" ref={loadMoreRef} className="h-6 w-full" aria-hidden />

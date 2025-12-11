@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { postSignout } from "@/api/auth.api";
@@ -65,9 +66,7 @@ const Header = () => {
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
             {!isMounted ? (
-              <Link href="/login" className="nav-link">
-                로그인
-              </Link>
+              <Skeleton className="h-8 w-8 rounded-full sm:h-11 sm:w-11" />
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -89,7 +88,7 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link href="/login" className="nav-link">
+              <Link href="/login" className="nav-link hover:underline">
                 로그인
               </Link>
             )}
