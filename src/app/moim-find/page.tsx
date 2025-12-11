@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useMoimFind } from "@/hooks/useMoimFind";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import MoimAddModal from "@/components/modules/moim-find/MoimAddModal";
+import { Spinner } from "@/components/ui/spinner";
 import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
 const MoimFindPage = () => {
@@ -16,7 +18,18 @@ const MoimFindPage = () => {
     error,
     handleFilterChange,
     handleCreateMoimClick,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useMoimFind();
+
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error,
+  });
 
   return (
     <>
@@ -31,6 +44,17 @@ const MoimFindPage = () => {
         </div>
       )}
       {!isLoading && !error && <MoimCardList items={moimCardData} />}
+
+      {/* 무한 스크롤 센티널 */}
+      <div id="moim-load-more-sentinel" ref={loadMoreRef} className="h-6 w-full" aria-hidden />
+
+      {/* 로딩 스피너 */}
+      {isFetchingNextPage && (
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 text-base text-gray-600">
+          <Spinner className="size-7 text-green-500" />
+          <span>모임을 불러오는 중...</span>
+        </div>
+      )}
 
       {/* 우측 하단 고정된 모임 생성 버튼 */}
       <button

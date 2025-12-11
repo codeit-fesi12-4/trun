@@ -37,12 +37,13 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
     onFilterChange?.({ ...createFilterValues(), category: newCategory, location: newLocation });
   };
 
-  // availableLocations가 변경될 때 선택된 지역이 목록에 없으면 리셋
+  // availableLocations가 변경될 때 선택된 지역이 목록에 없으면 리셋 (카테고리 변경 시에만)
   useEffect(() => {
     if (
       availableLocations &&
       availableLocations.length > 0 &&
-      !availableLocations.includes(location)
+      !availableLocations.includes(location) &&
+      location !== MOIM_LOCATION.ALL
     ) {
       const newLocation = MOIM_LOCATION.ALL;
       setLocation(newLocation);
@@ -52,8 +53,16 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
   }, [availableLocations]);
 
   const handleLocationChange = (newLocation: string) => {
+    // 상태 업데이트와 콜백 호출을 동기적으로 처리
     setLocation(newLocation);
-    onFilterChange?.({ ...createFilterValues(), location: newLocation });
+    // 최신 상태를 사용하여 필터 값 생성
+    const updatedFilters: MoimFilterValues = {
+      category,
+      location: newLocation,
+      date,
+      sort,
+    };
+    onFilterChange?.(updatedFilters);
   };
 
   const handleDateChange = (newDate: Date | undefined) => {
