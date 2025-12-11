@@ -1,15 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoimStatus, MypageMoim } from "@/types/mypage.type";
-import { formatDateTime } from "@/utils/mypage.util";
+import { MypageMoim } from "@/types/mypage.type";
+import { formatDateTime, getMeetingStatus, getMoimStatusClass } from "@/utils/mypage.util";
 import Image from "next/image";
-
-const statusToClassName: Record<MoimStatus, string> = {
-  "이용 예정": "bg-green-100 text-green-600",
-  "개설 확정": "bg-white text-green-600 border-[var(--gradient-500)] ",
-  "개설 대기": "border-gray-200 text-gray-500 bg-white",
-  "이용 완료": "bg-gray-100 text-gray-600 text-md",
-};
 
 type MyPageCardItemProps = {
   item: MypageMoim;
@@ -20,33 +13,37 @@ type MyPageCardItemProps = {
 
 const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageCardItemProps) => {
   const formattedDate = formatDateTime(item.dateTime);
+  const { main, sub } = getMeetingStatus(item);
+
   return (
     <>
       {/* 텍스트 영역 */}
       <div className="relative flex w-full flex-col p-4 sm:justify-between sm:py-0 sm:pr-0 md:pl-4">
         {/* 내용 상단 부분 */}
         <div>
-          {/* 상태 */}
-          {item.status && (
-            <div className="flex gap-2 pb-4">
-              {(Array.isArray(item.status) ? item.status : [item.status]).map(status => (
-                <Badge
-                  key={status}
-                  className={`${statusToClassName[status as MoimStatus]} h-8 text-sm font-medium`}
-                >
-                  {status === "개설 확정" && (
-                    <Image
-                      src="/icons/ic_check.svg"
-                      alt="개설 확정 아이콘"
-                      width={24}
-                      height={24}
-                    />
-                  )}
-                  {status}
-                </Badge>
-              ))}
-            </div>
-          )}
+          {/* 상태별 배지 스타일 */}
+          <div className="flex gap-2 pb-4">
+            {/* 서브 상태 */}
+            {sub && (
+              <Badge className={`${getMoimStatusClass(sub)} h-8 px-2.5 text-sm font-medium`}>
+                {sub}
+              </Badge>
+            )}
+
+            {/* 메인 상태 */}
+            <Badge
+              className={`${getMoimStatusClass(main)} flex h-8 items-center px-2.5 text-sm font-medium`}
+            >
+              {main === "개설 확정" ? (
+                <>
+                  <Image src="/icons/ic_check.svg" alt="개설 확정 아이콘" width={16} height={16} />
+                  <span>{main}</span>
+                </>
+              ) : (
+                main
+              )}
+            </Badge>
+          </div>
 
           {/* 찜하기 */}
           <Button
