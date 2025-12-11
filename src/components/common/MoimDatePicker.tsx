@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Image from "next/image";
@@ -19,21 +18,18 @@ const MoimDatePicker = ({ selectedDate, onDateChange }: MoimDatePickerProps) => 
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          data-empty={!selectedDate}
-          className="flex h-7 w-21 items-center justify-center gap-0 border-none bg-transparent text-sm font-medium text-gray-500! shadow-none hover:bg-transparent data-[state=open]:bg-transparent data-[state=open]:text-black sm:text-base"
-        >
-          {formatDateWithDash(selectedDate) || <span>날짜 전체</span>}
-          <Image
-            src="/icons/down_arrow.svg"
-            alt="날짜 선택지 보기 아이콘"
-            width={17}
-            height={17}
-            className="sm:mb-1"
-          />
-        </Button>
+      <PopoverTrigger
+        data-empty={!selectedDate}
+        className="flex h-7 w-26 items-center justify-center text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=open]:text-black sm:text-base"
+      >
+        <span>{formatDateWithDash(selectedDate) || "날짜 전체"}</span>
+        <Image
+          src="/icons/down_arrow.svg"
+          alt="날짜 선택지 보기 아이콘"
+          width={17}
+          height={17}
+          className="sm:mb-1"
+        />
       </PopoverTrigger>
       <PopoverContent side="bottom" align="center">
         <Calendar
