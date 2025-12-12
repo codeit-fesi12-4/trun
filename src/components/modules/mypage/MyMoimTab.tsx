@@ -2,19 +2,18 @@
 
 import EmptyState from "./EmptyState";
 import MyPageCard from "./MyPageCard";
-import { useQuery } from "@tanstack/react-query";
-import { TEAM_NAME } from "@/constants";
-import { getMoimJoined } from "@/api/mypageMoim.api";
-
-const handleJoinClick = (id: number) => {
-  alert(`${id}하기`);
-};
+import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
 
 const MyMoimTab = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["mypage", "joinedMoims"],
-    queryFn: () => getMoimJoined(undefined, TEAM_NAME),
-  });
+  // 참여한 나의 모임 조회
+  const { data, isLoading, isError } = useJoinedMoims();
+  // 예약 취소
+  const cancelJoinMutation = useCancelReservation();
+
+  // 예약 취소 버튼
+  const handleCancelClick = (id: number) => {
+    cancelJoinMutation.mutate(id);
+  };
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
@@ -30,7 +29,7 @@ const MyMoimTab = () => {
           <MyPageCard
             key={item.id}
             item={item}
-            onClick={() => handleJoinClick(item.id)}
+            onCancelClick={() => handleCancelClick(item.id)}
             showButton={true}
           />
         ))
