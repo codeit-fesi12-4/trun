@@ -48,6 +48,8 @@ export const addFavoriteMoim = (moimId: number, userId: string | null = null): v
       const updated = [...favorites, moimId];
       const key = getFavoriteMoimsKey(userId);
       localStorage.setItem(key, JSON.stringify(updated));
+      // 같은 탭에서 실시간 업데이트를 위한 커스텀 이벤트 발생
+      window.dispatchEvent(new Event("favoriteMoimsChanged"));
     }
   } catch (error) {
     console.error("찜한 모임 추가 실패:", error);
@@ -67,6 +69,8 @@ export const removeFavoriteMoim = (moimId: number, userId: string | null = null)
     const updated = favorites.filter(id => id !== moimId);
     const key = getFavoriteMoimsKey(userId);
     localStorage.setItem(key, JSON.stringify(updated));
+    // 같은 탭에서 실시간 업데이트를 위한 커스텀 이벤트 발생
+    window.dispatchEvent(new Event("favoriteMoimsChanged"));
   } catch (error) {
     console.error("찜한 모임 제거 실패:", error);
   }

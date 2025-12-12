@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -11,31 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { postSignout } from "@/api/auth.api";
-import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { useHeader } from "@/hooks/useHeader";
 
 const Header = () => {
-  const user = useAuthStore(state => state.user);
-  const reset = useAuthStore(state => state.reset);
-  const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
-
-  // 클라이언트 마운트 체크
-  useEffect(() => {
-    const handleMount = () => {
-      setIsMounted(true);
-    };
-    handleMount();
-  }, []);
-
-  const handleLogout = async () => {
-    await postSignout();
-    reset();
-    router.push("/");
-    toast.success("로그아웃 성공");
-  };
+  const { user, isMounted, favoriteCount, handleLogout } = useHeader();
 
   return (
     <header className="bg-background fixed top-0 z-10 w-full px-4 shadow-xl md:px-6">
@@ -50,12 +29,20 @@ const Header = () => {
               className="h-auto w-18 sm:w-28"
             />
           </Link>
-          <nav className="flex gap-4 md:gap-9">
+          <nav className="flex gap-4 md:gap-8">
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <Link href="/moim-favorite" className="nav-link">
+            <Link href="/moim-favorite" className="nav-link flex items-center gap-1.5">
               찜한 모임
+              {favoriteCount > 0 && (
+                <Badge
+                  variant="default"
+                  className="h-4 border-transparent bg-green-500 px-1 text-white sm:h-5.5 sm:px-1.5 sm:text-[10px]"
+                >
+                  <span className="sm:text-sm sm:font-bold">{favoriteCount}</span>
+                </Badge>
+              )}
             </Link>
             <Link href="/all-review" className="nav-link">
               모든 리뷰

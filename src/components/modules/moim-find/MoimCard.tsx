@@ -22,7 +22,8 @@ const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
             fill
             className="rounded-b-none object-cover md:rounded-3xl"
           />
-          {item.participantCount >= item.capacity && (
+          {(item.participantCount >= item.capacity ||
+            new Date(item.registrationEnd) < new Date()) && (
             <div className="absolute inset-0 flex items-center justify-center rounded-b-none bg-black/50 md:rounded-3xl">
               <Image
                 src="/icons/모집 마감.svg"
