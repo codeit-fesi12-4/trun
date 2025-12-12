@@ -4,14 +4,16 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useAuthStore } from "@/stores/auth.store";
+import { Moim } from "@/types/moim.type";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
   const previousFavoriteMoimIdsRef = useRef<number[]>([]);
   const isInitialMountRef = useRef(true);
+  const allMoimsRef = useRef<Moim[]>([]);
 
   const user = useAuthStore(state => state.user);
-  const userId = user?.id ?? null;
+  const userId = user?.id?.toString() ?? null;
 
   const {
     moimCardData: allMoims,
@@ -20,6 +22,11 @@ export const useMoimFavorite = () => {
     error,
     handleFilterChange,
   } = useMoimFind();
+
+  // allMoims를 ref에 저장 (alert 표시 시 최신 값 사용)
+  useEffect(() => {
+    allMoimsRef.current = allMoims;
+  }, [allMoims]);
 
   // localStorage에서 찜한 모임 ID 목록 가져오기
   useEffect(() => {
@@ -57,20 +64,21 @@ export const useMoimFavorite = () => {
     const previousIds = previousFavoriteMoimIdsRef.current;
 
     // 찜한 모임이 제거된 경우만 알림 표시
-    if (previousIds.length > 0 && favoriteMoimIds.length < previousIds.length && allMoims) {
+    // allMoims가 변경되는 것은 카테고리 변경일 수 있으므로, favoriteMoimIds가 실제로 변경되었을 때만 처리
+    if (previousIds.length > 0 && favoriteMoimIds.length < previousIds.length) {
       // 제거된 모임 ID 찾기
       const removedIds = previousIds.filter((id: number) => !favoriteMoimIds.includes(id));
 
       if (removedIds.length > 0) {
-        // 제거된 모임 이름 찾기
-        const removedMoim = allMoims.find(moim => removedIds.includes(moim.id));
+        // 제거된 모임 이름 찾기 (현재 allMoims에 포함된 모임만)
+        const removedMoim = allMoimsRef.current.find(moim => removedIds.includes(moim.id));
 
         if (removedMoim) {
           alert(`"${removedMoim.name}" 모임이 찜한 목록에서 제거되었습니다.`);
         }
       }
     }
-  }, [favoriteMoimIds, allMoims]);
+  }, [favoriteMoimIds]);
 
   // 찜한 모임만 필터링
   const moimCardData = useMemo(() => {
