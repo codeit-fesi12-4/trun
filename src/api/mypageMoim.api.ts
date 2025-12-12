@@ -41,6 +41,42 @@ export const getMoimJoined = async (
   }
 };
 
+// 나의 모임 탭에서 예약 취소
+export const deleteReservation = async (
+  moimId: number,
+  teamName: string = TEAM_NAME,
+  token?: string | null,
+) => {
+  try {
+    if (!token) {
+      throw new Error("로그인이 필요합니다.");
+    }
+    const res = await fetch(buildMoimPath(`/${moimId}/leave`, teamName), {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      const errorMessage = result.message || `API Error: ${res.status}`;
+
+      if (res.status === 401) {
+        throw new Error("인증 오류가 발생했습니다. 다시 로그인해주세요.");
+      }
+      throw new Error(errorMessage);
+    }
+
+    return result;
+  } catch (error) {
+    console.error("API 요청 중 오류 발생:", error);
+    if (error instanceof Error) throw error;
+    throw new Error("예약 취소 중 네트워크 오류가 발생했습니다.");
+  }
+};
+
 // 나의 리뷰
 
 // 내가 만든 모임
