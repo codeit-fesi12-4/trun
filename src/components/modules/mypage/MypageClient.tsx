@@ -13,9 +13,10 @@ const MypageClient = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    const handleClient = () => {
       setIsClient(true);
-    }, 0);
+    };
+    handleClient();
   }, []);
 
   const handleModalOpen = () => {
