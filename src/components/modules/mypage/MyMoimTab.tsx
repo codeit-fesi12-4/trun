@@ -5,13 +5,22 @@ import EmptyState from "./EmptyState";
 import MyPageCard from "./MyPageCard";
 import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
 import ModalLayout from "@/components/layouts/ModalLayout";
+import { ReviewCardData } from "@/types/mypage.type";
+import ReviewWriteModal from "./mypage-modal/ReviewWriteModal";
+import { buildReviewData } from "@/utils/mypage.util";
 
 const MyMoimTab = () => {
+  // 리뷰쓰기 모달
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedReviewItem, setSelectedReviewItem] = useState<ReviewCardData | null>(null);
+
   // 예약 취소 확인 모달
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
+
   // 참여한 나의 모임 조회
   const { data, isLoading, isError } = useJoinedMoims();
+
   // 예약 취소
   const cancelJoinMutation = useCancelReservation();
 
@@ -19,6 +28,12 @@ const MyMoimTab = () => {
   const handleCancelClick = (id: number) => {
     setSelectedCancelId(id);
     setIsCancelModalOpen(true);
+  };
+
+  // 리뷰 작성 버튼
+  const handleReviewClick = (item: ReviewCardData) => {
+    setSelectedReviewItem(item);
+    setIsReviewModalOpen(true);
   };
 
   if (isLoading) return <div>로딩 중...</div>;
@@ -36,6 +51,7 @@ const MyMoimTab = () => {
             key={item.id}
             item={item}
             onCancelClick={() => handleCancelClick(item.id)}
+            onReviewClick={() => handleReviewClick(buildReviewData(item))}
             showButton={true}
           />
         ))
@@ -62,6 +78,15 @@ const MyMoimTab = () => {
             예약을 취소하시겠습니까?
           </h2>
         </ModalLayout>
+      )}
+
+      {/* 리뷰 작성 모달 */}
+      {isReviewModalOpen && selectedReviewItem && (
+        <ReviewWriteModal
+          open={isReviewModalOpen}
+          onOpenChange={setIsReviewModalOpen}
+          item={selectedReviewItem}
+        />
       )}
     </div>
   );
