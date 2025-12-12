@@ -19,6 +19,13 @@ import { Participant } from "@/types/moimDetail.type";
 import ConfirmationJoinModal from "./ConfirmationJoinModal";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { useAuthStore } from "@/stores/auth.store";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Link2, Share2 } from "lucide-react";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -104,6 +111,25 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
     }
   };
 
+  // 공유하기 버튼 기능 (해당 페이지에 대한 url 복사)
+  const handleShareUrl = async () => {
+    const url = `${window.location.origin}/moim-find/${moim.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("링크가 복사되었습니다.");
+    } catch (error) {
+      console.error("링크 복사 실패:", error);
+      toast.error("링크 복사에 실패했습니다.");
+    }
+  };
+  // 카카오톡 오픈채팅 공유 기능 (임시)
+  const handleShareKakao = () => {
+    const url = `${window.location.origin}/moim-find/${moim.id}`;
+    const text = `${moim.name} - ${moim.location}에서 함께 달려요!`;
+    const kakaoUrl = `https://story.kakao.com/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
+    window.open(kakaoUrl, "_blank", "width=600,height=600");
+  };
+
   return (
     <div className="flex w-full flex-col gap-4 sm:h-[333px] sm:w-1/2 md:h-[443px] md:gap-6">
       <div className="flex flex-col gap-1 rounded-[12px] bg-white p-4 sm:h-[204px] sm:rounded-[20px] sm:px-6 sm:py-[22px] md:h-[278px] md:rounded-4xl md:p-8 md:px-10 md:py-[34px]">
@@ -145,7 +171,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         <div className="mt-3 flex flex-row items-center gap-4 sm:mt-5 sm:gap-2.5 md:mt-9 md:gap-4">
           <FavoriteButton moimId={moim.id} />
           {isCreator ? (
-            <div className="flex w-full gap-2 sm:h-12 md:h-15">
+            <div className="flex h-10 w-full gap-2 sm:h-12 md:h-15">
               <button
                 onClick={() => void handleMoimCancel()}
                 disabled={isCanCelMoimPending}
@@ -153,9 +179,29 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               >
                 {isCanCelMoimPending ? "취소중..." : "취소하기"}
               </button>
-              <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
-                공유하기
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
+                    공유하기
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-(--radix-dropdown-menu-trigger-width)"
+                >
+                  <DropdownMenuItem
+                    onClick={() => void handleShareUrl()}
+                    className="cursor-pointer"
+                  >
+                    <Link2 className="mr-2 size-4" />
+                    링크 복사
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleShareKakao} className="cursor-pointer">
+                    <Share2 className="mr-2 size-4" />
+                    카카오톡 공유
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ) : !token ? (
             <ConfirmationJoinModal />
