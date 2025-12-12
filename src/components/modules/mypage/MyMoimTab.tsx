@@ -1,10 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import EmptyState from "./EmptyState";
 import MyPageCard from "./MyPageCard";
 import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
+import ModalLayout from "@/components/layouts/ModalLayout";
 
 const MyMoimTab = () => {
+  // 예약 취소 확인 모달
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
   // 참여한 나의 모임 조회
   const { data, isLoading, isError } = useJoinedMoims();
   // 예약 취소
@@ -12,7 +17,8 @@ const MyMoimTab = () => {
 
   // 예약 취소 버튼
   const handleCancelClick = (id: number) => {
-    cancelJoinMutation.mutate(id);
+    setSelectedCancelId(id);
+    setIsCancelModalOpen(true);
   };
 
   if (isLoading) return <div>로딩 중...</div>;
@@ -33,6 +39,29 @@ const MyMoimTab = () => {
             showButton={true}
           />
         ))
+      )}
+
+      {isCancelModalOpen && selectedCancelId && (
+        <ModalLayout
+          open={isCancelModalOpen}
+          onOpenChange={setIsCancelModalOpen}
+          title="예약 취소"
+          onConfirm={() => {
+            cancelJoinMutation.mutate(selectedCancelId);
+            setIsCancelModalOpen(false);
+            setSelectedCancelId(null);
+          }}
+          onCancel={() => {
+            setIsCancelModalOpen(false);
+            setSelectedCancelId(null);
+          }}
+          confirmText="확인"
+          showCancel
+        >
+          <h2 className="flex items-center justify-center py-3 text-base font-medium">
+            예약을 취소하시겠습니까?
+          </h2>
+        </ModalLayout>
       )}
     </div>
   );
