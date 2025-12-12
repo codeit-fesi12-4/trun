@@ -39,11 +39,7 @@ export type CreateMoimsResponse = MypageMoim[];
 
 // 모임 리뷰
 export type ReviewCardData = {
-  id: number;
-  image: string;
-  name: string;
-  location: string;
-  dateTime: string;
-  score?: number;
-  comment?: string;
+  gatheringId: number;
+  score: number;
+  comment: string;
 };

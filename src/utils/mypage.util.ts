@@ -69,11 +69,7 @@ export const getMeetingStatus = (item: MypageMoim) => {
 
 // 리뷰 쓰기
 export const buildReviewData = (item: MypageMoim): ReviewCardData => ({
-  id: item.id,
-  name: item.name,
-  image: item.image,
-  dateTime: item.dateTime,
-  location: item.location,
   score: 0,
   comment: "",
+  gatheringId: item.id,
 });

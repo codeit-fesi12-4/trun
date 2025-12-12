@@ -83,3 +83,10 @@ export type ReviewFilterProps = {
 };
 
 export type ReviewDistribution = { score: number; count: number };
+
+// 리뷰 추가 타입
+export type PostReviewParams = {
+  gatheringId: number;
+  score: number;
+  comment: string;
+};
