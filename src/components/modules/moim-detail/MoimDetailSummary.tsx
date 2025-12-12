@@ -156,7 +156,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               >
                 {isCanCelMoimPending ? "취소중..." : "취소하기"}
               </button>
-              <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
+              <button className="h-full w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
                 공유하기
               </button>
             </div>
@@ -164,14 +164,14 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isCancelJoinPending}
               onClick={() => void handleMoimLeave()}
-              className="w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "취소중..." : "참여 취소하기"}
             </button>
           ) : isFull ? (
             <button
               disabled={isFull}
-              className="w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               참여하기
             </button>
@@ -179,7 +179,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isJoinPending}
               onClick={() => void handleMoimJoin()}
-              className="w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "참여중..." : "참여하기"}
             </button>
