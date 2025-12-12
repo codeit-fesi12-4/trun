@@ -9,9 +9,16 @@ type MyPageCardItemProps = {
   onClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;
+  isReviewedMoimTab?: boolean;
 };
 
-const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageCardItemProps) => {
+const MyPageCardItem = ({
+  item,
+  onClick,
+  showButton,
+  isCreatedMoimTab,
+  isReviewedMoimTab,
+}: MyPageCardItemProps) => {
   const formattedDate = formatDateTime(item.dateTime);
   const { main, sub } = getMeetingStatus(item);
 
@@ -22,28 +29,35 @@ const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageC
         {/* 내용 상단 부분 */}
         <div>
           {/* 상태별 배지 스타일 */}
-          <div className="flex gap-2 pb-4">
-            {/* 서브 상태 */}
-            {sub && (
-              <Badge className={`${getMoimStatusClass(sub)} h-8 px-2.5 text-sm font-medium`}>
-                {sub}
-              </Badge>
-            )}
-
-            {/* 메인 상태 */}
-            <Badge
-              className={`${getMoimStatusClass(main)} flex h-8 items-center px-2.5 text-sm font-medium`}
-            >
-              {main === "개설 확정" ? (
-                <>
-                  <Image src="/icons/ic_check.svg" alt="개설 확정 아이콘" width={16} height={16} />
-                  <span>{main}</span>
-                </>
-              ) : (
-                main
+          {!isCreatedMoimTab && !isReviewedMoimTab && (
+            <div className="flex gap-2 pb-4">
+              {/* 서브 상태 */}
+              {sub && (
+                <Badge className={`${getMoimStatusClass(sub)} h-8 px-2.5 text-sm font-medium`}>
+                  {sub}
+                </Badge>
               )}
-            </Badge>
-          </div>
+
+              {/* 메인 상태 */}
+              <Badge
+                className={`${getMoimStatusClass(main)} flex h-8 items-center px-2.5 text-sm font-medium`}
+              >
+                {main === "개설 확정" ? (
+                  <>
+                    <Image
+                      src="/icons/ic_check.svg"
+                      alt="개설 확정 아이콘"
+                      width={16}
+                      height={16}
+                    />
+                    <span>{main}</span>
+                  </>
+                ) : (
+                  main
+                )}
+              </Badge>
+            </div>
+          )}
 
           {/* 찜하기 */}
           <Button
@@ -53,7 +67,6 @@ const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageC
           >
             <Image src="/icons/ic_save.svg" alt="찜하기" width={48} height={48} />
           </Button>
-
           {/* 제목 */}
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-semibold text-gray-900">{item.name}</h2>

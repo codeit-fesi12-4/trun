@@ -1,20 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import EmptyState from "./EmptyState";
 import MyPageCard from "./MyPageCard";
-import { useQuery } from "@tanstack/react-query";
-import { TEAM_NAME } from "@/constants";
-import { getMoimJoined } from "@/api/mypageMoim.api";
-
-const handleJoinClick = (id: number) => {
-  alert(`${id}하기`);
-};
+import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
+import ModalLayout from "@/components/layouts/ModalLayout";
 
 const MyMoimTab = () => {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["mypage", "joinedMoims"],
-    queryFn: () => getMoimJoined(undefined, TEAM_NAME),
-  });
+  // 예약 취소 확인 모달
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
+  // 참여한 나의 모임 조회
+  const { data, isLoading, isError } = useJoinedMoims();
+  // 예약 취소
+  const cancelJoinMutation = useCancelReservation();
+
+  // 예약 취소 버튼
+  const handleCancelClick = (id: number) => {
+    setSelectedCancelId(id);
+    setIsCancelModalOpen(true);
+  };
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
@@ -30,11 +35,33 @@ const MyMoimTab = () => {
           <MyPageCard
             key={item.id}
             item={item}
-            onClick={() => handleJoinClick(item.id)}
+            onCancelClick={() => handleCancelClick(item.id)}
             showButton={true}
-            isCreatedMoimTab={false}
           />
         ))
+      )}
+
+      {isCancelModalOpen && selectedCancelId && (
+        <ModalLayout
+          open={isCancelModalOpen}
+          onOpenChange={setIsCancelModalOpen}
+          title="예약 취소"
+          onConfirm={() => {
+            cancelJoinMutation.mutate(selectedCancelId);
+            setIsCancelModalOpen(false);
+            setSelectedCancelId(null);
+          }}
+          onCancel={() => {
+            setIsCancelModalOpen(false);
+            setSelectedCancelId(null);
+          }}
+          confirmText="확인"
+          showCancel
+        >
+          <h2 className="flex items-center justify-center py-3 text-base font-medium">
+            예약을 취소하시겠습니까?
+          </h2>
+        </ModalLayout>
       )}
     </div>
   );
