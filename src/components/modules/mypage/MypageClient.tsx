@@ -5,11 +5,19 @@ import ProfileSection from "@/components/modules/mypage/ProfileCard";
 import TabsSection from "@/components/modules/mypage/TabsSection";
 import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MypageClient = () => {
   const user = useAuthStore(state => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    const handleClient = () => {
+      setIsClient(true);
+    };
+    handleClient();
+  }, []);
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -32,7 +40,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          {user && (
+          {isClient && user && (
             <ProfileSection
               id={user.id}
               name={user.name}

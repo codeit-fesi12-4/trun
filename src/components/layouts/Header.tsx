@@ -1,6 +1,5 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,33 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { postSignout } from "@/api/auth.api";
-import { useEffect, useState } from "react";
 import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useHeader } from "@/hooks/useHeader";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 const Header = () => {
-  const user = useAuthStore(state => state.user);
-  const reset = useAuthStore(state => state.reset);
-  const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
+  const { user, isMounted, favoriteCount, handleLogout } = useHeader();
   const [open, setOpen] = useState(false);
-
-  // 클라이언트 마운트 체크
-  useEffect(() => {
-    const handleMount = () => {
-      setIsMounted(true);
-    };
-    handleMount();
-  }, []);
-
-  const handleLogout = async () => {
-    await postSignout();
-    reset();
-    router.push("/");
-    toast.success("로그아웃 성공");
-  };
+  const router = useRouter();
 
   const handleFavoritePage = () => {
     if (!user) {
@@ -59,12 +42,20 @@ const Header = () => {
               className="h-auto w-18 sm:w-28"
             />
           </Link>
-          <nav className="flex gap-4 md:gap-9">
+          <nav className="flex gap-4 md:gap-8">
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <button onClick={handleFavoritePage} className="nav-link">
+            <button onClick={handleFavoritePage} className="nav-link flex items-center gap-1.5">
               찜한 모임
+              {favoriteCount > 0 && (
+                <Badge
+                  variant="default"
+                  className="h-4 border-transparent bg-green-500 px-1 text-white sm:h-5.5 sm:px-1.5 sm:text-[10px]"
+                >
+                  <span className="sm:text-sm sm:font-bold">{favoriteCount}</span>
+                </Badge>
+              )}
             </button>
             <Link href="/all-review" className="nav-link">
               모든 리뷰
@@ -75,9 +66,7 @@ const Header = () => {
         <div className="flex items-center">
           <div className="flex items-center space-x-4">
             {!isMounted ? (
-              <Link href="/login" className="nav-link">
-                로그인
-              </Link>
+              <Skeleton className="h-8 w-8 rounded-full sm:h-11 sm:w-11" />
             ) : user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -99,7 +88,7 @@ const Header = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link href="/login" className="nav-link">
+              <Link href="/login" className="nav-link hover:underline">
                 로그인
               </Link>
             )}

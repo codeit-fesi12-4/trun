@@ -1,7 +1,5 @@
 export const HeartSvg = ({ className }: { className?: string }) => (
   <svg
-    width="20"
-    height="20"
     viewBox="0 0 32 28"
     xmlns="http://www.w3.org/2000/svg"
     className={className}

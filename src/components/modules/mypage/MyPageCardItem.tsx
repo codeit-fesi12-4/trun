@@ -1,3 +1,6 @@
+"use client";
+
+import FavoriteButton from "@/components/common/FavoriteButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MypageMoim } from "@/types/mypage.type";
@@ -6,12 +9,21 @@ import Image from "next/image";
 
 type MyPageCardItemProps = {
   item: MypageMoim;
-  onClick?: () => void;
+  onCancelClick?: () => void;
+  onReviewClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;
+  isReviewedMoimTab?: boolean;
 };
 
-const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageCardItemProps) => {
+const MyPageCardItem = ({
+  item,
+  onCancelClick,
+  onReviewClick,
+  showButton,
+  isCreatedMoimTab,
+  isReviewedMoimTab,
+}: MyPageCardItemProps) => {
   const formattedDate = formatDateTime(item.dateTime);
   const { main, sub } = getMeetingStatus(item);
 
@@ -22,37 +34,40 @@ const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageC
         {/* 내용 상단 부분 */}
         <div>
           {/* 상태별 배지 스타일 */}
-          <div className="flex gap-2 pb-4">
-            {/* 서브 상태 */}
-            {sub && (
-              <Badge className={`${getMoimStatusClass(sub)} h-8 px-2.5 text-sm font-medium`}>
-                {sub}
-              </Badge>
-            )}
-
-            {/* 메인 상태 */}
-            <Badge
-              className={`${getMoimStatusClass(main)} flex h-8 items-center px-2.5 text-sm font-medium`}
-            >
-              {main === "개설 확정" ? (
-                <>
-                  <Image src="/icons/ic_check.svg" alt="개설 확정 아이콘" width={16} height={16} />
-                  <span>{main}</span>
-                </>
-              ) : (
-                main
+          {!isCreatedMoimTab && !isReviewedMoimTab && (
+            <div className="flex gap-2 pb-4">
+              {/* 서브 상태 */}
+              {sub && (
+                <Badge className={`${getMoimStatusClass(sub)} h-8 px-2.5 text-sm font-medium`}>
+                  {sub}
+                </Badge>
               )}
-            </Badge>
-          </div>
+
+              {/* 메인 상태 */}
+              <Badge
+                className={`${getMoimStatusClass(main)} flex h-8 items-center px-2.5 text-sm font-medium`}
+              >
+                {main === "개설 확정" ? (
+                  <>
+                    <Image
+                      src="/icons/ic_check.svg"
+                      alt="개설 확정 아이콘"
+                      width={16}
+                      height={16}
+                    />
+                    <span>{main}</span>
+                  </>
+                ) : (
+                  main
+                )}
+              </Badge>
+            </div>
+          )}
 
           {/* 찜하기 */}
-          <Button
-            variant="outline"
-            className="absolute top-4 right-4 ml-auto h-12 w-12 rounded-full border-gray-300 p-0 text-gray-500 hover:bg-red-50 hover:text-red-600 sm:top-0 sm:right-0"
-            onClick={() => alert("찜하기 클릭")}
-          >
-            <Image src="/icons/ic_save.svg" alt="찜하기" width={48} height={48} />
-          </Button>
+          <div className="absolute top-4 right-4 sm:top-0 sm:right-0">
+            <FavoriteButton moimId={item.id} />
+          </div>
 
           {/* 제목 */}
           <div className="flex items-center gap-2">
@@ -100,20 +115,29 @@ const MyPageCardItem = ({ item, onClick, showButton, isCreatedMoimTab }: MyPageC
                 <Button
                   variant="outline"
                   className="h-11 w-32 rounded-2xl border-green-500 bg-white px-7 py-5 font-semibold text-green-500 hover:bg-green-500 hover:text-white sm:h-12 sm:w-28"
-                  onClick={onClick}
+                  onClick={onCancelClick}
                 >
                   예약 취소하기
                 </Button>
               )}
-              {item.isCompleted && !item.isReviewed && (
-                <Button
-                  variant="outline"
-                  className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
-                  onClick={onClick}
-                >
-                  리뷰 작성하기
-                </Button>
-              )}
+              {item.isCompleted &&
+                (item.isReviewed ? (
+                  <Button
+                    variant="outline"
+                    className="h-11 w-32 rounded-2xl bg-gray-100 font-semibold text-gray-600 sm:h-12 sm:w-28"
+                    disabled
+                  >
+                    리뷰 작성 완료
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
+                    onClick={onReviewClick}
+                  >
+                    리뷰 작성하기
+                  </Button>
+                ))}
             </div>
           )}
         </div>
