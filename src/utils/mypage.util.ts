@@ -1,4 +1,4 @@
-import { MoimStatus, MypageMoim } from "@/types/mypage.type";
+import { MoimStatus, MypageMoim, ReviewCardData } from "@/types/mypage.type";
 
 export const formatDateTime = (isoString: string) => {
   if (!isoString) return { date: "", time: "", full: "" };
@@ -66,3 +66,11 @@ export const getMeetingStatus = (item: MypageMoim) => {
     sub: null,
   } as const;
 };
+
+// 리뷰 쓰기
+export const buildReviewData = (item: MypageMoim): ReviewCardData => ({
+  score: 0,
+  comment: "",
+  gatheringId: item.id,
+  isReviewed: false,
+});

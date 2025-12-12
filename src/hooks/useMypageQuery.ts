@@ -1,6 +1,9 @@
 import { deleteReservation, getMoimJoined } from "@/api/mypageMoim.api";
+import { postReviews } from "@/api/review.api";
 import { TEAM_NAME } from "@/constants";
 import { useAuthStore } from "@/stores/auth.store";
+import { ReviewCardData } from "@/types/mypage.type";
+import { PostReviewParams } from "@/types/review.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -33,6 +36,38 @@ export const useCancelReservation = () => {
     onError: error => {
       console.error("예약 취소 실패:", error);
       toast.error(error instanceof Error ? error.message : "예약 취소 중 오류가 발생했습니다.");
+    },
+  });
+};
+
+// 리뷰 등록 훅
+export const useReviewMutation = (onSuccessCallback: (gatheringId: number) => void) => {
+  const queryClient = useQueryClient();
+  const token = useAuthStore(state => state.token);
+  const joinedMoimsQueryKey = ["mypage", "joinedMoims"];
+
+  return useMutation({
+    mutationFn: (params: PostReviewParams) => {
+      if (!token) throw new Error("로그인이 필요합니다.");
+      return postReviews(params, token);
+    },
+
+    onSuccess: (_data, params) => {
+      void queryClient.invalidateQueries({ queryKey: joinedMoimsQueryKey });
+      onSuccessCallback(params.gatheringId);
+
+      queryClient.setQueryData<ReviewCardData[]>(["mypage", "joinedMoims"], old =>
+        old?.map(item =>
+          item.gatheringId === params.gatheringId ? { ...item, isReviewed: true } : item,
+        ),
+      );
+
+      toast.success("리뷰가 성공적으로 등록되었습니다.");
+    },
+
+    onError: error => {
+      const message = error instanceof Error ? error.message : "리뷰 등록 중 알 수 없는 오류 발생";
+      toast.error(message);
     },
   });
 };

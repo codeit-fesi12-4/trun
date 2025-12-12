@@ -21,7 +21,7 @@ const ReviewWrittenList = () => {
       {items.length === 0 ? (
         <EmptyState text="아직 작성한 리뷰가 없어요" />
       ) : (
-        items.map(card => <ReviewCardWritten key={card.id} item={card} />)
+        items.map(item => <ReviewCardWritten key={item.id} item={item} />)
       )}
     </div>
   );

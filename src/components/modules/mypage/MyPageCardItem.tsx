@@ -9,7 +9,8 @@ import Image from "next/image";
 
 type MyPageCardItemProps = {
   item: MypageMoim;
-  onClick?: () => void;
+  onCancelClick?: () => void;
+  onReviewClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;
   isReviewedMoimTab?: boolean;
@@ -17,7 +18,8 @@ type MyPageCardItemProps = {
 
 const MyPageCardItem = ({
   item,
-  onClick,
+  onCancelClick,
+  onReviewClick,
   showButton,
   isCreatedMoimTab,
   isReviewedMoimTab,
@@ -113,20 +115,29 @@ const MyPageCardItem = ({
                 <Button
                   variant="outline"
                   className="h-11 w-32 rounded-2xl border-green-500 bg-white px-7 py-5 font-semibold text-green-500 hover:bg-green-500 hover:text-white sm:h-12 sm:w-28"
-                  onClick={onClick}
+                  onClick={onCancelClick}
                 >
                   예약 취소하기
                 </Button>
               )}
-              {item.isCompleted && !item.isReviewed && (
-                <Button
-                  variant="outline"
-                  className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
-                  onClick={onClick}
-                >
-                  리뷰 작성하기
-                </Button>
-              )}
+              {item.isCompleted &&
+                (item.isReviewed ? (
+                  <Button
+                    variant="outline"
+                    className="h-11 w-32 rounded-2xl bg-gray-100 font-semibold text-gray-600 sm:h-12 sm:w-28"
+                    disabled
+                  >
+                    리뷰 작성 완료
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
+                    onClick={onReviewClick}
+                  >
+                    리뷰 작성하기
+                  </Button>
+                ))}
             </div>
           )}
         </div>
