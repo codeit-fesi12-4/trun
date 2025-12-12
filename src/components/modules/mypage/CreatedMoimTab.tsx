@@ -25,8 +25,8 @@ const CreatedMoimTab = () => {
       {items.length === 0 ? (
         <EmptyState text="아직 만든 모임이 없어요" />
       ) : (
-        items.map(card => (
-          <MyPageCard key={card.id} item={card} showButton={false} isCreatedMoimTab={true} />
+        items.map(item => (
+          <MyPageCard key={item.id} item={item} showButton={false} isCreatedMoimTab={true} />
         ))
       )}
     </div>
