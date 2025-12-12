@@ -1,3 +1,6 @@
+"use client";
+
+import FavoriteButton from "@/components/common/FavoriteButton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MypageMoim } from "@/types/mypage.type";
@@ -60,13 +63,10 @@ const MyPageCardItem = ({
           )}
 
           {/* 찜하기 */}
-          <Button
-            variant="outline"
-            className="absolute top-4 right-4 ml-auto h-12 w-12 rounded-full border-gray-300 p-0 text-gray-500 hover:bg-red-50 hover:text-red-600 sm:top-0 sm:right-0"
-            onClick={() => alert("찜하기 클릭")}
-          >
-            <Image src="/icons/ic_save.svg" alt="찜하기" width={48} height={48} />
-          </Button>
+          <div className="absolute top-4 right-4 sm:top-0 sm:right-0">
+            <FavoriteButton moimId={item.id} />
+          </div>
+
           {/* 제목 */}
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-semibold text-gray-900">{item.name}</h2>
