@@ -120,15 +120,24 @@ const MyPageCardItem = ({
                   예약 취소하기
                 </Button>
               )}
-              {item.isCompleted && !item.isReviewed && (
-                <Button
-                  variant="outline"
-                  className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
-                  onClick={onReviewClick}
-                >
-                  리뷰 작성하기
-                </Button>
-              )}
+              {item.isCompleted &&
+                (item.isReviewed ? (
+                  <Button
+                    variant="outline"
+                    className="h-11 w-32 rounded-2xl bg-gray-100 font-semibold text-gray-600 sm:h-12 sm:w-28"
+                    disabled
+                  >
+                    리뷰 작성 완료
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
+                    onClick={onReviewClick}
+                  >
+                    리뷰 작성하기
+                  </Button>
+                ))}
             </div>
           )}
         </div>

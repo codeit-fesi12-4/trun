@@ -42,4 +42,5 @@ export type ReviewCardData = {
   gatheringId: number;
   score: number;
   comment: string;
+  isReviewed: boolean;
 };

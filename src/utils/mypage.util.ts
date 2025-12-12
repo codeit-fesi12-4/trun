@@ -72,4 +72,5 @@ export const buildReviewData = (item: MypageMoim): ReviewCardData => ({
   score: 0,
   comment: "",
   gatheringId: item.id,
+  isReviewed: false,
 });

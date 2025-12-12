@@ -2,6 +2,7 @@ import { deleteReservation, getMoimJoined } from "@/api/mypageMoim.api";
 import { postReviews } from "@/api/review.api";
 import { TEAM_NAME } from "@/constants";
 import { useAuthStore } from "@/stores/auth.store";
+import { ReviewCardData } from "@/types/mypage.type";
 import { PostReviewParams } from "@/types/review.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -54,6 +55,13 @@ export const useReviewMutation = (onSuccessCallback: (gatheringId: number) => vo
     onSuccess: (_data, params) => {
       void queryClient.invalidateQueries({ queryKey: joinedMoimsQueryKey });
       onSuccessCallback(params.gatheringId);
+
+      queryClient.setQueryData<ReviewCardData[]>(["mypage", "joinedMoims"], old =>
+        old?.map(item =>
+          item.gatheringId === params.gatheringId ? { ...item, isReviewed: true } : item,
+        ),
+      );
+
       toast.success("리뷰가 성공적으로 등록되었습니다.");
     },
 
