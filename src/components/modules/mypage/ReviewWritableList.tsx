@@ -27,7 +27,7 @@ const ReviewWritableList = () => {
           <MyPageCard
             key={card.id}
             item={card}
-            onClick={() => handleJoinClick(card.id)}
+            onCancelClick={() => handleJoinClick(card.id)}
             showButton={true}
             isReviewedMoimTab={true}
           />

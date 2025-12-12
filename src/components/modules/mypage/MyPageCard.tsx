@@ -6,7 +6,7 @@ import MyPageCardItem from "./MyPageCardItem";
 
 type MyPageCardProps = {
   item: MypageMoim;
-  onClick?: () => void;
+  onCancelClick?: () => void;
   showButton?: boolean;
   isCreatedMoimTab?: boolean;
   isReviewedMoimTab?: boolean;
@@ -14,7 +14,7 @@ type MyPageCardProps = {
 
 const MyPageCard = ({
   item,
-  onClick,
+  onCancelClick,
   showButton,
   isCreatedMoimTab,
   isReviewedMoimTab,
@@ -31,7 +31,7 @@ const MyPageCard = ({
     {/* 데이터 */}
     <MyPageCardItem
       item={item}
-      onClick={onClick}
+      onClick={onCancelClick}
       showButton={showButton}
       isCreatedMoimTab={isCreatedMoimTab}
       isReviewedMoimTab={isReviewedMoimTab}
