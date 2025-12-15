@@ -19,8 +19,8 @@ const AuthLayout = ({
   heroCopy = [],
 }: AuthLayoutProps) => (
   <section className="bg-background">
-    <div className="mx-auto flex max-h-screen max-w-[1220px] items-center justify-center px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-36">
-      <div className="grid w-full items-start justify-items-center gap-0 sm:gap-8 md:grid-cols-[1.2fr_0.9fr] md:justify-items-center">
+    <div className="mx-auto flex min-h-screen max-w-[1200px] items-center justify-center px-4 py-8 sm:px-6 sm:py-20 md:px-10 md:py-36">
+      <div className="grid w-full items-center justify-items-center gap-0 sm:gap-8 md:grid-cols-[1.2fr_0.9fr] md:justify-items-center">
         <div className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center md:max-w-[588px]">
           <div className="space-y-2 text-center">
             <p className="text-xl font-semibold text-gray-800 sm:text-2xl md:text-2xl">
@@ -33,6 +33,12 @@ const AuthLayout = ({
             </div>
           </div>
           <div className="relative mx-auto w-full max-w-[250px] pb-6 sm:max-w-[350px] sm:pb-0 md:max-w-[500px]">
+            <h2 className="pb-1 text-2xl font-bold sm:text-3xl">Welcome to 같이 달림! </h2>
+            <p className="text-base font-medium sm:text-lg">
+              다양한 러닝 모임을 찾고 <br />
+              함께 달려보세요.
+            </p>
+            <p> </p>
             <Image
               src="/images/img_login.png"
               alt="환영 일러스트"
