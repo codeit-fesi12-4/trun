@@ -1,8 +1,8 @@
-import { deleteReservation, getMoimJoined } from "@/api/mypageMoim.api";
-import { postReviews } from "@/api/review.api";
+import { deleteReservation, getAvailableReviews, getMoimJoined } from "@/api/mypageMoim.api";
+import { getReviews, postReviews } from "@/api/review.api";
 import { TEAM_NAME } from "@/constants";
 import { useAuthStore } from "@/stores/auth.store";
-import { ReviewCardData } from "@/types/mypage.type";
+import { WritableReviewItem, WrittenReviewItem } from "@/types/mypage.type";
 import { PostReviewParams } from "@/types/review.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -56,10 +56,8 @@ export const useReviewMutation = (onSuccessCallback: (gatheringId: number) => vo
       void queryClient.invalidateQueries({ queryKey: joinedMoimsQueryKey });
       onSuccessCallback(params.gatheringId);
 
-      queryClient.setQueryData<ReviewCardData[]>(["mypage", "joinedMoims"], old =>
-        old?.map(item =>
-          item.gatheringId === params.gatheringId ? { ...item, isReviewed: true } : item,
-        ),
+      queryClient.setQueryData<WritableReviewItem[]>(["mypage", "joinedMoims"], old =>
+        old?.map(item => (item.id === params.gatheringId ? { ...item, isReviewed: true } : item)),
       );
 
       toast.success("리뷰가 성공적으로 등록되었습니다.");
@@ -69,5 +67,23 @@ export const useReviewMutation = (onSuccessCallback: (gatheringId: number) => vo
       const message = error instanceof Error ? error.message : "리뷰 등록 중 알 수 없는 오류 발생";
       toast.error(message);
     },
+  });
+};
+
+// 작성 가능한 리뷰 훅
+export const useAvailableReviews = () =>
+  useQuery<WritableReviewItem[]>({
+    queryKey: ["mypage", "availableReviews"],
+    queryFn: getAvailableReviews,
+  });
+
+// 작성한 리뷰 훅
+export const useWrittenReviews = () => {
+  const user = useAuthStore(state => state.user);
+
+  return useQuery<{ data: WrittenReviewItem[] }, Error>({
+    queryKey: ["mypage", "writtenReviews", user?.id],
+    queryFn: () => getReviews({ teamId: TEAM_NAME, userId: user?.id }),
+    enabled: !!user?.id, // user가 있을 때만 실행
   });
 };
