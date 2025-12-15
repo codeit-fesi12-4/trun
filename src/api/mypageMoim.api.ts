@@ -84,11 +84,11 @@ export const getAvailableReviews = async (): Promise<WritableReviewItem[]> => {
   const joinedMoims = await getMoimJoined();
 
   return joinedMoims
-    .filter(item => item.isCompleted && !item.isReviewed)
+    .filter(item => item.isCompleted && !item.isReviewed && !item.canceledAt)
     .map(item => ({
       ...item,
-      gatheringId: item.id, // WritableReviewItem 필수
-      score: 0, // 초기 점수
+      gatheringId: item.id,
+      score: 0,
     }));
 };
 
