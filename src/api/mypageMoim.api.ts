@@ -3,6 +3,7 @@ import {
   CreateMoimsResponse,
   GetJoinedMoimsParams,
   GetJoinedMoimsResponse,
+  WritableReviewItem,
 } from "@/types/mypage.type";
 import { getMoimList } from "./moim.api";
 
@@ -78,6 +79,18 @@ export const deleteReservation = async (
 };
 
 // 나의 리뷰
+// 작성 가능한 리뷰 데이터 필터
+export const getAvailableReviews = async (): Promise<WritableReviewItem[]> => {
+  const joinedMoims = await getMoimJoined();
+
+  return joinedMoims
+    .filter(item => item.isCompleted && !item.isReviewed)
+    .map(item => ({
+      ...item,
+      gatheringId: item.id, // WritableReviewItem 필수
+      score: 0, // 초기 점수
+    }));
+};
 
 // 내가 만든 모임
 export const getCreatedMoims = (userId: number): Promise<CreateMoimsResponse> =>
