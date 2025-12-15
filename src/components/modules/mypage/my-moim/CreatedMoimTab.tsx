@@ -1,10 +1,10 @@
 "use client";
 
-import MyPageCard from "./MyPageCard";
-import EmptyState from "./EmptyState";
+import MyPageCard from "./MyPageMoimCard";
 import { useQuery } from "@tanstack/react-query";
 import { getCreatedMoims } from "@/api/mypageMoim.api";
 import { useAuthStore } from "@/stores/auth.store";
+import { EmptyState } from "@/components/modules/mypage/EmptyState";
 
 const CreatedMoimTab = () => {
   const user = useAuthStore(state => state.user);
@@ -26,7 +26,7 @@ const CreatedMoimTab = () => {
         <EmptyState text="아직 만든 모임이 없어요" />
       ) : (
         items.map(item => (
-          <MyPageCard key={item.id} item={item} showButton={false} isCreatedMoimTab={true} />
+          <MyPageCard key={item.id} item={item} showCancelButton={false} isCreatedMoimTab={true} />
         ))
       )}
     </div>
