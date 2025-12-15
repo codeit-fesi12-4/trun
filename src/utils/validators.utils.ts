@@ -66,7 +66,7 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
     nextErrors.email = "중복된 이메일입니다.";
   }
   if (!values.companyName.trim()) {
-    nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
+    nextErrors.companyName = "크루명을 정확하게 입력해주세요.";
   }
   if (!values.password) {
     nextErrors.password = "비밀번호를 입력해주세요.";
@@ -85,7 +85,7 @@ export const validateUpdateProfile = (values: UpdateProfileForm): UpdateProfileE
   const nextErrors: UpdateProfileErrors = {};
 
   if (!values.companyName.trim()) {
-    nextErrors.companyName = "회사명을 정확하게 입력해주세요.";
+    nextErrors.companyName = "크루명을 정확하게 입력해주세요.";
   }
   if (values.file) {
     const validTypes = ["image/jpeg", "image/png", "image/gif", "image/svg+xml"];

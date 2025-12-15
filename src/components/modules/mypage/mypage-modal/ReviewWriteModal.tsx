@@ -3,19 +3,19 @@
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { useReviewMutation } from "@/hooks/useMypageQuery";
-import { ReviewCardData } from "@/types/mypage.type";
+import { WritableReviewItem } from "@/types/mypage.type";
 import { PostReviewParams } from "@/types/review.type";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const ReviewWriteModal = ({
+export const ReviewWriteModal = ({
   open,
   onOpenChange,
   item,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  item: ReviewCardData;
+  item: WritableReviewItem;
 }) => {
   const [score, setScore] = useState(item.score ?? 0);
   const [comment, setComment] = useState("");
@@ -102,4 +102,3 @@ const ReviewWriteModal = ({
     </ModalLayout>
   );
 };
-export default ReviewWriteModal;

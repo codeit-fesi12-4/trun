@@ -23,10 +23,10 @@ const ProfileSection = ({ image, name, companyName, email }: UserProfile) => (
     <div className="my-6 hidden w-full border-t border-gray-100 lg:block" />
     <div className="mx-4 h-16 w-px bg-gray-100 lg:hidden" />
 
-    {/* 회사 + 이메일 */}
+    {/* 크루명 + 이메일 */}
     <div className="flex flex-col gap-1 text-sm font-medium sm:text-base">
       <p className="text-gray-500">
-        회사 <span className="pl-2 text-gray-800">{companyName}</span>
+        크루명 <span className="pl-2 text-gray-800">{companyName}</span>
       </p>
       <p className="text-gray-500">
         이메일 <span className="pl-2 text-gray-800">{email}</span>

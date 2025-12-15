@@ -2,9 +2,9 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
-import MyMoimTab from "./MyMoimTab";
-import MyReviewsTab from "./MyReviewsTab";
-import CreatedMoimTab from "./CreatedMoimTab";
+import MyMoimTab from "./my-moim/MyMoimTab";
+import MyReviewsTab from "./my-review/MyReviewsTab";
+import CreatedMoimTab from "./my-moim/CreatedMoimTab";
 
 const TabsSection = () => (
   <Tabs defaultValue="myMoim">

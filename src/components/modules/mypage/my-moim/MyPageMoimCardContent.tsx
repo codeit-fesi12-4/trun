@@ -6,23 +6,22 @@ import { Button } from "@/components/ui/button";
 import { MypageMoim } from "@/types/mypage.type";
 import { formatDateTime, getMeetingStatus, getMoimStatusClass } from "@/utils/mypage.util";
 import Image from "next/image";
+import { ReactNode } from "react";
 
 type MyPageCardItemProps = {
   item: MypageMoim;
   onCancelClick?: () => void;
-  onReviewClick?: () => void;
-  showButton?: boolean;
+  showCancelButton?: boolean;
   isCreatedMoimTab?: boolean;
-  isReviewedMoimTab?: boolean;
+  reviewAction?: ReactNode;
 };
 
-const MyPageCardItem = ({
+const MyPageMoimCardContent = ({
   item,
   onCancelClick,
-  onReviewClick,
-  showButton,
   isCreatedMoimTab,
-  isReviewedMoimTab,
+  showCancelButton,
+  reviewAction,
 }: MyPageCardItemProps) => {
   const formattedDate = formatDateTime(item.dateTime);
   const { main, sub } = getMeetingStatus(item);
@@ -34,7 +33,7 @@ const MyPageCardItem = ({
         {/* 내용 상단 부분 */}
         <div>
           {/* 상태별 배지 스타일 */}
-          {!isCreatedMoimTab && !isReviewedMoimTab && (
+          {!isCreatedMoimTab && (
             <div className="flex gap-2 pb-4">
               {/* 서브 상태 */}
               {sub && (
@@ -109,41 +108,23 @@ const MyPageCardItem = ({
           </div>
 
           {/* 버튼 */}
-          {showButton && (
-            <div className="mt-auto flex justify-end">
-              {item.canceledAt === null && !item.isCompleted && (
-                <Button
-                  variant="outline"
-                  className="h-11 w-32 rounded-2xl border-green-500 bg-white px-7 py-5 font-semibold text-green-500 hover:bg-green-500 hover:text-white sm:h-12 sm:w-28"
-                  onClick={onCancelClick}
-                >
-                  예약 취소하기
-                </Button>
-              )}
-              {item.isCompleted &&
-                (item.isReviewed ? (
-                  <Button
-                    variant="outline"
-                    className="h-11 w-32 rounded-2xl bg-gray-100 font-semibold text-gray-600 sm:h-12 sm:w-28"
-                    disabled
-                  >
-                    리뷰 작성 완료
-                  </Button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    className="h-11 w-32 rounded-2xl border-green-500 bg-green-500 font-semibold text-white hover:bg-green-50 hover:text-green-500 sm:h-12 sm:w-28"
-                    onClick={onReviewClick}
-                  >
-                    리뷰 작성하기
-                  </Button>
-                ))}
-            </div>
-          )}
+          <div className="mt-auto flex justify-end gap-2">
+            {showCancelButton && item.canceledAt === null && !item.isCompleted && (
+              <Button
+                variant="outline"
+                className="h-11 w-32 rounded-2xl border-green-500 bg-white font-semibold text-green-500 hover:bg-green-500 hover:text-white"
+                onClick={onCancelClick}
+              >
+                예약 취소하기
+              </Button>
+            )}
+
+            {reviewAction}
+          </div>
         </div>
       </div>
     </>
   );
 };
 
-export default MyPageCardItem;
+export default MyPageMoimCardContent;

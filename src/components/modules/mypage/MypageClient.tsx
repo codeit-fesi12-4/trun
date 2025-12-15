@@ -1,11 +1,11 @@
 "use client";
 
-import ProfileEditModal from "@/components/modules/mypage/mypage-modal/ProfileEditModal";
 import ProfileSection from "@/components/modules/mypage/ProfileCard";
 import TabsSection from "@/components/modules/mypage/TabsSection";
 import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
 
 const MypageClient = () => {
   const user = useAuthStore(state => state.user);

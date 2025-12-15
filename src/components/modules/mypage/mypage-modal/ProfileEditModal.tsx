@@ -11,7 +11,7 @@ import { UserProfile } from "@/types/user.type";
 import { useUpdateProfileMutationQuery } from "@/hooks/useUserQuery";
 import { toast } from "sonner";
 
-const ProfileEditModal = ({
+export const ProfileEditModal = ({
   open,
   onOpenChange,
   user,
@@ -152,8 +152,8 @@ const ProfileEditModal = ({
           />
           <MypageField
             id="signup-company"
-            label="회사"
-            placeholder="회사명을 입력해주세요."
+            label="크루명"
+            placeholder="크루명을 입력해주세요."
             autoComplete="organization"
             value={form.companyName}
             onChange={handleChange("companyName")}
@@ -171,5 +171,3 @@ const ProfileEditModal = ({
     </ModalLayout>
   );
 };
-
-export default ProfileEditModal;

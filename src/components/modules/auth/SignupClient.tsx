@@ -96,8 +96,8 @@ const SignupClient = () => {
         />
         <AuthTextField
           id="signup-company"
-          label="회사명"
-          placeholder="회사명을 입력해주세요."
+          label="크루명"
+          placeholder="크루명을 입력해주세요."
           autoComplete="organization"
           value={form.companyName}
           onChange={handleChange("companyName")}

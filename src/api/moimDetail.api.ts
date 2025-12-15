@@ -100,7 +100,6 @@ export const putMoim = async (
       toast.error(result.message);
       return null;
     }
-    toast.success("모임이 취소되었습니다.");
   } catch (error) {
     console.error(error);
     return null;
