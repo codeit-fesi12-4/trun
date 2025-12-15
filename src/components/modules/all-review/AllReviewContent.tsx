@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useEffect, useState } from "react";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import AllReviewHeader from "./AllReviewHeader";
 import AllReviewStats from "./AllReviewStats";

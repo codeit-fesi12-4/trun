@@ -3,7 +3,7 @@
 import MyPageCard from "./MyPageCard";
 import EmptyState from "./EmptyState";
 import { getMoimJoined } from "@/api/mypageMoim.api";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ReviewCardData } from "@/types/mypage.type";

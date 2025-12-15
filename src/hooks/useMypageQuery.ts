@@ -1,6 +1,6 @@
 import { deleteReservation, getMoimJoined } from "@/api/mypageMoim.api";
 import { postReviews } from "@/api/review.api";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 import { useAuthStore } from "@/stores/auth.store";
 import { ReviewCardData } from "@/types/mypage.type";
 import { PostReviewParams } from "@/types/review.type";

@@ -1,15 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { ReviewCardData } from "@/types/mypage.type";
+import { MypageMoim } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
+import { MOIM_TYPE, FILTER_CATEGORY } from "@/constants/moim";
 
 export type ReviewCardProps = {
-  item: ReviewCardData;
+  item: MypageMoim & {
+    score?: number;
+    comment?: string;
+  };
 };
 
 const ReviewCardWritten = ({ item }: ReviewCardProps) => {
   const formattedDate = formatDateTime(item.dateTime);
+
+  // 모임 타입을 한글로 변환
+  const getTypeLabel = (type: string) => {
+    if (type === MOIM_TYPE.DALLIMFIT) return FILTER_CATEGORY.DALLIMFIT;
+    if (type === MOIM_TYPE.RUNCATION) return FILTER_CATEGORY.RUNCATION;
+    return type;
+  };
 
   return (
     <div className="mb-6 flex flex-col gap-6 border-b border-gray-200 pb-6 sm:flex-row md:gap-6">
@@ -42,7 +53,7 @@ const ReviewCardWritten = ({ item }: ReviewCardProps) => {
         {/* 타입 + 위치 */}
         <div className="flex items-center gap-1.5 text-xs font-medium text-gray-500">
           <div className="h-3.5 w-1 bg-gray-200" />
-          <h2>{item.name}</h2>
+          <h2>{getTypeLabel(item.type)}</h2>
           <span>·</span>
           <p>{item.location}</p>
         </div>

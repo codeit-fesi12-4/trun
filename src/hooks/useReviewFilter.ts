@@ -7,7 +7,7 @@ type UseReviewFilterProps = ReviewFilterProps;
 export const useReviewFilter = ({ onFilterChange, availableLocations }: UseReviewFilterProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
   const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
-  const [sort, setSort] = useState<"최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순">(
+  const [sortBy, setSortBy] = useState<"최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순">(
     "최신 리뷰 순",
   );
 
@@ -15,7 +15,7 @@ export const useReviewFilter = ({ onFilterChange, availableLocations }: UseRevie
   const createFilterValues = (): ReviewFilterValues => ({
     category,
     location,
-    sort,
+    sortBy,
   });
 
   // 지역 리셋 로직 공통화
@@ -57,14 +57,14 @@ export const useReviewFilter = ({ onFilterChange, availableLocations }: UseRevie
   };
 
   const handleSortChange = (newSort: "최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순") => {
-    setSort(newSort);
-    onFilterChange?.({ ...createFilterValues(), sort: newSort });
+    setSortBy(newSort);
+    onFilterChange?.({ ...createFilterValues(), sortBy: newSort });
   };
 
   return {
     category,
     location,
-    sort,
+    sortBy,
     handleCategoryChange,
     handleLocationChange,
     handleSortChange,
