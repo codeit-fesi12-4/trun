@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Toaster
             position="top-center"
             toastOptions={{
+              duration: 3000,
               style: {
                 fontSize: "var(--toast-font-size)",
                 padding: "var(--toast-padding)",
