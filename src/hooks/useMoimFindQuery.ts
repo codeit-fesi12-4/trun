@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 import { getMoimList, postMoim } from "@/api/moim.api";
 import { CreateMoimRequest, GetMoimsParams } from "@/types/moim.type";
 

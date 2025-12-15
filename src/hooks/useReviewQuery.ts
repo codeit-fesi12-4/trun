@@ -1,5 +1,5 @@
 import { getMoimReviews, getReviews, getReviewScores } from "@/api/review.api";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { GetReviewsParams, ReviewScore, ReviewScoresParams } from "@/types/review.type";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";

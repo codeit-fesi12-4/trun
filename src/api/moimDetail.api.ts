@@ -1,4 +1,4 @@
-import { API_BASE_URL, TEAM_NAME } from "@/constants";
+import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
 import { logout } from "@/utils/logout.util";
 import { toast } from "sonner";
 

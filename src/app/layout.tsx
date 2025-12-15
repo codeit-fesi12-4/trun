@@ -18,7 +18,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <Header />
           <LayoutWrapper>{children}</LayoutWrapper>
-          <Toaster position="top-center" />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                fontSize: "var(--toast-font-size)",
+                padding: "var(--toast-padding)",
+                minHeight: "var(--toast-min-height)",
+                borderRadius: "12px",
+                width: "var(--toast-width)",
+                marginLeft: "auto",
+                marginRight: "auto",
+                borderColor: "transparent",
+                boxShadow: "0 0 5px 5px rgb(176, 239, 209)",
+              },
+            }}
+          />
         </Providers>
       </body>
     </html>

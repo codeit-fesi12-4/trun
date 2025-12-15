@@ -9,12 +9,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { useHeader } from "@/hooks/useHeader";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 const Header = () => {
   const { user, isMounted, favoriteCount, handleLogout } = useHeader();
+  const [open, setOpen] = useState(false);
+  const router = useRouter();
+
+  const handleFavoritePage = () => {
+    if (!user) {
+      setOpen(true);
+      return;
+    }
+    router.push("/moim-favorite");
+  };
 
   return (
     <header className="bg-background fixed top-0 z-10 w-full px-4 shadow-xl md:px-6">
@@ -33,7 +46,7 @@ const Header = () => {
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <Link href="/moim-favorite" className="nav-link flex items-center gap-1.5">
+            <button onClick={handleFavoritePage} className="nav-link flex items-center gap-1.5">
               찜한 모임
               {favoriteCount > 0 && (
                 <Badge
@@ -43,7 +56,7 @@ const Header = () => {
                   <span className="sm:text-sm sm:font-bold">{favoriteCount}</span>
                 </Badge>
               )}
-            </Link>
+            </button>
             <Link href="/all-review" className="nav-link">
               모든 리뷰
             </Link>
@@ -82,6 +95,7 @@ const Header = () => {
           </div>
         </div>
       </div>
+      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </header>
   );
 };

@@ -1,4 +1,4 @@
-import { TEAM_NAME, API_BASE_URL } from "@/constants";
+import { TEAM_NAME, API_BASE_URL } from "@/constants/env";
 import {
   CreateMoimRequest,
   CreateMoimResponse,

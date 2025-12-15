@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/constants";
+import { API_BASE_URL } from "@/constants/env";
 
 type ApiError = Error & { status?: number; code?: string | number };
 

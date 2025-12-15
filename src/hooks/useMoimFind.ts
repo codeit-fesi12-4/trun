@@ -15,6 +15,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { formatDateWithDash } from "@/utils/date.util";
 
 export const useMoimFind = () => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<MoimFilterValues>({
     category: FILTER_CATEGORY.DALLIMFIT,
@@ -150,8 +151,7 @@ export const useMoimFind = () => {
 
   const handleCreateMoimClick = () => {
     if (!token) {
-      alert("로그인이 필요한 서비스입니다. 먼저 로그인해주세요.");
-      window.location.href = "/login";
+      setIsLoginModalOpen(true);
       return;
     }
     setIsModalOpen(true);
@@ -160,6 +160,8 @@ export const useMoimFind = () => {
   return {
     isModalOpen,
     setIsModalOpen,
+    isLoginModalOpen,
+    setIsLoginModalOpen,
     moimCardData: filteredMoims,
     availableLocations,
     isLoading,
