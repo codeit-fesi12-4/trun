@@ -40,7 +40,7 @@ const MyPageMoimCard = ({
 
       {/* 모집 취소 오버레이: 내가 참여한 모임이 생성자에 의해 취소된 경우 */}
       {isCreatorCanceled && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gray-950/80 text-sm font-medium text-white">
+        <div className="absolute inset-0 z-5 flex flex-col items-center justify-center bg-gray-950/80 text-sm font-medium text-white">
           <p>모집 취소된 모임이에요,</p>
           <p>다음 기회에 만나요 🙏</p>
         </div>
