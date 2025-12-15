@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import EmptyState from "./EmptyState";
 import ReviewCardWritten from "./ReviewCardWritten";
 import { getMoimJoined } from "@/api/mypageMoim.api";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 
 const ReviewWrittenList = () => {
   const { data, isLoading, isError } = useQuery({

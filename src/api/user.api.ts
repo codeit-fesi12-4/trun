@@ -1,4 +1,4 @@
-import { API_BASE_URL, TEAM_NAME } from "@/constants";
+import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
 import { UserProfile } from "@/types/user.type";
 
 const buildAuthPath = (path: string, teamName: string) => `${API_BASE_URL}${teamName}/auths${path}`;

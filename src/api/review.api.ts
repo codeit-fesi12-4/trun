@@ -1,4 +1,4 @@
-import { API_BASE_URL, TEAM_NAME } from "@/constants";
+import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
 import { GetReviewsParams, PostReviewParams, ReviewScoresParams } from "@/types/review.type";
 import { toast } from "sonner";
 

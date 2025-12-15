@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/pagination";
 import ReviewList from "./ReviewList";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { useMoimReviewsQuery } from "@/hooks/useReviewQuery";
 
