@@ -11,7 +11,7 @@ import { UserProfile } from "@/types/user.type";
 import { useUpdateProfileMutationQuery } from "@/hooks/useUserQuery";
 import { toast } from "sonner";
 
-const ProfileEditModal = ({
+export const ProfileEditModal = ({
   open,
   onOpenChange,
   user,
@@ -171,5 +171,3 @@ const ProfileEditModal = ({
     </ModalLayout>
   );
 };
-
-export default ProfileEditModal;
