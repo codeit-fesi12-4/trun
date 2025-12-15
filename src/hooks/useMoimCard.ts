@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { isFavoriteMoim, toggleFavoriteMoim } from "@/utils/favorite.util";
+import { isFavoriteMoim } from "@/utils/favorite.util";
 import { formatDeadline } from "@/utils/moim.util";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
@@ -21,7 +21,7 @@ export const useMoimCard = (
 ) => {
   const token = useAuthStore(state => state.token);
   const user = useAuthStore(state => state.user);
-  const userId = user?.id ?? null;
+  const userId = user?.id.toString() ?? null;
 
   // localStorage에서 찜한 상태를 계산 (item.id, userId가 변경될 때마다 재계산)
   const computedFavoriteState = useMemo(() => {
@@ -60,28 +60,6 @@ export const useMoimCard = (
     };
   }, [item.id, userId, token]);
 
-  // 찜한 모임 토글 함수
-  const toggleFavorite = () => {
-    if (!userId) return false;
-    const newFavoriteState = toggleFavoriteMoim(item.id, userId);
-    setIsFavorite(newFavoriteState);
-
-    // 같은 탭 내 다른 컴포넌트에 변경 알림
-    window.dispatchEvent(new Event("favoriteMoimsChanged"));
-
-    return newFavoriteState;
-  };
-
-  // 하트 클릭 핸들러
-  const handleFavoriteClick = () => {
-    if (!token) {
-      alert("로그인이 필요한 서비스입니다. 먼저 로그인해주세요.");
-      return;
-    }
-    toggleFavorite();
-    onFavoriteToggle?.(item.id);
-  };
-
   // 참여하기 클릭 핸들러
   const handleJoinClick = () => {
     onJoinClick?.(item.id);
@@ -94,7 +72,6 @@ export const useMoimCard = (
 
   return {
     isFavorite,
-    handleFavoriteClick,
     handleJoinClick,
     participantPercentage,
     isFull,

@@ -16,9 +16,9 @@ import {
   useParticipantsQuery,
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
-import ConfirmationJoinModal from "./ConfirmationJoinModal";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { useAuthStore } from "@/stores/auth.store";
+import ConfirmationJoinModal from "./ConfirmationJoinModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +35,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
   const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutaiton();
@@ -44,7 +45,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
   const router = useRouter();
 
-  const token = useAuthStore(state => state.user);
   const user = useAuthStore(state => state.user);
   const userId = user?.id;
 
@@ -72,7 +72,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
       }
     };
 
-    // distinguishUserId();
     distinguishCreator();
     distinguishParticipant();
     distinguishFull();
@@ -93,6 +92,10 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimJoin = async () => {
+    if (!userId) {
+      setOpen(true);
+      return;
+    }
     try {
       await joinMoim(moim.id);
     } catch (error) {
@@ -203,20 +206,18 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-          ) : !token ? (
-            <ConfirmationJoinModal />
           ) : isParticipant ? (
             <button
               disabled={isCancelJoinPending}
               onClick={() => void handleMoimLeave()}
-              className="w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "취소중..." : "참여 취소하기"}
             </button>
           ) : isFull ? (
             <button
               disabled={isFull}
-              className="w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               참여하기
             </button>
@@ -224,7 +225,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isJoinPending}
               onClick={() => void handleMoimJoin()}
-              className="w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "참여중..." : "참여하기"}
             </button>
@@ -232,6 +233,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         </div>
       </div>
       <MoimDetailProgress moim={moim} />
+      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </div>
   );
 };

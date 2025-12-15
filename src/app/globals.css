@@ -239,3 +239,28 @@ body {
     background: #9ca3af;
   }
 }
+
+:root {
+  --toast-font-size: 14px;
+  --toast-padding: 14px 18px;
+  --toast-min-height: 56px;
+  --toast-width: 300px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --toast-font-size: 15px;
+    --toast-padding: 18px 24px;
+    --toast-min-height: 64px;
+    --toast-width: 400px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --toast-font-size: 16px;
+    --toast-padding: 20px 30px;
+    --toast-min-height: 70px;
+    --toast-width: 500px;
+  }
+}

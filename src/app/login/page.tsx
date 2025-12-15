@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
@@ -26,6 +26,9 @@ const LoginPage = () => {
   const [errors, setErrors] = useState<LoginErrors>({});
   const [serverError, setServerError] = useState<string | null>(null);
 
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+
   const signinMutation = useMutation({
     mutationFn: () => postSignin({ email, password }),
     onSuccess: async data => {
@@ -33,7 +36,7 @@ const LoginPage = () => {
       setToken(data.token);
       const profile = await getUserProfile();
       setUser(profile);
-      router.push("/");
+      router.push(redirect ?? "/");
     },
     onError: error => {
       setServerError(error.message);
