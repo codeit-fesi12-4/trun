@@ -1,0 +1,95 @@
+"use client";
+
+import { useState } from "react";
+import EmptyState from "./EmptyState";
+import MyPageCard from "./MyPageCard";
+import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
+import ModalLayout from "@/components/layouts/ModalLayout";
+import { ReviewCardData } from "@/types/mypage.type";
+import ReviewWriteModal from "./mypage-modal/ReviewWriteModal";
+import { buildReviewData } from "@/utils/mypage.util";
+
+const MyMoimTab = () => {
+  // 리뷰쓰기 모달
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedReviewItem, setSelectedReviewItem] = useState<ReviewCardData | null>(null);
+
+  // 예약 취소 확인 모달
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
+
+  // 참여한 나의 모임 조회
+  const { data, isLoading, isError } = useJoinedMoims();
+
+  // 예약 취소
+  const cancelJoinMutation = useCancelReservation();
+
+  // 예약 취소 버튼
+  const handleCancelClick = (id: number) => {
+    setSelectedCancelId(id);
+    setIsCancelModalOpen(true);
+  };
+
+  // 리뷰 작성 버튼
+  const handleReviewClick = (item: ReviewCardData) => {
+    setSelectedReviewItem(item);
+    setIsReviewModalOpen(true);
+  };
+
+  if (isLoading) return <div>로딩 중...</div>;
+  if (isError) return <div>오류가 발생했습니다.</div>;
+
+  const items = data ?? [];
+
+  return (
+    <div className="flex flex-col gap-6">
+      {items.length === 0 ? (
+        <EmptyState text="신청한 모임이 아직 없어요" />
+      ) : (
+        items.map(item => (
+          <MyPageCard
+            key={item.id}
+            item={item}
+            onCancelClick={() => handleCancelClick(item.id)}
+            onReviewClick={() => handleReviewClick(buildReviewData(item))}
+            showButton={true}
+          />
+        ))
+      )}
+
+      {isCancelModalOpen && selectedCancelId && (
+        <ModalLayout
+          open={isCancelModalOpen}
+          onOpenChange={setIsCancelModalOpen}
+          title="예약 취소"
+          onConfirm={() => {
+            cancelJoinMutation.mutate(selectedCancelId);
+            setIsCancelModalOpen(false);
+            setSelectedCancelId(null);
+          }}
+          onCancel={() => {
+            setIsCancelModalOpen(false);
+            setSelectedCancelId(null);
+          }}
+          confirmText="확인"
+          showCancel
+        >
+          <h2 className="flex items-center justify-center py-3 text-base font-medium">
+            예약을 취소하시겠습니까?
+          </h2>
+        </ModalLayout>
+      )}
+
+      {/* 리뷰 작성 모달 */}
+      {isReviewModalOpen && selectedReviewItem && (
+        <ReviewWriteModal
+          open={isReviewModalOpen}
+          onOpenChange={setIsReviewModalOpen}
+          item={selectedReviewItem}
+        />
+      )}
+    </div>
+  );
+};
+
+export default MyMoimTab;
