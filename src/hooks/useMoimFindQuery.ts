@@ -82,7 +82,10 @@ export const useCreateMoimMutation = (teamName: string = TEAM_NAME) => {
   return useMutation({
     mutationFn: (payload: CreateMoimRequest) => postMoim(payload, teamName),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["moims", teamName] });
+      // "moims"로 시작하는 모든 쿼리 무효화 (infinite 쿼리 포함)
+      void queryClient.invalidateQueries({ queryKey: ["moims"] });
+      // 마이페이지의 생성한 모임 목록도 무효화
+      void queryClient.invalidateQueries({ queryKey: ["mypage", "createdMoims"] });
     },
   });
 };
