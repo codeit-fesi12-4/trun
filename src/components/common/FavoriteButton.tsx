@@ -33,15 +33,16 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
       return;
     }
 
-    setIsFavorite((prev: boolean) => {
-      const next = !prev;
+    const next = !isFavorite;
+    setIsFavorite(next);
+    // 렌더링 중 다른 컴포넌트 업데이트 방지
+    setTimeout(() => {
       if (next) {
         addFavoriteMoim(moimId, userId);
       } else {
         removeFavoriteMoim(moimId, userId);
       }
-      return next;
-    });
+    }, 0);
   };
   return (
     <>
