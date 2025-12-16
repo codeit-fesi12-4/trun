@@ -17,7 +17,7 @@ type MoimCardItemsProps = {
 } & MoimCardActions;
 
 const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
-  const { handleJoinClick, participantPercentage, deadlineText } = useMoimCard(
+  const { handleJoinClick, participantPercentage, isFull, deadlineText } = useMoimCard(
     item,
     onFavoriteToggle,
     onJoinClick,
@@ -109,11 +109,15 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
           <Button
             variant="outline"
             size="xs"
-            className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
+            className={`rounded-xl p-5 text-[14px] font-semibold ${
+              isFull
+                ? "border-gray-300 bg-white text-gray-400 hover:border-gray-400 hover:bg-gray-50 hover:text-gray-500"
+                : "border-green-400 bg-white text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
+            }`}
             onClick={handleJoinClick}
             type="button"
           >
-            참여하기
+            {isFull ? "마감" : "참여하기"}
           </Button>
         </Link>
       </div>
