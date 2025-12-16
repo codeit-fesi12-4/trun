@@ -17,7 +17,7 @@ type MoimCardItemsProps = {
 } & MoimCardActions;
 
 const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsProps) => {
-  const { handleJoinClick, participantPercentage, isFull, deadlineText } = useMoimCard(
+  const { handleJoinClick, participantPercentage, deadlineText } = useMoimCard(
     item,
     onFavoriteToggle,
     onJoinClick,
@@ -105,31 +105,17 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
         </div>
 
         {/* 오른쪽: 참여하기 버튼 */}
-        {isFull ? (
-          <div className="shrink-0">
-            <Button
-              variant="outline"
-              size="xs"
-              disabled
-              className="cursor-not-allowed rounded-xl border-gray-300 p-5 text-[14px] font-semibold text-gray-400"
-              type="button"
-            >
-              마감
-            </Button>
-          </div>
-        ) : (
-          <Link href={`/moim-find/${item.id}`} className="shrink-0">
-            <Button
-              variant="outline"
-              size="xs"
-              className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
-              onClick={handleJoinClick}
-              type="button"
-            >
-              참여하기
-            </Button>
-          </Link>
-        )}
+        <Link href={`/moim-find/${item.id}`} className="shrink-0">
+          <Button
+            variant="outline"
+            size="xs"
+            className="rounded-xl border-green-400 bg-white p-5 text-[14px] font-semibold text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
+            onClick={handleJoinClick}
+            type="button"
+          >
+            참여하기
+          </Button>
+        </Link>
       </div>
     </div>
   );
