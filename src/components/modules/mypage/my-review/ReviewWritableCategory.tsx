@@ -88,7 +88,7 @@ const ReviewWritableCategory = () => {
                 <div className="mt-4 flex justify-end sm:mt-auto">
                   {item.isCompleted && (
                     <button
-                      className="h-11 w-32 rounded-2xl bg-green-500 font-semibold text-white"
+                      className="h-11 w-32 cursor-pointer rounded-2xl bg-green-500 font-semibold text-white"
                       onClick={() => handleReviewClick(item)}
                     >
                       리뷰 작성하기

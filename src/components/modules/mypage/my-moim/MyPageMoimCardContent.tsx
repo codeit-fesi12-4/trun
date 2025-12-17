@@ -109,7 +109,7 @@ const MyPageMoimCardContent = ({
             {showCancelButton && item.canceledAt === null && !item.isCompleted && (
               <Button
                 variant="outline"
-                className="h-11 w-32 rounded-2xl border-green-500 bg-white font-semibold text-green-500 hover:bg-green-500 hover:text-white"
+                className="h-11 w-32 cursor-pointer rounded-2xl border-green-500 bg-white font-semibold text-green-500 hover:bg-green-500 hover:text-white"
                 onClick={onCancelClick}
               >
                 예약 취소하기
