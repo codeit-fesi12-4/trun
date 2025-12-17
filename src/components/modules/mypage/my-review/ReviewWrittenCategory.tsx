@@ -63,18 +63,18 @@ const ReviewWrittenCategory = () => {
                     <Image
                       src="/icons/ic_mypage_edit.svg"
                       alt="수정"
-                      width={40}
-                      height={40}
-                      className="w-8 sm:w-10"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
                     />
                   </button>
                   <button onClick={() => toast("삭제 클릭")} className="cursor-pointer">
                     <Image
                       src="/icons/ic_trash.svg"
                       alt="수정"
-                      width={40}
-                      height={40}
-                      className="w-8 sm:w-10"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
                     />
                   </button>
                 </div>
