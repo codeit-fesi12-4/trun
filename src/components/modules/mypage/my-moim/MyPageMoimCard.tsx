@@ -2,13 +2,11 @@
 
 import Image from "next/image";
 import { MypageMoim } from "@/types/mypage.type";
-import MyPageCardItem from "./MyPageMoimCardContent";
-import { ReactNode } from "react";
+import MyPageMoimCardContent from "./MyPageMoimCardContent";
 
 type MyPageCardProps = {
   item: MypageMoim;
   onCancelClick?: () => void;
-  reviewAction?: ReactNode;
   showCancelButton?: boolean;
   isCreatedMoimTab?: boolean;
 };
@@ -16,7 +14,6 @@ type MyPageCardProps = {
 const MyPageMoimCard = ({
   item,
   onCancelClick,
-  reviewAction,
   showCancelButton,
   isCreatedMoimTab,
 }: MyPageCardProps) => {
@@ -30,10 +27,9 @@ const MyPageMoimCard = ({
       </div>
 
       {/* 데이터 */}
-      <MyPageCardItem
+      <MyPageMoimCardContent
         item={item}
         onCancelClick={onCancelClick}
-        reviewAction={reviewAction}
         showCancelButton={showCancelButton}
         isCreatedMoimTab={isCreatedMoimTab}
       />

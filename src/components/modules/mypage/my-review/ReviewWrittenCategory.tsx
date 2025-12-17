@@ -58,11 +58,11 @@ const ReviewWrittenCategory = () => {
                 </div>
               </div>
 
-              {/* 타입 / 위치 */}
+              {/* 위치 */}
               <div className="flex flex-row items-center gap-1.5">
                 <div className="h-[13px] w-[3px] bg-gray-100 sm:h-4" />
                 <span className="text-sm font-medium text-gray-400 sm:text-base">
-                  {review.Gathering.type} · {review.Gathering.location}
+                  {review.Gathering.location}
                 </span>
               </div>
 
