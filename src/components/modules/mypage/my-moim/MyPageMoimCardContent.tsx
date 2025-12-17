@@ -6,14 +6,12 @@ import { Button } from "@/components/ui/button";
 import { MypageMoim } from "@/types/mypage.type";
 import { formatDateTime, getMeetingStatus, getMoimStatusClass } from "@/utils/mypage.util";
 import Image from "next/image";
-import { ReactNode } from "react";
 
 type MyPageCardItemProps = {
   item: MypageMoim;
   onCancelClick?: () => void;
   showCancelButton?: boolean;
   isCreatedMoimTab?: boolean;
-  reviewAction?: ReactNode;
 };
 
 const MyPageMoimCardContent = ({
@@ -21,7 +19,6 @@ const MyPageMoimCardContent = ({
   onCancelClick,
   isCreatedMoimTab,
   showCancelButton,
-  reviewAction,
 }: MyPageCardItemProps) => {
   const formattedDate = formatDateTime(item.dateTime);
   const { main, sub } = getMeetingStatus(item);
@@ -118,8 +115,6 @@ const MyPageMoimCardContent = ({
                 예약 취소하기
               </Button>
             )}
-
-            {reviewAction}
           </div>
         </div>
       </div>
