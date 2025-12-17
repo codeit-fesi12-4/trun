@@ -12,19 +12,19 @@ const TabsSection = () => (
       <TabsList className="bg-transparen w-full p-0 sm:w-auto">
         <TabsTrigger
           value="myMoim"
-          className="flex-1 rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
+          className="flex-1 cursor-pointer rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
         >
           나의 모임
         </TabsTrigger>
         <TabsTrigger
           value="myReviews"
-          className="flex-1 rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
+          className="flex-1 cursor-pointer rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
         >
           나의 리뷰
         </TabsTrigger>
         <TabsTrigger
           value="createdMoim"
-          className="flex-1 rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
+          className="flex-1 cursor-pointer rounded-none border-0 border-transparent border-b-transparent bg-transparent p-0 pb-4 text-center text-sm font-semibold text-gray-600 shadow-none hover:text-green-600 focus:ring-0 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-b-green-600 data-[state=active]:text-green-600 data-[state=active]:shadow-none sm:min-w-40 sm:text-xl"
         >
           내가 만든 모임
         </TabsTrigger>
