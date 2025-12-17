@@ -86,21 +86,14 @@ const ReviewWritableCategory = () => {
 
                 {/* 리뷰 작성 버튼 */}
                 <div className="mt-4 flex justify-end sm:mt-auto">
-                  {item.isReviewed ? (
-                    <button
-                      className="h-11 w-32 rounded-2xl bg-gray-100 font-semibold text-gray-500"
-                      disabled
-                    >
-                      리뷰 작성 완료
-                    </button>
-                  ) : item.isCompleted ? (
+                  {item.isCompleted && (
                     <button
                       className="h-11 w-32 rounded-2xl bg-green-500 font-semibold text-white"
                       onClick={() => handleReviewClick(item)}
                     >
                       리뷰 작성하기
                     </button>
-                  ) : null}
+                  )}
                 </div>
               </div>
             </div>
