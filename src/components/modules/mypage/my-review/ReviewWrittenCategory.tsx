@@ -4,6 +4,7 @@ import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
 import { useWrittenReviews } from "@/hooks/useMypageQuery";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 const ReviewWrittenCategory = () => {
   const { data, isLoading, isError } = useWrittenReviews();
@@ -55,6 +56,27 @@ const ReviewWrittenCategory = () => {
                       {format(new Date(review.Gathering.dateTime), "yyyy.MM.dd")}
                     </div>
                   </div>
+                </div>
+
+                <div className="ml-auto flex items-center">
+                  <button onClick={() => toast("수정 클릭")} className="cursor-pointer">
+                    <Image
+                      src="/icons/ic_mypage_edit.svg"
+                      alt="수정"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
+                    />
+                  </button>
+                  <button onClick={() => toast("삭제 클릭")} className="cursor-pointer">
+                    <Image
+                      src="/icons/ic_trash.svg"
+                      alt="수정"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
+                    />
+                  </button>
                 </div>
               </div>
 
