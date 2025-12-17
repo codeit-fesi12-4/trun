@@ -1,23 +1,15 @@
 import { getMoimReviews, getReviews, getReviewScores } from "@/api/review.api";
-import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
-import { GetReviewsParams, ReviewScore, ReviewScoresParams } from "@/types/review.type";
+import { GetReviewScoresParams, GetReviewsParams, ReviewScore } from "@/types/review.type";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
 // 모든 리뷰 가져오기
 export const useAllReviewQuery = (params: GetReviewsParams) =>
   useInfiniteQuery({
-    queryKey: ["reviews", params.teamId, params.type, params.location, params.sortBy, params.limit],
+    queryKey: ["reviews", params.type, params.location, params.sortBy, params.limit],
     queryFn: async ({ pageParam = 0 }) => {
-      const res = await getReviews({ ...params, offset: pageParam });
-
-      if (Array.isArray(res)) {
-        return {
-          data: res,
-          totalItemCount: res.length,
-        };
-      }
-      return res;
+      const result = await getReviews({ ...params, offset: pageParam });
+      return result;
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, pages) => {
@@ -31,24 +23,11 @@ export const useAllReviewQuery = (params: GetReviewsParams) =>
   });
 
 // 모임별 리뷰 가져오기
-export const useMoimReviewsQuery = ({
-  teamName = TEAM_NAME,
-  moimId,
-  limit,
-  offset,
-  enabled = true,
-}: {
-  teamName?: string;
-  moimId: number;
-  limit: number;
-  offset: number;
-  enabled?: boolean;
-}) =>
+export const useMoimReviewsQuery = (params: GetReviewsParams) =>
   useQuery({
-    queryKey: ["moimReview", teamName, moimId, limit, offset],
-    queryFn: () => getMoimReviews({ moimId, teamName, limit, offset }),
+    queryKey: ["moimReview", params.gatheringId, params.limit, params.offset],
+    queryFn: () => getMoimReviews({ ...params }),
     staleTime: 1000 * 60,
-    enabled,
   });
 
 // 리뷰 평점 가져오기
@@ -56,7 +35,7 @@ export const useReviewScoresQuery = ({
   params,
   enabled = true,
 }: {
-  params: ReviewScoresParams;
+  params: GetReviewScoresParams;
   enabled?: boolean;
 }) =>
   useQuery<ReviewScore | null>({

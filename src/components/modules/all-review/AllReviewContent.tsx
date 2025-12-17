@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useRef, useEffect, useState } from "react";
-import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import AllReviewHeader from "./AllReviewHeader";
 import AllReviewStats from "./AllReviewStats";
@@ -23,7 +22,6 @@ const AllReviewContent = () => {
 
   const reviewQueryParams = useMemo(
     () => ({
-      teamId: TEAM_NAME,
       limit: REVIEW_PAGE_SIZE.SCROLL,
       type: activeReviewType,
       location: filters.location,
@@ -44,7 +42,7 @@ const AllReviewContent = () => {
   const reviewList = useMemo(() => reviewsPages?.pages.flatMap(p => p.data) ?? [], [reviewsPages]);
 
   const { data: scoresData } = useReviewScoresQuery({
-    params: { teamId: TEAM_NAME, type: activeReviewType },
+    params: { type: activeReviewType },
   });
 
   const distribution = buildDistribution(scoresData);
