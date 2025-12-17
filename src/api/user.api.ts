@@ -6,12 +6,14 @@ const buildAuthPath = (path: string, teamName: string) => `${API_BASE_URL}${team
 // 회원 정보 확인
 export const getUserProfile = async (teamName: string = TEAM_NAME, token?: string | null) => {
   try {
+    if (!token) {
+      throw new Error("로그인이 필요합니다.");
+    }
+
     const res = await fetch(buildAuthPath("/user", teamName), {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${
-          token ?? (typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "")
-        }`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -34,12 +36,14 @@ export const updateProfile = async (
   teamName: string = TEAM_NAME,
   token?: string | null,
 ): Promise<UserProfile> => {
-  const Token = token ?? (typeof window !== "undefined" ? localStorage.getItem("token") : "") ?? "";
+  if (!token) {
+    throw new Error("로그인이 필요합니다.");
+  }
 
   const res = await fetch(buildAuthPath("/user", teamName), {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${Token}`,
+      Authorization: `Bearer ${token}`,
     },
     body: formData,
   });

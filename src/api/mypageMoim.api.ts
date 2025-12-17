@@ -14,6 +14,7 @@ const buildMoimPath = (path: string, teamName: string) =>
 export const getMoimJoined = async (
   params?: GetJoinedMoimsParams,
   teamName: string = TEAM_NAME,
+  token?: string | null,
 ): Promise<GetJoinedMoimsResponse> => {
   try {
     const url = new URL(buildMoimPath(`/joined`, teamName));
@@ -22,8 +23,6 @@ export const getMoimJoined = async (
         url.searchParams.append(key, String(value));
       });
     }
-
-    const token = typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
 
     const res = await fetch(url.toString(), {
       method: "GET",

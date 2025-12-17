@@ -37,12 +37,11 @@ const buildMoimsPath = (teamName: string, params?: GetMoimsParams) => {
 export const getMoimList = async (
   params?: GetMoimsParams,
   teamName: string = TEAM_NAME,
+  token?: string | null,
 ): Promise<GetMoimsResponse> => {
   try {
     const path = buildMoimsPath(teamName, params);
     const endpoint = new URL(path, API_BASE_URL).toString();
-
-    const token = typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
 
     const response = await fetch(endpoint, {
       method: "GET",
@@ -68,8 +67,13 @@ export const getMoimList = async (
 export const postMoim = async (
   payload: CreateMoimRequest,
   teamName: string = TEAM_NAME,
+  token?: string | null,
 ): Promise<CreateMoimResponse> => {
   try {
+    if (!token) {
+      throw new Error("로그인이 필요합니다. 먼저 로그인해주세요.");
+    }
+
     const formData = new FormData();
 
     formData.append("location", payload.location);
@@ -84,12 +88,6 @@ export const postMoim = async (
     }
 
     const endpoint = new URL(`/${teamName}/gatherings`, API_BASE_URL).toString();
-
-    const token = typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
-
-    if (!token) {
-      throw new Error("로그인이 필요합니다. 먼저 로그인해주세요.");
-    }
 
     const response = await fetch(endpoint, {
       method: "POST",
