@@ -1,4 +1,3 @@
-import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
 import { ApiError } from "@/utils/error.util";
 
 type ApiFetchOptions = RequestInit & {
@@ -6,11 +5,10 @@ type ApiFetchOptions = RequestInit & {
 };
 
 export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}) => {
-  const url = `${API_BASE_URL}${TEAM_NAME}${path}`;
   const { isFormData, headers, ...rest } = options;
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(path, {
       ...rest,
       headers: {
         ...(isFormData ? {} : { "Content-Type": "application/json" }),
