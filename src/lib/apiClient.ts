@@ -1,16 +1,5 @@
 import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
-
-export class ApiError extends Error {
-  status: number;
-  code?: string;
-
-  constructor(args: { message: string; status: number; code?: string }) {
-    super(args.message);
-    this.status = args.status;
-    this.code = args.code;
-    this.name = "ApiError";
-  }
-}
+import { ApiError } from "@/utils/error.util";
 
 type ApiFetchOptions = RequestInit & {
   isFormData?: boolean;
