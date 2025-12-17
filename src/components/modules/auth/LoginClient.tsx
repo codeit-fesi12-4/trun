@@ -3,15 +3,12 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { signIn, useSession } from "next-auth/react";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
-import { postSignin } from "@/api/auth.api";
-import { useAuthStore } from "@/stores/auth.store";
-import { validateLogin, LoginErrors as ValidationLoginErrors } from "@/utils/validators.utils";
-import { getUserProfile } from "@/api/user.api";
+import { validateLogin } from "@/utils/validators.utils";
 
 type LoginErrors = {
   email?: string;
@@ -20,47 +17,57 @@ type LoginErrors = {
 
 const LoginClient = () => {
   const router = useRouter();
-  const { token, setToken, setUser } = useAuthStore();
+  const { status } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
   const [serverError, setServerError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 
-  const signinMutation = useMutation({
-    mutationFn: () => postSignin({ email, password }),
-    onSuccess: async data => {
-      setServerError(null);
-      setToken(data.token);
-      const profile = await getUserProfile();
-      setUser(profile);
-      router.push(redirect ?? "/");
-    },
-    onError: error => {
-      setServerError(error.message);
-    },
-  });
+  const validate = (): LoginErrors => validateLogin({ email, password });
 
-  const validate = (): LoginErrors => validateLogin({ email, password }) as ValidationLoginErrors;
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validate();
     setErrors(nextErrors);
+    setServerError(null);
+
     if (Object.keys(nextErrors).length === 0) {
-      signinMutation.mutate();
+      setIsLoading(true);
+      try {
+        const result = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
+        });
+
+        if (result?.error) {
+          setServerError(result.error);
+        } else if (result?.ok) {
+          router.push(redirect ?? "/");
+        }
+      } catch {
+        setServerError("로그인 중 오류가 발생했습니다.");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  useEffect(() => {
-    if (token) {
-      router.replace("/");
-    }
-  }, [token, router]);
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    void handleSubmit(event);
+  };
 
-  if (token) {
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace(redirect ?? "/");
+    }
+  }, [status, router, redirect]);
+
+  if (status === "authenticated" || status === "loading") {
     return null;
   }
 
@@ -81,7 +88,7 @@ const LoginClient = () => {
         </p>
       }
     >
-      <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+      <form className="space-y-5" onSubmit={onSubmit} noValidate>
         <AuthTextField
           id="login-email"
           label="아이디"
@@ -110,12 +117,12 @@ const LoginClient = () => {
         />
         <Button
           type="submit"
-          disabled={!isFormValid || signinMutation.isPending}
+          disabled={!isFormValid || isLoading}
           className={`h-11 w-full rounded-lg text-base font-semibold transition-colors disabled:opacity-50 ${
             isFormValid ? "bg-green-600 text-white hover:bg-green-800" : "bg-gray-100 text-gray-400"
           }`}
         >
-          {signinMutation.isPending ? "로그인 중..." : "로그인"}
+          {isLoading ? "로그인 중..." : "로그인"}
         </Button>
         {serverError ? <p className="text-sm font-semibold text-red-600">{serverError}</p> : null}
       </form>

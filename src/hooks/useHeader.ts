@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/auth.store";
-import { postSignout } from "@/api/auth.api";
+import { useSession, signOut } from "next-auth/react";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useMoimFind } from "@/hooks/useMoimFind";
 
 export const useHeader = () => {
-  const user = useAuthStore(state => state.user);
-  const reset = useAuthStore(state => state.reset);
+  const { data: session } = useSession();
+  const user = session?.user;
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);
@@ -60,10 +59,14 @@ export const useHeader = () => {
   }, [user?.id, allMoims]);
 
   const handleLogout = async () => {
-    await postSignout();
-    reset();
-    router.push("/");
-    toast.success("로그아웃 성공");
+    try {
+      await signOut({ redirect: false });
+      router.push("/");
+      toast.success("로그아웃 성공");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("로그아웃 중 오류가 발생했습니다.");
+    }
   };
 
   return {

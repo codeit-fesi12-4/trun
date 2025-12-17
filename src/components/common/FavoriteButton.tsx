@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth.store";
+import { useSession } from "next-auth/react";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -14,7 +14,8 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const user = useAuthStore(state => state.user);
+  const { data: session } = useSession();
+  const user = session?.user;
   const userId = user?.id.toString();
 
   useEffect(() => {
