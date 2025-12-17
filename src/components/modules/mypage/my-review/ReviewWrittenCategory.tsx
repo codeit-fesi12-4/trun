@@ -4,6 +4,7 @@ import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
 import { useWrittenReviews } from "@/hooks/useMypageQuery";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 const ReviewWrittenCategory = () => {
   const { data, isLoading, isError } = useWrittenReviews();
@@ -56,13 +57,34 @@ const ReviewWrittenCategory = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className="ml-auto flex items-center">
+                  <button onClick={() => toast("수정 클릭")} className="cursor-pointer">
+                    <Image
+                      src="/icons/ic_mypage_edit.svg"
+                      alt="수정"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
+                    />
+                  </button>
+                  <button onClick={() => toast("삭제 클릭")} className="cursor-pointer">
+                    <Image
+                      src="/icons/ic_trash.svg"
+                      alt="수정"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
+                    />
+                  </button>
+                </div>
               </div>
 
-              {/* 타입 / 위치 */}
+              {/* 위치 */}
               <div className="flex flex-row items-center gap-1.5">
                 <div className="h-[13px] w-[3px] bg-gray-100 sm:h-4" />
                 <span className="text-sm font-medium text-gray-400 sm:text-base">
-                  {review.Gathering.type} · {review.Gathering.location}
+                  {review.Gathering.location}
                 </span>
               </div>
 
