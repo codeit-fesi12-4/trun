@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { postSignin } from "@/api/auth.api";
 import { getUserProfile } from "@/api/user.api";
 import type { NextAuthOptions } from "next-auth";
-import { TEAM_NAME } from "@/constants";
+import { TEAM_NAME } from "@/constants/env";
 
 export const authOptions: NextAuthOptions = {
   providers: [
