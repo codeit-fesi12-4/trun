@@ -11,7 +11,7 @@ import {
 } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
-import { useAuthStore } from "@/stores/auth.store";
+import { useSession } from "next-auth/react";
 import { formatDateWithDash } from "@/utils/date.util";
 
 export const useMoimFind = () => {
@@ -60,6 +60,10 @@ export const useMoimFind = () => {
     return params;
   }, [filters.category, filters.location, filters.date, filters.sort]);
 
+  // NextAuth 세션에서 토큰 가져오기
+  const { data: session } = useSession();
+  const token = session?.token;
+
   // 무한 스크롤 쿼리
   const {
     data: moimsPages,
@@ -71,6 +75,7 @@ export const useMoimFind = () => {
   } = useMoimsInfiniteQuery({
     params: infiniteQueryParams,
     pageSize: 8,
+    token,
   });
 
   // 모든 페이지의 모임 데이터를 하나의 배열로 통합
@@ -95,6 +100,7 @@ export const useMoimFind = () => {
   } = useMoimsInfiniteQuery({
     params: locationQueryParams,
     pageSize: 8,
+    token,
   });
 
   const allLocationMoims = useMemo<Moim[]>(() => {
@@ -146,8 +152,6 @@ export const useMoimFind = () => {
   const handleFilterChange = (newFilters: MoimFilterValues) => {
     setFilters(newFilters);
   };
-
-  const token = useAuthStore(state => state.token);
 
   const handleCreateMoimClick = () => {
     if (!token) {

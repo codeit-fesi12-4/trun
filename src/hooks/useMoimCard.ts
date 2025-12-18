@@ -5,7 +5,7 @@ import { isFavoriteMoim } from "@/utils/favorite.util";
 import { formatDeadline } from "@/utils/moim.util";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
-import { useAuthStore } from "@/stores/auth.store";
+import { useSession } from "next-auth/react";
 
 /**
  * MoimCard 컴포넌트에서 사용하는 로직을 관리하는 훅
@@ -19,8 +19,9 @@ export const useMoimCard = (
   onFavoriteToggle?: MoimCardActions["onFavoriteToggle"],
   onJoinClick?: MoimCardActions["onJoinClick"],
 ) => {
-  const token = useAuthStore(state => state.token);
-  const user = useAuthStore(state => state.user);
+  const { data: session } = useSession();
+  const token = session?.token;
+  const user = session?.user;
   const userId = user?.id.toString() ?? null;
 
   // localStorage에서 찜한 상태를 계산 (item.id, userId가 변경될 때마다 재계산)

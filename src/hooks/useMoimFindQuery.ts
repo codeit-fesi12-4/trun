@@ -26,11 +26,13 @@ export const useMoimsInfiniteQuery = ({
   teamName = TEAM_NAME,
   enabled = true,
   pageSize = 8,
+  token,
 }: {
   params?: Omit<GetMoimsParams, "limit" | "offset">;
   teamName?: string;
   enabled?: boolean;
   pageSize?: number;
+  token?: string | null;
 }) =>
   useInfiniteQuery({
     queryKey: ["moims", "infinite", teamName, params],
@@ -45,6 +47,7 @@ export const useMoimsInfiniteQuery = ({
             offset: pageParam,
           },
           teamName,
+          token,
         );
         return {
           data: result,
@@ -61,6 +64,7 @@ export const useMoimsInfiniteQuery = ({
             offset: pageParam,
           },
           teamName,
+          token,
         ),
         new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000)), // 1-2초 랜덤 딜레이
       ]);
@@ -76,11 +80,17 @@ export const useMoimsInfiniteQuery = ({
   });
 
 // React Query Mutation 훅 - 모임 생성
-export const useCreateMoimMutation = (teamName: string = TEAM_NAME) => {
+export const useCreateMoimMutation = ({
+  teamName = TEAM_NAME,
+  token,
+}: {
+  teamName?: string;
+  token?: string | null;
+} = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (payload: CreateMoimRequest) => postMoim(payload, teamName),
+    mutationFn: (payload: CreateMoimRequest) => postMoim(payload, teamName, token),
     onSuccess: () => {
       // "moims"로 시작하는 모든 쿼리 무효화 (infinite 쿼리 포함)
       void queryClient.invalidateQueries({ queryKey: ["moims"] });
