@@ -24,6 +24,19 @@ export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}) =
 
       const code = result?.errors?.[0]?.code ?? result?.code ?? undefined;
 
+      // 401 에러 (인증 실패) 시 NextAuth 세션 무효화
+      if (response.status === 401 && typeof window !== "undefined") {
+        // NextAuth 세션 쿠키 삭제 및 로그아웃
+        try {
+          const { signOut } = await import("next-auth/react");
+          const { toast } = await import("sonner");
+          toast.info("세션이 만료되어 자동으로 로그아웃됩니다.");
+          await signOut({ redirect: false });
+        } catch (signOutError) {
+          console.error("Sign out error:", signOutError);
+        }
+      }
+
       throw new ApiError({ message, status: response.status, code });
     }
 

@@ -1,5 +1,4 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { TEAM_NAME } from "@/constants/env";
 import { getMoimList, postMoim } from "@/api/moim.api";
 import { CreateMoimRequest, GetMoimsParams } from "@/types/moim.type";
@@ -16,7 +15,7 @@ export const useMoimsQuery = ({
 }) =>
   useQuery({
     queryKey: ["moims", teamName, params],
-    queryFn: () => getMoimList(params, teamName),
+    queryFn: () => getMoimList(params),
     staleTime: 1000 * 60, // 1분
     enabled,
   });
@@ -27,13 +26,11 @@ export const useMoimsInfiniteQuery = ({
   teamName = TEAM_NAME,
   enabled = true,
   pageSize = 8,
-  token,
 }: {
   params?: Omit<GetMoimsParams, "limit" | "offset">;
   teamName?: string;
   enabled?: boolean;
   pageSize?: number;
-  token?: string | null;
 }) =>
   useInfiniteQuery({
     queryKey: ["moims", "infinite", teamName, params],
@@ -41,15 +38,11 @@ export const useMoimsInfiniteQuery = ({
       // 초기 페이지(offset 0)가 아닐 때만 딜레이 적용
       if (pageParam === 0) {
         // 초기 로드 시 딜레이 없이 바로 반환
-        const result = await getMoimList(
-          {
-            ...params,
-            limit: pageSize,
-            offset: pageParam,
-          },
-          teamName,
-          token,
-        );
+        const result = await getMoimList({
+          ...params,
+          limit: pageSize,
+          offset: pageParam,
+        });
         return {
           data: result,
           nextOffset: result.length < pageSize ? undefined : pageParam + result.length,
@@ -58,15 +51,11 @@ export const useMoimsInfiniteQuery = ({
 
       // 추가 페이지 로드 시 1-2초 딜레이 적용
       const [result] = await Promise.all([
-        getMoimList(
-          {
-            ...params,
-            limit: pageSize,
-            offset: pageParam,
-          },
-          teamName,
-          token,
-        ),
+        getMoimList({
+          ...params,
+          limit: pageSize,
+          offset: pageParam,
+        }),
         new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000)), // 1-2초 랜덤 딜레이
       ]);
       return {
@@ -81,13 +70,11 @@ export const useMoimsInfiniteQuery = ({
   });
 
 // React Query Mutation 훅 - 모임 생성
-export const useCreateMoimMutation = (teamName: string = TEAM_NAME) => {
+export const useCreateMoimMutation = () => {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
-  const token = session?.token;
 
   return useMutation({
-    mutationFn: (payload: CreateMoimRequest) => postMoim(payload, teamName, token),
+    mutationFn: (payload: CreateMoimRequest) => postMoim(payload),
     onSuccess: () => {
       // "moims"로 시작하는 모든 쿼리 무효화 (infinite 쿼리 포함)
       void queryClient.invalidateQueries({ queryKey: ["moims"] });

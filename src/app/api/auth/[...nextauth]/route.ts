@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
             password: credentials.password,
           });
 
-          if (!loginResult?.token) {
+          if (!loginResult.token) {
             return null;
           }
 
@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      // 새로운 로그인 시 토큰 업데이트
       if (user) {
         token.id = user.id || "";
         token.email = user.email || "";
@@ -58,11 +59,24 @@ export const authOptions: NextAuthOptions = {
         token.companyName = user.companyName || "";
         token.image = user.image ?? null;
         token.accessToken = user.token;
+        return token;
       }
+
+      // 기존 세션에서 토큰이 없으면 빈 토큰 반환
+      if (!token.accessToken) {
+        return { ...token, accessToken: undefined };
+      }
+
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.email && token.name && token.companyName) {
+      // 토큰이 없으면 세션에서 토큰 제거 (API 호출 시 401 에러 발생하여 apiClient에서 자동 로그아웃)
+      if (!token.accessToken) {
+        session.token = undefined;
+        return session;
+      }
+
+      if (token.email && token.name && token.companyName) {
         const user = session.user;
         user.id = Number(token.id) || 0;
         user.email = token.email;
@@ -79,6 +93,10 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 1일 (24시간)
+  },
+  jwt: {
+    maxAge: 24 * 60 * 60, // 1일 (24시간)
   },
 };
 

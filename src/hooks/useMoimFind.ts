@@ -75,7 +75,6 @@ export const useMoimFind = () => {
   } = useMoimsInfiniteQuery({
     params: infiniteQueryParams,
     pageSize: 8,
-    token,
   });
 
   // 모든 페이지의 모임 데이터를 하나의 배열로 통합
@@ -100,7 +99,6 @@ export const useMoimFind = () => {
   } = useMoimsInfiniteQuery({
     params: locationQueryParams,
     pageSize: 8,
-    token,
   });
 
   const allLocationMoims = useMemo<Moim[]>(() => {
