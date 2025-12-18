@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/pagination";
 import ReviewList from "./ReviewList";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
-import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { useMoimReviewsQuery } from "@/hooks/useReviewQuery";
 
@@ -27,8 +26,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
   const NumberMoimId = Number(moimId);
 
   const { data, isLoading } = useMoimReviewsQuery({
-    moimId: NumberMoimId,
-    teamName: TEAM_NAME,
+    gatheringId: NumberMoimId,
     limit: REVIEW_PAGE_SIZE.PAGINATION,
     offset: (page - 1) * REVIEW_PAGE_SIZE.PAGINATION,
   });

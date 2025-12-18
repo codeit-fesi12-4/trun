@@ -3,7 +3,6 @@ import { MoimType, SortOrder } from "./moim.type";
 export type ReviewSortBy = "createdAt" | "score" | "participantCount";
 
 export type GetReviewsParams = {
-  teamId: string;
   gatheringId?: number;
   userId?: number;
   type?: MoimType;
@@ -50,8 +49,7 @@ export type GetReviewsResponse = {
   totalPages: number;
 };
 
-export type ReviewScoresParams = {
-  teamId: string;
+export type GetReviewScoresParams = {
   gatheringId?: number;
   type?: MoimType;
 };
@@ -68,7 +66,7 @@ export type ReviewScore = {
   fiveStars: number;
 };
 
-export type ReviewScoresResponse = ReviewScore[];
+export type GetReviewScoresResponse = ReviewScore[];
 
 // 리뷰 필터 값 타입
 export type ReviewFilterValues = {
