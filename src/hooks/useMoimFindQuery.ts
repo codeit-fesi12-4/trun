@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { TEAM_NAME } from "@/constants/env";
 import { getMoimList, postMoim } from "@/api/moim.api";
 import { CreateMoimRequest, GetMoimsParams } from "@/types/moim.type";
@@ -80,14 +81,10 @@ export const useMoimsInfiniteQuery = ({
   });
 
 // React Query Mutation 훅 - 모임 생성
-export const useCreateMoimMutation = ({
-  teamName = TEAM_NAME,
-  token,
-}: {
-  teamName?: string;
-  token?: string | null;
-} = {}) => {
+export const useCreateMoimMutation = (teamName: string = TEAM_NAME) => {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const token = session?.token;
 
   return useMutation({
     mutationFn: (payload: CreateMoimRequest) => postMoim(payload, teamName, token),

@@ -11,16 +11,13 @@ import {
 } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 
 type UseMoimAddModalProps = {
   onOpenChange: (open: boolean) => void;
 };
 
 export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
-  const { data: session } = useSession();
-  const token = session?.token;
-  const createMoimMutation = useCreateMoimMutation({ token });
+  const createMoimMutation = useCreateMoimMutation();
   const [currentStep, setCurrentStep] = useState(1);
 
   const [formData, setFormData] = useState<MoimFormData>(INITIAL_FORM_DATA);
