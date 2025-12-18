@@ -83,7 +83,7 @@ export const useWrittenReviews = () => {
 
   return useQuery<{ data: WrittenReviewItem[] }, Error>({
     queryKey: ["mypage", "writtenReviews", user?.id],
-    queryFn: () => getReviews({ teamId: TEAM_NAME, userId: user?.id }),
+    queryFn: () => getReviews({ userId: user?.id }),
     enabled: !!user?.id, // user가 있을 때만 실행
   });
 };
