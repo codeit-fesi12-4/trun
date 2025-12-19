@@ -10,6 +10,7 @@ import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/Auth
 import { Button } from "@/components/ui/button";
 import { postSignup } from "@/api/auth.api";
 import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators.utils";
+import { toast } from "sonner";
 
 const DUPLICATE_EMAILS = ["cheda@codeit.com"];
 
@@ -33,9 +34,14 @@ const SignupClient = () => {
         companyName: form.companyName,
         password: form.password,
       }),
-    onSuccess: () => {
-      setServerError(null);
-      router.push("/login");
+    onSuccess: result => {
+      if (result.ok) {
+        toast.success(result.data.message);
+        setServerError(null);
+        router.push("/login");
+      } else {
+        setServerError(result.message);
+      }
     },
     onError: error => {
       setServerError((error as Error).message);
