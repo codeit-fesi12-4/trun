@@ -12,7 +12,7 @@ export const useAllReviewQuery = (params: GetReviewsParams) =>
       const res = await getReviews({ ...params, offset: pageParam });
       if (!res.ok) {
         toast.error(res.message);
-        return null;
+        return { data: [] };
       }
       return res.data;
     },
