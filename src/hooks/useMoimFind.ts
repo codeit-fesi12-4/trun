@@ -11,7 +11,7 @@ import {
 } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
-import { useAuthStore } from "@/stores/auth.store";
+import { useSession } from "next-auth/react";
 import { formatDateWithDash } from "@/utils/date.util";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 
@@ -60,6 +60,11 @@ export const useMoimFind = () => {
     };
     return params;
   }, [filters.category, filters.location, filters.date, filters.sort]);
+
+  // NextAuth 세션에서 사용자 정보 가져오기
+  const { data: session } = useSession();
+  // 로그인 여부는 user 존재로 확인 (토큰은 HttpOnly 쿠키에 있어서 클라이언트에서 접근 불가)
+  const isLoggedIn = !!session?.user;
 
   // 무한 스크롤 쿼리
   const {
@@ -148,10 +153,8 @@ export const useMoimFind = () => {
     setFilters(newFilters);
   };
 
-  const token = useAuthStore(state => state.token);
-
   const handleCreateMoimClick = () => {
-    if (!token) {
+    if (!isLoggedIn) {
       setIsLoginModalOpen(true);
       return;
     }

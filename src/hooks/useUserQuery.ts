@@ -16,7 +16,14 @@ export const useUserProfileQuery = ({
 }) =>
   useQuery({
     queryKey: ["userProfile", teamName, token ?? "guest"],
-    queryFn: () => getUserProfile(teamName, token),
+    queryFn: async () => {
+      const res = await getUserProfile();
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data;
+    },
     staleTime: 1000 * 60,
     enabled,
   });
@@ -25,8 +32,13 @@ export const useUserProfileQuery = ({
 export const useUpdateProfileMutationQuery = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ formData, token }: { formData: FormData; token?: string | null }) =>
-      updateProfile(formData, TEAM_NAME, token),
+    mutationFn: async ({ formData }: { formData: FormData; token?: string | null }) => {
+      const res = await updateProfile(formData);
+      if (!res.ok) {
+        throw new Error(res.message);
+      }
+      return res.data;
+    },
 
     onSuccess: async data => {
       useAuthStore.getState().setUser(data);

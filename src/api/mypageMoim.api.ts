@@ -93,7 +93,7 @@ export const getAvailableReviews = async (): Promise<WritableReviewItem[]> => {
 
 // 내가 만든 모임
 export const getCreatedMoims = (userId: number): Promise<CreateMoimsResponse> =>
-  getMoimList({ createdBy: userId }, TEAM_NAME).then(data =>
+  getMoimList({ createdBy: userId }).then(data =>
     data.map(item => ({
       ...item,
       joinedAt: item.dateTime, // 본인이 만든 날짜로 처리
