@@ -1,9 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { postSignin } from "@/api/auth.api";
-import { getUserProfile } from "@/api/user.api";
+import { getUserProfileServer } from "@/api/user.api";
 import type { NextAuthOptions } from "next-auth";
-import { TEAM_NAME } from "@/constants/env";
 import { cookies } from "next/headers";
 
 export const authOptions: NextAuthOptions = {
@@ -25,11 +24,17 @@ export const authOptions: NextAuthOptions = {
             password: credentials.password,
           });
 
-          if (!loginResult.token) {
+          // API 에러 처리
+          if (!loginResult.ok) {
+            console.error("Login failed:", loginResult.message);
             return null;
           }
 
-          const userProfile = await getUserProfile(TEAM_NAME, loginResult.token);
+          if (!loginResult.data.token) {
+            return null;
+          }
+
+          const userProfile = await getUserProfileServer(loginResult.data.token);
 
           if (!userProfile) {
             return null;
@@ -37,7 +42,7 @@ export const authOptions: NextAuthOptions = {
 
           // 외부 API 토큰을 HttpOnly 쿠키에 저장 (서버 사이드에서만 가능)
           const cookieStore = await cookies();
-          cookieStore.set("api-token", loginResult.token, {
+          cookieStore.set("api-token", loginResult.data.token, {
             httpOnly: true, // 클라이언트에서 접근 불가 (보안)
             secure: process.env.NODE_ENV === "production", // HTTPS에서만 전송
             sameSite: "lax", // CSRF 방지

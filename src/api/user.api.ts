@@ -1,54 +1,38 @@
-import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
+import { apiFetch } from "@/lib/apiClient";
 import { UserProfile } from "@/types/user.type";
+import { API_BASE_URL, TEAM_NAME } from "@/constants/env";
 
-const buildAuthPath = (path: string, teamName: string) => `${API_BASE_URL}${teamName}/auths${path}`;
+// 회원 정보 확인 (클라이언트용 - 프록시 라우트 사용)
+export const getUserProfile = () =>
+  apiFetch<UserProfile>(`/api/proxy/auths/user`, {
+    method: "GET",
+  });
 
-// 회원 정보 확인
-export const getUserProfile = async (
+// 회원 정보 확인 (서버 사이드용 - 직접 API 호출)
+export const getUserProfileServer = async (
+  token: string,
   teamName: string = TEAM_NAME,
-  token?: string | null,
 ): Promise<UserProfile> => {
-  if (!token) {
-    throw new Error("로그인이 필요합니다.");
-  }
-
-  const res = await fetch(buildAuthPath("/user", teamName), {
+  const response = await fetch(`${API_BASE_URL}${teamName}/auths/user`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
+      Accept: "application/json",
     },
   });
 
-  const result = await res.json();
-
-  if (!res.ok) {
-    throw new Error(result.message);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(errorData.message || "사용자 정보를 가져오는데 실패했습니다.");
   }
-  return result as UserProfile;
+
+  return response.json();
 };
 
 // 회원 정보 수정
-export const updateProfile = async (
-  formData: FormData,
-  teamName: string = TEAM_NAME,
-  token?: string | null,
-): Promise<UserProfile> => {
-  if (!token) {
-    throw new Error("로그인이 필요합니다.");
-  }
-
-  const res = await fetch(buildAuthPath("/user", teamName), {
+export const updateProfile = (formData: FormData) =>
+  apiFetch<UserProfile>(`/api/proxy/auths/user`, {
     method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    isFormData: true,
     body: formData,
   });
-
-  if (!res.ok) {
-    const errorData = await res.json().catch(() => ({ message: res.statusText }));
-    throw new Error(errorData.message);
-  }
-
-  return res.json();
-};

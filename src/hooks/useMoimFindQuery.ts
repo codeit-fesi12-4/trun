@@ -1,7 +1,10 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { TEAM_NAME } from "@/constants/env";
 import { getMoimList, postMoim } from "@/api/moim.api";
-import { CreateMoimRequest, GetMoimsParams } from "@/types/moim.type";
+import { CreateMoimRequest, GetMoimsParams, GetMoimsResponse } from "@/types/moim.type";
+import { handleApiError } from "@/utils/error.util";
+import { useUnauthorizedHandler } from "./useUnauthorizedHandler";
+import { toast } from "sonner";
 
 // React Query 훅 - 모임 목록 조회
 export const useMoimsQuery = ({
@@ -16,6 +19,10 @@ export const useMoimsQuery = ({
   useQuery({
     queryKey: ["moims", teamName, params],
     queryFn: () => getMoimList(params),
+    select: res => {
+      const response = res as { ok?: boolean; data?: GetMoimsResponse };
+      return response.ok ? response.data : undefined;
+    },
     staleTime: 1000 * 60, // 1분
     enabled,
   });
@@ -43,9 +50,11 @@ export const useMoimsInfiniteQuery = ({
           limit: pageSize,
           offset: pageParam,
         });
+        const response = result as { ok?: boolean; data?: GetMoimsResponse };
+        const data = response.ok ? (response.data ?? []) : [];
         return {
-          data: result,
-          nextOffset: result.length < pageSize ? undefined : pageParam + result.length,
+          data,
+          nextOffset: data.length < pageSize ? undefined : pageParam + data.length,
         };
       }
 
@@ -58,9 +67,11 @@ export const useMoimsInfiniteQuery = ({
         }),
         new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000)), // 1-2초 랜덤 딜레이
       ]);
+      const response = result as { ok?: boolean; data?: GetMoimsResponse };
+      const data = response.ok ? (response.data ?? []) : [];
       return {
-        data: result,
-        nextOffset: result.length < pageSize ? undefined : pageParam + result.length,
+        data,
+        nextOffset: data.length < pageSize ? undefined : pageParam + data.length,
       };
     },
     initialPageParam: 0,
@@ -72,14 +83,25 @@ export const useMoimsInfiniteQuery = ({
 // React Query Mutation 훅 - 모임 생성
 export const useCreateMoimMutation = () => {
   const queryClient = useQueryClient();
+  const handleUnauthorized = useUnauthorizedHandler();
 
   return useMutation({
     mutationFn: (payload: CreateMoimRequest) => postMoim(payload),
-    onSuccess: () => {
+    onSuccess: data => {
+      const response = data as { ok?: boolean; data?: unknown; message?: string };
+      if (response.ok === false) {
+        toast.error(response.message ?? "모임 생성에 실패했습니다.");
+        return;
+      }
       // "moims"로 시작하는 모든 쿼리 무효화 (infinite 쿼리 포함)
       void queryClient.invalidateQueries({ queryKey: ["moims"] });
       // 마이페이지의 생성한 모임 목록도 무효화
       void queryClient.invalidateQueries({ queryKey: ["mypage", "createdMoims"] });
+    },
+    onError: async error => {
+      await handleApiError(error, {
+        onUnauthorized: handleUnauthorized,
+      });
     },
   });
 };
