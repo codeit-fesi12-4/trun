@@ -2,19 +2,6 @@ import { MoimType, SortOrder } from "./moim.type";
 
 export type ReviewSortBy = "createdAt" | "score" | "participantCount";
 
-export type GetReviewsParams = {
-  gatheringId?: number;
-  userId?: number;
-  type?: MoimType;
-  location?: string;
-  date?: string;
-  registrationEnd?: string;
-  sortBy?: ReviewSortBy;
-  sortOrder?: SortOrder;
-  limit?: number;
-  offset?: number;
-};
-
 export type ReviewGathering = {
   teamId: number;
   id: number;
@@ -42,18 +29,6 @@ export type ReviewItem = {
   User: ReviewUser;
 };
 
-export type GetReviewsResponse = {
-  data: ReviewItem[];
-  totalItemCount: number;
-  currentPage: number;
-  totalPages: number;
-};
-
-export type GetReviewScoresParams = {
-  gatheringId?: number;
-  type?: MoimType;
-};
-
 export type ReviewScore = {
   teamId: number;
   gatheringId: number | null;
@@ -66,8 +41,6 @@ export type ReviewScore = {
   fiveStars: number;
 };
 
-export type GetReviewScoresResponse = ReviewScore[];
-
 // 리뷰 필터 값 타입
 export type ReviewFilterValues = {
   category: "달림핏" | "런케이션";
@@ -75,12 +48,38 @@ export type ReviewFilterValues = {
   sortBy: "최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순";
 };
 
-export type ReviewFilterProps = {
-  onFilterChange?: (filters: ReviewFilterValues) => void;
-  availableLocations?: string[];
+export type ReviewDistribution = { score: number; count: number };
+
+// 리뷰 리스트 요청 함수용 파라미터
+export type GetReviewsParams = {
+  gatheringId?: number;
+  userId?: number;
+  type?: MoimType;
+  location?: string;
+  date?: string;
+  registrationEnd?: string;
+  sortBy?: ReviewSortBy;
+  sortOrder?: SortOrder;
+  limit?: number;
+  offset?: number;
 };
 
-export type ReviewDistribution = { score: number; count: number };
+// 리뷰 스코어 요청 함수용 파라미터
+export type GetReviewScoresParams = {
+  gatheringId?: number;
+  type?: MoimType;
+};
+
+// 리뷰 리스트 응답
+export type GetReviewsResponse = {
+  data: ReviewItem[];
+  totalItemCount: number;
+  currentPage: number;
+  totalPages: number;
+};
+
+// 리뷰 스코어 응답
+export type GetReviewScoresResponse = ReviewScore[];
 
 // 리뷰 추가 타입
 export type PostReviewParams = {

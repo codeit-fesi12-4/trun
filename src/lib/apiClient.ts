@@ -4,7 +4,25 @@ type ApiFetchOptions = RequestInit & {
   isFormData?: boolean;
 };
 
-export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}) => {
+export type ApiFailure = {
+  ok: false;
+  status: number;
+  message: string;
+  code?: string;
+};
+
+export type ApiSuccess<T> = {
+  ok: true;
+  status: number;
+  data: T;
+};
+
+export type ApiResult<T> = ApiSuccess<T> | ApiFailure;
+
+export const apiFetch = async <T>(
+  path: string,
+  options: ApiFetchOptions = {},
+): Promise<ApiResult<T>> => {
   const { isFormData, headers, ...rest } = options;
 
   try {
@@ -24,10 +42,14 @@ export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}) =
 
       const code = result?.errors?.[0]?.code ?? result?.code ?? undefined;
 
+      if (response.status === 400 || response.status === 403) {
+        return { ok: false, status: response.status, message, code };
+      }
+
       throw new ApiError({ message, status: response.status, code });
     }
 
-    return result as T;
+    return { ok: true, status: response.status, data: result as T };
   } catch (error) {
     console.error(error);
     throw error;
