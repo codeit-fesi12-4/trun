@@ -4,10 +4,8 @@ import { deleteJoin, getMoim, getParticipants, postJoin, putMoim } from "@/api/m
 import { handleApiError } from "@/utils/error.util";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
 import { toast } from "sonner";
-import { logout } from "@/utils/logout.util";
-import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUnauthorizedHandler } from "./useUnauthorizedHandler";
 
 // 모임 상세 정보 가져오기
 export const useMoimQuery = (moimId: number) =>
@@ -30,13 +28,7 @@ export const useParticipantsQuery = (moimId: number) =>
 // 모임 참여하기
 export const useCreateJoinMutaiton = () => {
   const queryClient = useQueryClient();
-  const { setOpen } = useLoginModalStore();
-  const handleUnauthorized = () => {
-    void (async () => {
-      await logout();
-      setOpen(true);
-    })();
-  };
+  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
     mutationFn: (moimId: number) => postJoin(moimId),
     onSuccess: (data, moimId) => {
@@ -61,13 +53,7 @@ export const useCreateJoinMutaiton = () => {
 // 모임 참여 취소하기 (참여자)
 export const useCancelJoinMutaion = () => {
   const queryClient = useQueryClient();
-  const { setOpen } = useLoginModalStore();
-  const handleUnauthorized = () => {
-    void (async () => {
-      await logout();
-      setOpen(true);
-    })();
-  };
+  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
     mutationFn: (moimId: number) => deleteJoin(moimId),
     onSuccess: (data, moimId) => {
@@ -91,13 +77,7 @@ export const useCancelJoinMutaion = () => {
 export const useCancelMoimMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { setOpen } = useLoginModalStore();
-  const handleUnauthorized = () => {
-    void (async () => {
-      await logout();
-      setOpen(true);
-    })();
-  };
+  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
     mutationFn: (moimId: number) => putMoim(moimId),
     onSuccess: (data, moimId) => {
