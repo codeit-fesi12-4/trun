@@ -45,7 +45,16 @@ const LoginClient = () => {
         });
 
         if (result?.error) {
-          setServerError(result.error);
+          // NextAuth 에러 코드를 사용자 친화적인 메시지로 변환
+          const errorMessage =
+            result.error === "CredentialsSignin"
+              ? "이메일 또는 비밀번호가 올바르지 않습니다."
+              : result.error === "Configuration"
+                ? "서버 설정 오류가 발생했습니다."
+                : result.error === "AccessDenied"
+                  ? "접근이 거부되었습니다."
+                  : "로그인 중 오류가 발생했습니다.";
+          setServerError(errorMessage);
         } else if (result?.ok) {
           router.push(redirect ?? "/");
         }

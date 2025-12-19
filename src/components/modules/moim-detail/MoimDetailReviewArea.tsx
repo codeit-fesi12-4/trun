@@ -16,17 +16,15 @@ import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { useMoimReviewsQuery } from "@/hooks/useReviewQuery";
 
 type MoimDetailReviewAreaProps = {
-  moimId: string;
+  moimId: number;
 };
 
 export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaProps) {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState<(number | string)[]>([]);
 
-  const NumberMoimId = Number(moimId);
-
   const { data, isLoading } = useMoimReviewsQuery({
-    gatheringId: NumberMoimId,
+    gatheringId: moimId,
     limit: REVIEW_PAGE_SIZE.PAGINATION,
     offset: (page - 1) * REVIEW_PAGE_SIZE.PAGINATION,
   });

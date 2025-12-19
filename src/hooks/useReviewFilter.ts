@@ -1,10 +1,13 @@
 import { FILTER_CATEGORY, MOIM_LOCATION } from "@/constants/moim";
-import { ReviewFilterProps, ReviewFilterValues } from "@/types/review.type";
+import { ReviewFilterValues } from "@/types/review.type";
 import { useState, useEffect } from "react";
 
-type UseReviewFilterProps = ReviewFilterProps;
+export type ReviewFilterProps = {
+  onFilterChange?: (filters: ReviewFilterValues) => void;
+  availableLocations?: string[];
+};
 
-export const useReviewFilter = ({ onFilterChange, availableLocations }: UseReviewFilterProps) => {
+export const useReviewFilter = ({ onFilterChange, availableLocations }: ReviewFilterProps) => {
   const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
   const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
   const [sortBy, setSortBy] = useState<"최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순">(

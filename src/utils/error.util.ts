@@ -12,10 +12,17 @@ export class ApiError extends Error {
   }
 }
 
-export const handleApiError = (error: unknown) => {
+export const handleApiError = async (error: unknown, options?: { onUnauthorized?: () => void }) => {
   if (error instanceof ApiError) {
-    toast.error(error.message);
-    return;
+    if (error.status === 401) {
+      console.error(error);
+      options?.onUnauthorized?.();
+      return;
+    } else {
+      console.error(error);
+      toast.error(error.message);
+      return;
+    }
   }
   toast.error("네트워크 오류가 발생했습니다.");
 };

@@ -7,14 +7,11 @@ import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import MoimAddModal from "@/components/modules/moim-find/MoimAddModal";
 import { Spinner } from "@/components/ui/spinner";
 import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
-import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 
 const MoimFindClient = () => {
   const {
     isModalOpen,
     setIsModalOpen,
-    isLoginModalOpen,
-    setIsLoginModalOpen,
     moimCardData,
     availableLocations,
     isLoading,
@@ -91,7 +88,6 @@ const MoimFindClient = () => {
       </button>
 
       <MoimAddModal open={isModalOpen} onOpenChange={setIsModalOpen} />
-      <ConfirmationJoinModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen} />
     </>
   );
 };
