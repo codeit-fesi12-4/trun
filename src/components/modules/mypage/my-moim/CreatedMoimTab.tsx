@@ -2,7 +2,7 @@
 
 import MyPageCard from "./MyPageMoimCard";
 import { useQuery } from "@tanstack/react-query";
-import { getCreatedMoims } from "@/api/mypageMoim.api";
+import { getCreatedMoims } from "@/api/mypage.api";
 import { useAuthStore } from "@/stores/auth.store";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
 
