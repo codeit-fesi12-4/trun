@@ -82,7 +82,6 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name || "";
         token.companyName = user.companyName || "";
         token.image = user.image ?? null;
-        // token.accessToken = 제거됨 ✅
         return token;
       }
 
