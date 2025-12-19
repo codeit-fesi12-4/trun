@@ -13,7 +13,7 @@ export const buildReviewsQueryString = (params: GetReviewsParams) => {
   if (params.date) searchParams.append("date", params.date);
   if (params.registrationEnd) searchParams.append("registrationEnd", params.registrationEnd);
   if (params.sortBy) searchParams.append("sortBy", params.sortBy);
-  if (params.sortOrder) searchParams.append("sortOrder", params.sortOrder);
+  if (params.sortBy) searchParams.append("sortOrder", "desc");
   if (params.limit !== undefined) searchParams.append("limit", String(params.limit));
   if (params.offset !== undefined) searchParams.append("offset", String(params.offset));
 
