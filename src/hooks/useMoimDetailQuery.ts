@@ -1,96 +1,97 @@
+"use client";
+
 import { deleteJoin, getMoim, getParticipants, postJoin, putMoim } from "@/api/moimDetail.api";
-import { TEAM_NAME } from "@/constants/env";
-import { useAuthStore } from "@/stores/auth.store";
+import { handleApiError } from "@/utils/error.util";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useUnauthorizedHandler } from "./useUnauthorizedHandler";
 
 // 모임 상세 정보 가져오기
-export const useMoimQuery = ({
-  teamName = TEAM_NAME,
-  moimId,
-  enabled = true,
-}: {
-  teamName?: string;
-  moimId: number;
-  enabled?: boolean;
-}) =>
+export const useMoimQuery = (moimId: number) =>
   useQuery({
-    queryKey: ["moim", teamName, moimId],
-    queryFn: () => getMoim(moimId, teamName),
+    queryKey: ["moim", moimId],
+    queryFn: () => getMoim(moimId),
+    select: res => (res.ok ? res.data : undefined),
     staleTime: 1000 * 60,
-    enabled,
   });
 
 // 참여자 정보 가져오기
-export const useParticipantsQuery = ({
-  teamName = TEAM_NAME,
-  moimId,
-  enabled = true,
-}: {
-  teamName?: string;
-  moimId: number;
-  enabled?: boolean;
-}) =>
+export const useParticipantsQuery = (moimId: number) =>
   useQuery({
-    queryKey: ["participants", teamName, moimId],
-    queryFn: () => getParticipants(moimId, teamName),
+    queryKey: ["participants", moimId],
+    queryFn: () => getParticipants(moimId),
+    select: res => (res.ok ? res.data : undefined),
     staleTime: 1000 * 60,
-    enabled,
   });
 
 // 모임 참여하기
-export const useCreateJoinMutaiton = (teamName: string = TEAM_NAME) => {
+export const useCreateJoinMutaiton = () => {
   const queryClient = useQueryClient();
+  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = useAuthStore.getState().token;
-      return postJoin(moimId, teamName, token);
+    mutationFn: (moimId: number) => postJoin(moimId),
+    onSuccess: (data, moimId) => {
+      if (!data.ok) {
+        toast.error(data.message);
+        return;
+      }
+      if (data.data.message) {
+        toast.success(data.data.message);
+      }
+      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
-    onSuccess: (_, moimId) => {
-      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
-    },
-
-    onError: err => {
-      console.error("모임 참여 실패:", err);
-    },
-  });
-};
-
-// 모임 취소하기 (방장)
-export const useCancelMoimMutation = (teamName: string = TEAM_NAME) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = useAuthStore.getState().token;
-      return putMoim(moimId, teamName, token);
-    },
-    onSuccess: (_, moimId) => {
-      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
-    },
-
-    onError: err => {
-      console.error("모임 취소 실패:", err);
+    onError: async error => {
+      await handleApiError(error, {
+        onUnauthorized: handleUnauthorized,
+      });
     },
   });
 };
 
 // 모임 참여 취소하기 (참여자)
-export const useCancelJoinMutaion = (teamName: string = TEAM_NAME) => {
+export const useCancelJoinMutaion = () => {
   const queryClient = useQueryClient();
+  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = useAuthStore.getState().token;
-      return deleteJoin(moimId, teamName, token);
+    mutationFn: (moimId: number) => deleteJoin(moimId),
+    onSuccess: (data, moimId) => {
+      if (!data.ok) {
+        toast.error(data.message);
+        return;
+      }
+      if (data.data.message) {
+        toast.success(data.data.message);
+      }
+      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
-    onSuccess: (_, moimId) => {
-      void queryClient.invalidateQueries({ queryKey: ["moim", teamName, moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", teamName, moimId] });
+    onError: error => {
+      void handleApiError(error, { onUnauthorized: handleUnauthorized });
     },
+  });
+};
 
-    onError: err => {
-      console.error("모임 참여 취소 실패:", err);
+// 모임 취소하기 (방장)
+export const useCancelMoimMutation = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const handleUnauthorized = useUnauthorizedHandler();
+  return useMutation({
+    mutationFn: (moimId: number) => putMoim(moimId),
+    onSuccess: (data, moimId) => {
+      if (!data.ok) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success("모임이 취소되었습니다.");
+      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
+      void router.replace("/moim-find");
+    },
+    onError: error => {
+      void handleApiError(error, { onUnauthorized: handleUnauthorized });
     },
   });
 };

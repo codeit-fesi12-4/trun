@@ -12,13 +12,13 @@ import {
 import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHeader } from "@/hooks/useHeader";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { useLoginModalStore } from "@/stores/loginModal.store";
 
 const Header = () => {
   const { user, isMounted, favoriteCount, handleLogout } = useHeader();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen } = useLoginModalStore();
   const router = useRouter();
 
   const handleFavoritePage = () => {

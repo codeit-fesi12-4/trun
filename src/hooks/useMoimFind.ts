@@ -13,9 +13,10 @@ import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { useSession } from "next-auth/react";
 import { formatDateWithDash } from "@/utils/date.util";
+import { useLoginModalStore } from "@/stores/loginModal.store";
 
 export const useMoimFind = () => {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<MoimFilterValues>({
     category: FILTER_CATEGORY.DALLIMFIT,
@@ -163,8 +164,6 @@ export const useMoimFind = () => {
   return {
     isModalOpen,
     setIsModalOpen,
-    isLoginModalOpen,
-    setIsLoginModalOpen,
     moimCardData: filteredMoims,
     availableLocations,
     isLoading,

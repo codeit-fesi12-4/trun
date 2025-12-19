@@ -4,7 +4,25 @@ type ApiFetchOptions = RequestInit & {
   isFormData?: boolean;
 };
 
-export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}) => {
+export type ApiFailure = {
+  ok: false;
+  status: number;
+  message: string;
+  code?: string;
+};
+
+export type ApiSuccess<T> = {
+  ok: true;
+  status: number;
+  data: T;
+};
+
+export type ApiResult<T> = ApiSuccess<T> | ApiFailure;
+
+export const apiFetch = async <T>(
+  path: string,
+  options: ApiFetchOptions = {},
+): Promise<ApiResult<T>> => {
   const { isFormData, headers, ...rest } = options;
 
   try {
@@ -24,23 +42,14 @@ export const apiFetch = async <T>(path: string, options: ApiFetchOptions = {}) =
 
       const code = result?.errors?.[0]?.code ?? result?.code ?? undefined;
 
-      // 401 에러 (인증 실패) 시 NextAuth 세션 무효화 (events.signOut에서 쿠키도 자동 삭제됨)
-      if (response.status === 401 && typeof window !== "undefined") {
-        try {
-          // NextAuth 세션 삭제 (events.signOut에서 쿠키도 자동 삭제됨)
-          const { signOut } = await import("next-auth/react");
-          const { toast } = await import("sonner");
-          toast.info("세션이 만료되어 자동으로 로그아웃됩니다.");
-          await signOut({ redirect: false });
-        } catch (signOutError) {
-          console.error("Sign out error:", signOutError);
-        }
+      if (response.status === 400 || response.status === 403) {
+        return { ok: false, status: response.status, message, code };
       }
 
       throw new ApiError({ message, status: response.status, code });
     }
 
-    return result as T;
+    return { ok: true, status: response.status, data: result as T };
   } catch (error) {
     console.error(error);
     throw error;

@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
+import { useLoginModalStore } from "@/stores/loginModal.store";
 
 type FavoriteButtonProps = {
   moimId: number;
@@ -12,7 +12,7 @@ type FavoriteButtonProps = {
 
 const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [open, setOpen] = useState(false);
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { data: session } = useSession();
   const user = session?.user;
@@ -30,7 +30,7 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
 
   const handleFavoriteClick = () => {
     if (!userId) {
-      setOpen(true);
+      setIsLoginModalOpen(true);
       return;
     }
 
@@ -59,7 +59,6 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
           className={`${isFavorite && "heart-pop"} sm:h-6 sm:w-6`}
         />
       </button>
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </>
   );
 };
