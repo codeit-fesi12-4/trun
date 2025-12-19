@@ -2,22 +2,19 @@
 
 import ProfileSection from "@/components/modules/mypage/ProfileCard";
 import TabsSection from "@/components/modules/mypage/TabsSection";
-import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
+import { useSession } from "next-auth/react";
 
 const MypageClient = () => {
-  const user = useAuthStore(state => state.user);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  const { data: session, status } = useSession();
+  const user = session?.user;
 
-  useEffect(() => {
-    const handleClient = () => {
-      setIsClient(true);
-    };
-    handleClient();
-  }, []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (status === "loading") return null;
+  if (!user) return null;
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -40,15 +37,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          {isClient && user && (
-            <ProfileSection
-              id={user.id}
-              name={user.name}
-              companyName={user.companyName}
-              email={user.email}
-              image={user.image}
-            />
-          )}
+          <ProfileSection user={user} />
         </div>
       </div>
 
