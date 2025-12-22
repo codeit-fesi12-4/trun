@@ -41,13 +41,11 @@ export type UpdateProfileErrors = {
 
 export const validateLogin = (values: LoginForm): LoginErrors => {
   const nextErrors: LoginErrors = {};
-  if (!values.email.trim()) {
-    nextErrors.email = "아이디를 입력해주세요.";
-  } else if (!EMAIL_PATTERN.test(values.email)) {
-    nextErrors.email = "올바른 이메일을 입력해주세요.";
+  if (values.email.trim() && !EMAIL_PATTERN.test(values.email)) {
+    nextErrors.email = "올바른 이메일 형식을 입력해주세요.";
   }
-  if (!values.password) {
-    nextErrors.password = "비밀번호를 입력해주세요.";
+  if (values.password && values.password.length < 8) {
+    nextErrors.password = "비밀번호는 8자 이상이어야 합니다.";
   }
   return nextErrors;
 };
