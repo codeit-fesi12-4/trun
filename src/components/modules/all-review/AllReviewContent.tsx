@@ -9,6 +9,8 @@ import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/useReviewQuery"
 import { CATEGORY_MAP, SORTBY_MAP } from "@/utils/category.util";
 import { buildDistribution } from "@/utils/review.util";
 import { ReviewFilterValues } from "@/types/review.type";
+import { buildReviewsQueryString } from "@/utils/path.util";
+import useSyncQueryString from "@/hooks/useSyncQueryString";
 
 const AllReviewContent = () => {
   const [filters, setFilters] = useState<ReviewFilterValues>({
@@ -29,6 +31,8 @@ const AllReviewContent = () => {
     }),
     [activeReviewType, filters.location, activeReviewSort],
   );
+
+  useSyncQueryString(buildReviewsQueryString(reviewQueryParams));
 
   const {
     data: reviewsPages,

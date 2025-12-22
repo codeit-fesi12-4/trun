@@ -1,7 +1,7 @@
 import { GetReviewsParams, GetReviewScoresParams } from "@/types/review.type";
 
-// 리뷰 Path
-export const buildReviewsPath = (params: GetReviewsParams) => {
+// 리뷰 query string
+export const buildReviewsQueryString = (params: GetReviewsParams) => {
   const searchParams = new URLSearchParams();
 
   if (params.gatheringId !== undefined)
@@ -19,11 +19,17 @@ export const buildReviewsPath = (params: GetReviewsParams) => {
 
   const queryString = searchParams.toString();
 
-  return `/reviews?${queryString}`;
+  return queryString ? `${queryString}` : "";
 };
 
-// 리뷰 평점 Path
-export const buildReviewScoresPath = (params: GetReviewScoresParams) => {
+// 리뷰 path
+export const buildReviewsPath = (params: GetReviewsParams) => {
+  const queryString = buildReviewsQueryString(params);
+  return queryString ? `/reviews?${queryString}` : "/reviews";
+};
+
+// 리뷰 평점 query string
+export const buildReviewScoresQueryString = (params: GetReviewScoresParams) => {
   const searchParams = new URLSearchParams();
 
   if (params.gatheringId !== undefined)
@@ -31,5 +37,11 @@ export const buildReviewScoresPath = (params: GetReviewScoresParams) => {
   if (params.type) searchParams.append("type", params.type);
 
   const queryString = searchParams.toString();
-  return `/reviews/scores?${queryString}`;
+  return queryString ? `${queryString}` : "";
+};
+
+// 리뷰 평점 path
+export const buildReviewScoresPath = (params: GetReviewScoresParams) => {
+  const queryString = buildReviewScoresQueryString(params);
+  return queryString ? `/reviews/scores?${queryString}` : "/reviews/scores";
 };
