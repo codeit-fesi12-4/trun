@@ -13,7 +13,7 @@ const useSyncQueryString = (queryString: string) => {
     if (current !== queryString) {
       router.replace(nextUrl);
     }
-  }, [queryString, nextUrl, searchParams, router]);
+  }, [queryString, nextUrl, router]);
 
   return;
 };
