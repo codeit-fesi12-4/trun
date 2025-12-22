@@ -56,9 +56,26 @@ export const AuthPasswordField = ({
   className,
   autoComplete = "current-password",
   error,
+  value,
+  onFocus,
+  onBlur,
   ...props
 }: PasswordFieldProps) => {
   const [visible, setVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(true);
+    onFocus?.(e);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    setIsFocused(false);
+    onBlur?.(e);
+  };
+
+  const hasValue = Boolean(value && String(value).length > 0);
+  const showIcon = isFocused && hasValue;
 
   return (
     <div className="space-y-2 text-sm font-semibold text-gray-800">
@@ -72,6 +89,9 @@ export const AuthPasswordField = ({
           placeholder={placeholder}
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
+          value={value}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           className={cn(
             "h-11 rounded-lg border border-gray-50 bg-white pr-10 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
             "focus-visible:border-gray-50 focus-visible:ring-gray-50",
@@ -81,21 +101,26 @@ export const AuthPasswordField = ({
           )}
           {...props}
         />
-        <button
-          type="button"
-          onClick={() => setVisible(prev => !prev)}
-          className="absolute top-1/2 right-4 -translate-y-1/2 font-bold text-gray-500 transition-colors hover:text-gray-700"
-        >
-          <Image
-            src={visible ? "/icons/auth/visibility_on.svg" : "/icons/auth/visibility_off.svg"}
-            alt={visible ? "비밀번호 숨기기" : "비밀번호 표시"}
-            width={20}
-            height={20}
-            className="opacity-80"
-            priority={false}
-          />
-          <span className="sr-only">{visible ? "비밀번호 숨기기" : "비밀번호 표시"}</span>
-        </button>
+        {showIcon && (
+          <button
+            type="button"
+            onMouseDown={e => {
+              e.preventDefault();
+              setVisible(prev => !prev);
+            }}
+            className="absolute top-1/2 right-4 -translate-y-1/2 font-bold text-gray-500 transition-colors hover:text-gray-700"
+          >
+            <Image
+              src={visible ? "/icons/auth/visibility_on.svg" : "/icons/auth/visibility_off.svg"}
+              alt={visible ? "비밀번호 숨기기" : "비밀번호 표시"}
+              width={20}
+              height={20}
+              className="font-bold opacity-60"
+              priority={false}
+            />
+            <span className="sr-only">{visible ? "비밀번호 숨기기" : "비밀번호 표시"}</span>
+          </button>
+        )}
       </div>
       {error ? <p className="text-xs font-semibold text-red-600">{error}</p> : null}
     </div>
