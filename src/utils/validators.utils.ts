@@ -1,15 +1,10 @@
+import { loginSchema, type LoginForm, type LoginErrors } from "@/types/schemas/login.schema";
+import { z } from "zod";
+
 const EMAIL_PATTERN =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
 
-export type LoginForm = {
-  email: string;
-  password: string;
-};
-
-export type LoginErrors = {
-  email?: string;
-  password?: string;
-};
+export type { LoginForm, LoginErrors };
 
 export type SignupForm = {
   name: string;
@@ -40,14 +35,17 @@ export type UpdateProfileErrors = {
 };
 
 export const validateLogin = (values: LoginForm): LoginErrors => {
-  const nextErrors: LoginErrors = {};
-  if (values.email.trim() && !EMAIL_PATTERN.test(values.email)) {
-    nextErrors.email = "올바른 이메일 형식을 입력해주세요.";
+  const result = loginSchema.safeParse(values);
+  if (!result.success) {
+    const errors: LoginErrors = {};
+    result.error.issues.forEach((err: z.ZodIssue) => {
+      const field = err.path[0];
+      if (field === "email") errors.email = err.message;
+      else if (field === "password") errors.password = err.message;
+    });
+    return errors;
   }
-  if (values.password && values.password.length < 8) {
-    nextErrors.password = "비밀번호는 8자 이상이어야 합니다.";
-  }
-  return nextErrors;
+  return {};
 };
 
 export const validateSignup = (values: SignupForm, duplicateEmails: string[]): SignupErrors => {

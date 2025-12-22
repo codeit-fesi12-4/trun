@@ -8,12 +8,7 @@ import { signIn, useSession } from "next-auth/react";
 import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
 import { Button } from "@/components/ui/button";
-import { validateLogin } from "@/utils/validators.utils";
-
-type LoginErrors = {
-  email?: string;
-  password?: string;
-};
+import { validateLogin, type LoginErrors } from "@/utils/validators.utils";
 
 const LoginClient = () => {
   const router = useRouter();
@@ -27,11 +22,9 @@ const LoginClient = () => {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 
-  const validate = (): LoginErrors => validateLogin({ email, password });
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const nextErrors = validate();
+    const nextErrors = validateLogin({ email, password });
     setErrors(nextErrors);
     setServerError(null);
 
