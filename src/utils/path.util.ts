@@ -25,7 +25,7 @@ export const buildReviewsQueryString = (params: GetReviewsParams) => {
 // 리뷰 path
 export const buildReviewsPath = (params: GetReviewsParams) => {
   const queryString = buildReviewsQueryString(params);
-  return queryString ? `/reviews?${queryString}}` : "/reviews";
+  return queryString ? `/reviews?${queryString}` : "/reviews";
 };
 
 // 리뷰 평점 query string
@@ -43,5 +43,5 @@ export const buildReviewScoresQueryString = (params: GetReviewScoresParams) => {
 // 리뷰 평점 path
 export const buildReviewScoresPath = (params: GetReviewScoresParams) => {
   const queryString = buildReviewScoresQueryString(params);
-  return queryString ? `/reviews/scores?${queryString}` : "reviews/scores";
+  return queryString ? `/reviews/scores?${queryString}` : "/reviews/scores";
 };
