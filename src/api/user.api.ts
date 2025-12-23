@@ -30,7 +30,7 @@ export const getUserProfileServer = async (
 };
 
 // 회원 정보 수정
-export const updateProfile = (formData: FormData) =>
+export const putUpdateProfile = (formData: FormData) =>
   apiFetch<UserProfile>(`/api/proxy/auths/user`, {
     method: "PUT",
     isFormData: true,
