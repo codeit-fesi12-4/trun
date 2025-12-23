@@ -6,18 +6,23 @@ import Image from "next/image";
 import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
 import { useSession } from "next-auth/react";
+import { UserProfile } from "@/types/user.type";
 
 const MypageClient = () => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
-
+  const { data: session, status, update } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (status === "loading") return null;
-  if (!user) return null;
+  if (!session?.user) return null;
 
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
+  const handleProfileUpdated = (updatedUser: UserProfile) => {
+    void update({
+      user: {
+        ...session.user,
+        companyName: updatedUser.companyName,
+        image: updatedUser.image,
+      },
+    });
   };
 
   return (
@@ -28,7 +33,7 @@ const MypageClient = () => {
           <h1 className="text-base font-semibold text-gray-900 sm:text-2xl">마이페이지</h1>
 
           <button
-            onClick={handleModalOpen}
+            onClick={() => setIsModalOpen(true)}
             className="cursor-pointer lg:absolute lg:top-[68px] lg:right-[52px]"
           >
             <Image src="/icons/ic_mypage_edit.svg" alt="수정 아이콘" width={32} height={32} />
@@ -37,7 +42,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          <ProfileSection user={user} />
+          <ProfileSection user={session.user} />
         </div>
       </div>
 
@@ -47,7 +52,12 @@ const MypageClient = () => {
       </div>
 
       {/* 프로필 수정 모달 */}
-      <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />
+      <ProfileEditModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        user={session.user}
+        onSuccess={handleProfileUpdated}
+      />
     </main>
   );
 };
