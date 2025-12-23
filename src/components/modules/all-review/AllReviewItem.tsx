@@ -16,12 +16,12 @@ const AllReviewItem = ({ review, index, length }: ReviewListItemProps) => (
     <div className="flex w-full flex-col gap-6 sm:h-50 sm:justify-between sm:gap-0">
       {/* 프로필 이미지 */}
       <div className="flex flex-row items-center gap-[13px]">
-        <div className="h-10 w-10 overflow-hidden rounded-full">
+        <div className="relative h-10 w-10 overflow-hidden rounded-full">
           <Image
             src={review.User.image ? review.User.image : "/icons/default_profile.svg"}
             alt="프로필이미지"
-            width={40}
-            height={40}
+            fill
+            className="object-cover"
           />
         </div>
         <div className="flex flex-col gap-1">
