@@ -1,7 +1,7 @@
-import { MOIM_TYPE, SORT_BY, SORT_ORDER, MOIM_LOCATION } from "@/constants/moim";
+import { SORT_BY, SORT_ORDER, MOIM_LOCATION } from "@/constants/moim";
 
 // 공통으로 사용되는 유니온 타입
-export type MoimType = (typeof MOIM_TYPE)[keyof typeof MOIM_TYPE];
+export type MoimType = "MINDFULNESS" | "WORKATION";
 export type MoimLocation = (typeof MOIM_LOCATION)[keyof typeof MOIM_LOCATION];
 export type SortBy = (typeof SORT_BY)[keyof typeof SORT_BY];
 export type SortOrder = (typeof SORT_ORDER)[keyof typeof SORT_ORDER];
