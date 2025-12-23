@@ -1,4 +1,5 @@
-import { loginSchema, type LoginForm, type LoginErrors } from "@/types/schemas/login.schema";
+import { loginSchema } from "@/types/schemas/login.schema";
+import { type LoginForm, type LoginErrors } from "@/types/auth.type";
 import { z } from "zod";
 
 const EMAIL_PATTERN =
