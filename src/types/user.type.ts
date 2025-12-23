@@ -5,8 +5,3 @@ export type UserProfile = {
   companyName: string;
   image: string | null;
 };
-
-export type UpdateProfile = {
-  companyName: string;
-  image: string | null;
-};
