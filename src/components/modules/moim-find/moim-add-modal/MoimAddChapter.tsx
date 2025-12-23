@@ -2,7 +2,7 @@ import MoimDatePickerField from "./MoimDatePickerField";
 import ServieCheckboxField from "./ServieCheckboxField";
 import MoimInputField from "./MoimInputField";
 import MoimPlaceSelectField from "./MoimPlaceSelectField";
-import { FILTER_CATEGORY, MIN_CAPACITY, MOIM_TYPE } from "@/constants/moim";
+import { MIN_CAPACITY } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
 
 type MoimAddChapterProps = {
@@ -28,17 +28,17 @@ export const MoimAddChapter = ({
           <p className="text-sm text-gray-600">원하시는 서비스를 선택해주세요</p>
           <div className="flex flex-col gap-3">
             <ServieCheckboxField
-              title={FILTER_CATEGORY.DALLIMFIT}
-              service={FILTER_CATEGORY.DALLIMFIT}
-              isSelected={formData.type === MOIM_TYPE.DALLIMFIT}
+              title="달림핏"
+              service="MINDFULNESS"
+              isSelected={formData.type === "MINDFULNESS"}
               onServiceChange={onServiceChange}
               iconSrc="/icons/dallimfit.svg"
               iconAlt="달림핏 아이콘"
             />
             <ServieCheckboxField
-              title={FILTER_CATEGORY.RUNCATION}
-              service={FILTER_CATEGORY.RUNCATION}
-              isSelected={formData.type === MOIM_TYPE.RUNCATION}
+              title="런케이션"
+              service="WORKATION"
+              isSelected={formData.type === "WORKATION"}
               onServiceChange={onServiceChange}
               iconSrc="/icons/runcation.svg"
               iconAlt="런케이션 아이콘"

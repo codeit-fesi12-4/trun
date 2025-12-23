@@ -10,21 +10,28 @@ type AllReviewHeaderProps = {
 };
 
 const AllReviewHeader = ({ filters, onFilterChange, availableLocations }: AllReviewHeaderProps) => {
-  const update = (next: Partial<ReviewFilterValues>) => onFilterChange({ ...filters, ...next });
+  const onFilterchange = (next: Partial<ReviewFilterValues>) => {
+    console.warn("next", next);
+
+    return onFilterChange({ ...filters, ...next });
+  };
 
   return (
     <CategoryShell
-      category={filters.category}
-      onCategoryChange={category => update({ category })}
+      category={filters.type}
+      onCategoryChange={type => onFilterchange({ type })}
       LocationSlot={
         <LocationFilter
           selectedLocation={filters.location}
-          onLocationChange={location => update({ location })}
+          onLocationChange={location => onFilterchange({ location })}
           availableLocations={availableLocations}
         />
       }
       SortSlot={
-        <AllReviewSort selectedSort={filters.sortBy} onSortChange={sortBy => update({ sortBy })} />
+        <AllReviewSort
+          selectedSort={filters.sortBy}
+          onSortChange={sortBy => onFilterchange({ sortBy })}
+        />
       }
     />
   );

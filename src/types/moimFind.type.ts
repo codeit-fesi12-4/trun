@@ -19,7 +19,7 @@ export type MoimCardActions = {
 
 // 모임 필터 값 타입
 export type MoimFilterValues = {
-  category: "달림핏" | "런케이션";
+  category: MoimType;
   location: string;
   date: Date | undefined;
   sort: "마감임박 순" | "참여 인원 순";

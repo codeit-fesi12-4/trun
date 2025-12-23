@@ -1,10 +1,11 @@
 import { type MoimFormData } from "@/types/moimFind.type";
 
+// @@@ MINDFULNESS,WOKRATION 사용하면서 더아상 사용 X
 // 모임 서비스 종류 상수
-export const MOIM_TYPE = {
-  DALLIMFIT: "MINDFULNESS", // 달림핏
-  RUNCATION: "WORKATION", // 런케이션
-} as const;
+// export const MOIM_TYPE = {
+//   DALLIMFIT: "MINDFULNESS", // 달림핏
+//   RUNCATION: "WORKATION", // 런케이션
+// } as const;
 
 // 모임 생성 챕터 수
 export const TOTAL_STEPS = 3;
@@ -23,11 +24,12 @@ export const INITIAL_FORM_DATA: MoimFormData = {
   capacity: "",
 };
 
+// @@@ MINDFULNESS,WOKRATION 사용하면서 더아상 사용 X
 // 필터 카테고리 상수
-export const FILTER_CATEGORY = {
-  DALLIMFIT: "달림핏",
-  RUNCATION: "런케이션",
-} as const;
+// export const FILTER_CATEGORY = {
+//   DALLIMFIT: "달림핏",
+//   RUNCATION: "런케이션",
+// } as const;
 
 // 모임 필터 정렬 상수
 export const MOIM_FILTER_SORT = {
