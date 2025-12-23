@@ -11,7 +11,7 @@ const useSyncQueryString = (queryString: string) => {
   useEffect(() => {
     const current = searchParams.toString();
     if (current !== queryString) {
-      router.push(nextUrl);
+      router.push(nextUrl, { scroll: false });
     }
   }, [queryString, nextUrl]);
 
