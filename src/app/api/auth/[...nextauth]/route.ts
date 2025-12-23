@@ -74,7 +74,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       // 새로운 로그인 시 사용자 정보만 저장 (토큰 제거)
       if (user) {
         token.id = user.id || "";
@@ -83,6 +83,13 @@ export const authOptions: NextAuthOptions = {
         token.companyName = user.companyName || "";
         token.image = user.image ?? null;
         return token;
+      }
+
+      // session.update() 호출 시
+      if (trigger === "update" && session?.user) {
+        token.name = session.user.name;
+        token.companyName = session.user.companyName;
+        token.image = session.user.image ?? null;
       }
 
       // 기존 세션 유지
