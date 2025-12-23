@@ -22,21 +22,8 @@ export type MypageMoim = {
   isReviewed: boolean; // 리뷰 작성 여부
 };
 
-// 요청 파라미터
-export type GetJoinedMoimsParams = {
-  completed?: boolean;
-  reviewed?: boolean;
-  limit?: number;
-  offset?: number;
-  sortBy?: string;
-  sortOrder?: string;
-};
-
 // 나의 모임 응답 타입
 export type GetJoinedMoimsResponse = MypageMoim[];
-
-// 내가 만든 모임 응답 타입
-export type CreateMoimsResponse = MypageMoim[];
 
 // 작성 가능한 리뷰 타입
 export type WritableReviewItem = MypageMoim & {
