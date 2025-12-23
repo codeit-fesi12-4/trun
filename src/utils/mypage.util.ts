@@ -1,4 +1,4 @@
-import { MoimStatus, MypageMoim, WritableReviewItem } from "@/types/mypage.type";
+import { MoimStatus, MypageMoim } from "@/types/mypage.type";
 
 export const formatDateTime = (isoString: string) => {
   if (!isoString) return { date: "", time: "", full: "" };
@@ -66,13 +66,3 @@ export const getMeetingStatus = (item: MypageMoim) => {
     sub: null,
   } as const;
 };
-
-// 작성 가능한 리뷰만 필터링
-export const toWritableReviews = (moims: MypageMoim[]): WritableReviewItem[] =>
-  moims
-    .filter(item => item.isCompleted && !item.isReviewed)
-    .map(item => ({
-      ...item,
-      gatheringId: item.id,
-      score: 0,
-    }));
