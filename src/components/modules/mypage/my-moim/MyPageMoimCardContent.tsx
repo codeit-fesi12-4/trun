@@ -17,8 +17,8 @@ type MyPageCardItemProps = {
 const MyPageMoimCardContent = ({
   item,
   onCancelClick,
-  isCreatedMoimTab,
   showCancelButton,
+  isCreatedMoimTab,
 }: MyPageCardItemProps) => {
   const formattedDate = formatDateTime(item.dateTime);
   const { main, sub } = getMeetingStatus(item);
