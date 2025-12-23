@@ -18,13 +18,6 @@ export const useMoimFind = () => {
     sort: MOIM_FILTER_SORT.DEADLINE,
   });
 
-  // @@@ MINDFULNESS,WOKRATION 사용하면서 더아상 사용 X
-  // 카테고리를 MoimType으로 변환
-  // const convertCategoryToMoimType = (category: MoimType): MoimType | undefined => {
-  //   if (category === "MINDFYL") return MOIM_TYPE.DALLIMFIT;
-  //   return MOIM_TYPE.RUNCATION;
-  // };
-
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
     if (location === MOIM_LOCATION.ALL) return undefined;

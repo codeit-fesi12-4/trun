@@ -25,14 +25,6 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
     }
   };
 
-  // @@@ MINDFULNESS,WOKRATION 사용하면서 더아상 사용 X
-  // 서비스 문자열을 MoimType으로 변환
-  // const convertServiceToType = (service: string): MoimType | null => {
-  //   if (service === FILTER_CATEGORY.DALLIMFIT) return MOIM_TYPE.DALLIMFIT;
-  //   if (service === FILTER_CATEGORY.RUNCATION) return MOIM_TYPE.RUNCATION;
-  //   return null;
-  // };
-
   const handleFieldChange = (
     field: keyof MoimFormData,
     value: string | File | null | Date | undefined,
