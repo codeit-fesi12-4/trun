@@ -87,7 +87,6 @@ export const authOptions: NextAuthOptions = {
 
       // session.update() 호출 시
       if (trigger === "update" && session?.user) {
-        token.name = session.user.name;
         token.companyName = session.user.companyName;
         token.image = session.user.image ?? null;
       }
