@@ -61,7 +61,7 @@ export const AuthPasswordField = ({
           onBlur={handleBlur}
           className={cn(
             "h-11 rounded-lg border border-gray-50 bg-white pr-10 text-base font-medium text-gray-900 placeholder:text-sm placeholder:font-medium placeholder:text-gray-400 sm:placeholder:text-base md:placeholder:text-base",
-            "focus-visible:border-gray-50 focus-visible:ring-gray-50",
+            "focus-visible:border-green-600 focus-visible:ring-green-200",
             error &&
               "border-2 border-red-500 text-red-600 focus-visible:border-red-500 focus-visible:ring-red-200",
             className,
