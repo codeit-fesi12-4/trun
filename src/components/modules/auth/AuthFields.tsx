@@ -23,8 +23,9 @@ export const AuthTextField = ({
   ...props
 }: FieldProps) => (
   <div className="space-y-2 text-sm font-semibold text-gray-800">
-    <label htmlFor={id} className="block">
-      {label}
+    <label htmlFor={id} className="flex items-center gap-2">
+      <span>{label}</span>
+      {error ? <span className="text-xs font-semibold text-red-600">※ {error}</span> : null}
     </label>
     <Input
       id={id}
@@ -41,7 +42,6 @@ export const AuthTextField = ({
       )}
       {...props}
     />
-    {error ? <p className="text-xs font-semibold text-red-600">{error}</p> : null}
   </div>
 );
 
@@ -79,8 +79,9 @@ export const AuthPasswordField = ({
 
   return (
     <div className="space-y-2 text-sm font-semibold text-gray-800">
-      <label htmlFor={id} className="block">
-        {label}
+      <label htmlFor={id} className="flex items-center gap-2">
+        <span>{label}</span>
+        {error ? <span className="text-xs font-semibold text-red-600">※ {error}</span> : null}
       </label>
       <div className="relative">
         <Input
@@ -122,7 +123,6 @@ export const AuthPasswordField = ({
           </button>
         )}
       </div>
-      {error ? <p className="text-xs font-semibold text-red-600">{error}</p> : null}
     </div>
   );
 };

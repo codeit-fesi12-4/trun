@@ -98,7 +98,7 @@ const LoginClient = () => {
           autoComplete="email"
           value={email}
           onChange={event => {
-            setEmail(event.target.value);
+            setEmail(event.target.value.replace(/\s/g, ""));
             if (serverError) setServerError(null);
             if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
           }}
@@ -111,7 +111,7 @@ const LoginClient = () => {
           autoComplete="current-password"
           value={password}
           onChange={event => {
-            setPassword(event.target.value);
+            setPassword(event.target.value.replace(/\s/g, ""));
             if (serverError) setServerError(null);
             if (errors.password) setErrors(prev => ({ ...prev, password: undefined }));
           }}

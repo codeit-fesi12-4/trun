@@ -29,3 +29,21 @@ export type LoginErrors = {
   email?: string;
   password?: string;
 };
+
+// 회원가입 폼 타입 추론
+export type SignupForm = {
+  name: string;
+  email: string;
+  companyName: string;
+  password: string;
+  confirmPassword: string;
+};
+
+// 회원가입 에러 타입 추론
+export type SignupErrors = {
+  name?: string;
+  email?: string;
+  companyName?: string;
+  password?: string;
+  confirmPassword?: string;
+};
