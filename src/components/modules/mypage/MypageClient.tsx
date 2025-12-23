@@ -7,22 +7,28 @@ import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
 import { useSession } from "next-auth/react";
 import { UserProfile } from "@/types/user.type";
+import { getUserProfile } from "@/api/user.api";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const MypageClient = () => {
-  const { data: session, status, update } = useSession();
+  const { status } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
-  if (status === "loading") return null;
-  if (!session?.user) return null;
+  // user 데이터는 별도로 조회
+  const { data: user, isLoading } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: getUserProfile,
+    select: res => (res.ok ? res.data : null),
+    enabled: status === "authenticated",
+  });
+
+  if (status === "loading" || isLoading) return null;
+  if (status !== "authenticated" || !user) return null;
 
   const handleProfileUpdated = (updatedUser: UserProfile) => {
-    void update({
-      user: {
-        ...session.user,
-        companyName: updatedUser.companyName,
-        image: updatedUser.image,
-      },
-    });
+    // user 데이터 업데이트
+    queryClient.setQueryData<UserProfile>(["userProfile"], updatedUser);
   };
 
   return (
@@ -42,7 +48,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          <ProfileSection user={session.user} />
+          <ProfileSection user={user} />
         </div>
       </div>
 
@@ -55,7 +61,7 @@ const MypageClient = () => {
       <ProfileEditModal
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        user={session.user}
+        user={user}
         onSuccess={handleProfileUpdated}
       />
     </main>
