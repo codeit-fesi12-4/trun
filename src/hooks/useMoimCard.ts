@@ -12,11 +12,11 @@ export const useMoimCard = (
   onFavoriteToggle?: MoimCardActions["onFavoriteToggle"],
   onJoinClick?: MoimCardActions["onJoinClick"],
 ) => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const user = session?.user;
   const userId = user?.id.toString() ?? null;
   // 로그인 여부는 user 존재로 확인 (토큰은 HttpOnly 쿠키에 있어서 클라이언트에서 접근 불가)
-  const isLoggedIn = !!user;
+  const isLoggedIn = status === "authenticated";
 
   // localStorage에서 찜한 상태를 계산 (item.id, userId가 변경될 때마다 재계산)
   const computedFavoriteState = useMemo(() => {

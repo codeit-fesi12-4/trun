@@ -93,6 +93,8 @@ export const useCreateMoimMutation = () => {
         toast.error(response.message ?? "모임 생성에 실패했습니다.");
         return;
       }
+
+      toast.success("모임이 성공적으로 생성되었습니다.");
       // "moims"로 시작하는 모든 쿼리 무효화 (infinite 쿼리 포함)
       void queryClient.invalidateQueries({ queryKey: ["moims"] });
       // 마이페이지의 생성한 모임 목록도 무효화

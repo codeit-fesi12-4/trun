@@ -1,4 +1,4 @@
-import { apiFetch } from "@/lib/apiClient";
+import { apiFetch, ApiResult } from "@/lib/apiClient";
 import {
   CreateMoimRequest,
   CreateMoimResponse,
@@ -34,7 +34,9 @@ const buildMoimsPath = (params?: GetMoimsParams) => {
 };
 
 // 모임 목록 조회 함수
-export const getMoimList = async (params?: GetMoimsParams): Promise<GetMoimsResponse> => {
+export const getMoimList = async (
+  params?: GetMoimsParams,
+): Promise<ApiResult<GetMoimsResponse>> => {
   const path = buildMoimsPath(params);
   return apiFetch<GetMoimsResponse>(`/api/proxy/${path}`, {
     method: "GET",
@@ -42,7 +44,9 @@ export const getMoimList = async (params?: GetMoimsParams): Promise<GetMoimsResp
 };
 
 // 모임 생성 함수 (multipart/form-data)
-export const postMoim = async (payload: CreateMoimRequest): Promise<CreateMoimResponse> => {
+export const postMoim = async (
+  payload: CreateMoimRequest,
+): Promise<ApiResult<CreateMoimResponse>> => {
   const formData = new FormData();
 
   formData.append("location", payload.location);

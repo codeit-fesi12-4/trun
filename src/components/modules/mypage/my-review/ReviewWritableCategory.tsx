@@ -11,13 +11,11 @@ import FavoriteButton from "@/components/common/FavoriteButton";
 
 const ReviewWritableCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<WritableReviewItem | null>(null);
-  const { data, isLoading, isError, refetch } = useAvailableReviews();
-  const items = data ?? [];
+  const { data: items = [], isLoading, isError } = useAvailableReviews();
 
   const handleModalChange = (isOpen: boolean) => {
     if (!isOpen) {
       setSelectedReviewItem(null);
-      void refetch();
     }
   };
 

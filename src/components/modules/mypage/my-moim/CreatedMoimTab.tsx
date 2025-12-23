@@ -1,24 +1,20 @@
 "use client";
 
 import MyPageCard from "./MyPageMoimCard";
-import { useQuery } from "@tanstack/react-query";
-import { getCreatedMoims } from "@/api/mypageMoim.api";
-import { useAuthStore } from "@/stores/auth.store";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
+import { useSession } from "next-auth/react";
+import { useCreatedMoims } from "@/hooks/useMypageQuery";
 
 const CreatedMoimTab = () => {
-  const user = useAuthStore(state => state.user);
+  const { data: session, status } = useSession();
+  const userId = session?.user?.id;
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["mypage", "createdMoims", user?.id],
-    queryFn: () => getCreatedMoims(user!.id),
-    enabled: !!user,
-  });
+  const { data: items = [], isLoading, isError } = useCreatedMoims(userId);
 
+  if (status === "loading") return <div>로딩 중...</div>;
+  if (!userId) return <div>로그인이 필요합니다.</div>;
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
-
-  const items = data ?? [];
 
   return (
     <div className="flex flex-col gap-6">
