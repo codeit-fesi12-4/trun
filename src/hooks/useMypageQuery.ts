@@ -1,37 +1,31 @@
-import { deleteReservation, getAvailableReviews, getMoimJoined } from "@/api/mypage.api";
+import { deleteReservation, getCreatedMoims, getMoimJoined } from "@/api/mypage.api";
 import { getReviews, postReviews } from "@/api/review.api";
-import { TEAM_NAME } from "@/constants/env";
-import { useAuthStore } from "@/stores/auth.store";
-import { WritableReviewItem, WrittenReviewItem } from "@/types/mypage.type";
-import { PostReviewParams } from "@/types/review.type";
+import { WritableReviewItem } from "@/types/mypage.type";
+import { PostReviewParams, ReviewItem } from "@/types/review.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 
-// 참여한 나의 모임 조회 훅
+// 참여한 나의 모임 조회
 export const useJoinedMoims = () =>
   useQuery({
     queryKey: ["mypage", "joinedMoims"],
-    queryFn: () => getMoimJoined(undefined, TEAM_NAME),
+    queryFn: getMoimJoined,
+    select: res => (res.ok ? res.data : []),
   });
 
-// 예약 취소 훅
+// 예약 취소
 export const useCancelReservation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = useAuthStore.getState().token;
-      return deleteReservation(moimId, TEAM_NAME, token);
-    },
+    mutationFn: (moimId: number) => deleteReservation(moimId),
     onSuccess: (_, moimId) => {
       toast.success("예약이 취소되었습니다.");
 
-      // 마이페이지 참여 모임 목록 무효화
       void queryClient.invalidateQueries({ queryKey: ["mypage", "joinedMoims"] });
-      // 상세 페이지 메인 데이터 무효화 (참여 상태, 인원 수 갱신)
-      void queryClient.invalidateQueries({ queryKey: ["moim", TEAM_NAME, moimId] });
-      // 상세 페이지 참여자 목록 무효화 (참여자 목록에서 사용자 제거)
-      void queryClient.invalidateQueries({ queryKey: ["participants", TEAM_NAME, moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
     onError: error => {
       console.error("예약 취소 실패:", error);
@@ -40,50 +34,90 @@ export const useCancelReservation = () => {
   });
 };
 
-// 리뷰 등록 훅
-export const useReviewMutation = (onSuccessCallback: (gatheringId: number) => void) => {
+// 작성 가능한 리뷰
+export const useAvailableReviews = () => {
+  const { data: joinedMoims } = useJoinedMoims();
+
+  return useQuery<WritableReviewItem[]>({
+    queryKey: ["mypage", "availableReviews"],
+    queryFn: async () => {
+      if (!joinedMoims) return [];
+      // 참여 모임 데이터를 기반으로 작성 가능한 리뷰만 필터링
+      return joinedMoims
+        .filter(item => item.isCompleted && !item.isReviewed && !item.canceledAt)
+        .map(item => ({
+          ...item,
+          gatheringId: item.id,
+          score: 0,
+        }));
+    },
+    enabled: !!joinedMoims, // 참여 모임 데이터가 있을 때만 실행
+    staleTime: 60_000, // 1분 캐싱
+  });
+};
+
+// 리뷰 등록
+export const useReviewMutation = (onCloseModal: () => void) => {
   const queryClient = useQueryClient();
-  const token = useAuthStore(state => state.token);
-  const joinedMoimsQueryKey = ["mypage", "joinedMoims"];
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   return useMutation({
     mutationFn: (params: PostReviewParams) => {
-      if (!token) throw new Error("로그인이 필요합니다.");
-      return postReviews(params, token);
+      if (!userId) throw new Error("로그인이 필요합니다.");
+      return postReviews(params);
     },
-
-    onSuccess: (_data, params) => {
-      void queryClient.invalidateQueries({ queryKey: joinedMoimsQueryKey });
-      onSuccessCallback(params.gatheringId);
-
-      queryClient.setQueryData<WritableReviewItem[]>(["mypage", "joinedMoims"], old =>
-        old?.map(item => (item.id === params.gatheringId ? { ...item, isReviewed: true } : item)),
+    onSuccess: (_, params) => {
+      // 작성 가능한 리뷰에서 제거
+      queryClient.setQueryData<WritableReviewItem[]>(["mypage", "availableReviews"], old =>
+        Array.isArray(old) ? old.filter(item => item.id !== params.gatheringId) : [],
       );
 
+      // 참여한 모임(joinedMoims) 상태 업데이트
+      queryClient.setQueryData<WritableReviewItem[]>(["mypage", "joinedMoims"], old =>
+        Array.isArray(old)
+          ? old.map(item => (item.id === params.gatheringId ? { ...item, isReviewed: true } : item))
+          : [],
+      );
+
+      // 작성한 리뷰 목록 새로고침
+      void queryClient.invalidateQueries({ queryKey: ["mypage", "writtenReviews"] });
+
+      // 모달 닫기
+      onCloseModal();
+
+      // 알림
       toast.success("리뷰가 성공적으로 등록되었습니다.");
     },
-
     onError: error => {
-      const message = error instanceof Error ? error.message : "리뷰 등록 중 알 수 없는 오류 발생";
+      const message = error instanceof Error ? error.message : "리뷰 등록 중 오류 발생";
       toast.error(message);
     },
   });
 };
 
-// 작성 가능한 리뷰 훅
-export const useAvailableReviews = () =>
-  useQuery<WritableReviewItem[]>({
-    queryKey: ["mypage", "availableReviews"],
-    queryFn: getAvailableReviews,
-  });
-
-// 작성한 리뷰 훅
+// 작성한 리뷰
 export const useWrittenReviews = () => {
-  const user = useAuthStore(state => state.user);
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
-  return useQuery<{ data: WrittenReviewItem[] }, Error>({
-    queryKey: ["mypage", "writtenReviews", user?.id],
-    queryFn: () => getReviews({ userId: user?.id }),
-    enabled: !!user?.id, // user가 있을 때만 실행
+  return useQuery<ReviewItem[]>({
+    queryKey: ["mypage", "writtenReviews", userId],
+    queryFn: async () => {
+      if (!userId) return [];
+      const res = await getReviews({ userId });
+      if (!res.ok) throw new Error("리뷰 가져오기 실패");
+
+      return res.data.data;
+    },
+    enabled: !!userId,
   });
 };
+
+// 내가 만든 모임
+export const useCreatedMoims = (userId?: number) =>
+  useQuery({
+    queryKey: ["mypage", "createdMoims", userId],
+    queryFn: () => getCreatedMoims(userId ?? 0),
+    enabled: !!userId,
+  });
