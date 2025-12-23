@@ -48,7 +48,7 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
     <>
       <button
         onMouseDown={handleFavoriteClick}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 sm:h-12 sm:w-12"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 hover:cursor-pointer sm:h-12 sm:w-12"
       >
         <Image
           src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
