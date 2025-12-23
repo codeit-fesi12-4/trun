@@ -35,12 +35,10 @@ export const validateLogin = (values: LoginForm): LoginErrors => {
   return {};
 };
 
-export const validateSignup = (values: SignupForm, duplicateEmails: string[]): SignupErrors => {
+export const validateSignup = (values: SignupForm): SignupErrors => {
   const result = signupSchema.safeParse(values);
-  const errors: SignupErrors = {};
-
-  // Zod 스키마 검증 결과 처리
   if (!result.success) {
+    const errors: SignupErrors = {};
     result.error.issues.forEach(err => {
       const field = err.path[0];
       if (
@@ -54,15 +52,9 @@ export const validateSignup = (values: SignupForm, duplicateEmails: string[]): S
         errors[field] = err.message;
       }
     });
+    return errors;
   }
-
-  // 중복 이메일 체크 (스키마 검증 통과 후 별도로 체크)
-  const normalizedEmail = values.email.trim().toLowerCase();
-  if (normalizedEmail && duplicateEmails.includes(normalizedEmail)) {
-    errors.email = "중복된 이메일입니다.";
-  }
-
-  return errors;
+  return {};
 };
 
 export const validateUpdateProfile = (values: UpdateProfileForm): UpdateProfileErrors => {
