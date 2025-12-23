@@ -1,6 +1,10 @@
 import { MoimType, SortOrder } from "./moim.type";
 
+export type ReviewType = "MINDFULNESS" | "WORKATION";
+
 export type ReviewSortBy = "createdAt" | "score" | "participantCount";
+
+export type ReviewSortOrder = "asc" | "desc";
 
 export type ReviewGathering = {
   teamId: number;
@@ -43,9 +47,10 @@ export type ReviewScore = {
 
 // 리뷰 필터 값 타입
 export type ReviewFilterValues = {
-  category: "달림핏" | "런케이션";
+  type: ReviewType;
   location: string;
-  sortBy: "최신 리뷰 순" | "평점 높은 순" | "참여자 많은 순";
+  sortBy: ReviewSortBy;
+  sortOrder: ReviewSortOrder;
 };
 
 export type ReviewDistribution = { score: number; count: number };
@@ -67,7 +72,7 @@ export type GetReviewsParams = {
 // 리뷰 스코어 요청 함수용 파라미터
 export type GetReviewScoresParams = {
   gatheringId?: number;
-  type?: MoimType;
+  type?: ReviewType;
 };
 
 // 리뷰 리스트 응답

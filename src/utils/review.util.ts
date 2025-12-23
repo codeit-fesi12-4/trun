@@ -4,7 +4,6 @@
 // 1 : {score: 4, count: 2}
 // 2 : {score: 3, count: 3}
 // 3 : {score: 2, count: 4}
-
 import { ReviewDistribution } from "@/types/review.type";
 
 // 4 : {score: 1, count: 5}

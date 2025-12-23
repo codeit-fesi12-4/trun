@@ -1,14 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
-import { GetMoimsParams, MoimType, MoimLocation, Moim } from "@/types/moim.type";
-import {
-  MOIM_TYPE,
-  FILTER_CATEGORY,
-  MOIM_LOCATION,
-  MOIM_FILTER_SORT,
-  SORT_BY,
-  SORT_ORDER,
-} from "@/constants/moim";
+import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
+import { MOIM_LOCATION, MOIM_FILTER_SORT, SORT_BY, SORT_ORDER } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { useSession } from "next-auth/react";
@@ -19,17 +12,11 @@ export const useMoimFind = () => {
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<MoimFilterValues>({
-    category: FILTER_CATEGORY.DALLIMFIT,
+    category: "MINDFULNESS",
     location: MOIM_LOCATION.ALL,
     date: undefined,
     sort: MOIM_FILTER_SORT.DEADLINE,
   });
-
-  // 카테고리를 MoimType으로 변환
-  const convertCategoryToMoimType = (category: "달림핏" | "런케이션"): MoimType | undefined => {
-    if (category === FILTER_CATEGORY.DALLIMFIT) return MOIM_TYPE.DALLIMFIT;
-    return MOIM_TYPE.RUNCATION;
-  };
 
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
@@ -52,7 +39,7 @@ export const useMoimFind = () => {
           };
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
-      type: convertCategoryToMoimType(filters.category),
+      type: filters.category,
       location: convertLocationToMoimLocation(filters.location),
       date: formatDateWithDash(filters.date),
       sortBy: sortParams.sortBy,
@@ -88,7 +75,7 @@ export const useMoimFind = () => {
   // 지역 목록 추출을 위한 별도 무한 스크롤 쿼리
   const locationQueryParams = useMemo(
     () => ({
-      type: convertCategoryToMoimType(filters.category),
+      type: filters.category,
     }),
     [filters.category],
   );
