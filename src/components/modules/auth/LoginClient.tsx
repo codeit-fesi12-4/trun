@@ -6,14 +6,11 @@ import { FormEvent, useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
-import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
+import { AuthPasswordField } from "@/components/modules/auth/AuthPasswordField";
+import { AuthTextField } from "@/components/modules/auth/AuthTextField";
 import { Button } from "@/components/ui/button";
-import { validateLogin } from "@/utils/validators.utils";
-
-type LoginErrors = {
-  email?: string;
-  password?: string;
-};
+import { validateLogin, type LoginErrors } from "@/utils/validators.utils";
+import { getAuthErrorMessage } from "@/utils/auth-error.util";
 
 const LoginClient = () => {
   const router = useRouter();
@@ -27,11 +24,9 @@ const LoginClient = () => {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect");
 
-  const validate = (): LoginErrors => validateLogin({ email, password });
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const nextErrors = validate();
+    const nextErrors = validateLogin({ email, password });
     setErrors(nextErrors);
     setServerError(null);
 
@@ -45,16 +40,7 @@ const LoginClient = () => {
         });
 
         if (result?.error) {
-          // NextAuth 에러 코드를 사용자 친화적인 메시지로 변환
-          const errorMessage =
-            result.error === "CredentialsSignin"
-              ? "이메일 또는 비밀번호가 올바르지 않습니다."
-              : result.error === "Configuration"
-                ? "서버 설정 오류가 발생했습니다."
-                : result.error === "AccessDenied"
-                  ? "접근이 거부되었습니다."
-                  : "로그인 중 오류가 발생했습니다.";
-          setServerError(errorMessage);
+          setServerError(getAuthErrorMessage(result.error));
         } else if (result?.ok) {
           router.push(redirect ?? "/");
         }
@@ -64,10 +50,6 @@ const LoginClient = () => {
         setIsLoading(false);
       }
     }
-  };
-
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
-    void handleSubmit(event);
   };
 
   useEffect(() => {
@@ -97,7 +79,7 @@ const LoginClient = () => {
         </p>
       }
     >
-      <form className="space-y-5" onSubmit={onSubmit} noValidate>
+      <form className="space-y-5" onSubmit={event => void handleSubmit(event)} noValidate>
         <AuthTextField
           id="login-email"
           label="아이디"
@@ -105,7 +87,7 @@ const LoginClient = () => {
           autoComplete="email"
           value={email}
           onChange={event => {
-            setEmail(event.target.value);
+            setEmail(event.target.value.replace(/\s/g, ""));
             if (serverError) setServerError(null);
             if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
           }}
@@ -118,7 +100,7 @@ const LoginClient = () => {
           autoComplete="current-password"
           value={password}
           onChange={event => {
-            setPassword(event.target.value);
+            setPassword(event.target.value.replace(/\s/g, ""));
             if (serverError) setServerError(null);
             if (errors.password) setErrors(prev => ({ ...prev, password: undefined }));
           }}
@@ -127,8 +109,10 @@ const LoginClient = () => {
         <Button
           type="submit"
           disabled={!isFormValid || isLoading}
-          className={`h-11 w-full rounded-lg text-base font-semibold transition-colors disabled:opacity-50 ${
-            isFormValid ? "bg-green-600 text-white hover:bg-green-800" : "bg-gray-100 text-gray-400"
+          className={`h-11 w-full rounded-lg text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            isFormValid
+              ? "cursor-pointer bg-green-600 text-white hover:bg-green-800"
+              : "bg-gray-100 text-gray-400"
           }`}
         >
           {isLoading ? "로그인 중..." : "로그인"}
