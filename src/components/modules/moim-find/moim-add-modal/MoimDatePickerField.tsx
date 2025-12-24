@@ -22,7 +22,7 @@ const MoimDatePickerField = ({
   <div className="flex w-full flex-col gap-2">
     <label className="text-xs font-semibold text-gray-600 sm:text-sm">
       {label}
-      {required && <span className="text-red-500">*</span>}
+      {required && <span className="text-red-500"> *</span>}
     </label>
     <Popover>
       <PopoverTrigger asChild>

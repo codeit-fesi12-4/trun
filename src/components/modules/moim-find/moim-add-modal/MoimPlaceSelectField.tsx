@@ -30,7 +30,7 @@ const MoimPlaceSelectField = ({
   <div className="flex flex-col gap-2">
     <label htmlFor={id} className="text-sm font-semibold text-gray-700">
       {label}
-      {required && <span className="text-red-500">*</span>}
+      {required && <span className="text-red-500"> *</span>}
     </label>
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger

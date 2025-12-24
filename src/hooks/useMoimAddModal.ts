@@ -29,9 +29,12 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
   const handleModalOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);
     if (!isOpen) {
-      // 모달이 닫힐 때 초기화
-      setCurrentStep(1);
-      setFormData(INITIAL_FORM_DATA);
+      // 모달이 완전히 닫힌 후 상태 초기화 (애니메이션 완료 대기)
+      setTimeout(() => {
+        setCurrentStep(1);
+        setFormData(INITIAL_FORM_DATA);
+        setFieldErrors({});
+      }, 300); // Dialog 애니메이션 시간 고려 (보통 200-300ms)
     }
   };
 

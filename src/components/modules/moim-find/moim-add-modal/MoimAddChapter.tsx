@@ -32,7 +32,7 @@ export const MoimAddChapter = ({
       return (
         <div className="mb-4 flex flex-col gap-4 py-6">
           <p className="text-sm text-gray-600">
-            원하시는 서비스를 선택해주세요<span className="text-red-500">*</span>
+            원하시는 서비스를 선택해주세요<span className="text-red-500"> *</span>
           </p>
           <div className="flex flex-col gap-3">
             <ServieCheckboxField

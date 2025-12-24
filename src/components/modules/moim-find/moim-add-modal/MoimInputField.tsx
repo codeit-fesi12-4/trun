@@ -53,7 +53,7 @@ const MoimInputField = ({
       <div className="flex flex-col gap-2">
         <label htmlFor={id} className="text-sm font-semibold text-gray-600">
           {label}
-          {required && <span className="text-red-500">*</span>}
+          {required && <span className="text-red-500"> *</span>}
         </label>
         <div className="flex gap-2">
           <Input
@@ -94,7 +94,7 @@ const MoimInputField = ({
     <div className="flex flex-col gap-2">
       <label htmlFor={id} className="text-sm font-semibold text-gray-600">
         {label}
-        {required && <span className="text-red-500">*</span>}
+        {required && <span className="text-red-500"> *</span>}
       </label>
       <Input
         id={id}
