@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import MyPageMoimCard from "./MyPageMoimCard";
+import MoimCardSkeleton from "./MoimCardSkeleton";
 import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
@@ -23,7 +24,14 @@ const MyMoimTab = () => {
     setIsCancelModalOpen(true);
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <div className="flex flex-col gap-6">
+        {[1, 2, 3].map(i => (
+          <MoimCardSkeleton key={i} />
+        ))}
+      </div>
+    );
   if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (

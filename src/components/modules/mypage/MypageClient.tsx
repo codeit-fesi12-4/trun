@@ -1,6 +1,7 @@
 "use client";
 
 import ProfileSection from "@/components/modules/mypage/ProfileCard";
+import ProfileCardSkeleton from "@/components/modules/mypage/ProfileCardSkeleton";
 import TabsSection from "@/components/modules/mypage/TabsSection";
 import Image from "next/image";
 import { useState } from "react";
@@ -9,9 +10,7 @@ import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const MypageClient = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data: user } = useUserProfileQuery();
-
-  if (!user) return null;
+  const { data: user, isLoading } = useUserProfileQuery();
 
   return (
     <main className="flex w-full flex-1 flex-col lg:flex-row">
@@ -30,7 +29,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          <ProfileSection user={user} />
+          {isLoading || !user ? <ProfileCardSkeleton /> : <ProfileSection user={user} />}
         </div>
       </div>
 
@@ -40,7 +39,7 @@ const MypageClient = () => {
       </div>
 
       {/* 프로필 수정 모달 */}
-      <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />
+      {user && <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />}
     </main>
   );
 };
