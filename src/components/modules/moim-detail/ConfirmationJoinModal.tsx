@@ -9,8 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import useLoginRedirect from "@/hooks/useLoginRedirect";
+import { useLoginModalStore } from "@/stores/loginModal.store";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 type ConfirmationJoinModalProps = {
@@ -20,19 +21,18 @@ type ConfirmationJoinModalProps = {
 
 // useSearchParams()를 사용하는 부분만 별도 컴포넌트로 분리
 const LoginButton = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { redirectToLogin } = useLoginRedirect();
+  const { setOpen } = useLoginModalStore();
 
-  const handleLogin = () => {
-    const current = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
-    router.push(`/login?redirect=${encodeURIComponent(current)}`);
+  const handleApproveButtonClick = () => {
+    setOpen(false);
+    redirectToLogin();
   };
 
   return (
     <Button
-      onClick={handleLogin}
-      className="h-full flex-1 rounded-[12px] bg-green-500 text-base font-bold hover:cursor-pointer hover:bg-green-500 hover:shadow-md sm:rounded-2xl sm:text-xl"
+      onClick={handleApproveButtonClick}
+      className="h-full flex-1 rounded-[12px] bg-green-500 text-base font-bold sm:rounded-2xl sm:text-xl"
     >
       확인
     </Button>

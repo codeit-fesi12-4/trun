@@ -12,13 +12,15 @@ import {
 import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHeader } from "@/hooks/useHeader";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const Header = () => {
-  const { user, isMounted, favoriteCount, handleLogout } = useHeader();
-  const [open, setOpen] = useState(false);
+  const { isMounted, favoriteCount, handleLogout } = useHeader();
+  const { data: user, isLoading } = useUserProfileQuery();
+  const { open, setOpen } = useLoginModalStore();
   const router = useRouter();
 
   const handleFavoritePage = () => {
@@ -28,6 +30,8 @@ const Header = () => {
     }
     router.push("/moim-favorite");
   };
+
+  if (isLoading) return null;
 
   return (
     <header className="bg-background fixed top-0 z-10 w-full px-4 shadow-xl md:px-6">

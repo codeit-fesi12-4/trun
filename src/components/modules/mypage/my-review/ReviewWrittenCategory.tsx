@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 const ReviewWrittenCategory = () => {
   const { data, isLoading, isError } = useWrittenReviews();
-  const items = data?.data ?? [];
+  const items = data ?? [];
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;

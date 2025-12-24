@@ -3,9 +3,9 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { getFavoriteMoims } from "@/utils/favorite.util";
-import { useAuthStore } from "@/stores/auth.store";
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
+import { useUserProfileQuery } from "./useUserQuery";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
@@ -13,8 +13,9 @@ export const useMoimFavorite = () => {
   const isInitialMountRef = useRef(true);
   const allMoimsRef = useRef<Moim[]>([]);
 
-  const user = useAuthStore(state => state.user);
-  const userId = user?.id.toString() ?? null;
+  const { data: user } = useUserProfileQuery();
+
+  const userId = user?.id;
 
   const {
     moimCardData: allMoims,
@@ -82,11 +83,10 @@ export const useMoimFavorite = () => {
   }, [favoriteMoimIds]);
 
   // 찜한 모임만 필터링
-  const moimCardData = useMemo(() => {
-    if (!allMoims) return [];
-
-    return allMoims.filter(moim => favoriteMoimIds.includes(moim.id));
-  }, [allMoims, favoriteMoimIds]);
+  const moimCardData = useMemo(
+    () => allMoims.filter(moim => favoriteMoimIds.includes(moim.id)),
+    [allMoims, favoriteMoimIds],
+  );
 
   const handleFavoriteToggle = (moimId: number) => {
     void moimId;

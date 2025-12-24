@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth.store";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type FavoriteButtonProps = {
   moimId: number;
@@ -12,10 +12,10 @@ type FavoriteButtonProps = {
 
 const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [open, setOpen] = useState(false);
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
+  const { data: user, isLoading } = useUserProfileQuery();
 
-  const user = useAuthStore(state => state.user);
-  const userId = user?.id.toString();
+  const userId = user?.id;
 
   useEffect(() => {
     if (userId) {
@@ -29,7 +29,7 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
 
   const handleFavoriteClick = () => {
     if (!userId) {
-      setOpen(true);
+      setIsLoginModalOpen(true);
       return;
     }
 
@@ -44,6 +44,12 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
       }
     }, 0);
   };
+
+  if (isLoading)
+    return (
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 sm:h-12 sm:w-12" />
+    );
+
   return (
     <>
       <button
@@ -58,7 +64,6 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
           className={`${isFavorite && "heart-pop"} sm:h-6 sm:w-6`}
         />
       </button>
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </>
   );
 };

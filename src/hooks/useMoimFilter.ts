@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { type MoimFilterValues, type MoimFilterProps } from "@/types/moimFind.type";
-import { FILTER_CATEGORY, MOIM_LOCATION, MOIM_FILTER_SORT } from "@/constants/moim";
+import { MOIM_LOCATION, MOIM_FILTER_SORT } from "@/constants/moim";
+import { MoimType } from "@/types/moim.type";
 
 type UseMoimFilterProps = MoimFilterProps;
 
 export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFilterProps) => {
-  const [category, setCategory] = useState<"달림핏" | "런케이션">(FILTER_CATEGORY.DALLIMFIT);
+  const [category, setCategory] = useState<MoimType>("MINDFULNESS");
   const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(MOIM_FILTER_SORT.DEADLINE);
@@ -28,8 +29,8 @@ export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFil
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleCategoryChange = (value: string) => {
-    const newCategory = value as "달림핏" | "런케이션";
+  const handleCategoryChange = (value: MoimType) => {
+    const newCategory = value as MoimType;
     setCategory(newCategory);
     // 카테고리 변경 시 선택된 지역이 새로운 카테고리에 존재하지 않으면 "지역 전체"로 리셋
     const newLocation = resetLocationIfInvalid(location);

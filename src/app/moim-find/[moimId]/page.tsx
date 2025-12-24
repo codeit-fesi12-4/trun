@@ -9,11 +9,12 @@ type MoimDetailPage = {
 
 const MoimDetailPage = async ({ params }: MoimDetailPage) => {
   const { moimId } = await params;
+  const numberMoimId = Number(moimId);
 
   return (
     <section className="flex flex-col gap-4">
-      <MoimDetailInformation moimId={moimId} />
-      <MoimDetailReviewArea moimId={moimId} />
+      <MoimDetailInformation moimId={numberMoimId} />
+      <MoimDetailReviewArea moimId={numberMoimId} />
     </section>
   );
 };

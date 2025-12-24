@@ -6,12 +6,13 @@ import { type ChangeEvent, FormEvent, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import AuthLayout from "@/components/layouts/AuthLayout";
-import { AuthPasswordField, AuthTextField } from "@/components/modules/auth/AuthFields";
+import { AuthPasswordField } from "@/components/modules/auth/AuthPasswordField";
+import { AuthTextField } from "@/components/modules/auth/AuthTextField";
 import { Button } from "@/components/ui/button";
 import { postSignup } from "@/api/auth.api";
-import { SignupErrors, SignupForm, validateSignup } from "@/utils/validators.utils";
-
-const DUPLICATE_EMAILS = ["cheda@codeit.com"];
+import { validateSignup } from "@/utils/validators.utils";
+import { type SignupErrors, type SignupForm } from "@/types/auth.type";
+import { toast } from "sonner";
 
 const SignupClient = () => {
   const router = useRouter();
@@ -33,9 +34,14 @@ const SignupClient = () => {
         companyName: form.companyName,
         password: form.password,
       }),
-    onSuccess: () => {
-      setServerError(null);
-      router.push("/login");
+    onSuccess: result => {
+      if (result.ok) {
+        toast.success(result.data.message);
+        setServerError(null);
+        router.push("/login");
+      } else {
+        setServerError(result.message);
+      }
     },
     onError: error => {
       setServerError((error as Error).message);
@@ -43,7 +49,11 @@ const SignupClient = () => {
   });
 
   const handleChange = (field: keyof SignupForm) => (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
+    let { value } = e.target;
+    // 이름과 크루명을 제외한 필드에서 띄어쓰기 제거
+    if (field !== "name" && field !== "companyName") {
+      value = value.replace(/\s/g, "");
+    }
     setForm(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
@@ -53,12 +63,19 @@ const SignupClient = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const validation = validateSignup(form, DUPLICATE_EMAILS);
+    const validation = validateSignup(form);
     setErrors(validation);
     if (Object.keys(validation).length === 0) {
       signupMutation.mutate();
     }
   };
+
+  const isFormValid =
+    form.name.trim() !== "" &&
+    form.email.trim() !== "" &&
+    form.companyName.trim() !== "" &&
+    form.password.trim() !== "" &&
+    form.confirmPassword.trim() !== "";
 
   return (
     <AuthLayout
@@ -123,10 +140,14 @@ const SignupClient = () => {
         />
         <Button
           type="submit"
-          disabled={signupMutation.isPending}
-          className="h-11 w-full rounded-lg bg-gray-500 text-base font-semibold text-white transition-colors hover:bg-gray-600"
+          disabled={!isFormValid || signupMutation.isPending}
+          className={`h-11 w-full rounded-lg text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+            isFormValid
+              ? "cursor-pointer bg-green-600 text-white hover:bg-green-800"
+              : "bg-gray-100 text-gray-400"
+          }`}
         >
-          {signupMutation.isPending ? "진행 중..." : "확인"}
+          {signupMutation.isPending ? "진행 중..." : "가입"}
         </Button>
         {serverError ? <p className="text-sm font-semibold text-red-600">{serverError}</p> : null}
       </form>

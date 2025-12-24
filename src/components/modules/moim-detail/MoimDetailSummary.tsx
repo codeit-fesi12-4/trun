@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { Moim } from "@/types/moim.type";
 import { formatDeadline } from "@/utils/moim.util";
 import {
@@ -17,8 +16,6 @@ import {
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 import FavoriteButton from "@/components/common/FavoriteButton";
-import { useAuthStore } from "@/stores/auth.store";
-import ConfirmationJoinModal from "./ConfirmationJoinModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +23,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link2, Share2 } from "lucide-react";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -35,17 +34,18 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
-  const [open, setOpen] = useState(false);
+
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
   const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutaiton();
   const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
 
-  const { data: participants } = useParticipantsQuery({ moimId: moim.id });
+  const moimId = Number(moim.id);
 
-  const router = useRouter();
+  const { data: participants } = useParticipantsQuery(moimId);
+  const { data: user } = useUserProfileQuery();
 
-  const user = useAuthStore(state => state.user);
   const userId = user?.id;
 
   useEffect(() => {
@@ -54,7 +54,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         setIsCreator(true);
       }
     };
-
     const distinguishParticipant = () => {
       const participantsIds = participants?.map((p: Participant) => p.userId);
       if (participantsIds?.find((p: number) => p === userId)) {
@@ -63,7 +62,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         setIsParticipant(false);
       }
     };
-
     const distinguishFull = () => {
       if (moim.capacity > moim.participantCount) {
         setIsFull(false);
@@ -71,52 +69,38 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         setIsFull(true);
       }
     };
-
     distinguishCreator();
     distinguishParticipant();
     distinguishFull();
   }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
-    try {
-      await cancelMoim(moim.id);
-      await router.replace("/moim-find");
-
-      toast.success("모임이 취소되었습니다.");
-    } catch (error) {
-      console.error(error);
-      toast.error("모임 취소 실패", {
-        description: "잠시 후 다시 시도해주세요.",
-      });
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
     }
+    await cancelMoim(moimId);
   };
 
   const handleMoimJoin = async () => {
-    if (!userId) {
-      setOpen(true);
+    if (!user) {
+      setIsLoginModalOpen(true);
       return;
     }
-    try {
-      await joinMoim(moim.id);
-    } catch (error) {
-      console.error(error);
-      toast.error("모임 참여 실패", {
-        description: "잠시 후 다시 시도해주세요.",
-      });
-    }
+    await joinMoim(moimId);
   };
 
   const handleMoimLeave = async () => {
-    try {
-      await cancelJoin(moim.id);
-    } catch (error) {
-      console.error(error);
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
     }
+    await cancelJoin(moimId);
   };
 
   // 공유하기 버튼 기능 (해당 페이지에 대한 url 복사)
   const handleShareUrl = async () => {
-    const url = `${window.location.origin}/moim-find/${moim.id}`;
+    const url = `${window.location.origin}/moim-find/${moimId}`;
     try {
       await navigator.clipboard.writeText(url);
       toast.success("링크가 복사되었습니다.");
@@ -233,7 +217,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         </div>
       </div>
       <MoimDetailProgress moim={moim} />
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </div>
   );
 };

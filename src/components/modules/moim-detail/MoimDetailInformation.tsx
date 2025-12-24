@@ -7,11 +7,11 @@ import MoimDetailSummary from "./MoimDetailSummary";
 import MoimDetailSummarySkeleton from "./detail-skeleton/MoimDetailSummarySkeleton";
 
 type MoimDetailInformationProps = {
-  moimId: string;
+  moimId: number;
 };
 
 const MoimDetailInformation = ({ moimId }: MoimDetailInformationProps) => {
-  const { data, isLoading, error } = useMoimQuery({ moimId: Number(moimId) });
+  const { data, isLoading, error } = useMoimQuery(moimId);
 
   if (isLoading)
     return (

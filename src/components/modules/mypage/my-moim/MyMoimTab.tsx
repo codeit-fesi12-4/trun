@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import MyPageCard from "./MyPageMoimCard";
+import MyPageMoimCard from "./MyPageMoimCard";
 import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
@@ -12,7 +12,7 @@ const MyMoimTab = () => {
   const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
 
   // 참여한 나의 모임 조회
-  const { data: joinedMoims = [], isLoading, isError } = useJoinedMoims();
+  const { data = [], isLoading, isError } = useJoinedMoims();
 
   // 예약 취소
   const cancelJoinMutation = useCancelReservation();
@@ -28,11 +28,11 @@ const MyMoimTab = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      {joinedMoims.length === 0 ? (
+      {data.length === 0 ? (
         <EmptyState text="신청한 모임이 아직 없어요" />
       ) : (
-        joinedMoims.map(item => (
-          <MyPageCard
+        data.map(item => (
+          <MyPageMoimCard
             key={item.id}
             item={item}
             showCancelButton={!item.isCompleted} // 취소 버튼 노출 여부
@@ -47,9 +47,12 @@ const MyMoimTab = () => {
           onOpenChange={setIsCancelModalOpen}
           title="예약 취소"
           onConfirm={() => {
-            cancelJoinMutation.mutate(selectedCancelId);
-            setIsCancelModalOpen(false);
-            setSelectedCancelId(null);
+            cancelJoinMutation.mutate(selectedCancelId, {
+              onSuccess: () => {
+                setIsCancelModalOpen(false);
+                setSelectedCancelId(null);
+              },
+            });
           }}
           onCancel={() => {
             setIsCancelModalOpen(false);

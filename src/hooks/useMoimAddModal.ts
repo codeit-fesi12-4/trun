@@ -2,13 +2,7 @@ import { useState } from "react";
 import { useCreateMoimMutation } from "@/hooks/useMoimFindQuery";
 import { CreateMoimRequest, MoimType } from "@/types/moim.type";
 import { dateToISO } from "@/utils/date.util";
-import {
-  MOIM_TYPE,
-  TOTAL_STEPS,
-  INITIAL_FORM_DATA,
-  MIN_CAPACITY,
-  FILTER_CATEGORY,
-} from "@/constants/moim";
+import { TOTAL_STEPS, INITIAL_FORM_DATA, MIN_CAPACITY } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
 import { toast } from "sonner";
 
@@ -31,13 +25,6 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
     }
   };
 
-  // 서비스 문자열을 MoimType으로 변환
-  const convertServiceToType = (service: string): MoimType | null => {
-    if (service === FILTER_CATEGORY.DALLIMFIT) return MOIM_TYPE.DALLIMFIT;
-    if (service === FILTER_CATEGORY.RUNCATION) return MOIM_TYPE.RUNCATION;
-    return null;
-  };
-
   const handleFieldChange = (
     field: keyof MoimFormData,
     value: string | File | null | Date | undefined,
@@ -48,11 +35,10 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
     }));
   };
 
-  const handleServiceChange = (service: string) => {
-    const selectedType = convertServiceToType(service);
+  const handleServiceChange = (service: MoimType) => {
     setFormData(prev => ({
       ...prev,
-      type: prev.type === selectedType ? "" : (selectedType ?? ""),
+      type: prev.type === service ? "" : (service ?? ""),
     }));
   };
 

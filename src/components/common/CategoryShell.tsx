@@ -2,11 +2,11 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
-import { FILTER_CATEGORY } from "@/constants/moim";
+import { ReviewType } from "@/types/review.type";
 
 type CategoryShellProps = {
-  category: "달림핏" | "런케이션";
-  onCategoryChange: (val: "달림핏" | "런케이션") => void;
+  category: ReviewType;
+  onCategoryChange: (val: ReviewType) => void;
   LocationSlot?: React.ReactNode;
   DateSlot?: React.ReactNode;
   SortSlot?: React.ReactNode;
@@ -23,14 +23,14 @@ const CategoryShell = ({
     {/* 카테고리 탭 영역 */}
     <Tabs
       value={category}
-      onValueChange={v => onCategoryChange(v as "달림핏" | "런케이션")}
+      onValueChange={v => onCategoryChange(v as ReviewType)}
       className="-mx-6 sm:mx-0"
     >
       <TabsList className="flex w-full justify-between bg-transparent">
         <div className="flex w-full border-b border-gray-200 md:border-0">
           <TabsTrigger
-            value={FILTER_CATEGORY.DALLIMFIT}
-            className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 hover:cursor-pointer data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
+            value="MINDFULNESS"
+            className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
           >
             <Image
               src="/icons/dallimfit.svg"
@@ -42,8 +42,8 @@ const CategoryShell = ({
             달림핏
           </TabsTrigger>
           <TabsTrigger
-            value={FILTER_CATEGORY.RUNCATION}
-            className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 hover:cursor-pointer data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
+            value="WORKATION"
+            className="h-[53px] w-1/2 gap-2 bg-transparent! px-6 text-base font-semibold text-gray-500 data-[state=active]:rounded-none data-[state=active]:border-x-0 data-[state=active]:border-t-0 data-[state=active]:border-b-2 data-[state=active]:border-green-500 data-[state=active]:text-green-600 data-[state=active]:shadow-none md:text-xl"
           >
             <Image
               src="/icons/runcation.svg"

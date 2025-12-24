@@ -12,23 +12,19 @@ import {
 } from "@/components/ui/pagination";
 import ReviewList from "./ReviewList";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
-import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { useMoimReviewsQuery } from "@/hooks/useReviewQuery";
 
 type MoimDetailReviewAreaProps = {
-  moimId: string;
+  moimId: number;
 };
 
 export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaProps) {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState<(number | string)[]>([]);
 
-  const NumberMoimId = Number(moimId);
-
   const { data, isLoading } = useMoimReviewsQuery({
-    moimId: NumberMoimId,
-    teamName: TEAM_NAME,
+    gatheringId: moimId,
     limit: REVIEW_PAGE_SIZE.PAGINATION,
     offset: (page - 1) * REVIEW_PAGE_SIZE.PAGINATION,
   });
