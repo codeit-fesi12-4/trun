@@ -4,6 +4,7 @@ import MoimInputField from "./MoimInputField";
 import MoimPlaceSelectField from "./MoimPlaceSelectField";
 import { MIN_CAPACITY } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
+import { MoimType } from "@/types/moim.type";
 
 type MoimAddChapterProps = {
   currentStep: number;
@@ -12,7 +13,7 @@ type MoimAddChapterProps = {
     field: keyof MoimFormData,
     value: string | File | null | Date | undefined,
   ) => void;
-  onServiceChange: (service: string) => void;
+  onServiceChange: (service: MoimType) => void;
 };
 
 export const MoimAddChapter = ({

@@ -1,13 +1,14 @@
 "use client";
 
+import { MoimType } from "@/types/moim.type";
 import Image from "next/image";
 
 type ServieCheckboxFieldProps = {
   title: string;
   subtitle?: string;
-  service: string;
+  service: MoimType;
   isSelected: boolean;
-  onServiceChange: (service: string) => void;
+  onServiceChange: (service: MoimType) => void;
   iconSrc?: string;
   iconAlt?: string;
 };
