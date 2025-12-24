@@ -1,5 +1,5 @@
 import { getUserProfile, putUpdateProfile } from "@/api/user.api";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // 회원 정보 호출
@@ -14,8 +14,10 @@ export const useUserProfileQuery = (enabled = false) =>
   });
 
 // 회원 정보 수정
-export const useUpdateProfileMutationQuery = () =>
-  useMutation({
+export const useUpdateProfileQuery = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: (formData: FormData) => putUpdateProfile(formData),
     onSuccess: res => {
       if (!res.ok) {
@@ -23,9 +25,14 @@ export const useUpdateProfileMutationQuery = () =>
         return;
       }
       toast("프로필이 수정되었습니다");
+
+      void queryClient.invalidateQueries({
+        queryKey: ["userProfile"],
+      });
     },
     onError: error => {
       if (error instanceof Error) toast(error.message);
       else toast("프로필 업데이트 중 오류가 발생했습니다");
     },
   });
+};

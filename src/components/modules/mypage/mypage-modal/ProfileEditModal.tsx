@@ -7,7 +7,7 @@ import {
   UpdateProfileForm,
   validateUpdateProfile,
 } from "@/utils/validators.utils";
-import { useUpdateProfileMutationQuery } from "@/hooks/useUserQuery";
+import { useUpdateProfileQuery } from "@/hooks/useUserQuery";
 import { toast } from "sonner";
 import { UserProfile } from "@/types/user.type";
 
@@ -15,12 +15,10 @@ export const ProfileEditModal = ({
   open,
   onOpenChange,
   user,
-  onSuccess,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   user: UserProfile;
-  onSuccess: (updatedUser: UserProfile) => void;
 }) => {
   const [form, setForm] = useState<UpdateProfileForm>({
     companyName: "",
@@ -28,7 +26,7 @@ export const ProfileEditModal = ({
     file: null,
   });
   const [errors, setErrors] = useState<UpdateProfileErrors>({});
-  const updateProfileMutation = useUpdateProfileMutationQuery();
+  const updateProfileMutation = useUpdateProfileQuery();
 
   // 모달 open 시 유저 정보로 폼 초기화
   useEffect(() => {
@@ -89,7 +87,6 @@ export const ProfileEditModal = ({
       onSuccess: res => {
         if (!res.ok) return;
         onOpenChange(false);
-        onSuccess(res.data);
       },
     });
   };
