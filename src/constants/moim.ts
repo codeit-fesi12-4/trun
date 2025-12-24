@@ -24,17 +24,17 @@ export const MOIM_FILTER_SORT = {
 } as const;
 
 // API 정렬 기준 상수
-export const SORT_BY = {
-  DATE_TIME: "dateTime",
-  REGISTRATION_END: "registrationEnd",
-  PARTICIPANT_COUNT: "participantCount",
-} as const;
+// export const SORT_BY = {
+//   DATE_TIME: "dateTime",
+//   REGISTRATION_END: "registrationEnd",
+//   PARTICIPANT_COUNT: "participantCount",
+// } as const;
 
 // API 정렬 순서 상수
-export const SORT_ORDER = {
-  ASC: "asc",
-  DESC: "desc",
-} as const;
+// export const SORT_ORDER = {
+//   ASC: "asc",
+//   DESC: "desc",
+// } as const;
 
 // 모임 지역 상수 (필터 "전체" 옵션 포함)
 export const MOIM_LOCATION = {

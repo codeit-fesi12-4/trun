@@ -1,4 +1,4 @@
-import { MoimType, SortOrder } from "./moim.type";
+import { MoimType } from "./moim.type";
 
 export type ReviewType = "MINDFULNESS" | "WORKATION";
 
@@ -64,7 +64,7 @@ export type GetReviewsParams = {
   date?: string;
   registrationEnd?: string;
   sortBy?: ReviewSortBy;
-  sortOrder?: SortOrder;
+  sortOrder?: ReviewSortOrder;
   limit?: number;
   offset?: number;
 };
