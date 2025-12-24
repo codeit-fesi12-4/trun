@@ -8,7 +8,7 @@ export const useUserProfileQuery = (enabled = false) =>
     queryKey: ["userProfile"],
     queryFn: () => getUserProfile(),
     enabled,
-    retry: false,
+    retry: 2,
     staleTime: 1000 * 60,
     select: res => (res.ok ? res.data : undefined),
   });

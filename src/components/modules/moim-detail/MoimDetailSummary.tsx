@@ -34,6 +34,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
+
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
@@ -41,8 +42,8 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
 
   const moimId = Number(moim.id);
-  const { data: participants } = useParticipantsQuery(moimId);
 
+  const { data: participants } = useParticipantsQuery(moimId);
   const { data: user } = useUserProfileQuery();
 
   const userId = user?.id;
@@ -74,7 +75,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
-    if (status === "unauthenticated") {
+    if (!user) {
       setIsLoginModalOpen(true);
       return;
     }
@@ -82,7 +83,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimJoin = async () => {
-    if (status === "unauthenticated") {
+    if (!user) {
       setIsLoginModalOpen(true);
       return;
     }
@@ -90,7 +91,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimLeave = async () => {
-    if (status === "unauthenticated") {
+    if (!user) {
       setIsLoginModalOpen(true);
       return;
     }
