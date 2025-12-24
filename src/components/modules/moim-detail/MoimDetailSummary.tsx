@@ -23,8 +23,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link2, Share2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -34,6 +34,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
+
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
@@ -41,11 +42,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
 
   const moimId = Number(moim.id);
+
   const { data: participants } = useParticipantsQuery(moimId);
+  const { data: user } = useUserProfileQuery();
 
-  const session = useSession();
-
-  const userId = session.data?.user.id;
+  const userId = user?.id;
 
   useEffect(() => {
     const distinguishCreator = () => {
@@ -74,7 +75,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
-    if (session.status === "unauthenticated") {
+    if (!user) {
       setIsLoginModalOpen(true);
       return;
     }
@@ -82,7 +83,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimJoin = async () => {
-    if (session.status === "unauthenticated") {
+    if (!user) {
       setIsLoginModalOpen(true);
       return;
     }
@@ -90,7 +91,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimLeave = async () => {
-    if (session.status === "unauthenticated") {
+    if (!user) {
       setIsLoginModalOpen(true);
       return;
     }

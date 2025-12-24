@@ -2,12 +2,12 @@
 
 import MyPageCard from "./MyPageMoimCard";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { useSession } from "next-auth/react";
 import { useCreatedMoims } from "@/hooks/useMypageQuery";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const CreatedMoimTab = () => {
-  const { data: session, status } = useSession();
-  const userId = session?.user?.id;
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
 
   const { data: items = [], isLoading, isError } = useCreatedMoims(userId);
 

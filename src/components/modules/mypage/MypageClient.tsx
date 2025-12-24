@@ -7,28 +7,24 @@ import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
 import { useSession } from "next-auth/react";
 import { UserProfile } from "@/types/user.type";
-import { getUserProfile } from "@/api/user.api";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const MypageClient = () => {
-  const { status } = useSession();
+  const { update } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const queryClient = useQueryClient();
 
-  // user 데이터는 별도로 조회
-  const { data: user, isLoading } = useQuery({
-    queryKey: ["userProfile"],
-    queryFn: getUserProfile,
-    select: res => (res.ok ? res.data : null),
-    enabled: status === "authenticated",
-  });
+  const { data: user } = useUserProfileQuery();
 
-  if (status === "loading" || isLoading) return null;
-  if (status !== "authenticated" || !user) return null;
+  if (!user) return null;
 
   const handleProfileUpdated = (updatedUser: UserProfile) => {
-    // user 데이터 업데이트
-    queryClient.setQueryData<UserProfile>(["userProfile"], updatedUser);
+    void update({
+      user: {
+        ...user,
+        companyName: updatedUser.companyName,
+        image: updatedUser.image,
+      },
+    });
   };
 
   return (
