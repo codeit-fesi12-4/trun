@@ -7,18 +7,21 @@ import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
 import { useSession } from "next-auth/react";
 import { UserProfile } from "@/types/user.type";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const MypageClient = () => {
-  const { data: session, status, update } = useSession();
+  const { status, update } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { data: user } = useUserProfileQuery(status === "authenticated");
+
   if (status === "loading") return null;
-  if (!session?.user) return null;
+  if (!user) return null;
 
   const handleProfileUpdated = (updatedUser: UserProfile) => {
     void update({
       user: {
-        ...session.user,
+        ...user,
         companyName: updatedUser.companyName,
         image: updatedUser.image,
       },
@@ -42,7 +45,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          <ProfileSection user={session.user} />
+          <ProfileSection user={user} />
         </div>
       </div>
 
@@ -55,7 +58,7 @@ const MypageClient = () => {
       <ProfileEditModal
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
-        user={session.user}
+        user={user}
         onSuccess={handleProfileUpdated}
       />
     </main>

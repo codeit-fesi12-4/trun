@@ -5,18 +5,19 @@ import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/fav
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type FavoriteButtonProps = {
   moimId: number;
 };
 
 const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
+  const { status } = useSession();
   const [isFavorite, setIsFavorite] = useState(false);
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
+  const { data: user, isLoading } = useUserProfileQuery(status === "authenticated");
 
-  const { data: session } = useSession();
-  const user = session?.user;
-  const userId = user?.id.toString();
+  const userId = user?.id;
 
   useEffect(() => {
     if (userId) {
@@ -45,6 +46,12 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
       }
     }, 0);
   };
+
+  if (isLoading)
+    return (
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 sm:h-12 sm:w-12" />
+    );
+
   return (
     <>
       <button

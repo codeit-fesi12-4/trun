@@ -6,6 +6,7 @@ import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
+import { useUserProfileQuery } from "./useUserQuery";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
@@ -13,9 +14,10 @@ export const useMoimFavorite = () => {
   const isInitialMountRef = useRef(true);
   const allMoimsRef = useRef<Moim[]>([]);
 
-  const { data: session } = useSession();
-  const user = session?.user;
-  const userId = user?.id.toString() ?? null;
+  const { status } = useSession();
+  const { data: user } = useUserProfileQuery(status === "authenticated");
+
+  const userId = user?.id;
 
   const {
     moimCardData: allMoims,

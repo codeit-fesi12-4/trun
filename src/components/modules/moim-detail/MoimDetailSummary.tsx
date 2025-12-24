@@ -25,6 +25,7 @@ import {
 import { Link2, Share2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -43,9 +44,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const moimId = Number(moim.id);
   const { data: participants } = useParticipantsQuery(moimId);
 
-  const session = useSession();
+  const { status } = useSession();
 
-  const userId = session.data?.user.id;
+  const { data: user } = useUserProfileQuery(status === "authenticated");
+
+  const userId = user?.id;
 
   useEffect(() => {
     const distinguishCreator = () => {
@@ -74,7 +77,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
-    if (session.status === "unauthenticated") {
+    if (status === "unauthenticated") {
       setIsLoginModalOpen(true);
       return;
     }
@@ -82,7 +85,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimJoin = async () => {
-    if (session.status === "unauthenticated") {
+    if (status === "unauthenticated") {
       setIsLoginModalOpen(true);
       return;
     }
@@ -90,7 +93,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   };
 
   const handleMoimLeave = async () => {
-    if (session.status === "unauthenticated") {
+    if (status === "unauthenticated") {
       setIsLoginModalOpen(true);
       return;
     }

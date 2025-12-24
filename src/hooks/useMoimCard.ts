@@ -6,15 +6,18 @@ import { formatDeadline } from "@/utils/moim.util";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
 import { useSession } from "next-auth/react";
+import { useUserProfileQuery } from "./useUserQuery";
 
 export const useMoimCard = (
   item: Moim,
   onFavoriteToggle?: MoimCardActions["onFavoriteToggle"],
   onJoinClick?: MoimCardActions["onJoinClick"],
 ) => {
-  const { data: session, status } = useSession();
-  const user = session?.user;
-  const userId = user?.id.toString() ?? null;
+  const { status } = useSession();
+  const { data: user } = useUserProfileQuery(status === "authenticated");
+
+  const userId = user?.id;
+
   // 로그인 여부는 user 존재로 확인 (토큰은 HttpOnly 쿠키에 있어서 클라이언트에서 접근 불가)
   const isLoggedIn = status === "authenticated";
 

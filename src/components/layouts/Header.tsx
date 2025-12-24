@@ -15,9 +15,13 @@ import { useHeader } from "@/hooks/useHeader";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useSession } from "next-auth/react";
 
 const Header = () => {
-  const { user, isMounted, favoriteCount, handleLogout } = useHeader();
+  const { status } = useSession();
+  const { isMounted, favoriteCount, handleLogout } = useHeader();
+  const { data: user, isLoading } = useUserProfileQuery(status === "authenticated");
   const { open, setOpen } = useLoginModalStore();
   const router = useRouter();
 
@@ -28,6 +32,8 @@ const Header = () => {
     }
     router.push("/moim-favorite");
   };
+
+  if (isLoading) return null;
 
   return (
     <header className="bg-background fixed top-0 z-10 w-full px-4 shadow-xl md:px-6">

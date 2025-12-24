@@ -6,10 +6,11 @@ import { toast } from "sonner";
 import { useSession, signOut } from "next-auth/react";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useMoimFind } from "@/hooks/useMoimFind";
+import { useUserProfileQuery } from "./useUserQuery";
 
 export const useHeader = () => {
-  const { data: session } = useSession();
-  const user = session?.user;
+  const { status } = useSession();
+  const { data: user } = useUserProfileQuery(status === "authenticated");
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);
@@ -27,9 +28,8 @@ export const useHeader = () => {
 
   // 찜한 모임 개수 가져오기 및 업데이트 (실제 존재하는 모임만 카운트)
   useEffect(() => {
-    const userId = user?.id ? user.id.toString() : null;
     const updateFavoriteCount = () => {
-      const favorites = getFavoriteMoims(userId);
+      const favorites = getFavoriteMoims(user?.id);
 
       // 실제 모임 목록이 있을 때만 필터링
       if (allMoims.length > 0) {

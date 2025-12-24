@@ -1,6 +1,16 @@
-import { putUpdateProfile } from "@/api/user.api";
-import { useMutation } from "@tanstack/react-query";
+import { getUserProfile, putUpdateProfile } from "@/api/user.api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+// 회원 정보 호출
+export const useUserProfileQuery = (enabled: boolean) =>
+  useQuery({
+    queryKey: ["userProfile"],
+    queryFn: () => getUserProfile(),
+    enabled,
+    staleTime: 1000 * 60,
+    select: res => (res.ok ? res.data : undefined),
+  });
 
 // 회원 정보 수정
 export const useUpdateProfileMutationQuery = () =>

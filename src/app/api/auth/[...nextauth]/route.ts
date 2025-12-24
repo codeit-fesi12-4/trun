@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { postSignin } from "@/api/auth.api";
-import { getUserProfileServer } from "@/api/user.api";
 import type { NextAuthOptions } from "next-auth";
 import { cookies } from "next/headers";
 
@@ -34,12 +33,6 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          const userProfile = await getUserProfileServer(loginResult.data.token);
-
-          if (!userProfile) {
-            return null;
-          }
-
           // 외부 API 토큰을 HttpOnly 쿠키에 저장 (서버 사이드에서만 가능)
           const cookieStore = await cookies();
           cookieStore.set("api-token", loginResult.data.token, {
@@ -50,14 +43,8 @@ export const authOptions: NextAuthOptions = {
             path: "/", // 모든 경로에서 접근 가능
           });
 
-          // 사용자 정보만 반환 (토큰은 쿠키에 저장됨)
-          return {
-            id: String(userProfile.id),
-            email: userProfile.email,
-            name: userProfile.name,
-            companyName: userProfile.companyName,
-            image: userProfile.image,
-          };
+          // NextAuth는 토큰만 관리
+          return { id: "authenticated" };
         } catch (error) {
           console.error("Login error:", error);
           return null;
@@ -68,43 +55,8 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signOut() {
       // 로그아웃 시 토큰 쿠키도 함께 삭제
-      // NextAuth의 signOut 이벤트에서 처리하므로 별도 API 라우트 불필요
       const cookieStore = await cookies();
       cookieStore.delete("api-token");
-    },
-  },
-  callbacks: {
-    async jwt({ token, user, trigger, session }) {
-      // 새로운 로그인 시 사용자 정보만 저장 (토큰 제거)
-      if (user) {
-        token.id = user.id || "";
-        token.email = user.email || "";
-        token.name = user.name || "";
-        token.companyName = user.companyName || "";
-        token.image = user.image ?? null;
-        return token;
-      }
-
-      // session.update() 호출 시
-      if (trigger === "update" && session?.user) {
-        token.companyName = session.user.companyName;
-        token.image = session.user.image ?? null;
-      }
-
-      // 기존 세션 유지
-      return token;
-    },
-    async session({ session, token }) {
-      // 세션에 사용자 정보만 포함 (토큰 제거)
-      if (token.email && token.name && token.companyName) {
-        const user = session.user;
-        user.id = Number(token.id) || 0;
-        user.email = token.email;
-        user.name = token.name;
-        user.companyName = token.companyName;
-        user.image = token.image ?? null;
-      }
-      return session;
     },
   },
   pages: {
