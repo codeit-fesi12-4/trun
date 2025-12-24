@@ -16,12 +16,10 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "@/hooks/useUserQuery";
-import { useSession } from "next-auth/react";
 
 const Header = () => {
-  const { status } = useSession();
   const { isMounted, favoriteCount, handleLogout } = useHeader();
-  const { data: user, isLoading } = useUserProfileQuery(status === "authenticated");
+  const { data: user, isLoading } = useUserProfileQuery();
   const { open, setOpen } = useLoginModalStore();
   const router = useRouter();
 

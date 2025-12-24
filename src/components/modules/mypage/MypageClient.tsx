@@ -10,12 +10,11 @@ import { UserProfile } from "@/types/user.type";
 import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const MypageClient = () => {
-  const { status, update } = useSession();
+  const { update } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
 
-  if (status === "loading") return null;
   if (!user) return null;
 
   const handleProfileUpdated = (updatedUser: UserProfile) => {

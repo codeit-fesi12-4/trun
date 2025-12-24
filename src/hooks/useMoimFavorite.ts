@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { getFavoriteMoims } from "@/utils/favorite.util";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
 import { useUserProfileQuery } from "./useUserQuery";
@@ -14,8 +13,7 @@ export const useMoimFavorite = () => {
   const isInitialMountRef = useRef(true);
   const allMoimsRef = useRef<Moim[]>([]);
 
-  const { status } = useSession();
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
 
   const userId = user?.id;
 

@@ -23,7 +23,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link2, Share2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
@@ -44,9 +43,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const moimId = Number(moim.id);
   const { data: participants } = useParticipantsQuery(moimId);
 
-  const { status } = useSession();
-
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
 
   const userId = user?.id;
 

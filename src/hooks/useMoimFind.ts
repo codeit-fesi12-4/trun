@@ -4,7 +4,6 @@ import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
 import { MOIM_LOCATION, MOIM_FILTER_SORT, SORT_BY, SORT_ORDER } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
-import { useSession } from "next-auth/react";
 import { formatDateWithDash } from "@/utils/date.util";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "./useUserQuery";
@@ -49,9 +48,7 @@ export const useMoimFind = () => {
     return params;
   }, [filters.category, filters.location, filters.date, filters.sort]);
 
-  // NextAuth 세션에서 사용자 정보 가져오기
-  const { status } = useSession();
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
   // 로그인 여부는 user 존재로 확인 (토큰은 HttpOnly 쿠키에 있어서 클라이언트에서 접근 불가)
   const isLoggedIn = !!user;
 

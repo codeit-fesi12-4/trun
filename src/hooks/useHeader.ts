@@ -3,14 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { useUserProfileQuery } from "./useUserQuery";
 
 export const useHeader = () => {
-  const { status } = useSession();
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);

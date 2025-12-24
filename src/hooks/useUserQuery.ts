@@ -3,11 +3,12 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // 회원 정보 호출
-export const useUserProfileQuery = (enabled: boolean) =>
+export const useUserProfileQuery = (enabled = false) =>
   useQuery({
     queryKey: ["userProfile"],
     queryFn: () => getUserProfile(),
     enabled,
+    retry: false,
     staleTime: 1000 * 60,
     select: res => (res.ok ? res.data : undefined),
   });

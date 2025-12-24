@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -12,10 +11,9 @@ type FavoriteButtonProps = {
 };
 
 const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
-  const { status } = useSession();
   const [isFavorite, setIsFavorite] = useState(false);
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
-  const { data: user, isLoading } = useUserProfileQuery(status === "authenticated");
+  const { data: user, isLoading } = useUserProfileQuery();
 
   const userId = user?.id;
 

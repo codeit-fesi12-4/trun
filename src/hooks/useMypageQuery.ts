@@ -3,7 +3,6 @@ import { getReviews, postReviews } from "@/api/review.api";
 import { WritableReviewItem } from "@/types/mypage.type";
 import { PostReviewParams, ReviewItem } from "@/types/review.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useUserProfileQuery } from "./useUserQuery";
 
@@ -60,8 +59,7 @@ export const useAvailableReviews = () => {
 // 리뷰 등록
 export const useReviewMutation = (onCloseModal: () => void) => {
   const queryClient = useQueryClient();
-  const { status } = useSession();
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
   const userId = user?.id;
 
   return useMutation({
@@ -100,8 +98,7 @@ export const useReviewMutation = (onCloseModal: () => void) => {
 
 // 작성한 리뷰
 export const useWrittenReviews = () => {
-  const { status } = useSession();
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
   const userId = user?.id;
 
   return useQuery<ReviewItem[]>({

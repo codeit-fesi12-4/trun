@@ -14,7 +14,7 @@ export const useMoimCard = (
   onJoinClick?: MoimCardActions["onJoinClick"],
 ) => {
   const { status } = useSession();
-  const { data: user } = useUserProfileQuery(status === "authenticated");
+  const { data: user } = useUserProfileQuery();
 
   const userId = user?.id;
 
