@@ -27,8 +27,6 @@ const AllReviewContent = () => {
 
   useSyncQueryString(buildReviewsQueryString(reviewQueryParams));
 
-  useSyncQueryString(buildReviewsQueryString(reviewQueryParams));
-
   const {
     data: reviewsPages,
     isLoading,
