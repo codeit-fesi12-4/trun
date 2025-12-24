@@ -1,22 +1,24 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
-import { MOIM_LOCATION, MOIM_FILTER_SORT, SORT_BY, SORT_ORDER } from "@/constants/moim";
+import { MOIM_LOCATION } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { formatDateWithDash } from "@/utils/date.util";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "./useUserQuery";
+import { buildMoimsQueryString } from "@/utils/path.util";
+import useSyncQueryString from "./useSyncQueryString";
+import { useSearchParams } from "next/navigation";
+import parseFilters from "@/utils/parseFilters";
 
 export const useMoimFind = () => {
+  const searchParams = useSearchParams();
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<MoimFilterValues>({
-    category: "MINDFULNESS",
-    location: MOIM_LOCATION.ALL,
-    date: undefined,
-    sort: MOIM_FILTER_SORT.DEADLINE,
-  });
+  const [filters, setFilters] = useState<MoimFilterValues>(() =>
+    parseFilters(searchParams, "moim"),
+  );
 
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
@@ -28,15 +30,15 @@ export const useMoimFind = () => {
   const infiniteQueryParams = useMemo(() => {
     // 정렬 기준을 API 파라미터로 변환
     const sortParams =
-      filters.sort === MOIM_FILTER_SORT.DEADLINE
-        ? {
-            sortBy: SORT_BY.REGISTRATION_END,
-            sortOrder: SORT_ORDER.ASC,
-          }
-        : {
-            sortBy: SORT_BY.PARTICIPANT_COUNT,
-            sortOrder: SORT_ORDER.DESC,
-          };
+      filters.sortBy === "registrationEnd"
+        ? ({
+            sortBy: "registrationEnd",
+            sortOrder: "asc",
+          } as const)
+        : ({
+            sortBy: "participantCount",
+            sortOrder: "desc",
+          } as const);
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
       type: filters.category,
@@ -46,7 +48,9 @@ export const useMoimFind = () => {
       sortOrder: sortParams.sortOrder,
     };
     return params;
-  }, [filters.category, filters.location, filters.date, filters.sort]);
+  }, [filters.category, filters.location, filters.date, filters.sortBy]);
+
+  useSyncQueryString(buildMoimsQueryString(infiniteQueryParams));
 
   const { data: user } = useUserProfileQuery();
   // 로그인 여부는 user 존재로 확인 (토큰은 HttpOnly 쿠키에 있어서 클라이언트에서 접근 불가)
@@ -98,13 +102,19 @@ export const useMoimFind = () => {
 
   // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
   useEffect(() => {
+    const reflectParseFilter = () => {
+      setFilters(parseFilters(searchParams, "moim"));
+    };
+
+    reflectParseFilter();
+
     if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
       isAutoLoadingRef.current = true;
       void fetchNextLocationPage().finally(() => {
         isAutoLoadingRef.current = false;
       });
     }
-  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage]);
+  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage, searchParams]);
 
   const availableLocations = useMemo(() => {
     if (allLocationMoims.length === 0) return [MOIM_LOCATION.ALL];
