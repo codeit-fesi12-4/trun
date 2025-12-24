@@ -5,27 +5,13 @@ import TabsSection from "@/components/modules/mypage/TabsSection";
 import Image from "next/image";
 import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
-import { useSession } from "next-auth/react";
-import { UserProfile } from "@/types/user.type";
 import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const MypageClient = () => {
-  const { update } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { data: user } = useUserProfileQuery();
 
   if (!user) return null;
-
-  const handleProfileUpdated = (updatedUser: UserProfile) => {
-    void update({
-      user: {
-        ...user,
-        companyName: updatedUser.companyName,
-        image: updatedUser.image,
-      },
-    });
-  };
 
   return (
     <main className="flex w-full flex-1 flex-col lg:flex-row">
@@ -54,12 +40,7 @@ const MypageClient = () => {
       </div>
 
       {/* 프로필 수정 모달 */}
-      <ProfileEditModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        user={user}
-        onSuccess={handleProfileUpdated}
-      />
+      <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />
     </main>
   );
 };
