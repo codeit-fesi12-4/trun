@@ -21,6 +21,7 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
     handlePrevious,
     handleSubmit,
     isSubmitting,
+    fieldErrors,
   } = useMoimAddModal({ onOpenChange });
 
   return (
@@ -41,6 +42,7 @@ const MoimAddModal = ({ open, onOpenChange }: MoimAddModalProps) => {
         formData={formData}
         onFieldChange={handleFieldChange}
         onServiceChange={handleServiceChange}
+        fieldErrors={fieldErrors}
       />
     </ModalLayout>
   );

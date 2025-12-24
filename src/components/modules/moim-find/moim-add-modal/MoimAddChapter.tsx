@@ -2,7 +2,7 @@ import MoimDatePickerField from "./MoimDatePickerField";
 import ServieCheckboxField from "./ServieCheckboxField";
 import MoimInputField from "./MoimInputField";
 import MoimPlaceSelectField from "./MoimPlaceSelectField";
-import { MIN_CAPACITY } from "@/constants/moim";
+import { MIN_CAPACITY, MAX_NAME_LENGTH } from "@/constants/moim";
 import { type MoimFormData } from "@/types/moimFind.type";
 import { MoimType } from "@/types/moim.type";
 
@@ -14,6 +14,10 @@ type MoimAddChapterProps = {
     value: string | File | null | Date | undefined,
   ) => void;
   onServiceChange: (service: MoimType) => void;
+  fieldErrors?: {
+    name?: string;
+    image?: string;
+  };
 };
 
 export const MoimAddChapter = ({
@@ -21,12 +25,15 @@ export const MoimAddChapter = ({
   formData,
   onFieldChange,
   onServiceChange,
+  fieldErrors = {},
 }: MoimAddChapterProps) => {
   switch (currentStep) {
     case 1:
       return (
         <div className="mb-4 flex flex-col gap-4 py-6">
-          <p className="text-sm text-gray-600">원하시는 서비스를 선택해주세요</p>
+          <p className="text-sm text-gray-600">
+            원하시는 서비스를 선택해주세요<span className="text-red-500">*</span>
+          </p>
           <div className="flex flex-col gap-3">
             <ServieCheckboxField
               title="달림핏"
@@ -57,6 +64,9 @@ export const MoimAddChapter = ({
             value={formData.name}
             onChange={value => onFieldChange("name", value)}
             type="text"
+            maxLength={MAX_NAME_LENGTH}
+            error={fieldErrors.name}
+            required
           />
           <MoimPlaceSelectField
             id="location"
@@ -64,14 +74,17 @@ export const MoimAddChapter = ({
             placeholder="장소를 선택해주세요"
             value={formData.location}
             onValueChange={value => onFieldChange("location", value)}
+            required
           />
           <MoimInputField
             id="image"
             label="이미지"
-            placeholder="이미지를 첨부해주세요"
+            placeholder="이미지를 첨부해주세요 (최대 용량 20MB)"
             onChange={value => onFieldChange("image", value)}
             type="image"
             fileName={formData.image?.name}
+            error={fieldErrors.image}
+            helperText="※ 이미지가 없을 경우, 기본 이미지로 대체됩니다."
           />
         </div>
       );
@@ -82,11 +95,13 @@ export const MoimAddChapter = ({
             label="모임 날짜"
             date={formData.dateTime}
             onDateChange={date => onFieldChange("dateTime", date)}
+            required
           />
           <MoimDatePickerField
             label="마감 날짜"
             date={formData.registrationEnd}
             onDateChange={date => onFieldChange("registrationEnd", date)}
+            required
           />
           <MoimInputField
             id="capacity"
@@ -96,6 +111,7 @@ export const MoimAddChapter = ({
             onChange={value => onFieldChange("capacity", value)}
             type="number"
             min={MIN_CAPACITY.toString()}
+            helperText={`※ 미입력 시, ${MIN_CAPACITY}명으로 설정됩니다.`}
           />
         </div>
       );
