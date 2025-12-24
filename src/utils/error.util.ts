@@ -12,11 +12,15 @@ export class ApiError extends Error {
   }
 }
 
-export const handleApiError = async (error: unknown, options?: { onUnauthorized?: () => void }) => {
+export const handleApiError = async (
+  error: unknown,
+  options?: { onUnauthorized?: (reason?: string) => void },
+) => {
   if (error instanceof ApiError) {
     if (error.status === 401) {
-      console.error(error);
-      options?.onUnauthorized?.();
+      const reason = error.code;
+      options?.onUnauthorized?.(reason);
+
       return;
     } else {
       console.error(error);

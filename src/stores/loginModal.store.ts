@@ -1,8 +1,13 @@
 import { create } from "zustand";
 
-type LoginModalState = { open: boolean; setOpen: (v: boolean) => void };
+type LoginModalState = {
+  open: boolean;
+  reason: string;
+  setOpen: (open: boolean, reason?: string) => void;
+};
 
 export const useLoginModalStore = create<LoginModalState>(set => ({
   open: false,
-  setOpen: v => set({ open: v }),
+  reason: "UNAUTHORIZED",
+  setOpen: (open, reason = "UNAUTHORIZED") => set({ open, reason }),
 }));
