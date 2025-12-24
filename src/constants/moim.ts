@@ -7,7 +7,7 @@ export const TOTAL_STEPS = 3;
 export const MIN_CAPACITY = 5;
 
 // 모임 이름 최대 글자수
-export const MAX_NAME_LENGTH = 50;
+export const MAX_NAME_LENGTH = 30;
 
 // 이미지 최대 용량 (바이트 단위, 20MB)
 export const MAX_IMAGE_SIZE = 20 * 1024 * 1024;

@@ -35,7 +35,7 @@ const MoimPlaceSelectField = ({
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
         id={id}
-        className="w-full border-transparent font-semibold data-[placeholder]:!text-gray-400 [&>svg:last-child]:hidden"
+        className="w-full cursor-pointer border-transparent font-semibold data-[placeholder]:!text-gray-400 [&>svg:last-child]:hidden"
       >
         <SelectValue placeholder={placeholder} />
         <Image

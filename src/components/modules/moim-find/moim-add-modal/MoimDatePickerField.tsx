@@ -28,7 +28,7 @@ const MoimDatePickerField = ({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="h-8 w-full justify-start border-transparent px-2 text-left text-xs font-semibold sm:h-9 sm:px-3 sm:text-sm"
+          className="h-8 w-full cursor-pointer justify-start border-transparent px-2 text-left text-xs font-semibold sm:h-9 sm:px-3 sm:text-sm"
         >
           {date ? (
             formatDatePicker(date)
