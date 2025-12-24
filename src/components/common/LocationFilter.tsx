@@ -27,7 +27,7 @@ const LocationFilter = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex h-7 w-21 items-center justify-center text-sm font-medium text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=active]:border-0 sm:text-base">
+      <DropdownMenuTrigger className="flex h-7 w-21 items-center justify-center text-sm font-medium text-gray-500 hover:cursor-pointer focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=active]:border-0 sm:text-base">
         {selectedLocation}
         <Image
           src="/icons/down_arrow.svg"
