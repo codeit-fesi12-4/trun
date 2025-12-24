@@ -62,7 +62,7 @@ const ConfirmationJoinModal = ({ open, onOpenChange }: ConfirmationJoinModalProp
         <DialogClose asChild>
           <Button
             variant="outline"
-            className="h-full flex-1 rounded-[12px] border border-gray-100 text-base font-medium text-gray-500 shadow-none sm:rounded-2xl sm:text-lg"
+            className="h-full flex-1 rounded-[12px] border border-gray-100 text-base font-medium text-gray-500 shadow-none hover:cursor-pointer hover:bg-transparent hover:shadow-sm sm:rounded-2xl sm:text-lg"
           >
             취소
           </Button>

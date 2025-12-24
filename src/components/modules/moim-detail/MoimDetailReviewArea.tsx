@@ -74,7 +74,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
               <PaginationPrevious
                 onClick={() => setPage(Math.max(page - 1, 1))}
                 disabled={page === 1}
-                className={`text-gray-200 ${page !== 1 && "hover:text-gray-800"}`}
+                className={`text-gray-200 hover:cursor-pointer ${page !== 1 && "hover:text-gray-800"}`}
               />
             </PaginationItem>
 
@@ -87,7 +87,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
                   <PaginationLink
                     isActive={page === p}
                     onClick={() => typeof p === "number" && setPage(p)}
-                    className="text-gray-200 hover:bg-green-200 data-[state=active]:border-0 data-[state=active]:bg-green-200 data-[state=active]:text-green-600 data-[state=active]:shadow-none"
+                    className="text-gray-200 hover:cursor-pointer hover:bg-green-200 data-[state=active]:border-0 data-[state=active]:bg-green-200 data-[state=active]:text-green-600 data-[state=active]:shadow-none"
                   >
                     {p}
                   </PaginationLink>
@@ -100,7 +100,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
               <PaginationNext
                 onClick={() => setPage(Math.min(page + 1, totalPages))}
                 disabled={page === totalPages}
-                className={`text-gray-200 ${page !== totalPages && "hover:text-gray-800"}`}
+                className={`text-gray-200 hover:cursor-pointer ${page !== totalPages && "hover:text-gray-800"}`}
               />
             </PaginationItem>
           </PaginationContent>

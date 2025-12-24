@@ -162,13 +162,13 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               <button
                 onClick={() => void handleMoimCancel()}
                 disabled={isCanCelMoimPending}
-                className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 sm:text-base md:text-xl"
+                className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 hover:cursor-pointer sm:text-base md:text-xl"
               >
                 {isCanCelMoimPending ? "취소중..." : "취소하기"}
               </button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
+                  <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
                     공유하기
                   </button>
                 </DropdownMenuTrigger>
@@ -180,11 +180,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
                     onClick={() => void handleShareUrl()}
                     className="cursor-pointer"
                   >
-                    <Link2 className="mr-2 size-4" />
+                    <Link2 className="mr-2 size-4 hover:cursor-pointer" />
                     링크 복사
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleShareKakao} className="cursor-pointer">
-                    <Share2 className="mr-2 size-4" />
+                    <Share2 className="mr-2 size-4 hover:cursor-pointer" />
                     카카오톡 공유
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -194,14 +194,14 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isCancelJoinPending}
               onClick={() => void handleMoimLeave()}
-              className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "취소중..." : "참여 취소하기"}
             </button>
           ) : isFull ? (
             <button
               disabled={isFull}
-              className="h-10 w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               참여하기
             </button>
@@ -209,7 +209,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isJoinPending}
               onClick={() => void handleMoimJoin()}
-              className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "참여중..." : "참여하기"}
             </button>
