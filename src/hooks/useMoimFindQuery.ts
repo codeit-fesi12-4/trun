@@ -2,8 +2,6 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import { TEAM_NAME } from "@/constants/env";
 import { getMoimList, postMoim } from "@/api/moim.api";
 import { CreateMoimRequest, GetMoimsParams, GetMoimsResponse } from "@/types/moim.type";
-import { handleApiError } from "@/utils/error.util";
-import { useUnauthorizedHandler } from "./useUnauthorizedHandler";
 import { toast } from "sonner";
 
 // React Query 훅 - 모임 목록 조회
@@ -83,7 +81,6 @@ export const useMoimsInfiniteQuery = ({
 // React Query Mutation 훅 - 모임 생성
 export const useCreateMoimMutation = () => {
   const queryClient = useQueryClient();
-  const handleUnauthorized = useUnauthorizedHandler();
 
   return useMutation({
     mutationFn: (payload: CreateMoimRequest) => postMoim(payload),
@@ -99,11 +96,6 @@ export const useCreateMoimMutation = () => {
       void queryClient.invalidateQueries({ queryKey: ["moims"] });
       // 마이페이지의 생성한 모임 목록도 무효화
       void queryClient.invalidateQueries({ queryKey: ["mypage", "createdMoims"] });
-    },
-    onError: async error => {
-      await handleApiError(error, {
-        onUnauthorized: handleUnauthorized,
-      });
     },
   });
 };
