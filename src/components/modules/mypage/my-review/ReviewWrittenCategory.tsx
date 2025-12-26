@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
+import ReviewWrittenSkeleton from "./ReviewWrittenSkeleton";
 import { useWrittenReviews } from "@/hooks/useMypageQuery";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -10,7 +11,14 @@ const ReviewWrittenCategory = () => {
   const { data, isLoading, isError } = useWrittenReviews();
   const items = data ?? [];
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <div className="flex flex-col gap-6 rounded-3xl bg-white p-6 lg:p-8">
+        {[1, 2, 3].map(i => (
+          <ReviewWrittenSkeleton key={i} />
+        ))}
+      </div>
+    );
   if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (

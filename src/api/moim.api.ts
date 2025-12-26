@@ -28,7 +28,22 @@ export const postMoim = async (
   formData.append("name", payload.name);
   formData.append("dateTime", payload.dateTime);
   formData.append("capacity", payload.capacity.toString());
-  formData.append("image", payload.image);
+
+  // 이미지가 없으면 기본 이미지를 사용
+  if (payload.image) {
+    formData.append("image", payload.image);
+  } else {
+    try {
+      const defaultImageResponse = await fetch("/images/img_login.png");
+      const defaultImageBlob = await defaultImageResponse.blob();
+      const defaultImageFile = new File([defaultImageBlob], "default-image.png", {
+        type: defaultImageBlob.type,
+      });
+      formData.append("image", defaultImageFile);
+    } catch (error) {
+      console.warn("기본 이미지 로드 실패:", error);
+    }
+  }
 
   if (payload.registrationEnd) {
     formData.append("registrationEnd", payload.registrationEnd);

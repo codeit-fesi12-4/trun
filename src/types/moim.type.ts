@@ -47,7 +47,7 @@ export type CreateMoimRequest = {
   dateTime: string;
   location: string;
   capacity: number;
-  image: File;
+  image?: File;
   registrationEnd?: string;
 };
 

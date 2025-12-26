@@ -7,12 +7,15 @@ import { signOut } from "next-auth/react";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useMoimFind } from "@/hooks/useMoimFind";
 import { useUserProfileQuery } from "./useUserQuery";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const useHeader = () => {
   const { data: user } = useUserProfileQuery();
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);
+
+  const queryClient = useQueryClient();
 
   // 실제 모임 목록 가져오기 (존재하는 모임만 카운트하기 위해)
   const { moimCardData: allMoims } = useMoimFind();
@@ -60,7 +63,8 @@ export const useHeader = () => {
   const handleLogout = async () => {
     try {
       await signOut({ redirect: false });
-      router.push("/");
+      queryClient.removeQueries({ queryKey: ["userProfile"] });
+      router.refresh();
       toast.success("로그아웃 성공");
     } catch (error) {
       console.error("Logout error:", error);

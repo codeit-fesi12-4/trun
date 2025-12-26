@@ -5,10 +5,10 @@ import { logout } from "@/utils/logout.util";
 
 export const useUnauthorizedHandler = () => {
   const { setOpen } = useLoginModalStore();
-  return () => {
+  return (reason = "UNAUTHORIZED") => {
     void (async () => {
+      setOpen(true, reason);
       await logout();
-      setOpen(true);
     })();
   };
 };

@@ -16,6 +16,7 @@ type MoimPlaceSelectFieldProps = {
   placeholder: string;
   value: string;
   onValueChange: (value: string) => void;
+  required?: boolean;
 };
 
 const MoimPlaceSelectField = ({
@@ -24,15 +25,17 @@ const MoimPlaceSelectField = ({
   placeholder,
   value,
   onValueChange,
+  required = false,
 }: MoimPlaceSelectFieldProps) => (
   <div className="flex flex-col gap-2">
     <label htmlFor={id} className="text-sm font-semibold text-gray-700">
       {label}
+      {required && <span className="text-red-500"> *</span>}
     </label>
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
         id={id}
-        className="w-full border-transparent font-semibold data-[placeholder]:!text-gray-400 [&>svg:last-child]:hidden"
+        className="w-full cursor-pointer border-transparent font-semibold data-[placeholder]:!text-gray-400 [&>svg:last-child]:hidden"
       >
         <SelectValue placeholder={placeholder} />
         <Image

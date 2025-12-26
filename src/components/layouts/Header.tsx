@@ -20,7 +20,7 @@ import { useUserProfileQuery } from "@/hooks/useUserQuery";
 const Header = () => {
   const { isMounted, favoriteCount, handleLogout } = useHeader();
   const { data: user, isLoading } = useUserProfileQuery();
-  const { open, setOpen } = useLoginModalStore();
+  const { setOpen } = useLoginModalStore();
   const router = useRouter();
 
   const handleFavoritePage = () => {
@@ -28,6 +28,7 @@ const Header = () => {
       setOpen(true);
       return;
     }
+    console.warn("user?", user);
     router.push("/moim-favorite");
   };
 
@@ -99,7 +100,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
+      <ConfirmationJoinModal />
     </header>
   );
 };
