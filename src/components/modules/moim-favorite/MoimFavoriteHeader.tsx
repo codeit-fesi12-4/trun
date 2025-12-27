@@ -7,17 +7,17 @@ import CategoryShell from "@/components/common/CategoryShell";
 import LocationFilter from "@/components/common/LocationFilter";
 import MoimSort from "@/components/common/MoimSort";
 
-const MoimFavoriteHeader = ({ onFilterChange, availableLocations }: MoimFilterProps) => {
+const MoimFavoriteHeader = ({ onFilterChange, availableLocations, filters }: MoimFilterProps) => {
   const {
     category,
     location,
     date,
-    sort,
+    sortBy,
     handleCategoryChange,
     handleLocationChange,
     handleDateChange,
     handleSortChange,
-  } = useMoimFilter({ onFilterChange, availableLocations });
+  } = useMoimFilter({ onFilterChange, availableLocations, filters });
   return (
     <div className="mt-2 sm:mt-4">
       <div className="flex flex-row gap-3 px-2 sm:gap-[26px]">
@@ -47,7 +47,7 @@ const MoimFavoriteHeader = ({ onFilterChange, availableLocations }: MoimFilterPr
             />
           }
           DateSlot={<MoimDatePicker selectedDate={date} onDateChange={handleDateChange} />}
-          SortSlot={<MoimSort selectedSort={sort} onSortChange={handleSortChange} />}
+          SortSlot={<MoimSort selectedSort={sortBy} onSortChange={handleSortChange} />}
         />
       </div>
     </div>
