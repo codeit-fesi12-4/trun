@@ -10,6 +10,7 @@ import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
 
 const MoimFindClient = () => {
   const {
+    filters,
     isModalOpen,
     setIsModalOpen,
     moimCardData,
@@ -33,7 +34,11 @@ const MoimFindClient = () => {
 
   return (
     <>
-      <MoimFindHeader onFilterChange={handleFilterChange} availableLocations={availableLocations} />
+      <MoimFindHeader
+        onFilterChange={handleFilterChange}
+        availableLocations={availableLocations}
+        filters={filters}
+      />
       {error && (
         <div className="mt-6 text-center text-red-500">
           모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
