@@ -23,11 +23,12 @@ export type MoimFilterValues = {
   location: string;
   date: Date | undefined;
   sortBy: MoimSortBy;
-  sortOder?: MoimSortOrder;
+  sortOrder?: MoimSortOrder;
 };
 
 // 모임 필터 관련 공통 props 타입
 export type MoimFilterProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
   availableLocations?: string[];
+  filters: MoimFilterValues;
 };

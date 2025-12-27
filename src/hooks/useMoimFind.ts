@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
-import { MOIM_LOCATION } from "@/constants/moim";
+import { MOIM_LOCATION, SORT_PARAMS_MAP } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { formatDateWithDash } from "@/utils/date.util";
@@ -29,23 +29,15 @@ export const useMoimFind = () => {
   // API 파라미터 생성 (무한 스크롤용 - limit, offset 제외)
   const infiniteQueryParams = useMemo(() => {
     // 정렬 기준을 API 파라미터로 변환
-    const sortParams =
-      filters.sortBy === "registrationEnd"
-        ? ({
-            sortBy: "registrationEnd",
-            sortOrder: "asc",
-          } as const)
-        : ({
-            sortBy: "participantCount",
-            sortOrder: "desc",
-          } as const);
+
+    const sortParams = () => SORT_PARAMS_MAP[filters.sortBy];
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
       type: filters.category,
       location: convertLocationToMoimLocation(filters.location),
       date: formatDateWithDash(filters.date),
-      sortBy: sortParams.sortBy,
-      sortOrder: sortParams.sortOrder,
+      sortBy: sortParams().sortBy,
+      sortOrder: sortParams().sortOrder,
     };
     return params;
   }, [filters.category, filters.location, filters.date, filters.sortBy]);
@@ -158,6 +150,7 @@ export const useMoimFind = () => {
   };
 
   return {
+    filters,
     isModalOpen,
     setIsModalOpen,
     moimCardData: filteredMoims,
