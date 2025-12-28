@@ -101,6 +101,7 @@ const SignupClient = () => {
           value={form.name}
           onChange={handleChange("name")}
           error={errors.name}
+          required
         />
         <AuthTextField
           id="signup-email"
@@ -110,6 +111,7 @@ const SignupClient = () => {
           value={form.email}
           onChange={handleChange("email")}
           error={errors.email}
+          required
         />
         <AuthTextField
           id="signup-company"
@@ -119,6 +121,7 @@ const SignupClient = () => {
           value={form.companyName}
           onChange={handleChange("companyName")}
           error={errors.companyName}
+          required
         />
         <AuthPasswordField
           id="signup-password"
@@ -128,6 +131,7 @@ const SignupClient = () => {
           value={form.password}
           onChange={handleChange("password")}
           error={errors.password}
+          required
         />
         <AuthPasswordField
           id="signup-password-confirm"
@@ -137,6 +141,7 @@ const SignupClient = () => {
           value={form.confirmPassword}
           onChange={handleChange("confirmPassword")}
           error={errors.confirmPassword}
+          required
         />
         <Button
           type="submit"
