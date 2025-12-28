@@ -56,14 +56,14 @@ export const useMoimsInfiniteQuery = ({
         };
       }
 
-      // 추가 페이지 로드 시 1-2초 딜레이 적용
+      // 추가 페이지 로드 시 0.3-0.6초 딜레이 적용
       const [result] = await Promise.all([
         getMoimList({
           ...params,
           limit: pageSize,
           offset: pageParam,
         }),
-        new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000)), // 1-2초 랜덤 딜레이
+        new Promise(resolve => setTimeout(resolve, 300 + Math.random() * 300)), // 0.3-0.6초 랜덤 딜레이
       ]);
       const response = result as { ok?: boolean; data?: GetMoimsResponse };
       const data = response.ok ? (response.data ?? []) : [];
