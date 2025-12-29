@@ -8,12 +8,24 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { EditableReviewItem } from "@/types/mypage.type";
 import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
+import ModalLayout from "@/components/layouts/ModalLayout";
 
 const ReviewWrittenCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
+
+  // 리뷰 삭제 모달
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reviewIdToDelete, setReviewIdToDelete] = useState<number | null>(null);
+
   const { data, isLoading, isError } = useWrittenReviews();
   const items = data ?? [];
   const reviewDeleteMutation = useReviewDeleteMutation();
+
+  // 리뷰 삭제 핸들러
+  const handleDeleteClick = (id: number) => {
+    setReviewIdToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
 
   if (isLoading)
     return (
@@ -90,14 +102,7 @@ const ReviewWrittenCategory = () => {
                       className="w-8 sm:w-9"
                     />
                   </button>
-                  <button
-                    onClick={() =>
-                      reviewDeleteMutation.mutate({
-                        reviewId: review.id,
-                      })
-                    }
-                    className="cursor-pointer"
-                  >
+                  <button onClick={() => handleDeleteClick(review.id)} className="cursor-pointer">
                     <Image
                       src="/icons/ic_trash.svg"
                       alt="삭제"
@@ -144,6 +149,35 @@ const ReviewWrittenCategory = () => {
           item={selectedReviewItem}
           mode="edit"
         />
+      )}
+
+      {/* 리뷰 삭제 확인 모달 */}
+      {isDeleteModalOpen && (
+        <ModalLayout
+          open={isDeleteModalOpen}
+          onOpenChange={setIsDeleteModalOpen}
+          title="리뷰 삭제"
+          confirmText="삭제하기"
+          onConfirm={() => {
+            if (reviewIdToDelete) {
+              reviewDeleteMutation.mutate(
+                { reviewId: reviewIdToDelete },
+                {
+                  onSuccess: () => {
+                    setIsDeleteModalOpen(false);
+                    setReviewIdToDelete(null);
+                  },
+                },
+              );
+            }
+          }}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          showCancel
+        >
+          <div className="flex items-center justify-center py-4 text-base font-medium">
+            작성하신 리뷰를 정말 삭제하시겠습니까?
+          </div>
+        </ModalLayout>
       )}
     </div>
   );
