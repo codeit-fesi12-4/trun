@@ -1,110 +1,17 @@
 # 언어 설정
-language: ko
+language: "ko-KR"
 
-# 리뷰 설정
+early_access: false
+
 reviews:
-  # 모든 브랜치에서 리뷰 활성화 (기본 브랜치가 아니어도 리뷰)
-  review_status: true
-
-  # 리뷰 대상 기본 브랜치 설정 (dev 브랜치로 merge되는 PR도 리뷰)
-  base_branches:
-    - main
-    - dev
-
-  # 리뷰 프로필 (chill: 부드럽게 | assertive: 적극적으로)
-  profile: assertive
-
-  # 고수준 요약 제공
+  profile: "assertive"
+  request_changes_workflow: false
   high_level_summary: true
-
-  # 시 생성 비활성화 (선택사항)
   poem: false
-
-  # PR 설명 자동 생성
+  review_status: true
+  collapse_walkthrough: false
   auto_review:
     enabled: true
-
-  # 리뷰에서 제외할 파일/폴더
-  path_filters:
-    # 빌드 파일 제외
-    - "!**/dist/**"
-    - "!**/build/**"
-    - "!**/.next/**"
-
-    # 의존성 파일 제외
-    - "!**/node_modules/**"
-    - "!**/package-lock.json"
-    - "!**/package.json"
-    - "!**/yarn.lock"
-    - "!**/pnpm-lock.yaml"
-
-    # 설정 파일은 리뷰 (제외하지 않음)
-    - "**/*.json"
-    - "**/*.yaml"
-    - "**/*.yml"
-
-# 채팅 설정
+    drafts: false
 chat:
-  auto_reply: false
-
-# 폴더별 리뷰 가이드
-path_instructions:
-  # API 라우트 (Next.js API)
-  - path: "**/api/**"
-    instructions: |
-      API 엔드포인트는 에러 핸들링, 인증/인가, 타입 안정성, 보안을 중점적으로 확인해주세요.
-      특히 민감한 데이터 처리와 API 응답 형식을 체크해주세요.
-
-  # 컴포넌트
-  - path: "**/components/**"
-    instructions: |
-      React 컴포넌트는 재사용성, 성능(memo, useMemo), 접근성, Props 타입 정의를 확인해주세요.
-
-  # 페이지 (app 디렉토리)
-  - path: "**/app/**"
-    instructions: |
-      Next.js App Router 페이지는 서버/클라이언트 컴포넌트 구분, 메타데이터, SEO, 레이아웃 구조를 확인해주세요.
-
-  # 상태 관리 (Zustand stores)
-  - path: "**/stores/**"
-    instructions: |
-      Zustand 스토어는 상태 구조, 불변성, 타입 안정성, 사이드 이펙트 처리를 확인해주세요.
-
-  # 커스텀 훅
-  - path: "**/hooks/**"
-    instructions: |
-      커스텀 훅은 의존성 배열, 메모이제이션, 재사용성, 사이드 이펙트 정리를 확인해주세요.
-
-  # 유틸리티 함수
-  - path: "**/utils/**"
-    instructions: |
-      유틸리티 함수는 순수 함수 원칙, 에러 핸들링, 타입 안정성, 테스트 가능성을 확인해주세요.
-
-  # 타입 정의
-  - path: "**/types/**"
-    instructions: |
-      타입 정의는 명확성, 재사용성, 올바른 타입 활용(any 사용 지양)을 확인해주세요.
-
-  # 상수
-  - path: "**/constants/**"
-    instructions: |
-      상수는 명명 규칙, 타입 안정성, 적절한 범위를 확인해주세요.
-
-  # 라이브러리 (외부 라이브러리 래퍼)
-  - path: "**/lib/**"
-    instructions: |
-      외부 라이브러리 설정은 보안, 에러 핸들링, 타입 안정성을 확인해주세요.
-
-  # 서버 관련 코드
-  - path: "**/src/**/*.ts"
-    instructions: |
-      TypeScript 파일은 타입 안정성, 코드 품질, 마이그레이션 호환성을 체크해주세요.
-
-  # React 컴포넌트 파일
-  - path: "**/src/**/*.tsx"
-    instructions: |
-      React 컴포넌트는 성능, 접근성, 베스트 프랙티스를 확인해주세요.
-
-  # 테스트 파일 (간단히)
-  - path: "**/*.test.*"
-    instructions: "테스트 코드는 간단히 리뷰해주세요."
+  auto_reply: true

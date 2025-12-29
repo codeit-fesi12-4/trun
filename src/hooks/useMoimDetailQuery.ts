@@ -1,11 +1,9 @@
 "use client";
 
 import { deleteJoin, getMoim, getParticipants, postJoin, putMoim } from "@/api/moimDetail.api";
-import { handleApiError } from "@/utils/error.util";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useUnauthorizedHandler } from "./useUnauthorizedHandler";
 
 // 모임 상세 정보 가져오기
 export const useMoimQuery = (moimId: number) =>
@@ -28,7 +26,6 @@ export const useParticipantsQuery = (moimId: number) =>
 // 모임 참여하기
 export const useCreateJoinMutaiton = () => {
   const queryClient = useQueryClient();
-  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
     mutationFn: (moimId: number) => postJoin(moimId),
     onSuccess: (data, moimId) => {
@@ -42,18 +39,12 @@ export const useCreateJoinMutaiton = () => {
       void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
       void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
-    onError: async error => {
-      await handleApiError(error, {
-        onUnauthorized: handleUnauthorized,
-      });
-    },
   });
 };
 
 // 모임 참여 취소하기 (참여자)
 export const useCancelJoinMutaion = () => {
   const queryClient = useQueryClient();
-  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
     mutationFn: (moimId: number) => deleteJoin(moimId),
     onSuccess: (data, moimId) => {
@@ -67,9 +58,6 @@ export const useCancelJoinMutaion = () => {
       void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
       void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
-    onError: error => {
-      void handleApiError(error, { onUnauthorized: handleUnauthorized });
-    },
   });
 };
 
@@ -77,7 +65,6 @@ export const useCancelJoinMutaion = () => {
 export const useCancelMoimMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const handleUnauthorized = useUnauthorizedHandler();
   return useMutation({
     mutationFn: (moimId: number) => putMoim(moimId),
     onSuccess: (data, moimId) => {
@@ -89,9 +76,6 @@ export const useCancelMoimMutation = () => {
       void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
       void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
       void router.replace("/moim-find");
-    },
-    onError: error => {
-      void handleApiError(error, { onUnauthorized: handleUnauthorized });
     },
   });
 };
