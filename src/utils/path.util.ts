@@ -1,4 +1,32 @@
+import { GetMoimsParams } from "@/types/moim.type";
 import { GetReviewsParams, GetReviewScoresParams } from "@/types/review.type";
+
+// 모임 query string
+export const buildMoimsQueryString = (params?: GetMoimsParams) => {
+  if (!params) return "";
+
+  const searchParams = new URLSearchParams();
+
+  if (params.id) searchParams.append("id", params.id);
+  if (params.type) searchParams.append("type", params.type);
+  if (params.location) searchParams.append("location", params.location);
+  if (params.date) searchParams.append("date", params.date);
+  if (params.createdBy !== undefined) searchParams.append("createdBy", params.createdBy.toString());
+  if (params.sortBy) searchParams.append("sortBy", params.sortBy);
+  if (params.sortOrder) searchParams.append("sortOrder", params.sortOrder);
+  if (params.limit !== undefined) searchParams.append("limit", params.limit.toString());
+  if (params.offset !== undefined) searchParams.append("offset", params.offset.toString());
+
+  const queryString = searchParams.toString();
+
+  return queryString;
+};
+
+// 모임 path
+export const buildMoimsPath = (params?: GetMoimsParams) => {
+  const queryString = buildMoimsQueryString(params);
+  return queryString ? `/gatherings?${queryString}` : "/gatherings";
+};
 
 // 리뷰 query string
 export const buildReviewsQueryString = (params: GetReviewsParams) => {

@@ -1,4 +1,4 @@
-import { MoimType } from "./moim.type";
+import { MoimSortBy, MoimSortOrder, MoimType } from "./moim.type";
 
 // CreateMoimRequest를 기반으로 한 폼 상태 타입
 export type MoimFormData = {
@@ -22,11 +22,13 @@ export type MoimFilterValues = {
   category: MoimType;
   location: string;
   date: Date | undefined;
-  sort: "마감임박 순" | "참여 인원 순";
+  sortBy: MoimSortBy;
+  sortOrder?: MoimSortOrder;
 };
 
 // 모임 필터 관련 공통 props 타입
 export type MoimFilterProps = {
   onFilterChange?: (filters: MoimFilterValues) => void;
   availableLocations?: string[];
+  filters: MoimFilterValues;
 };

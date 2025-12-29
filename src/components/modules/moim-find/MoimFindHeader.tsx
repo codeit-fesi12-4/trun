@@ -6,17 +6,17 @@ import LocationFilter from "@/components/common/LocationFilter";
 import MoimSort from "@/components/common/MoimSort";
 import MoimFindDatePicker from "@/components/common/MoimDatePicker";
 
-const MoimFindHeader = ({ onFilterChange, availableLocations }: MoimFilterProps) => {
+const MoimFindHeader = ({ onFilterChange, availableLocations, filters }: MoimFilterProps) => {
   const {
     category,
     location,
     date,
-    sort,
+    sortBy,
     handleCategoryChange,
     handleLocationChange,
     handleDateChange,
     handleSortChange,
-  } = useMoimFilter({ onFilterChange, availableLocations });
+  } = useMoimFilter({ onFilterChange, availableLocations, filters });
   return (
     <div className="-mx-6 -mt-6 sm:mx-0 sm:mt-2">
       <div className="relative mb-6 h-48 w-full overflow-hidden bg-[#9DEBCD] sm:h-[244px] sm:rounded-4xl">
@@ -46,7 +46,7 @@ const MoimFindHeader = ({ onFilterChange, availableLocations }: MoimFilterProps)
           />
         }
         DateSlot={<MoimFindDatePicker selectedDate={date} onDateChange={handleDateChange} />}
-        SortSlot={<MoimSort selectedSort={sort} onSortChange={handleSortChange} />}
+        SortSlot={<MoimSort selectedSort={sortBy} onSortChange={handleSortChange} />}
       />
     </div>
   );

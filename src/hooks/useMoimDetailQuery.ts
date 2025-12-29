@@ -24,7 +24,7 @@ export const useParticipantsQuery = (moimId: number) =>
   });
 
 // 모임 참여하기
-export const useCreateJoinMutaiton = () => {
+export const useCreateJoinMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => postJoin(moimId),
@@ -43,7 +43,7 @@ export const useCreateJoinMutaiton = () => {
 };
 
 // 모임 참여 취소하기 (참여자)
-export const useCancelJoinMutaion = () => {
+export const useCancelJoinMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => deleteJoin(moimId),

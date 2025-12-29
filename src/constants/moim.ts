@@ -25,21 +25,16 @@ export const INITIAL_FORM_DATA: MoimFormData = {
 
 // 모임 필터 정렬 상수
 export const MOIM_FILTER_SORT = {
-  DEADLINE: "마감임박 순",
-  PARTICIPANTS: "참여 인원 순",
+  dateTime: "모임 날짜 순",
+  registrationEnd: "마감임박 순",
+  participantCount: "참여 인원 순",
 } as const;
 
-// API 정렬 기준 상수
-export const SORT_BY = {
-  DATE_TIME: "dateTime",
-  REGISTRATION_END: "registrationEnd",
-  PARTICIPANT_COUNT: "participantCount",
-} as const;
-
-// API 정렬 순서 상수
-export const SORT_ORDER = {
-  ASC: "asc",
-  DESC: "desc",
+// 모임 정렬
+export const SORT_PARAMS_MAP = {
+  dateTime: { sortBy: "dateTime", sortOrder: "asc" },
+  registrationEnd: { sortBy: "registrationEnd", sortOrder: "asc" },
+  participantCount: { sortBy: "participantCount", sortOrder: "desc" },
 } as const;
 
 // 모임 지역 상수 (필터 "전체" 옵션 포함)

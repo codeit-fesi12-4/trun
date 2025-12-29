@@ -11,11 +11,14 @@ import { buildReviewsQueryString } from "@/utils/path.util";
 import useSyncQueryString from "@/hooks/useSyncQueryString";
 import { useSearchParams } from "next/navigation";
 import parseFilters from "@/utils/parseFilters";
+import { ReviewFilterValues } from "@/types/review.type";
 
 const AllReviewContent = () => {
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState(() => parseFilters(searchParams));
+  const [filters, setFilters] = useState<ReviewFilterValues>(() =>
+    parseFilters(searchParams, "review"),
+  );
 
   const reviewQueryParams = {
     limit: REVIEW_PAGE_SIZE.SCROLL,
@@ -49,7 +52,7 @@ const AllReviewContent = () => {
 
   useEffect(() => {
     const reflectParseFilter = () => {
-      setFilters(parseFilters(searchParams));
+      setFilters(parseFilters(searchParams, "review"));
     };
 
     reflectParseFilter();

@@ -32,16 +32,8 @@ export const useHeader = () => {
   useEffect(() => {
     const updateFavoriteCount = () => {
       const favorites = getFavoriteMoims(user?.id);
-
-      // 실제 모임 목록이 있을 때만 필터링
-      if (allMoims.length > 0) {
-        const existingMoimIds = new Set(allMoims.map(moim => moim.id));
-        const validFavorites = favorites.filter(id => existingMoimIds.has(id));
-        setFavoriteCount(validFavorites.length);
-      } else {
-        // 모임 목록이 아직 로드되지 않았으면 전체 개수 사용
-        setFavoriteCount(favorites.length);
-      }
+      setFavoriteCount(favorites.length);
+      // }
     };
 
     updateFavoriteCount();
