@@ -1,9 +1,10 @@
+import { LoginModalReason } from "@/types/loginModal.type";
 import { create } from "zustand";
 
 type LoginModalState = {
   open: boolean;
-  reason: string;
-  setOpen: (open: boolean, reason?: string) => void;
+  reason: LoginModalReason;
+  setOpen: (open: boolean, reason?: LoginModalReason) => void;
 };
 
 export const useLoginModalStore = create<LoginModalState>(set => ({

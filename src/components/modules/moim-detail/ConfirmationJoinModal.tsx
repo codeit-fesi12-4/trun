@@ -43,14 +43,14 @@ const ConfirmationJoinModal = () => {
         showCloseButton={false}
       >
         <DialogClose asChild className="absolute top-6 right-6 rounded-full p-1">
-          <button aria-label="닫기">
+          <button type="button" aria-label="닫기">
             <Image src="/icons/delete.svg" alt="닫기 버튼" width={24} height={24} />
           </button>
         </DialogClose>
         <DialogHeader className="flex h-[120px] flex-col items-center justify-center">
           <DialogTitle className="text-lg font-semibold text-gray-700">
             {reason === "INVALID_TOKEN"
-              ? "기간이 만료되었습니다. 다시 로그인해주세요."
+              ? "세션이 만료되었습니다. 다시 로그인해주세요."
               : "로그인이 필요한 서비스입니다."}
           </DialogTitle>
         </DialogHeader>
