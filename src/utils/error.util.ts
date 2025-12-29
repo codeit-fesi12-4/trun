@@ -12,7 +12,7 @@ export class ApiError extends Error {
   }
 }
 
-export const handleApiError = async (
+export const handleApiError = (
   error: unknown,
   options?: { onUnauthorized?: (reason?: string) => void },
 ) => {

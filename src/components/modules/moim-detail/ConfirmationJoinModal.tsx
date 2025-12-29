@@ -43,7 +43,7 @@ const ConfirmationJoinModal = () => {
         showCloseButton={false}
       >
         <DialogClose asChild className="absolute top-6 right-6 rounded-full p-1">
-          <button aria-label="닫기">
+          <button type="button" aria-label="닫기">
             <Image src="/icons/delete.svg" alt="닫기 버튼" width={24} height={24} />
           </button>
         </DialogClose>
