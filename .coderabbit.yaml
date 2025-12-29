@@ -26,23 +26,27 @@ reviews:
 
   # 리뷰에서 제외할 파일/폴더
   path_filters:
-    # 빌드 파일 제외
-    - "!**/dist/**"
-    - "!**/build/**"
-    - "!**/.next/**"
+    # 포함할 경로 (명시적으로 포함해야 리뷰됨)
+    include:
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/*.js"
+      - "**/*.jsx"
+      - "**/*.json"
+      - "**/*.yaml"
+      - "**/*.yml"
 
-    # 의존성 파일 제외
-    - "!**/node_modules/**"
-    - "!**/package-lock.json"
-    - "!**/package.json"
-    - "!**/yarn.lock"
-    - "!**/pnpm-lock.yaml"
-
-    # 설정 파일은 리뷰 (제외하지 않음)
-    - "**/*.json"
-    - "**/*.yaml"
-    - "**/*.yml"
-
+    # 제외할 경로
+    exclude:
+      # 빌드 파일 제외
+      - "**/dist/**"
+      - "**/build/**"
+      - "**/.next/**"
+      # 의존성 파일 제외
+      - "**/node_modules/**"
+      - "**/package-lock.json"
+      - "**/yarn.lock"
+      - "**/pnpm-lock.yaml"
 # 채팅 설정
 chat:
   auto_reply: false
