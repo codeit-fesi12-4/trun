@@ -6,6 +6,7 @@ import {
   GetReviewsResponse,
   GetReviewScoresParams,
   PostReviewParams,
+  PutReviewParams,
 } from "@/types/review.type";
 import { buildReviewScoresPath, buildReviewsPath } from "@/utils/path.util";
 
@@ -31,5 +32,12 @@ export const getReviewScores = (params: GetReviewScoresParams) =>
 export const postReviews = (params: PostReviewParams) =>
   apiFetch("/api/proxy/reviews", {
     method: "POST",
+    body: JSON.stringify(params),
+  });
+
+// 리뷰 수정
+export const putReviewEdit = (reviewId: number, params: PutReviewParams) =>
+  apiFetch(`/api/proxy/reviews/${reviewId}`, {
+    method: "PUT",
     body: JSON.stringify(params),
   });
