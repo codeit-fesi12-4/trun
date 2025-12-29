@@ -131,7 +131,7 @@ export const useReviewEditMutation = (onCloseModal: () => void) => {
       toast.success("리뷰가 수정되었습니다.");
     },
     onError: error => {
-      const message = error instanceof Error ? error.message : "리뷰 삭제 중 오류가 발생했습니다.";
+      const message = error instanceof Error ? error.message : "리뷰 수정 중 오류가 발생했습니다.";
       toast.error(message);
     },
   });
