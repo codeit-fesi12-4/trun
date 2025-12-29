@@ -23,8 +23,10 @@ export const buildMoimsQueryString = (params?: GetMoimsParams) => {
 };
 
 // 모임 path
-export const buildMoimsPath = (params?: GetMoimsParams) =>
-  `/gatherings?${buildMoimsQueryString(params)}`;
+export const buildMoimsPath = (params?: GetMoimsParams) => {
+  const queryString = buildMoimsQueryString(params);
+  return queryString ? `/gatherings?${queryString}` : "/gatherings";
+};
 
 // 리뷰 query string
 export const buildReviewsQueryString = (params: GetReviewsParams) => {
