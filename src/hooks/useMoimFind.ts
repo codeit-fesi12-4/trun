@@ -93,7 +93,6 @@ export const useMoimFind = () => {
 
   useEffect(() => {
     const reflectParseFilter = () => {
-      console.warn("왜 안돼?", parseFilters(searchParams, "moim"));
       setFilters(parseFilters(searchParams, "moim"));
     };
 
