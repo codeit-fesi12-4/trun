@@ -92,3 +92,9 @@ export type PostReviewParams = {
   score: number;
   comment: string;
 };
+
+// 리뷰 수정
+export type PutReviewParams = {
+  score: number;
+  comment: string;
+};
