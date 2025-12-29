@@ -2,17 +2,17 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { useWrittenReviews } from "@/hooks/useMypageQuery";
+import { useReviewDeleteMutation, useWrittenReviews } from "@/hooks/useMypageQuery";
 import { format } from "date-fns";
-import { toast } from "sonner";
-import { EditableReviewItem } from "@/types/mypage.type";
 import { useState } from "react";
+import { EditableReviewItem } from "@/types/mypage.type";
 import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
 
 const ReviewWrittenCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
   const { data, isLoading, isError } = useWrittenReviews();
   const items = data ?? [];
+  const reviewDeleteMutation = useReviewDeleteMutation();
 
   if (isLoading) return <div>로딩 중...</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
@@ -82,7 +82,15 @@ const ReviewWrittenCategory = () => {
                       className="w-8 sm:w-9"
                     />
                   </button>
-                  <button onClick={() => toast("삭제 클릭")} className="cursor-pointer">
+                  <button
+                    onClick={() =>
+                      reviewDeleteMutation.mutate({
+                        reviewId: review.id,
+                        gatheringId: review.Gathering.id,
+                      })
+                    }
+                    className="cursor-pointer"
+                  >
                     <Image
                       src="/icons/ic_trash.svg"
                       alt="수정"
