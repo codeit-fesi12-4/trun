@@ -5,8 +5,12 @@ import { EmptyState } from "@/components/modules/mypage/EmptyState";
 import { useWrittenReviews } from "@/hooks/useMypageQuery";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { EditableReviewItem } from "@/types/mypage.type";
+import { useState } from "react";
+import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
 
 const ReviewWrittenCategory = () => {
+  const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
   const { data, isLoading, isError } = useWrittenReviews();
   const items = data ?? [];
 
@@ -59,7 +63,17 @@ const ReviewWrittenCategory = () => {
                 </div>
 
                 <div className="ml-auto flex items-center">
-                  <button onClick={() => toast("수정 클릭")} className="cursor-pointer">
+                  {/* 리뷰 수정/삭제 */}
+                  <button
+                    onClick={() =>
+                      setSelectedReviewItem({
+                        id: review.id,
+                        score: review.score,
+                        comment: review.comment,
+                      })
+                    }
+                    className="cursor-pointer"
+                  >
                     <Image
                       src="/icons/ic_mypage_edit.svg"
                       alt="수정"
@@ -106,6 +120,15 @@ const ReviewWrittenCategory = () => {
             </div>
           </div>
         ))
+      )}
+      {/* 리뷰 수정 모달 */}
+      {selectedReviewItem && (
+        <ReviewModal
+          open={!!selectedReviewItem}
+          onOpenChange={() => setSelectedReviewItem(null)}
+          item={selectedReviewItem}
+          mode="edit"
+        />
       )}
     </div>
   );
