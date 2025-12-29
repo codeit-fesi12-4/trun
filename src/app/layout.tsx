@@ -5,6 +5,7 @@ import { pretendard } from "./font";
 import Header from "@/components/layouts/Header";
 import LayoutWrapper from "@/components/layouts/LayoutWrapper";
 import { Toaster } from "@/components/ui/sonner";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "같이달림 | 함께 달리는 즐거움",
@@ -16,7 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body className={`${pretendard.variable} bg-background antialiased`}>
         <Providers>
-          <Header />
+          <Suspense fallback={null}>
+            <Header />
+          </Suspense>
           <LayoutWrapper>{children}</LayoutWrapper>
           <Toaster
             position="top-center"
