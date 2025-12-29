@@ -16,12 +16,9 @@ export const useMoimFind = () => {
   const searchParams = useSearchParams();
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<MoimFilterValues>({
-    category: "MINDFULNESS",
-    location: "지역 전체",
-    date: undefined,
-    sortBy: "registrationEnd",
-  });
+  const [filters, setFilters] = useState<MoimFilterValues>(() =>
+    parseFilters(searchParams, "moim"),
+  );
 
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
@@ -96,6 +93,7 @@ export const useMoimFind = () => {
 
   useEffect(() => {
     const reflectParseFilter = () => {
+      console.warn("왜 안돼?", parseFilters(searchParams, "moim"));
       setFilters(parseFilters(searchParams, "moim"));
     };
 
