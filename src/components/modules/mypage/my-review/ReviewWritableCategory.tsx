@@ -3,11 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { ReviewWriteModal } from "@/components/modules/mypage/mypage-modal/ReviewWriteModal";
 import { useAvailableReviews } from "@/hooks/useMypageQuery";
 import { WritableReviewItem } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
 import FavoriteButton from "@/components/common/FavoriteButton";
+import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
 
 const ReviewWritableCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<WritableReviewItem | null>(null);
@@ -101,10 +101,11 @@ const ReviewWritableCategory = () => {
 
       {/* 리뷰 작성 모달 */}
       {selectedReviewItem && (
-        <ReviewWriteModal
+        <ReviewModal
           open={!!selectedReviewItem}
           onOpenChange={handleModalChange}
           item={selectedReviewItem}
+          mode="create"
         />
       )}
     </div>
