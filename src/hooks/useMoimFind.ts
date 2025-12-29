@@ -16,9 +16,12 @@ export const useMoimFind = () => {
   const searchParams = useSearchParams();
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<MoimFilterValues>(() =>
-    parseFilters(searchParams, "moim"),
-  );
+  const [filters, setFilters] = useState<MoimFilterValues>({
+    category: "MINDFULNESS",
+    location: "지역 전체",
+    date: undefined,
+    sortBy: "registrationEnd",
+  });
 
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
@@ -30,14 +33,14 @@ export const useMoimFind = () => {
   const infiniteQueryParams = useMemo(() => {
     // 정렬 기준을 API 파라미터로 변환
 
-    const sortParams = () => SORT_PARAMS_MAP[filters.sortBy];
+    const sortParams = SORT_PARAMS_MAP[filters.sortBy];
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
       type: filters.category,
       location: convertLocationToMoimLocation(filters.location),
       date: formatDateWithDash(filters.date),
-      sortBy: sortParams().sortBy,
-      sortOrder: sortParams().sortOrder,
+      sortBy: sortParams.sortBy,
+      sortOrder: sortParams.sortOrder,
     };
     return params;
   }, [filters.category, filters.location, filters.date, filters.sortBy]);
@@ -45,7 +48,6 @@ export const useMoimFind = () => {
   useSyncQueryString(buildMoimsQueryString(infiniteQueryParams));
 
   const { data: user } = useUserProfileQuery();
-  // 로그인 여부는 user 존재로 확인 (토큰은 HttpOnly 쿠키에 있어서 클라이언트에서 접근 불가)
   const isLoggedIn = !!user;
 
   // 무한 스크롤 쿼리
@@ -92,21 +94,23 @@ export const useMoimFind = () => {
 
   const isAutoLoadingRef = useRef(false);
 
-  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
   useEffect(() => {
     const reflectParseFilter = () => {
       setFilters(parseFilters(searchParams, "moim"));
     };
 
     reflectParseFilter();
+  }, [searchParams]);
 
+  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
+  useEffect(() => {
     if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
       isAutoLoadingRef.current = true;
       void fetchNextLocationPage().finally(() => {
         isAutoLoadingRef.current = false;
       });
     }
-  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage, searchParams]);
+  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage]);
 
   const availableLocations = useMemo(() => {
     if (allLocationMoims.length === 0) return [MOIM_LOCATION.ALL];
