@@ -69,7 +69,7 @@ const LoginClient = () => {
       formTitle="로그인"
       footerSlot={
         <p className="text-base font-medium text-gray-800">
-          같이 달랭이 처음이신가요?{" "}
+          같이 달림이 처음이신가요?{" "}
           <Link
             href="/signup"
             className="text-base font-medium text-green-600 underline underline-offset-4"

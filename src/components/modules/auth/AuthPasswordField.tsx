@@ -9,6 +9,7 @@ type FieldProps = InputHTMLAttributes<HTMLInputElement> & {
   id: string;
   label: string;
   error?: string;
+  required?: boolean;
 };
 
 type PasswordFieldProps = FieldProps & {
@@ -23,6 +24,7 @@ export const AuthPasswordField = ({
   autoComplete = "current-password",
   error,
   value,
+  required,
   onFocus,
   onBlur,
   ...props
@@ -45,8 +47,9 @@ export const AuthPasswordField = ({
 
   return (
     <div className="space-y-2 text-sm font-semibold text-gray-800">
-      <label htmlFor={id} className="flex items-center gap-2">
+      <label htmlFor={id} className="flex items-center gap-1">
         <span>{label}</span>
+        {required && <span className="text-red-600">*</span>}
         {error ? <span className="text-xs font-semibold text-red-600">※ {error}</span> : null}
       </label>
       <div className="relative">

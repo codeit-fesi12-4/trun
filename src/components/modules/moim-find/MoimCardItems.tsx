@@ -53,7 +53,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
         <FavoriteButton moimId={item.id} />
       </div>
 
-      {/* 하단: 왼쪽(뱃지+진행바) / 오른쪽(참여하기 버튼) */}
+      {/* 하단: 왼쪽(뱃지+진행바) / 오른쪽(상세보기 버튼) */}
       <div className="flex items-end justify-between gap-5">
         {/* 왼쪽: 뱃지들과 진행바/인원수 */}
         <div className="flex min-w-0 flex-1 flex-col gap-3.5">
@@ -104,12 +104,12 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
           </div>
         </div>
 
-        {/* 오른쪽: 참여하기 버튼 */}
+        {/* 오른쪽: 상세보기 버튼 */}
         <Link href={`/moim-find/${item.id}`} className="shrink-0">
           <Button
             variant="outline"
             size="xs"
-            className={`rounded-xl p-5 text-[14px] font-semibold ${
+            className={`cursor-pointer rounded-xl p-5 text-[14px] font-semibold ${
               isFull
                 ? "border-gray-300 bg-white text-gray-400 hover:border-gray-400 hover:bg-gray-50 hover:text-gray-500"
                 : "border-green-400 bg-white text-green-500 hover:border-green-500 hover:bg-green-500 hover:text-white"
@@ -117,7 +117,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
             onClick={handleJoinClick}
             type="button"
           >
-            {isFull ? "마감" : "참여하기"}
+            {isFull ? "마감" : "상세보기"}
           </Button>
         </Link>
       </div>
