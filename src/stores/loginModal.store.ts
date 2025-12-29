@@ -1,6 +1,5 @@
+import { LoginModalReason } from "@/types/loginModal.type";
 import { create } from "zustand";
-
-type LoginModalReason = "INVALID_TOKEN" | "UNAUTHORIZED";
 
 type LoginModalState = {
   open: boolean;
