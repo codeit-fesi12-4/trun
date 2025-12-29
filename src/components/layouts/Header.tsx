@@ -28,7 +28,6 @@ const Header = () => {
       setOpen(true);
       return;
     }
-    console.warn("user?", user);
     router.push("/moim-favorite");
   };
 

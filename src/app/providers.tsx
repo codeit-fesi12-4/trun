@@ -15,13 +15,11 @@ export default function Providers({ children }: { children: ReactNode }) {
       new QueryClient({
         queryCache: new QueryCache({
           onError: error => {
-            console.warn("provider 에러 처리");
             void handleApiError(error, { onUnauthorized: handleUnauthorized });
           },
         }),
         mutationCache: new MutationCache({
           onError: error => {
-            console.warn("mutation 에러 처리");
             void handleApiError(error, { onUnauthorized: handleUnauthorized });
           },
         }),
