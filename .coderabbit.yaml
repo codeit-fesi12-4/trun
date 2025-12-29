@@ -47,6 +47,7 @@ reviews:
       - "**/package-lock.json"
       - "**/yarn.lock"
       - "**/pnpm-lock.yaml"
+
 # 채팅 설정
 chat:
   auto_reply: false
