@@ -72,7 +72,7 @@ const Header = () => {
             {!isMounted ? (
               <Skeleton className="h-8 w-8 rounded-full sm:h-11 sm:w-11" />
             ) : user ? (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Image
                     src={user.image ? user.image : "/icons/default_profile.svg"}
