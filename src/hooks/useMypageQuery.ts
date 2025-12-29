@@ -1,7 +1,7 @@
 import { deleteReservation, getCreatedMoims, getMoimJoined } from "@/api/mypage.api";
-import { getReviews, postReviews } from "@/api/review.api";
+import { getReviews, postReviews, putReviewEdit } from "@/api/review.api";
 import { WritableReviewItem } from "@/types/mypage.type";
-import { PostReviewParams, ReviewItem } from "@/types/review.type";
+import { PostReviewParams, PutReviewParams, ReviewItem } from "@/types/review.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserProfileQuery } from "./useUserQuery";
@@ -121,3 +121,24 @@ export const useCreatedMoims = (userId?: number) =>
     queryFn: () => getCreatedMoims(userId ?? 0),
     enabled: !!userId,
   });
+
+//리뷰 수정
+export const useReviewEditMutation = (onCloseModal: () => void) => {
+  const queryClient = useQueryClient();
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+
+  return useMutation({
+    mutationFn: ({ reviewId, params }: { reviewId: number; params: PutReviewParams }) =>
+      putReviewEdit(reviewId, params),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["mypage", "writtenReviews", userId] });
+      onCloseModal();
+      toast.success("리뷰가 수정되었습니다.");
+    },
+    onError: error => {
+      const message = error instanceof Error ? error.message : "리뷰 삭제 중 오류가 발생했습니다.";
+      toast.error(message);
+    },
+  });
+};
