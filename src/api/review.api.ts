@@ -41,3 +41,9 @@ export const putReviewEdit = (reviewId: number, params: PutReviewParams) =>
     method: "PUT",
     body: JSON.stringify(params),
   });
+
+// 리뷰 삭제
+export const deleteReview = (reviewId: number) =>
+  apiFetch(`/api/proxy/reviews/${reviewId}`, {
+    method: "DELETE",
+  });
