@@ -101,7 +101,7 @@ const ReviewWrittenCategory = () => {
                   >
                     <Image
                       src="/icons/ic_trash.svg"
-                      alt="수정"
+                      alt="삭제"
                       width={36}
                       height={36}
                       className="w-8 sm:w-9"
