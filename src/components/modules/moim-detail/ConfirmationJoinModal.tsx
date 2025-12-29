@@ -50,7 +50,7 @@ const ConfirmationJoinModal = () => {
         <DialogHeader className="flex h-[120px] flex-col items-center justify-center">
           <DialogTitle className="text-lg font-semibold text-gray-700">
             {reason === "INVALID_TOKEN"
-              ? "기간이 만료되었습니다. 다시 로그인해주세요."
+              ? "세션이 만료되었습니다. 다시 로그인해주세요."
               : "로그인이 필요한 서비스입니다."}
           </DialogTitle>
         </DialogHeader>
