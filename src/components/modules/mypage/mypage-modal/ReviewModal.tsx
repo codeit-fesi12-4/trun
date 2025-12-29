@@ -29,7 +29,7 @@ export const ReviewModal = ({ open, onOpenChange, item, mode = "create" }: Revie
 
   // UI 상태 변수 분리
   const modalTitle = isEdit ? "리뷰 수정" : "리뷰 쓰기";
-  const confirmText = isPending ? "처리 중..." : isEdit ? "수정 완료" : "리뷰 등록";
+  const confirmText = isPending ? "처리 중..." : isEdit ? "수정 하기" : "리뷰 등록";
   const isConfirmDisabled = isPending || score === 0 || comment.trim().length < 5;
 
   const handleConfirm = () => {
