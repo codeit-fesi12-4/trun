@@ -94,7 +94,6 @@ const ReviewWrittenCategory = () => {
                     onClick={() =>
                       reviewDeleteMutation.mutate({
                         reviewId: review.id,
-                        gatheringId: review.Gathering.id,
                       })
                     }
                     className="cursor-pointer"

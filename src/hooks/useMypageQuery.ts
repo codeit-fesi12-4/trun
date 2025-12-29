@@ -144,7 +144,7 @@ export const useReviewDeleteMutation = () => {
   const userId = user?.id;
 
   return useMutation({
-    mutationFn: ({ reviewId }: { reviewId: number; gatheringId: number }) => deleteReview(reviewId),
+    mutationFn: ({ reviewId }: { reviewId: number }) => deleteReview(reviewId),
     onSuccess: () => {
       if (!userId) return;
 
