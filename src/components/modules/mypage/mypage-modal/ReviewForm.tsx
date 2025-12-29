@@ -21,6 +21,8 @@ export const ReviewForm = ({ score, comment, onScoreChange, onCommentChange }: R
             type="button"
             onClick={() => onScoreChange(star)}
             className="cursor-pointer text-3xl"
+            aria-label={`${star}점`}
+            aria-pressed={star <= score}
           >
             <span className={star <= score ? "text-green-600" : "text-gray-200"}>♥</span>
           </button>
