@@ -9,9 +9,9 @@ import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
 import { formatDeadline } from "@/utils/moim.util";
 import {
-  useCancelJoinMutaion,
   useCancelMoimMutation,
-  useCreateJoinMutaiton,
+  useCreateJoinMutation,
+  useCancelJoinMutation,
   useParticipantsQuery,
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
@@ -38,8 +38,8 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
-  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutaiton();
-  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
+  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutation();
+  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutation();
 
   const moimId = Number(moim.id);
 

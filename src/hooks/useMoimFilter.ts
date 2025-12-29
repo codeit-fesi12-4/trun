@@ -1,86 +1,42 @@
 import { useState, useEffect } from "react";
-import { type MoimFilterValues, type MoimFilterProps } from "@/types/moimFind.type";
-import { MOIM_LOCATION, MOIM_FILTER_SORT } from "@/constants/moim";
+import { type MoimFilterProps } from "@/types/moimFind.type";
+import { MOIM_LOCATION } from "@/constants/moim";
 import { MoimType } from "@/types/moim.type";
 
 type UseMoimFilterProps = MoimFilterProps;
 
-export const useMoimFilter = ({ onFilterChange, availableLocations }: UseMoimFilterProps) => {
-  const [category, setCategory] = useState<MoimType>("MINDFULNESS");
-  const [location, setLocation] = useState<string>(MOIM_LOCATION.ALL);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [sort, setSort] = useState<"마감임박 순" | "참여 인원 순">(MOIM_FILTER_SORT.DEADLINE);
-
-  // 필터 객체 생성 헬퍼 함수
-  const createFilterValues = (): MoimFilterValues => ({
-    category,
-    location,
-    date,
-    sort,
-  });
-
+export const useMoimFilter = ({
+  onFilterChange,
+  availableLocations,
+  filters,
+}: UseMoimFilterProps) => {
   // 지역 리셋 로직 공통화
   const resetLocationIfInvalid = (currentLocation: string): string =>
     availableLocations?.includes(currentLocation) ? currentLocation : MOIM_LOCATION.ALL;
 
-  // 초기 필터 값 전달
-  useEffect(() => {
-    onFilterChange?.(createFilterValues());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleCategoryChange = (value: MoimType) => {
-    const newCategory = value as MoimType;
-    setCategory(newCategory);
-    // 카테고리 변경 시 선택된 지역이 새로운 카테고리에 존재하지 않으면 "지역 전체"로 리셋
-    const newLocation = resetLocationIfInvalid(location);
-    setLocation(newLocation);
-    onFilterChange?.({ ...createFilterValues(), category: newCategory, location: newLocation });
-  };
-
-  // availableLocations가 변경될 때 선택된 지역이 목록에 없으면 리셋 (카테고리 변경 시에만)
-  useEffect(() => {
-    if (
-      availableLocations &&
-      availableLocations.length > 0 &&
-      !availableLocations.includes(location) &&
-      location !== MOIM_LOCATION.ALL
-    ) {
-      const newLocation = MOIM_LOCATION.ALL;
-      setLocation(newLocation);
-      onFilterChange?.({ ...createFilterValues(), location: newLocation });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [availableLocations]);
-
-  const handleLocationChange = (newLocation: string) => {
-    // 상태 업데이트와 콜백 호출을 동기적으로 처리
-    setLocation(newLocation);
-    // 최신 상태를 사용하여 필터 값 생성
-    const updatedFilters: MoimFilterValues = {
+  const handleCategoryChange = (category: MoimType) => {
+    const nextLocation = resetLocationIfInvalid(filters.location);
+    onFilterChange?.({
+      ...filters,
       category,
-      location: newLocation,
-      date,
-      sort,
-    };
-    onFilterChange?.(updatedFilters);
+      location: nextLocation,
+    });
   };
 
-  const handleDateChange = (newDate: Date | undefined) => {
-    setDate(newDate);
-    onFilterChange?.({ ...createFilterValues(), date: newDate });
+  const handleLocationChange = (location: string) => {
+    onFilterChange?.({ ...filters, location });
   };
 
-  const handleSortChange = (newSort: "마감임박 순" | "참여 인원 순") => {
-    setSort(newSort);
-    onFilterChange?.({ ...createFilterValues(), sort: newSort });
+  const handleDateChange = (date: Date | undefined) => {
+    onFilterChange?.({ ...filters, date });
+  };
+
+  const handleSortChange = (sortBy: "dateTime" | "registrationEnd" | "participantCount") => {
+    onFilterChange?.({ ...filters, sortBy });
   };
 
   return {
-    category,
-    location,
-    date,
-    sort,
+    ...filters,
     handleCategoryChange,
     handleLocationChange,
     handleDateChange,

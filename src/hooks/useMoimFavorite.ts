@@ -18,6 +18,7 @@ export const useMoimFavorite = () => {
   const userId = user?.id;
 
   const {
+    filters,
     moimCardData: allMoims,
     availableLocations,
     isLoading,
@@ -93,6 +94,7 @@ export const useMoimFavorite = () => {
   };
 
   return {
+    filters,
     moimCardData,
     availableLocations,
     isLoading,

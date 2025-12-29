@@ -1,10 +1,10 @@
-import { SORT_BY, SORT_ORDER, MOIM_LOCATION } from "@/constants/moim";
+import { MOIM_LOCATION } from "@/constants/moim";
 
 // 공통으로 사용되는 유니온 타입
 export type MoimType = "MINDFULNESS" | "WORKATION";
 export type MoimLocation = (typeof MOIM_LOCATION)[keyof typeof MOIM_LOCATION];
-export type SortBy = (typeof SORT_BY)[keyof typeof SORT_BY];
-export type SortOrder = (typeof SORT_ORDER)[keyof typeof SORT_ORDER];
+export type MoimSortBy = "dateTime" | "registrationEnd" | "participantCount";
+export type MoimSortOrder = "asc" | "desc";
 
 // 모임 기본 타입
 export type Moim = {
@@ -30,8 +30,8 @@ export type GetMoimsParams = {
   location?: MoimLocation;
   date?: string;
   createdBy?: number;
-  sortBy?: SortBy;
-  sortOrder?: SortOrder;
+  sortBy?: MoimSortBy;
+  sortOrder?: MoimSortOrder;
   limit?: number;
   offset?: number;
 };
@@ -47,7 +47,7 @@ export type CreateMoimRequest = {
   dateTime: string;
   location: string;
   capacity: number;
-  image: File;
+  image?: File;
   registrationEnd?: string;
 };
 

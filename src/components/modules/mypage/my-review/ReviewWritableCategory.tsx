@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
+import ReviewWritableSkeleton from "./ReviewWritableSkeleton";
 import { useAvailableReviews } from "@/hooks/useMypageQuery";
 import { WritableReviewItem } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
@@ -23,7 +24,14 @@ const ReviewWritableCategory = () => {
     setSelectedReviewItem(item);
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading)
+    return (
+      <div className="flex flex-col gap-6">
+        {[1, 2, 3].map(i => (
+          <ReviewWritableSkeleton key={i} />
+        ))}
+      </div>
+    );
   if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (
