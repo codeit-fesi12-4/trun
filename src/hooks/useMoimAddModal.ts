@@ -184,7 +184,6 @@ export const useMoimAddModal = ({ onOpenChange }: UseMoimAddModalProps) => {
     void createMoimMutation
       .mutateAsync(payload)
       .then(() => {
-        toast.success("모임이 성공적으로 생성되었습니다!");
         handleModalOpenChange(false);
       })
       .catch(error => {

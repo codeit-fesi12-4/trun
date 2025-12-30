@@ -164,7 +164,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
                 disabled={isCanCelMoimPending}
                 className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 hover:cursor-pointer sm:text-base md:text-xl"
               >
-                {isCanCelMoimPending ? "취소중..." : "취소하기"}
+                {isCanCelMoimPending ? "취소중..." : "모임 취소하기"}
               </button>
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>

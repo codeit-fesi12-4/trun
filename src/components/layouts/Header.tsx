@@ -50,7 +50,10 @@ const Header = () => {
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <button onClick={handleFavoritePage} className="nav-link flex items-center gap-1.5">
+            <button
+              onClick={handleFavoritePage}
+              className="nav-link flex items-center gap-1.5 hover:cursor-pointer"
+            >
               찜한 모임
               {favoriteCount > 0 && (
                 <Badge
