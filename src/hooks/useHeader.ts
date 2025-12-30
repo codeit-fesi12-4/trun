@@ -32,8 +32,10 @@ export const useHeader = () => {
   useEffect(() => {
     const updateFavoriteCount = () => {
       const favorites = getFavoriteMoims(user?.id);
-      setFavoriteCount(favorites.length);
-      // }
+      // 실제 존재하는 모임만 카운트
+      const existingMoimIds = new Set(allMoims.map(moim => moim.id));
+      const validFavorites = favorites.filter(id => existingMoimIds.has(id));
+      setFavoriteCount(validFavorites.length);
     };
 
     updateFavoriteCount();
