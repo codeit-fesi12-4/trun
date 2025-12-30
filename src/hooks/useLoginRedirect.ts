@@ -9,7 +9,7 @@ const useLoginRedirect = () => {
 
   const redirectToLogin = () => {
     const current = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
-    router.push(`/login?redirect=${encodeURIComponent(current)}`);
+    router.replace(`/login?redirect=${encodeURIComponent(current)}`);
   };
   return { redirectToLogin };
 };
