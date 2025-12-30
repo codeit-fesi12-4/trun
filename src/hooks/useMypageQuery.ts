@@ -34,10 +34,6 @@ export const useCancelReservation = () => {
       void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
       void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
-    onError: error => {
-      console.error("예약 취소 실패:", error);
-      toast.error(error instanceof Error ? error.message : "예약 취소 중 오류가 발생했습니다.");
-    },
   });
 };
 
@@ -67,10 +63,6 @@ export const useReviewMutation = (onCloseModal: () => void) => {
 
       onCloseModal();
       toast.success("리뷰가 성공적으로 등록되었습니다.");
-    },
-    onError: error => {
-      const message = error instanceof Error ? error.message : "리뷰 등록 중 오류 발생";
-      toast.error(message);
     },
   });
 };
@@ -130,10 +122,6 @@ export const useReviewEditMutation = (onCloseModal: () => void) => {
       onCloseModal();
       toast.success("리뷰가 수정되었습니다.");
     },
-    onError: error => {
-      const message = error instanceof Error ? error.message : "리뷰 수정 중 오류가 발생했습니다.";
-      toast.error(message);
-    },
   });
 };
 
@@ -149,11 +137,7 @@ export const useReviewDeleteMutation = () => {
       if (!userId) return;
 
       void queryClient.invalidateQueries({ queryKey: ["mypage"] });
-
       toast.success("리뷰가 삭제되었습니다.");
-    },
-    onError: error => {
-      toast.error(error instanceof Error ? error.message : "리뷰 삭제 중 오류가 발생했습니다.");
     },
   });
 };
