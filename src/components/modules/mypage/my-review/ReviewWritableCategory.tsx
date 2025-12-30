@@ -48,7 +48,7 @@ const ReviewWritableCategory = () => {
               className="relative flex w-full flex-col gap-4 overflow-hidden rounded-3xl bg-white sm:flex-row sm:items-stretch sm:p-6"
             >
               {/* 모임 이미지 */}
-              <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-3xl sm:h-40 sm:w-40">
+              <div className="relative h-40 w-full shrink-0 overflow-hidden sm:h-40 sm:w-40">
                 <Image src={item.image} alt={item.name} fill className="object-cover" />
               </div>
 
