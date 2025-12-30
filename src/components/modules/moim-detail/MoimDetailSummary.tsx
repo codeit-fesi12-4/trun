@@ -164,9 +164,9 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
                 disabled={isCanCelMoimPending}
                 className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 hover:cursor-pointer sm:text-base md:text-xl"
               >
-                {isCanCelMoimPending ? "취소중..." : "취소하기"}
+                {isCanCelMoimPending ? "취소중..." : "모임 취소하기"}
               </button>
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
                     공유하기

@@ -50,7 +50,10 @@ const Header = () => {
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <button onClick={handleFavoritePage} className="nav-link flex items-center gap-1.5">
+            <button
+              onClick={handleFavoritePage}
+              className="nav-link flex items-center gap-1.5 hover:cursor-pointer"
+            >
               찜한 모임
               {favoriteCount > 0 && (
                 <Badge
@@ -72,7 +75,7 @@ const Header = () => {
             {!isMounted ? (
               <Skeleton className="h-8 w-8 rounded-full sm:h-11 sm:w-11" />
             ) : user ? (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Image
                     src={user.image ? user.image : "/icons/default_profile.svg"}
