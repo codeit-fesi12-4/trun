@@ -41,13 +41,15 @@ export const useCancelReservation = () => {
   });
 };
 
-// 내가 만든 모임
-export const useCreatedMoims = (userId?: number) =>
+// 내가 만든 모임 조회
+export const useCreatedMoims = () =>
   useQuery({
-    queryKey: ["mypage", "createdMoims", userId],
-    queryFn: () => getCreatedMoims(userId ?? 0),
-    select: data => [...data].sort(sortMyMoims),
-    enabled: !!userId,
+    queryKey: ["mypage", "createdMoims"],
+    queryFn: () => getCreatedMoims(),
+    select: res => {
+      const data = res.ok ? res.data : [];
+      return [...data].sort(sortMyMoims);
+    },
   });
 
 // 리뷰 등록
