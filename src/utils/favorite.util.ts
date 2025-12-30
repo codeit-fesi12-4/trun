@@ -107,3 +107,31 @@ export const toggleFavoriteMoim = (moimId: number, userId: number | null = null)
     return true;
   }
 };
+
+// localStorage에서 존재하지 않는 모임 ID를 제거
+export const removeNonExistentFavoriteMoims = (
+  existingMoimIds: number[],
+  userId: number | null = null,
+): number => {
+  if (typeof window === "undefined") return 0;
+
+  try {
+    const favorites = getFavoriteMoims(userId);
+    const existingSet = new Set(existingMoimIds);
+    const validFavorites = favorites.filter(id => existingSet.has(id));
+
+    // 제거된 ID가 있는 경우에만 업데이트
+    if (validFavorites.length !== favorites.length) {
+      const key = getFavoriteMoimsKey(userId);
+      localStorage.setItem(key, JSON.stringify(validFavorites));
+      // 같은 탭에서 실시간 업데이트를 위한 커스텀 이벤트 발생
+      window.dispatchEvent(new Event("favoriteMoimsChanged"));
+      return favorites.length - validFavorites.length;
+    }
+
+    return 0;
+  } catch (error) {
+    console.error("존재하지 않는 찜한 모임 제거 실패:", error);
+    return 0;
+  }
+};
