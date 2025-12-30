@@ -7,12 +7,12 @@ import { EditableReviewItem, ReviewModalMode, WritableReviewItem } from "@/types
 import { toast } from "sonner";
 import { useReviewEditMutation, useReviewMutation } from "@/hooks/useMypageQuery";
 
-interface ReviewModalProps {
+type ReviewModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   item: WritableReviewItem | EditableReviewItem;
   mode?: ReviewModalMode;
-}
+};
 
 export const ReviewModal = ({ open, onOpenChange, item, mode = "create" }: ReviewModalProps) => {
   const [score, setScore] = useState(item.score ?? 0);
