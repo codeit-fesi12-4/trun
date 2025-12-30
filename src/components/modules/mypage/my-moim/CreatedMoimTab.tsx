@@ -8,9 +8,7 @@ import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const CreatedMoimTab = () => {
   const { data: user, isLoading: isUserLoading } = useUserProfileQuery();
-  const userId = user?.id;
-
-  const { data: items = [], isLoading, isError } = useCreatedMoims(userId);
+  const { data: items = [], isLoading, isError } = useCreatedMoims();
 
   if (isUserLoading || isLoading)
     return (
@@ -20,7 +18,8 @@ const CreatedMoimTab = () => {
         ))}
       </div>
     );
-  if (!userId) return <div>로그인이 필요합니다.</div>;
+
+  if (!user) return <div>로그인이 필요합니다.</div>;
   if (isError) return <div>오류가 발생했습니다.</div>;
 
   return (

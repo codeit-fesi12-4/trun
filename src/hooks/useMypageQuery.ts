@@ -5,6 +5,7 @@ import { PostReviewParams, PutReviewParams, ReviewItem } from "@/types/review.ty
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserProfileQuery } from "./useUserQuery";
+import { sortMyMoims } from "@/utils/mypage.util";
 
 // 참여한 나의 모임 조회
 export const useJoinedMoims = () => {
@@ -14,7 +15,10 @@ export const useJoinedMoims = () => {
   return useQuery({
     queryKey: ["mypage", "joinedMoims", userId],
     queryFn: getMoimJoined,
-    select: res => (res.ok ? res.data : []),
+    select: res => {
+      const data = res.ok ? res.data : [];
+      return [...data].sort(sortMyMoims);
+    },
     enabled: !!userId,
   });
 };
@@ -37,12 +41,15 @@ export const useCancelReservation = () => {
   });
 };
 
-// 내가 만든 모임
-export const useCreatedMoims = (userId?: number) =>
+// 내가 만든 모임 조회
+export const useCreatedMoims = () =>
   useQuery({
-    queryKey: ["mypage", "createdMoims", userId],
-    queryFn: () => getCreatedMoims(userId ?? 0),
-    enabled: !!userId,
+    queryKey: ["mypage", "createdMoims"],
+    queryFn: async () => {
+      const res = await getCreatedMoims();
+      const data = res.ok ? res.data : [];
+      return [...data].sort(sortMyMoims);
+    },
   });
 
 // 리뷰 등록
@@ -104,6 +111,9 @@ export const useWrittenReviews = () => {
 
       return res.data.data;
     },
+    select: data =>
+      // 작성일 기준 최신순 정렬
+      [...data].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
     enabled: !!userId,
   });
 };

@@ -66,3 +66,18 @@ export const getMeetingStatus = (item: MypageMoim) => {
     sub: null,
   } as const;
 };
+
+// 나의 모임 정렬
+// 정렬 순서: 이용 예정 -> 이용 완료 -> 모집 취소
+export const sortMyMoims = (a: MypageMoim, b: MypageMoim): number => {
+  // 모집 취소 항상 최하단
+  if (a.canceledAt && !b.canceledAt) return 1;
+  if (!a.canceledAt && b.canceledAt) return -1;
+
+  // 이용 예정 우선
+  if (!a.isCompleted && b.isCompleted) return -1; // a가 이용 예정이면 앞으로
+  if (a.isCompleted && !b.isCompleted) return 1; // a가 이용 완료면 뒤로
+
+  // 같은 상태 내에서 최신순
+  return new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime();
+};
