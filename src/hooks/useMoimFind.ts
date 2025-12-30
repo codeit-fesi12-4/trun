@@ -99,14 +99,19 @@ export const useMoimFind = () => {
     reflectParseFilter();
   }, [searchParams]);
 
-  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
+  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드 (지연 로딩으로 최적화)
   useEffect(() => {
-    if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
-      isAutoLoadingRef.current = true;
-      void fetchNextLocationPage().finally(() => {
-        isAutoLoadingRef.current = false;
-      });
-    }
+    // 초기 로딩을 지연시켜 메인 콘텐츠 로딩에 우선순위 부여
+    const timeoutId = setTimeout(() => {
+      if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
+        isAutoLoadingRef.current = true;
+        void fetchNextLocationPage().finally(() => {
+          isAutoLoadingRef.current = false;
+        });
+      }
+    }, 1000); // 1초 지연
+
+    return () => clearTimeout(timeoutId);
   }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage]);
 
   const availableLocations = useMemo(() => {
