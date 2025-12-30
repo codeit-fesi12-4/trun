@@ -8,9 +8,10 @@ import MoimCardItems from "./MoimCardItems";
 
 type MoimCardProps = {
   item: Moim;
+  priority?: boolean;
 } & MoimCardActions;
 
-const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
+const MoimCard = ({ item, onFavoriteToggle, onJoinClick, priority = false }: MoimCardProps) => (
   <Card className="overflow-hidden rounded-4xl border-[0.5px] p-0 shadow-none md:p-5">
     <CardContent className="p-0">
       <div className="flex flex-col items-stretch md:flex-row md:gap-6">
@@ -21,6 +22,7 @@ const MoimCard = ({ item, onFavoriteToggle, onJoinClick }: MoimCardProps) => (
             alt={item.name}
             fill
             className="rounded-b-none object-cover md:rounded-3xl"
+            priority={priority}
           />
           {(item.participantCount >= item.capacity ||
             new Date(item.registrationEnd) < new Date()) && (
