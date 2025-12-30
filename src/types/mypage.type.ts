@@ -1,7 +1,9 @@
 import { MoimType } from "@/types/moim.type";
-import { ReviewGathering } from "./review.type";
+import { ReviewGathering, ReviewUser } from "./review.type";
 
 export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
+
+export type ReviewModalMode = "create" | "edit";
 
 export type MypageMoim = {
   teamId: string;
@@ -29,6 +31,14 @@ export type GetJoinedMoimsResponse = MypageMoim[];
 export type WritableReviewItem = MypageMoim & {
   gatheringId: number;
   score: number;
+  comment?: string;
+};
+
+// 리뷰 수정 타입 (모달)
+export type EditableReviewItem = {
+  id: number;
+  score: number;
+  comment?: string;
 };
 
 // 작성한 리뷰 타입
@@ -37,13 +47,6 @@ export type WrittenReviewItem = {
   score: number;
   comment: string;
   createdAt: string;
-
   Gathering: ReviewGathering;
-
-  User: {
-    teamId: number;
-    id: number;
-    name: string;
-    image: string | null;
-  };
+  User: ReviewUser;
 };

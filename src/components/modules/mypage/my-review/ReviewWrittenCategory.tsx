@@ -2,14 +2,30 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
+import { useReviewDeleteMutation, useWrittenReviews } from "@/hooks/useMypageQuery";
 import ReviewWrittenSkeleton from "./ReviewWrittenSkeleton";
-import { useWrittenReviews } from "@/hooks/useMypageQuery";
 import { format } from "date-fns";
-import { toast } from "sonner";
+import { useState } from "react";
+import { EditableReviewItem } from "@/types/mypage.type";
+import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
+import ModalLayout from "@/components/layouts/ModalLayout";
 
 const ReviewWrittenCategory = () => {
+  const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
+
+  // 리뷰 삭제 모달
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reviewIdToDelete, setReviewIdToDelete] = useState<number | null>(null);
+
   const { data, isLoading, isError } = useWrittenReviews();
   const items = data ?? [];
+  const reviewDeleteMutation = useReviewDeleteMutation();
+
+  // 리뷰 삭제 핸들러
+  const handleDeleteClick = (id: number) => {
+    setReviewIdToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
 
   if (isLoading)
     return (
@@ -67,7 +83,17 @@ const ReviewWrittenCategory = () => {
                 </div>
 
                 <div className="ml-auto flex items-center">
-                  <button onClick={() => toast("수정 클릭")} className="cursor-pointer">
+                  {/* 리뷰 수정/삭제 */}
+                  <button
+                    onClick={() =>
+                      setSelectedReviewItem({
+                        id: review.id,
+                        score: review.score,
+                        comment: review.comment,
+                      })
+                    }
+                    className="cursor-pointer"
+                  >
                     <Image
                       src="/icons/ic_mypage_edit.svg"
                       alt="수정"
@@ -76,10 +102,10 @@ const ReviewWrittenCategory = () => {
                       className="w-8 sm:w-9"
                     />
                   </button>
-                  <button onClick={() => toast("삭제 클릭")} className="cursor-pointer">
+                  <button onClick={() => handleDeleteClick(review.id)} className="cursor-pointer">
                     <Image
                       src="/icons/ic_trash.svg"
-                      alt="수정"
+                      alt="삭제"
                       width={36}
                       height={36}
                       className="w-8 sm:w-9"
@@ -114,6 +140,44 @@ const ReviewWrittenCategory = () => {
             </div>
           </div>
         ))
+      )}
+      {/* 리뷰 수정 모달 */}
+      {selectedReviewItem && (
+        <ReviewModal
+          open={!!selectedReviewItem}
+          onOpenChange={() => setSelectedReviewItem(null)}
+          item={selectedReviewItem}
+          mode="edit"
+        />
+      )}
+
+      {/* 리뷰 삭제 확인 모달 */}
+      {isDeleteModalOpen && (
+        <ModalLayout
+          open={isDeleteModalOpen}
+          onOpenChange={setIsDeleteModalOpen}
+          title="리뷰 삭제"
+          confirmText="삭제하기"
+          onConfirm={() => {
+            if (reviewIdToDelete) {
+              reviewDeleteMutation.mutate(
+                { reviewId: reviewIdToDelete },
+                {
+                  onSuccess: () => {
+                    setIsDeleteModalOpen(false);
+                    setReviewIdToDelete(null);
+                  },
+                },
+              );
+            }
+          }}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          showCancel
+        >
+          <div className="flex items-center justify-center py-4 text-base font-medium">
+            작성하신 리뷰를 정말 삭제하시겠습니까?
+          </div>
+        </ModalLayout>
       )}
     </div>
   );
