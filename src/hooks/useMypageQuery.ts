@@ -45,8 +45,8 @@ export const useCancelReservation = () => {
 export const useCreatedMoims = () =>
   useQuery({
     queryKey: ["mypage", "createdMoims"],
-    queryFn: () => getCreatedMoims(),
-    select: res => {
+    queryFn: async () => {
+      const res = await getCreatedMoims();
       const data = res.ok ? res.data : [];
       return [...data].sort(sortMyMoims);
     },
