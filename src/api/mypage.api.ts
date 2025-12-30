@@ -1,5 +1,4 @@
 import { GetJoinedMoimsResponse, MypageMoim, WritableReviewItem } from "@/types/mypage.type";
-import { getMoimList } from "./moim.api";
 import { apiFetch } from "@/lib/apiClient";
 
 // 참여한 나의 모임 조회
@@ -29,23 +28,7 @@ export const getAvailableReviews = async (): Promise<WritableReviewItem[]> => {
 };
 
 // 내가 만든 모임
-export const getCreatedMoims = async (userId: number): Promise<MypageMoim[]> => {
-  if (!userId) return [];
-
-  try {
-    // getMoimList는 ApiResult<MypageMoim[]> 반환
-    const res = await getMoimList({ createdBy: userId });
-
-    if (!res.ok || !res.data) return [];
-
-    return res.data.map(item => ({
-      ...item,
-      joinedAt: item.dateTime,
-      isCompleted: false,
-      isReviewed: false,
-    }));
-  } catch (error) {
-    console.error("getCreatedMoims API 에러:", error);
-    return [];
-  }
-};
+export const getCreatedMoims = () =>
+  apiFetch<MypageMoim[]>(`/api/proxy/gatherings/my`, {
+    method: "GET",
+  });
