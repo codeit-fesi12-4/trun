@@ -1,20 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { signOut } from "next-auth/react";
 import { getFavoriteMoims } from "@/utils/favorite.util";
 import { useUserProfileQuery } from "./useUserQuery";
 import { useQueryClient } from "@tanstack/react-query";
+import { logout } from "@/utils/logout.util";
+import useLoginRedirect from "./useLoginRedirect";
 
 export const useHeader = () => {
   const { data: user } = useUserProfileQuery();
-  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);
 
   const queryClient = useQueryClient();
+
+  const { redirectToLogin } = useLoginRedirect();
 
   // 클라이언트 마운트 체크
   useEffect(() => {
@@ -50,10 +51,9 @@ export const useHeader = () => {
 
   const handleLogout = async () => {
     try {
-      await signOut({ redirect: false });
-      queryClient.removeQueries({ queryKey: ["userProfile"] });
-      router.refresh();
-      toast.success("로그아웃 성공");
+      await logout(queryClient);
+      redirectToLogin();
+      toast.success("로그아웃 했습니다.");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("로그아웃 중 오류가 발생했습니다.");

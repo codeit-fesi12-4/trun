@@ -6,6 +6,7 @@ import { getFavoriteMoims, removeNonExistentFavoriteMoims } from "@/utils/favori
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
 import { useUserProfileQuery } from "./useUserQuery";
+import { useSession } from "next-auth/react";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
@@ -13,6 +14,7 @@ export const useMoimFavorite = () => {
   const isInitialMountRef = useRef(true);
   const allMoimsRef = useRef<Moim[]>([]);
   const hasSyncedRef = useRef(false);
+  const { status: sessionStatus } = useSession();
 
   const { data: user } = useUserProfileQuery();
 
@@ -72,6 +74,10 @@ export const useMoimFavorite = () => {
     // 초기 마운트 시에는 알림 표시하지 않음
     if (isInitialMountRef.current) {
       isInitialMountRef.current = false;
+      return;
+    }
+
+    if (sessionStatus !== "authenticated") {
       return;
     }
 
