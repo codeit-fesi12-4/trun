@@ -46,6 +46,7 @@ const AuthLayout = ({
               sizes="(min-width: 1920px) 588px, (min-width: 744px) 407px, (min-width: 375px) 290px, 90vw"
               className="h-auto w-full object-contain drop-shadow-sm"
               priority
+              fetchPriority="high"
             />
           </div>
         </div>

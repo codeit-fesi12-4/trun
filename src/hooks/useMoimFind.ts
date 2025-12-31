@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
 import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
 import { MOIM_LOCATION, SORT_PARAMS_MAP } from "@/constants/moim";
@@ -66,31 +66,6 @@ export const useMoimFind = () => {
     return moimsPages.pages.flatMap(page => page.data);
   }, [moimsPages]);
 
-  // 지역 목록 추출을 위한 별도 무한 스크롤 쿼리
-  const locationQueryParams = useMemo(
-    () => ({
-      type: filters.category,
-    }),
-    [filters.category],
-  );
-
-  const {
-    data: locationMoimsPages,
-    fetchNextPage: fetchNextLocationPage,
-    hasNextPage: hasNextLocationPage,
-    isFetchingNextPage: isFetchingNextLocationPage,
-  } = useMoimsInfiniteQuery({
-    params: locationQueryParams,
-    pageSize: 8,
-  });
-
-  const allLocationMoims = useMemo<Moim[]>(() => {
-    if (!locationMoimsPages?.pages) return [];
-    return locationMoimsPages.pages.flatMap(page => page.data);
-  }, [locationMoimsPages]);
-
-  const isAutoLoadingRef = useRef(false);
-
   useEffect(() => {
     const reflectParseFilter = () => {
       setFilters(parseFilters(searchParams, "moim"));
@@ -99,26 +74,8 @@ export const useMoimFind = () => {
     reflectParseFilter();
   }, [searchParams]);
 
-  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
-  useEffect(() => {
-    if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
-      isAutoLoadingRef.current = true;
-      void fetchNextLocationPage().finally(() => {
-        isAutoLoadingRef.current = false;
-      });
-    }
-  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage]);
-
-  const availableLocations = useMemo(() => {
-    if (allLocationMoims.length === 0) return [MOIM_LOCATION.ALL];
-    const locations = new Set<string>();
-    allLocationMoims.forEach(moim => {
-      if (moim.location) {
-        locations.add(moim.location);
-      }
-    });
-    return [MOIM_LOCATION.ALL, ...Array.from(locations).sort()];
-  }, [allLocationMoims]);
+  // 정의된 지역 목록 사용
+  const availableLocations = useMemo(() => Object.values(MOIM_LOCATION), []);
 
   const filteredMoims = useMemo(() => {
     if (allMoims.length === 0) return [];

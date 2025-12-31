@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { getFavoriteMoims } from "@/utils/favorite.util";
-import { useMoimFind } from "@/hooks/useMoimFind";
 import { useUserProfileQuery } from "./useUserQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { logout } from "@/utils/logout.util";
@@ -18,9 +17,6 @@ export const useHeader = () => {
 
   const { redirectToLogin } = useLoginRedirect();
 
-  // 실제 모임 목록 가져오기 (존재하는 모임만 카운트하기 위해)
-  const { moimCardData: allMoims } = useMoimFind();
-
   // 클라이언트 마운트 체크
   useEffect(() => {
     const handleMount = () => {
@@ -29,12 +25,12 @@ export const useHeader = () => {
     handleMount();
   }, []);
 
-  // 찜한 모임 개수 가져오기 및 업데이트 (실제 존재하는 모임만 카운트)
+  // 찜한 모임 개수 가져오기 및 업데이트 (localStorage에서만 카운트 - 성능 최적화)
   useEffect(() => {
     const updateFavoriteCount = () => {
       const favorites = getFavoriteMoims(user?.id);
+      // localStorage에서만 개수 계산 (실제 존재 여부 검증은 찜한 모임 페이지에서 처리)
       setFavoriteCount(favorites.length);
-      // }
     };
 
     updateFavoriteCount();
@@ -51,7 +47,7 @@ export const useHeader = () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("favoriteMoimsChanged", handleStorageChange);
     };
-  }, [user?.id, allMoims]);
+  }, [user?.id]);
 
   const handleLogout = async () => {
     try {

@@ -16,6 +16,7 @@ const HomeClient = () => (
             height={400}
             className="mx-auto h-auto w-full max-w-[430px] md:max-w-[480px]"
             priority
+            fetchPriority="high"
           />
         </div>
 
