@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -11,10 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import useLoginRedirect from "@/hooks/useLoginRedirect";
 import { useLoginModalStore } from "@/stores/loginModal.store";
+import { isProtectedRoute } from "@/utils/routeGuard.util";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { Suspense } from "react";
 
-// useSearchParams()를 사용하는 부분만 별도 컴포넌트로 분리
 const LoginButton = () => {
   const { redirectToLogin } = useLoginRedirect();
   const { setOpen } = useLoginModalStore();
@@ -35,18 +35,51 @@ const LoginButton = () => {
 };
 
 const ConfirmationJoinModal = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const { open, reason, setOpen } = useLoginModalStore();
+
+  const cancelGoHome = isProtectedRoute(pathname);
+
+  const goHomeAndClose = () => {
+    setOpen(false);
+    void router.replace("/");
+  };
+
+  const closeOnly = () => {
+    setOpen(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={nextOpen => {
+        if (cancelGoHome && nextOpen === false) return;
+        setOpen(nextOpen);
+      }}
+    >
       <DialogContent
         className="h-[216px] max-w-[342px] gap-0 rounded-3xl p-6"
         showCloseButton={false}
+        onPointerDownOutside={e => {
+          if (cancelGoHome) e.preventDefault();
+        }}
+        onEscapeKeyDown={e => {
+          if (cancelGoHome) e.preventDefault();
+        }}
+        onInteractOutside={e => {
+          if (cancelGoHome) e.preventDefault();
+        }}
       >
-        <DialogClose asChild className="absolute top-6 right-6 rounded-full p-1">
-          <button type="button" aria-label="닫기">
-            <Image src="/icons/delete.svg" alt="닫기 버튼" width={24} height={24} />
-          </button>
-        </DialogClose>
+        <button
+          type="button"
+          aria-label="닫기"
+          onClick={cancelGoHome ? goHomeAndClose : closeOnly}
+          className="absolute top-6 right-6 rounded-full p-1"
+        >
+          <Image src="/icons/delete.svg" alt="닫기 버튼" width={24} height={24} />
+        </button>
         <DialogHeader className="flex h-[120px] flex-col items-center justify-center">
           <DialogTitle className="text-lg font-semibold text-gray-700">
             {reason === "INVALID_TOKEN"
@@ -55,15 +88,13 @@ const ConfirmationJoinModal = () => {
           </DialogTitle>
         </DialogHeader>
         <DialogFooter className="flex h-12 flex-row gap-2">
-          <DialogClose asChild>
-            <Button
-              variant="outline"
-              className="h-full flex-1 rounded-[12px] border border-gray-100 text-base font-medium text-gray-500 shadow-none hover:cursor-pointer hover:bg-transparent hover:shadow-sm"
-            >
-              취소
-            </Button>
-          </DialogClose>
-          {/* useSearchParams()를 사용하는 컴포넌트를 Suspense로 감싸야 함 */}
+          <Button
+            variant="outline"
+            onClick={cancelGoHome ? goHomeAndClose : closeOnly}
+            className="h-full flex-1 rounded-[12px] border border-gray-100 text-base font-medium text-gray-500 shadow-none hover:cursor-pointer hover:bg-transparent hover:shadow-sm"
+          >
+            취소
+          </Button>
           <Suspense fallback={null}>
             <LoginButton />
           </Suspense>

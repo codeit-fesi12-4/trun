@@ -1,13 +1,12 @@
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isProtectedRoute } from "./utils/routeGuard.util";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isProtected = pathname.startsWith("/mypage") || pathname.startsWith("/moim-favorite");
-
-  if (!isProtected) return NextResponse.next();
+  if (!isProtectedRoute(pathname)) return NextResponse.next();
 
   const token = await getToken({
     req: request,
@@ -16,7 +15,10 @@ export async function proxy(request: NextRequest) {
 
   if (token) return NextResponse.next();
 
-  return NextResponse.redirect(new URL("/login", request.url));
+  const loginUrl = new URL("/login", request.url);
+  loginUrl.searchParams.set("redirect", pathname);
+
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {
