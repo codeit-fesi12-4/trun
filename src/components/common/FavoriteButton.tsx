@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "@/hooks/useUserQuery";
-// import { useQueryClient } from "@tanstack/react-query";
-// import { getUserProfile } from "@/api/user.api";
 
 type FavoriteButtonProps = {
   moimId: number;
@@ -16,8 +14,6 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const { data: user, isLoading, refetch } = useUserProfileQuery();
-
-  // const queryClient = useQueryClient();
 
   const userId = user?.id;
 
@@ -41,7 +37,7 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
 
     const next = !isFavorite;
     setIsFavorite(next);
-    // 렌더링 중 다른 컴포넌트 업데이트 방지
+
     if (next) {
       addFavoriteMoim(moimId, userId);
     } else {
