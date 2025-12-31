@@ -43,8 +43,8 @@ const ConfirmationJoinModal = () => {
   const cancelGoHome = isProtectedRoute(pathname);
 
   const goHomeAndClose = () => {
-    setOpen(false);
     void router.replace("/");
+    setOpen(false);
   };
 
   const closeOnly = () => {

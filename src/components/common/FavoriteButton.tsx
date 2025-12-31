@@ -30,8 +30,13 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const handleFavoriteClick = async () => {
     const { error } = await refetch();
 
-    if (error?.code === "INVALID_TOKEN" || error?.code === "UNAUTHORIZED") {
-      setIsLoginModalOpen(true, error.code);
+    const code =
+      typeof error === "object" && error !== null && "code" in error
+        ? (error as { code?: unknown }).code
+        : undefined;
+
+    if (code === "INVALID_TOKEN" || code === "UNAUTHORIZED") {
+      setIsLoginModalOpen(true, code);
       return;
     }
 
