@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
-import { getFavoriteMoims } from "@/utils/favorite.util";
+import { getFavoriteMoims, removeNonExistentFavoriteMoims } from "@/utils/favorite.util";
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
 import { useUserProfileQuery } from "./useUserQuery";
@@ -12,6 +12,7 @@ export const useMoimFavorite = () => {
   const previousFavoriteMoimIdsRef = useRef<number[]>([]);
   const isInitialMountRef = useRef(true);
   const allMoimsRef = useRef<Moim[]>([]);
+  const hasSyncedRef = useRef(false);
 
   const { data: user } = useUserProfileQuery();
 
@@ -55,6 +56,16 @@ export const useMoimFavorite = () => {
       window.removeEventListener("favoriteMoimsChanged", handleStorageChange);
     };
   }, [userId]);
+
+  // 실제 존재하는 모임과 비교하여 localStorage 동기화 (로딩 완료 후 한 번만 실행)
+  useEffect(() => {
+    // 로딩이 완료되고, 모임 데이터가 있고, 아직 동기화하지 않은 경우에만 실행
+    if (!isLoading && allMoims.length > 0 && !hasSyncedRef.current) {
+      const existingMoimIds = allMoims.map(moim => moim.id);
+      removeNonExistentFavoriteMoims(existingMoimIds, userId);
+      hasSyncedRef.current = true;
+    }
+  }, [isLoading, allMoims, userId]);
 
   // 찜한 모임이 제거되었을 때 알림 표시 (추후 sonnar 적용 예정)
   useEffect(() => {

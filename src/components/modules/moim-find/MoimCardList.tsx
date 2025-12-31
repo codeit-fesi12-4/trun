@@ -25,12 +25,13 @@ const MoimCardList = ({ items, onFavoriteToggle, onJoinClick, isLoading }: MoimC
 
   return (
     <div className="mx-auto mt-6 grid w-full grid-cols-1 gap-4 lg:grid-cols-2">
-      {items.map(item => (
+      {items.map((item, index) => (
         <MoimCard
           key={item.id}
           item={item}
           onFavoriteToggle={onFavoriteToggle}
           onJoinClick={onJoinClick}
+          priority={index < 8}
         />
       ))}
     </div>

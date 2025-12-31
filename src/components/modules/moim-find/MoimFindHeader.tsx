@@ -26,6 +26,8 @@ const MoimFindHeader = ({ onFilterChange, availableLocations, filters }: MoimFil
             alt="모임찾기이미지"
             fill
             className="object-cover"
+            priority
+            fetchPriority="high"
           />
         </div>
         <div className="absolute ml-4 flex h-full flex-col justify-center gap-2 sm:ml-10 md:ml-10">
