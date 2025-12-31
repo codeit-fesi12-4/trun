@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "@/hooks/useUserQuery";
+// import { useQueryClient } from "@tanstack/react-query";
+// import { getUserProfile } from "@/api/user.api";
 
 type FavoriteButtonProps = {
   moimId: number;
@@ -13,7 +15,9 @@ type FavoriteButtonProps = {
 const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
-  const { data: user, isLoading } = useUserProfileQuery();
+  const { data: user, isLoading, refetch } = useUserProfileQuery();
+
+  // const queryClient = useQueryClient();
 
   const userId = user?.id;
 
@@ -27,22 +31,22 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
     }
   }, [moimId, userId]);
 
-  const handleFavoriteClick = () => {
-    if (!userId) {
-      setIsLoginModalOpen(true);
+  const handleFavoriteClick = async () => {
+    const { error } = await refetch();
+
+    if (error?.code === "INVALID_TOKEN") {
+      setIsLoginModalOpen(true, error.code);
       return;
     }
 
     const next = !isFavorite;
     setIsFavorite(next);
     // 렌더링 중 다른 컴포넌트 업데이트 방지
-    setTimeout(() => {
-      if (next) {
-        addFavoriteMoim(moimId, userId);
-      } else {
-        removeFavoriteMoim(moimId, userId);
-      }
-    }, 0);
+    if (next) {
+      addFavoriteMoim(moimId, userId);
+    } else {
+      removeFavoriteMoim(moimId, userId);
+    }
   };
 
   if (isLoading)
@@ -53,7 +57,9 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   return (
     <>
       <button
-        onMouseDown={handleFavoriteClick}
+        onMouseDown={() => {
+          void handleFavoriteClick();
+        }}
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 hover:cursor-pointer sm:h-12 sm:w-12"
       >
         <Image

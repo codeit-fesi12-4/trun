@@ -13,9 +13,13 @@ export function ProfileBootstrapper() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
+      queryClient.setQueryData(["userProfile"], undefined);
       queryClient.removeQueries({ queryKey: ["userProfile"] });
     }
   }, [status, queryClient]);
 
   return null;
 }
+
+// 로그인
+// status -> authenticated -> true -> useUserProfileQuery 다시 가져오기
