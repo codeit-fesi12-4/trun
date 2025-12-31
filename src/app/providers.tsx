@@ -11,29 +11,21 @@ import { ReactNode, useState } from "react";
 export default function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => {
     const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: { retry: false },
-        mutations: { retry: false },
-      },
-    });
-    const onUnauthorized = unauthorizedHandler(queryClient);
-
-    return new QueryClient({
       queryCache: new QueryCache({
-        onError: error => {
-          void handleApiError(error, { onUnauthorized });
-        },
+        onError: error => void handleApiError(error, { onUnauthorized }),
       }),
       mutationCache: new MutationCache({
-        onError: error => {
-          void handleApiError(error, { onUnauthorized });
-        },
+        onError: error => void handleApiError(error, { onUnauthorized }),
       }),
       defaultOptions: {
         queries: { retry: false },
         mutations: { retry: false },
       },
     });
+
+    const onUnauthorized = unauthorizedHandler(queryClient);
+
+    return queryClient;
   });
   return (
     <SessionProvider>
