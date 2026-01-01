@@ -5,6 +5,10 @@ export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "
 
 export type ReviewModalMode = "create" | "edit";
 
+export type MypageSortBy = "dateTime" | "registrationEnd" | "joinedAt";
+
+export type MypageSortOrder = "asc" | "desc";
+
 export type MypageMoim = {
   teamId: string;
   id: number;
@@ -26,6 +30,22 @@ export type MypageMoim = {
 
 // 나의 모임 응답 타입
 export type GetJoinedMoimsResponse = MypageMoim[];
+
+// 나의 모임 무한 스크롤을 위한 요청 파라미터 타입
+export type GetJoinedMoimsParams = {
+  completed?: boolean;
+  reviewed?: boolean;
+  limit: number;
+  offset: number;
+  sortBy?: MypageSortBy;
+  sortOrder?: MypageSortOrder;
+};
+
+// 내가 만든 모임 조회 파라미터
+export type GetCreatedMoimsParams = {
+  limit: number;
+  offset: number;
+};
 
 // 작성 가능한 리뷰 타입
 export type WritableReviewItem = MypageMoim & {
