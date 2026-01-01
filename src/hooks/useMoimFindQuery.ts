@@ -1,5 +1,4 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { TEAM_NAME } from "@/constants/env";
 import { getMoimList, postMoim } from "@/api/moim.api";
 import { CreateMoimRequest, GetMoimsParams, GetMoimsResponse } from "@/types/moim.type";
 import { toast } from "sonner";
@@ -7,15 +6,13 @@ import { toast } from "sonner";
 // React Query 훅 - 모임 목록 조회
 export const useMoimsQuery = ({
   params,
-  teamName = TEAM_NAME,
   enabled = true,
 }: {
   params?: GetMoimsParams;
-  teamName?: string;
   enabled?: boolean;
 }) =>
   useQuery({
-    queryKey: ["moims", teamName, params],
+    queryKey: ["moims", params],
     queryFn: () => getMoimList(params),
     select: res => {
       const response = res as { ok?: boolean; data?: GetMoimsResponse };
@@ -28,17 +25,15 @@ export const useMoimsQuery = ({
 // React Query 훅 - 모임 목록 무한 스크롤 조회
 export const useMoimsInfiniteQuery = ({
   params,
-  teamName = TEAM_NAME,
   enabled = true,
   pageSize = 8,
 }: {
   params?: Omit<GetMoimsParams, "limit" | "offset">;
-  teamName?: string;
   enabled?: boolean;
   pageSize?: number;
 }) =>
   useInfiniteQuery({
-    queryKey: ["moims", "infinite", teamName, params],
+    queryKey: ["moims", "infinite", params],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await getMoimList({
         ...params,
