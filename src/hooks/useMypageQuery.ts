@@ -22,7 +22,6 @@ export const useJoinedMoimsInfinite = (
   return useInfiniteQuery({
     queryKey: ["mypage", "joinedMoims", "infinite", userId, params],
     queryFn: async ({ pageParam = 0 }) => {
-      await new Promise(resolve => setTimeout(resolve, 8000));
       const res = await getMoimJoined({
         ...params,
         limit: LIMIT,
