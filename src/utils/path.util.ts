@@ -1,4 +1,5 @@
 import { GetMoimsParams } from "@/types/moim.type";
+import { GetJoinedMoimsParams } from "@/types/mypage.type";
 import { GetReviewsParams, GetReviewScoresParams } from "@/types/review.type";
 
 // 모임 query string
@@ -73,3 +74,26 @@ export const buildReviewScoresPath = (params: GetReviewScoresParams) => {
   const queryString = buildReviewScoresQueryString(params);
   return queryString ? `/reviews/scores?${queryString}` : "/reviews/scores";
 };
+
+// 참여 모임 query string
+export const buildJoinedMoimsQueryString = (params: GetJoinedMoimsParams) => {
+  const searchParams = new URLSearchParams();
+
+  searchParams.append("limit", String(params.limit));
+  searchParams.append("offset", String(params.offset));
+  searchParams.append("sortOrder", params.sortOrder ?? "desc");
+  searchParams.append("sortBy", params.sortBy ?? "dateTime");
+
+  if (params.completed !== undefined) {
+    searchParams.append("completed", String(params.completed));
+  }
+  if (params.reviewed !== undefined) {
+    searchParams.append("reviewed", String(params.reviewed));
+  }
+
+  return searchParams.toString();
+};
+
+// 참여한 모임 path
+export const buildJoinedMoimsPath = (params: GetJoinedMoimsParams) =>
+  `/gatherings/joined?${buildJoinedMoimsQueryString(params)}`;
