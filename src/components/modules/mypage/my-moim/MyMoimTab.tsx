@@ -3,22 +3,29 @@
 import { useState } from "react";
 import MyPageMoimCard from "./MyPageMoimCard";
 import MoimCardSkeleton from "./MoimCardSkeleton";
-import { useCancelReservation, useJoinedMoims } from "@/hooks/useMypageQuery";
+import { useCancelReservation, useJoinedMoimsInfinite } from "@/hooks/useMypageQuery"; // Infinite 훅만 사용
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll"; // 팀원분이 만든 훅 추가
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
+import { Spinner } from "@/components/ui/spinner";
 
 const MyMoimTab = () => {
-  // 예약 취소 확인 모달
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage, isError } =
+    useJoinedMoimsInfinite();
+
+  const cancelJoinMutation = useCancelReservation();
+
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error: isError ? new Error("데이터 로드 실패") : null,
+  });
+
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
 
-  // 참여한 나의 모임 조회
-  const { data = [], isLoading, isError } = useJoinedMoims();
-
-  // 예약 취소
-  const cancelJoinMutation = useCancelReservation();
-
-  // 예약 취소 버튼
   const handleCancelClick = (id: number) => {
     setSelectedCancelId(id);
     setIsCancelModalOpen(true);
@@ -32,23 +39,43 @@ const MyMoimTab = () => {
         ))}
       </div>
     );
-  if (isError) return <div>오류가 발생했습니다.</div>;
+
+  if (isError)
+    return (
+      <div className="mt-6 text-center text-red-500">
+        모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
+      </div>
+    );
+
+  const allMoims = data?.pages.flat() ?? [];
 
   return (
     <div className="flex flex-col gap-6">
-      {data.length === 0 ? (
+      {allMoims.length === 0 ? (
         <EmptyState text="신청한 모임이 아직 없어요" />
       ) : (
-        data.map(item => (
+        allMoims.map(item => (
           <MyPageMoimCard
             key={item.id}
             item={item}
-            showCancelButton={!item.isCompleted} // 취소 버튼 노출 여부
-            onCancelClick={() => handleCancelClick(item.id)} // 예약 취소 핸들러
+            showCancelButton={!item.isCompleted}
+            onCancelClick={() => handleCancelClick(item.id)}
           />
         ))
       )}
 
+      {/* 무한 스크롤 센티널 */}
+      {hasNextPage && <div ref={loadMoreRef} className="h-0 w-full" aria-hidden />}
+
+      {/* 로딩 스피너 */}
+      {isFetchingNextPage && (
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 text-base text-gray-600">
+          <Spinner className="size-7 text-green-500" />
+          <span>모임을 불러오는 중...</span>
+        </div>
+      )}
+
+      {/* 예약 취소 모달 */}
       {isCancelModalOpen && selectedCancelId && (
         <ModalLayout
           open={isCancelModalOpen}
