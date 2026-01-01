@@ -124,23 +124,19 @@ export const useAvailableReviews = () => {
     ? joinedData.pages
         .flat()
         .filter(item => {
-          // 취소된 모임 제외
           if (item.canceledAt) return false;
-
           if (item.isReviewed) return false;
-          // 2. 마감 날짜(registrationEnd)가 현재 시간보다 과거인 경우만 포함
           const now = new Date();
           const registrationEnd = new Date(item.registrationEnd);
           return registrationEnd < now;
         })
         .map(item => ({
           ...item,
-          gatheringId: item.id, // 전송 시 필요한 ID 매핑
-          score: 0, // 초기 별점 값
+          gatheringId: item.id,
+          score: 0,
         }))
     : [];
 
-  // useQuery와 같은 인터페이스를 유지하기 위해 객체로 반환
   return {
     ...rest,
     data: availableReviews,
