@@ -190,7 +190,9 @@ export const useReviewEditMutation = (onCloseModal: () => void) => {
     mutationFn: ({ reviewId, params }: { reviewId: number; params: PutReviewParams }) =>
       putReviewEdit(reviewId, params),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["mypage", "writtenReviews", userId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["mypage", "writtenReviews", "infinite", userId],
+      });
       onCloseModal();
       toast.success("리뷰가 수정되었습니다.");
     },
