@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuthStore } from "@/stores/auth.store";
 import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/favorite.util";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type FavoriteButtonProps = {
   moimId: number;
@@ -12,10 +12,10 @@ type FavoriteButtonProps = {
 
 const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [open, setOpen] = useState(false);
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
+  const { data: user, isLoading, refetch } = useUserProfileQuery();
 
-  const user = useAuthStore(state => state.user);
-  const userId = user?.id.toString();
+  const userId = user?.id;
 
   useEffect(() => {
     if (userId) {
@@ -27,28 +27,41 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
     }
   }, [moimId, userId]);
 
-  const handleFavoriteClick = () => {
-    if (!userId) {
-      setOpen(true);
+  const handleFavoriteClick = async () => {
+    const { error } = await refetch();
+
+    const code =
+      typeof error === "object" && error !== null && "code" in error
+        ? (error as { code?: unknown }).code
+        : undefined;
+
+    if (code === "INVALID_TOKEN" || code === "UNAUTHORIZED") {
+      setIsLoginModalOpen(true, code);
       return;
     }
 
     const next = !isFavorite;
     setIsFavorite(next);
-    // 렌더링 중 다른 컴포넌트 업데이트 방지
-    setTimeout(() => {
-      if (next) {
-        addFavoriteMoim(moimId, userId);
-      } else {
-        removeFavoriteMoim(moimId, userId);
-      }
-    }, 0);
+
+    if (next) {
+      addFavoriteMoim(moimId, userId);
+    } else {
+      removeFavoriteMoim(moimId, userId);
+    }
   };
+
+  if (isLoading)
+    return (
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 sm:h-12 sm:w-12" />
+    );
+
   return (
     <>
       <button
-        onMouseDown={handleFavoriteClick}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 sm:h-12 sm:w-12"
+        onMouseDown={() => {
+          void handleFavoriteClick();
+        }}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 hover:cursor-pointer sm:h-12 sm:w-12"
       >
         <Image
           src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
@@ -58,7 +71,6 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
           className={`${isFavorite && "heart-pop"} sm:h-6 sm:w-6`}
         />
       </button>
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </>
   );
 };

@@ -12,23 +12,19 @@ import {
 } from "@/components/ui/pagination";
 import ReviewList from "./ReviewList";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
-import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { useMoimReviewsQuery } from "@/hooks/useReviewQuery";
 
 type MoimDetailReviewAreaProps = {
-  moimId: string;
+  moimId: number;
 };
 
 export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaProps) {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState<(number | string)[]>([]);
 
-  const NumberMoimId = Number(moimId);
-
   const { data, isLoading } = useMoimReviewsQuery({
-    moimId: NumberMoimId,
-    teamName: TEAM_NAME,
+    gatheringId: moimId,
     limit: REVIEW_PAGE_SIZE.PAGINATION,
     offset: (page - 1) * REVIEW_PAGE_SIZE.PAGINATION,
   });
@@ -78,7 +74,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
               <PaginationPrevious
                 onClick={() => setPage(Math.max(page - 1, 1))}
                 disabled={page === 1}
-                className={`text-gray-200 ${page !== 1 && "hover:text-gray-800"}`}
+                className={`text-gray-200 hover:cursor-pointer ${page !== 1 && "hover:text-gray-800"}`}
               />
             </PaginationItem>
 
@@ -91,7 +87,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
                   <PaginationLink
                     isActive={page === p}
                     onClick={() => typeof p === "number" && setPage(p)}
-                    className="text-gray-200 hover:bg-green-200 data-[state=active]:border-0 data-[state=active]:bg-green-200 data-[state=active]:text-green-600 data-[state=active]:shadow-none"
+                    className="text-gray-200 hover:cursor-pointer hover:bg-green-200 data-[state=active]:border-0 data-[state=active]:bg-green-200 data-[state=active]:text-green-600 data-[state=active]:shadow-none"
                   >
                     {p}
                   </PaginationLink>
@@ -104,7 +100,7 @@ export default function MoimDetailReviewArea({ moimId }: MoimDetailReviewAreaPro
               <PaginationNext
                 onClick={() => setPage(Math.min(page + 1, totalPages))}
                 disabled={page === totalPages}
-                className={`text-gray-200 ${page !== totalPages && "hover:text-gray-800"}`}
+                className={`text-gray-200 hover:cursor-pointer ${page !== totalPages && "hover:text-gray-800"}`}
               />
             </PaginationItem>
           </PaginationContent>

@@ -1,36 +1,34 @@
 "use client";
 
 import { useMemo, useRef, useEffect, useState } from "react";
-import { TEAM_NAME } from "@/constants/env";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import AllReviewHeader from "./AllReviewHeader";
 import AllReviewStats from "./AllReviewStats";
 import AllReviewList from "./AllReviewList";
 import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/useReviewQuery";
-import { CATEGORY_MAP, SORTBY_MAP } from "@/utils/category.util";
 import { buildDistribution } from "@/utils/review.util";
+import { buildReviewsQueryString } from "@/utils/path.util";
+import useSyncQueryString from "@/hooks/useSyncQueryString";
+import { useSearchParams } from "next/navigation";
+import parseFilters from "@/utils/parseFilters";
 import { ReviewFilterValues } from "@/types/review.type";
 
 const AllReviewContent = () => {
-  const [filters, setFilters] = useState<ReviewFilterValues>({
-    category: "달림핏",
-    location: "지역 전체",
-    sortBy: "최신 리뷰 순",
-  });
+  const searchParams = useSearchParams();
 
-  const activeReviewSort = SORTBY_MAP[filters.sortBy];
-  const activeReviewType = CATEGORY_MAP[filters.category];
-
-  const reviewQueryParams = useMemo(
-    () => ({
-      teamId: TEAM_NAME,
-      limit: REVIEW_PAGE_SIZE.SCROLL,
-      type: activeReviewType,
-      location: filters.location,
-      sortBy: activeReviewSort,
-    }),
-    [activeReviewType, filters.location, activeReviewSort],
+  const [filters, setFilters] = useState<ReviewFilterValues>(() =>
+    parseFilters(searchParams, "review"),
   );
+
+  const reviewQueryParams = {
+    limit: REVIEW_PAGE_SIZE.SCROLL,
+    type: filters.type,
+    location: filters.location,
+    sortBy: filters.sortBy,
+    sortOrder: filters.sortOrder,
+  };
+
+  useSyncQueryString(buildReviewsQueryString(reviewQueryParams));
 
   const {
     data: reviewsPages,
@@ -44,7 +42,7 @@ const AllReviewContent = () => {
   const reviewList = useMemo(() => reviewsPages?.pages.flatMap(p => p.data) ?? [], [reviewsPages]);
 
   const { data: scoresData } = useReviewScoresQuery({
-    params: { teamId: TEAM_NAME, type: activeReviewType },
+    params: { type: filters.type },
   });
 
   const distribution = buildDistribution(scoresData);
@@ -53,6 +51,12 @@ const AllReviewContent = () => {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const reflectParseFilter = () => {
+      setFilters(parseFilters(searchParams, "review"));
+    };
+
+    reflectParseFilter();
+
     const target = loadMoreRef.current;
     if (!target) return;
 
@@ -67,7 +71,7 @@ const AllReviewContent = () => {
 
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, searchParams]);
 
   return (
     <div className="flex flex-col gap-6">

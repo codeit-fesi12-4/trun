@@ -7,14 +7,12 @@ import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import MoimAddModal from "@/components/modules/moim-find/MoimAddModal";
 import { Spinner } from "@/components/ui/spinner";
 import MoimFindHeader from "@/components/modules/moim-find/MoimFindHeader";
-import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 
 const MoimFindClient = () => {
   const {
+    filters,
     isModalOpen,
     setIsModalOpen,
-    isLoginModalOpen,
-    setIsLoginModalOpen,
     moimCardData,
     availableLocations,
     isLoading,
@@ -36,7 +34,11 @@ const MoimFindClient = () => {
 
   return (
     <>
-      <MoimFindHeader onFilterChange={handleFilterChange} availableLocations={availableLocations} />
+      <MoimFindHeader
+        onFilterChange={handleFilterChange}
+        availableLocations={availableLocations}
+        filters={filters}
+      />
       {error && (
         <div className="mt-6 text-center text-red-500">
           모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요.
@@ -77,7 +79,7 @@ const MoimFindClient = () => {
       {/* 우측 하단 고정된 모임 생성 버튼 */}
       <button
         onClick={handleCreateMoimClick}
-        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center gap-2 rounded-full bg-green-500 text-white shadow-lg transition-all hover:bg-green-600 sm:right-8 sm:bottom-8 sm:h-auto sm:w-auto sm:rounded-2xl sm:px-6 sm:py-3"
+        className="fixed right-6 bottom-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-green-500 text-white shadow-lg transition-all hover:bg-green-600 sm:right-8 sm:bottom-8 sm:h-auto sm:w-auto sm:rounded-2xl sm:px-6 sm:py-3"
         aria-label="모임 만들기"
       >
         <Image
@@ -91,7 +93,6 @@ const MoimFindClient = () => {
       </button>
 
       <MoimAddModal open={isModalOpen} onOpenChange={setIsModalOpen} />
-      <ConfirmationJoinModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen} />
     </>
   );
 };

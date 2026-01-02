@@ -12,13 +12,15 @@ import {
 import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHeader } from "@/hooks/useHeader";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const Header = () => {
-  const { user, isMounted, favoriteCount, handleLogout } = useHeader();
-  const [open, setOpen] = useState(false);
+  const { isMounted, favoriteCount, handleLogout } = useHeader();
+  const { data: user, isLoading } = useUserProfileQuery();
+  const { setOpen } = useLoginModalStore();
   const router = useRouter();
 
   const handleFavoritePage = () => {
@@ -28,6 +30,8 @@ const Header = () => {
     }
     router.push("/moim-favorite");
   };
+
+  if (isLoading) return null;
 
   return (
     <header className="bg-background fixed top-0 z-10 w-full px-4 shadow-xl md:px-6">
@@ -46,7 +50,10 @@ const Header = () => {
             <Link href="/moim-find" className="nav-link">
               모임 찾기
             </Link>
-            <button onClick={handleFavoritePage} className="nav-link flex items-center gap-1.5">
+            <button
+              onClick={handleFavoritePage}
+              className="nav-link flex items-center gap-1.5 hover:cursor-pointer"
+            >
               찜한 모임
               {favoriteCount > 0 && (
                 <Badge
@@ -68,7 +75,7 @@ const Header = () => {
             {!isMounted ? (
               <Skeleton className="h-8 w-8 rounded-full sm:h-11 sm:w-11" />
             ) : user ? (
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Image
                     src={user.image ? user.image : "/icons/default_profile.svg"}
@@ -95,7 +102,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
+      <ConfirmationJoinModal />
     </header>
   );
 };

@@ -7,9 +7,9 @@ import {
   UpdateProfileForm,
   validateUpdateProfile,
 } from "@/utils/validators.utils";
-import { UserProfile } from "@/types/user.type";
-import { useUpdateProfileMutationQuery } from "@/hooks/useUserQuery";
+import { useUpdateProfileQuery } from "@/hooks/useUserQuery";
 import { toast } from "sonner";
+import { UserProfile } from "@/types/user.type";
 
 export const ProfileEditModal = ({
   open,
@@ -18,7 +18,7 @@ export const ProfileEditModal = ({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  user: UserProfile | null;
+  user: UserProfile;
 }) => {
   const [form, setForm] = useState<UpdateProfileForm>({
     companyName: "",
@@ -26,14 +26,15 @@ export const ProfileEditModal = ({
     file: null,
   });
   const [errors, setErrors] = useState<UpdateProfileErrors>({});
+  const updateProfileMutation = useUpdateProfileQuery();
 
-  // 모달 open 유저 정보가 바뀌면 폼 초기화
+  // 모달 open 시 유저 정보로 폼 초기화
   useEffect(() => {
     if (!open || !user) return;
     setTimeout(() => {
       setForm({
-        companyName: (user.companyName && user.companyName) || "",
-        image: (user.image && user.image) || "",
+        companyName: user.companyName || "",
+        image: user.image || "",
         file: null,
       });
       setErrors({});
@@ -44,40 +45,32 @@ export const ProfileEditModal = ({
   const handleChange = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setForm(prev => ({ ...prev, [field]: value }));
-
-    // 해당 필드 에러 제거
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
 
+  // 이미지 변경 처리
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    // validateUpdateProfile로 검사
     const tempForm: UpdateProfileForm = { companyName: form.companyName, file };
     const nextErrors = validateUpdateProfile(tempForm);
-
     if (nextErrors.image) {
       toast(nextErrors.image);
       return;
     }
-
-    // 에러 없으면 상태 업데이트
     setForm(prev => ({
       ...prev,
       image: URL.createObjectURL(file),
       file,
     }));
-
     if (errors.image) {
       setErrors(prev => ({ ...prev, image: undefined }));
     }
   };
 
-  // 회원정보 업데이트
-  const updateProfileMutation = useUpdateProfileMutationQuery();
+  // 회원 정보 수정 제출
   const handleSubmit = () => {
     const nextErrors = validateUpdateProfile({
       companyName: form.companyName,
@@ -86,17 +79,16 @@ export const ProfileEditModal = ({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    // FormData 생성
     const formData = new FormData();
     formData.append("companyName", form.companyName);
     if (form.file) formData.append("image", form.file);
 
-    updateProfileMutation.mutate(
-      { formData },
-      {
-        onSuccess: () => onOpenChange(false),
+    updateProfileMutation.mutate(formData, {
+      onSuccess: res => {
+        if (!res.ok) return;
+        onOpenChange(false);
       },
-    );
+    });
   };
 
   return (
@@ -109,7 +101,6 @@ export const ProfileEditModal = ({
       onCancel={() => onOpenChange(false)}
       showCancel
     >
-      {/* 폼 */}
       <div className="flex flex-col">
         <div className="flex justify-center pt-4 pb-8">
           <input
@@ -142,12 +133,14 @@ export const ProfileEditModal = ({
             </div>
           </label>
         </div>
+
         <form className="space-y-4 pb-4" noValidate>
           <MypageField
             id="signup-name"
             label="이름"
             placeholder="이름을 입력해주세요."
             autoComplete="name"
+            value={user.name}
             disabled
           />
           <MypageField
@@ -164,6 +157,7 @@ export const ProfileEditModal = ({
             label="이메일"
             placeholder="이메일을 입력해주세요."
             autoComplete="email"
+            value={user.email}
             disabled
           />
         </form>

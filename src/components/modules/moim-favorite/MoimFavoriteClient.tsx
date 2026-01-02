@@ -7,6 +7,7 @@ import { useMoimFavorite } from "@/hooks/useMoimFavorite";
 
 const MoimFavoriteClient = () => {
   const {
+    filters,
     moimCardData,
     isLoading,
     error,
@@ -18,6 +19,7 @@ const MoimFavoriteClient = () => {
   return (
     <>
       <MoimFavoriteHeader
+        filters={filters}
         onFilterChange={handleFilterChange}
         availableLocations={availableLocations}
       />

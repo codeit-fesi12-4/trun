@@ -10,16 +10,25 @@ type MoimDatePickerFieldProps = {
   label: string;
   date: Date | undefined;
   onDateChange: (date: Date | undefined) => void;
+  required?: boolean;
 };
 
-const MoimDatePickerField = ({ label, date, onDateChange }: MoimDatePickerFieldProps) => (
+const MoimDatePickerField = ({
+  label,
+  date,
+  onDateChange,
+  required = false,
+}: MoimDatePickerFieldProps) => (
   <div className="flex w-full flex-col gap-2">
-    <label className="text-xs font-semibold text-gray-600 sm:text-sm">{label}</label>
+    <label className="text-xs font-semibold text-gray-600 sm:text-sm">
+      {label}
+      {required && <span className="text-red-500"> *</span>}
+    </label>
     <Popover>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="h-8 w-full justify-start border-transparent px-2 text-left text-xs font-semibold sm:h-9 sm:px-3 sm:text-sm"
+          className="h-8 w-full cursor-pointer justify-start border-transparent px-2 text-left text-xs font-semibold sm:h-9 sm:px-3 sm:text-sm"
         >
           {date ? (
             formatDatePicker(date)

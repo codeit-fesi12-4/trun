@@ -3,77 +3,105 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import useLoginRedirect from "@/hooks/useLoginRedirect";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { isProtectedRoute } from "@/utils/routeGuard.util";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Suspense } from "react";
 
-type ConfirmationJoinModalProps = {
-  open: boolean;
-  onOpenChange: (v: boolean) => void;
-};
-
-// useSearchParams()를 사용하는 부분만 별도 컴포넌트로 분리
 const LoginButton = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const { redirectToLogin } = useLoginRedirect();
+  const { setOpen } = useLoginModalStore();
 
-  const handleLogin = () => {
-    const current = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
-    router.push(`/login?redirect=${encodeURIComponent(current)}`);
+  const handleApproveButtonClick = () => {
+    setOpen(false);
+    redirectToLogin();
   };
 
   return (
     <Button
-      onClick={handleLogin}
-      className="h-full flex-1 rounded-[12px] bg-green-500 text-base font-bold sm:rounded-2xl sm:text-xl"
+      onClick={handleApproveButtonClick}
+      className="h-full flex-1 rounded-[12px] bg-green-500 text-base font-bold hover:cursor-pointer hover:bg-green-500 hover:shadow-md"
     >
       확인
     </Button>
   );
 };
 
-const ConfirmationJoinModal = ({ open, onOpenChange }: ConfirmationJoinModalProps) => (
-  <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent
-      className="h-[216px] max-w-[342px] gap-0 rounded-3xl p-6 sm:h-[289px] sm:max-w-[600px] sm:rounded-[40px] sm:p-10"
-      showCloseButton={false}
+const ConfirmationJoinModal = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const { open, reason, setOpen } = useLoginModalStore();
+
+  const cancelGoHome = isProtectedRoute(pathname);
+
+  const goHomeAndClose = () => {
+    void router.replace("/");
+    setOpen(false);
+  };
+
+  const closeOnly = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={nextOpen => {
+        if (cancelGoHome && nextOpen === false) return;
+        setOpen(nextOpen);
+      }}
     >
-      <DialogClose
-        asChild
-        className="absolute top-6 right-6 rounded-full p-1 sm:top-10 sm:right-10"
+      <DialogContent
+        className="h-[216px] max-w-[342px] gap-0 rounded-3xl p-6"
+        showCloseButton={false}
+        onPointerDownOutside={e => {
+          if (cancelGoHome) e.preventDefault();
+        }}
+        onEscapeKeyDown={e => {
+          if (cancelGoHome) e.preventDefault();
+        }}
+        onInteractOutside={e => {
+          if (cancelGoHome) e.preventDefault();
+        }}
       >
-        <button aria-label="닫기">
+        <button
+          type="button"
+          aria-label="닫기"
+          onClick={cancelGoHome ? goHomeAndClose : closeOnly}
+          className="absolute top-6 right-6 rounded-full p-1"
+        >
           <Image src="/icons/delete.svg" alt="닫기 버튼" width={24} height={24} />
         </button>
-      </DialogClose>
-      <DialogHeader className="flex h-[120px] flex-col items-center justify-center sm:h-[141px]">
-        <DialogTitle className="text-lg font-semibold text-gray-700 sm:text-2xl">
-          로그인이 필요한 서비스입니다.
-        </DialogTitle>
-      </DialogHeader>
-      <DialogFooter className="flex h-12 flex-row gap-2 sm:h-15">
-        <DialogClose asChild>
+        <DialogHeader className="flex h-[120px] flex-col items-center justify-center">
+          <DialogTitle className="text-lg font-semibold text-gray-700">
+            {reason === "INVALID_TOKEN"
+              ? "세션이 만료되었습니다. 다시 로그인해주세요."
+              : "로그인이 필요한 서비스입니다."}
+          </DialogTitle>
+        </DialogHeader>
+        <DialogFooter className="flex h-12 flex-row gap-2">
           <Button
             variant="outline"
-            className="h-full flex-1 rounded-[12px] border border-gray-100 text-base font-medium text-gray-500 shadow-none sm:rounded-2xl sm:text-lg"
+            onClick={cancelGoHome ? goHomeAndClose : closeOnly}
+            className="h-full flex-1 rounded-[12px] border border-gray-100 text-base font-medium text-gray-500 shadow-none hover:cursor-pointer hover:bg-transparent hover:shadow-sm"
           >
             취소
           </Button>
-        </DialogClose>
-        {/* useSearchParams()를 사용하는 컴포넌트를 Suspense로 감싸야 함 */}
-        <Suspense fallback={null}>
-          <LoginButton />
-        </Suspense>
-      </DialogFooter>
-    </DialogContent>
-  </Dialog>
-);
+          <Suspense fallback={null}>
+            <LoginButton />
+          </Suspense>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 export default ConfirmationJoinModal;

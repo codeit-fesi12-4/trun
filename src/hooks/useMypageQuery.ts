@@ -1,89 +1,217 @@
-import { deleteReservation, getAvailableReviews, getMoimJoined } from "@/api/mypageMoim.api";
-import { getReviews, postReviews } from "@/api/review.api";
-import { TEAM_NAME } from "@/constants/env";
-import { useAuthStore } from "@/stores/auth.store";
-import { WritableReviewItem, WrittenReviewItem } from "@/types/mypage.type";
-import { PostReviewParams } from "@/types/review.type";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteReservation, getCreatedMoims, getMoimJoined } from "@/api/mypage.api";
+import { deleteReview, getReviews, postReviews, putReviewEdit } from "@/api/review.api";
+import { GetJoinedMoimsParams, WritableReviewItem } from "@/types/mypage.type";
+import {
+  PostReviewParams,
+  PutReviewParams,
+  ReviewSortBy,
+  ReviewSortOrder,
+} from "@/types/review.type";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useUserProfileQuery } from "./useUserQuery";
 
-// 참여한 나의 모임 조회 훅
-export const useJoinedMoims = () =>
-  useQuery({
-    queryKey: ["mypage", "joinedMoims"],
-    queryFn: () => getMoimJoined(undefined, TEAM_NAME),
+// 참여한 나의 모임 조회
+export const useJoinedMoimsInfinite = (
+  params: Omit<GetJoinedMoimsParams, "limit" | "offset"> = { sortOrder: "desc" },
+) => {
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+  const LIMIT = 10;
+
+  return useInfiniteQuery({
+    queryKey: ["mypage", "joinedMoims", "infinite", userId, params],
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await getMoimJoined({
+        ...params,
+        limit: LIMIT,
+        offset: pageParam,
+      });
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < LIMIT) return undefined;
+      return allPages.length * LIMIT;
+    },
+    enabled: !!userId,
   });
+};
 
-// 예약 취소 훅
+// 예약 취소
 export const useCancelReservation = () => {
   const queryClient = useQueryClient();
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
 
   return useMutation({
-    mutationFn: (moimId: number) => {
-      const token = useAuthStore.getState().token;
-      return deleteReservation(moimId, TEAM_NAME, token);
-    },
+    mutationFn: (moimId: number) => deleteReservation(moimId),
     onSuccess: (_, moimId) => {
       toast.success("예약이 취소되었습니다.");
 
-      // 마이페이지 참여 모임 목록 무효화
-      void queryClient.invalidateQueries({ queryKey: ["mypage", "joinedMoims"] });
-      // 상세 페이지 메인 데이터 무효화 (참여 상태, 인원 수 갱신)
-      void queryClient.invalidateQueries({ queryKey: ["moim", TEAM_NAME, moimId] });
-      // 상세 페이지 참여자 목록 무효화 (참여자 목록에서 사용자 제거)
-      void queryClient.invalidateQueries({ queryKey: ["participants", TEAM_NAME, moimId] });
-    },
-    onError: error => {
-      console.error("예약 취소 실패:", error);
-      toast.error(error instanceof Error ? error.message : "예약 취소 중 오류가 발생했습니다.");
+      void queryClient.invalidateQueries({
+        queryKey: ["mypage", "joinedMoims", "infinite", userId],
+      });
+      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
   });
 };
 
-// 리뷰 등록 훅
-export const useReviewMutation = (onSuccessCallback: (gatheringId: number) => void) => {
+// 내가 만든 모임 조회
+export const useCreatedMoimsInfinite = () => {
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+  const LIMIT = 10;
+
+  return useInfiniteQuery({
+    queryKey: ["mypage", "createdMoims", "infinite", userId],
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await getCreatedMoims({
+        limit: LIMIT,
+        offset: pageParam,
+      });
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < LIMIT) return undefined;
+      return allPages.length * LIMIT;
+    },
+    enabled: !!userId,
+  });
+};
+
+// 리뷰 등록
+export const useReviewMutation = (onCloseModal: () => void) => {
   const queryClient = useQueryClient();
-  const token = useAuthStore(state => state.token);
-  const joinedMoimsQueryKey = ["mypage", "joinedMoims"];
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
 
   return useMutation({
     mutationFn: (params: PostReviewParams) => {
-      if (!token) throw new Error("로그인이 필요합니다.");
-      return postReviews(params, token);
+      if (!userId) throw new Error("로그인이 필요합니다.");
+      return postReviews(params);
     },
+    onSuccess: () => {
+      if (!userId) return;
 
-    onSuccess: (_data, params) => {
-      void queryClient.invalidateQueries({ queryKey: joinedMoimsQueryKey });
-      onSuccessCallback(params.gatheringId);
+      void queryClient.invalidateQueries({ queryKey: ["mypage"] });
 
-      queryClient.setQueryData<WritableReviewItem[]>(["mypage", "joinedMoims"], old =>
-        old?.map(item => (item.id === params.gatheringId ? { ...item, isReviewed: true } : item)),
-      );
-
+      onCloseModal();
       toast.success("리뷰가 성공적으로 등록되었습니다.");
-    },
-
-    onError: error => {
-      const message = error instanceof Error ? error.message : "리뷰 등록 중 알 수 없는 오류 발생";
-      toast.error(message);
     },
   });
 };
 
-// 작성 가능한 리뷰 훅
-export const useAvailableReviews = () =>
-  useQuery<WritableReviewItem[]>({
-    queryKey: ["mypage", "availableReviews"],
-    queryFn: getAvailableReviews,
+// 작성 가능한 리뷰
+export const useAvailableReviews = () => {
+  const { data: joinedData, ...rest } = useJoinedMoimsInfinite({
+    sortOrder: "desc",
+    completed: true,
+    reviewed: false,
   });
 
-// 작성한 리뷰 훅
-export const useWrittenReviews = () => {
-  const user = useAuthStore(state => state.user);
+  const availableReviews: WritableReviewItem[] = joinedData
+    ? joinedData.pages
+        .flat()
+        .filter(item => {
+          if (item.canceledAt) return false;
+          if (item.isReviewed) return false;
+          const now = new Date();
+          const registrationEnd = new Date(item.registrationEnd);
+          return registrationEnd < now;
+        })
+        .map(item => ({
+          ...item,
+          gatheringId: item.id,
+          score: 0,
+        }))
+    : [];
 
-  return useQuery<{ data: WrittenReviewItem[] }, Error>({
-    queryKey: ["mypage", "writtenReviews", user?.id],
-    queryFn: () => getReviews({ teamId: TEAM_NAME, userId: user?.id }),
-    enabled: !!user?.id, // user가 있을 때만 실행
+  return {
+    ...rest,
+    data: availableReviews,
+  };
+};
+
+// 작성한 리뷰
+export const useWrittenReviewsInfinite = (
+  sortBy: ReviewSortBy = "createdAt",
+  sortOrder: ReviewSortOrder = "desc",
+) => {
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+  const LIMIT = 10;
+
+  return useInfiniteQuery({
+    queryKey: ["mypage", "writtenReviews", "infinite", userId, sortBy, sortOrder],
+    queryFn: async ({ pageParam = 0 }) => {
+      if (!userId) return [];
+      const res = await getReviews({
+        userId,
+        limit: LIMIT,
+        offset: pageParam,
+        sortBy,
+        sortOrder,
+      });
+
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data.data ?? [];
+    },
+
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (!Array.isArray(lastPage) || lastPage.length < LIMIT) return undefined;
+      return allPages.length * LIMIT;
+    },
+    enabled: !!userId,
+  });
+};
+
+//리뷰 수정
+export const useReviewEditMutation = (onCloseModal: () => void) => {
+  const queryClient = useQueryClient();
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+
+  return useMutation({
+    mutationFn: ({ reviewId, params }: { reviewId: number; params: PutReviewParams }) =>
+      putReviewEdit(reviewId, params),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["mypage", "writtenReviews", "infinite", userId],
+      });
+      onCloseModal();
+      toast.success("리뷰가 수정되었습니다.");
+    },
+  });
+};
+
+// 리뷰 삭제 훅
+export const useReviewDeleteMutation = () => {
+  const queryClient = useQueryClient();
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+
+  return useMutation({
+    mutationFn: ({ reviewId }: { reviewId: number }) => deleteReview(reviewId),
+    onSuccess: () => {
+      if (!userId) return;
+
+      void queryClient.invalidateQueries({ queryKey: ["mypage"] });
+      toast.success("리뷰가 삭제되었습니다.");
+    },
   });
 };

@@ -1,22 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useAuthStore } from "@/stores/auth.store";
-import { postSignout } from "@/api/auth.api";
 import { getFavoriteMoims } from "@/utils/favorite.util";
-import { useMoimFind } from "@/hooks/useMoimFind";
+import { useUserProfileQuery } from "./useUserQuery";
+import { useQueryClient } from "@tanstack/react-query";
+import { logout } from "@/utils/logout.util";
+import useLoginRedirect from "./useLoginRedirect";
 
 export const useHeader = () => {
-  const user = useAuthStore(state => state.user);
-  const reset = useAuthStore(state => state.reset);
-  const router = useRouter();
+  const { data: user } = useUserProfileQuery();
   const [isMounted, setIsMounted] = useState(false);
   const [favoriteCount, setFavoriteCount] = useState(0);
 
-  // 실제 모임 목록 가져오기 (존재하는 모임만 카운트하기 위해)
-  const { moimCardData: allMoims } = useMoimFind();
+  const queryClient = useQueryClient();
+
+  const { redirectToLogin } = useLoginRedirect();
 
   // 클라이언트 마운트 체크
   useEffect(() => {
@@ -26,21 +25,12 @@ export const useHeader = () => {
     handleMount();
   }, []);
 
-  // 찜한 모임 개수 가져오기 및 업데이트 (실제 존재하는 모임만 카운트)
+  // 찜한 모임 개수 가져오기 및 업데이트 (localStorage에서만 카운트 - 성능 최적화)
   useEffect(() => {
-    const userId = user?.id ? user.id.toString() : null;
     const updateFavoriteCount = () => {
-      const favorites = getFavoriteMoims(userId);
-
-      // 실제 모임 목록이 있을 때만 필터링
-      if (allMoims.length > 0) {
-        const existingMoimIds = new Set(allMoims.map(moim => moim.id));
-        const validFavorites = favorites.filter(id => existingMoimIds.has(id));
-        setFavoriteCount(validFavorites.length);
-      } else {
-        // 모임 목록이 아직 로드되지 않았으면 전체 개수 사용
-        setFavoriteCount(favorites.length);
-      }
+      const favorites = getFavoriteMoims(user?.id);
+      // localStorage에서만 개수 계산 (실제 존재 여부 검증은 찜한 모임 페이지에서 처리)
+      setFavoriteCount(favorites.length);
     };
 
     updateFavoriteCount();
@@ -57,13 +47,17 @@ export const useHeader = () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("favoriteMoimsChanged", handleStorageChange);
     };
-  }, [user?.id, allMoims]);
+  }, [user?.id]);
 
   const handleLogout = async () => {
-    await postSignout();
-    reset();
-    router.push("/");
-    toast.success("로그아웃 성공");
+    try {
+      await logout(queryClient);
+      redirectToLogin();
+      toast.success("로그아웃 했습니다.");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("로그아웃 중 오류가 발생했습니다.");
+    }
   };
 
   return {

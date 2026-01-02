@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { ReactNode } from "react";
-
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 type AuthLayoutProps = {
@@ -18,8 +17,8 @@ const AuthLayout = ({
   heroTitle = "",
   heroCopy = [],
 }: AuthLayoutProps) => (
-  <section className="bg-background">
-    <div className="mx-auto flex min-h-screen max-w-[1200px] items-center justify-center px-4 py-8 sm:px-6 sm:py-20 md:px-10 md:py-36">
+  <section className="relative flex min-h-[calc(100vh-50px)] items-center justify-center overflow-hidden bg-gradient-to-b from-green-50 via-white to-green-50 md:min-h-[calc(100vh-88px)]">
+    <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center px-4 py-4 sm:px-6 sm:py-8 md:px-10 md:py-12">
       <div className="grid w-full items-center justify-items-center gap-0 sm:gap-8 md:grid-cols-[1.2fr_0.9fr] md:justify-items-center">
         <div className="flex w-full max-w-[420px] flex-col items-center gap-2 text-center md:max-w-[588px]">
           <div className="space-y-2 text-center">
@@ -47,6 +46,7 @@ const AuthLayout = ({
               sizes="(min-width: 1920px) 588px, (min-width: 744px) 407px, (min-width: 375px) 290px, 90vw"
               className="h-auto w-full object-contain drop-shadow-sm"
               priority
+              fetchPriority="high"
             />
           </div>
         </div>

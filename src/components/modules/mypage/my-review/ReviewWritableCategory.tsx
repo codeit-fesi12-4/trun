@@ -3,21 +3,37 @@
 import { useState } from "react";
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { ReviewWriteModal } from "@/components/modules/mypage/mypage-modal/ReviewWriteModal";
+import ReviewWritableSkeleton from "./ReviewWritableSkeleton";
 import { useAvailableReviews } from "@/hooks/useMypageQuery";
 import { WritableReviewItem } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
 import FavoriteButton from "@/components/common/FavoriteButton";
+import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { Spinner } from "@/components/ui/spinner";
 
 const ReviewWritableCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<WritableReviewItem | null>(null);
-  const { data, isLoading, isError, refetch } = useAvailableReviews();
-  const items = data ?? [];
+  const {
+    data: items = [],
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useAvailableReviews();
+
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error: isError ? new Error("모임 목록을 불러오는데 실패했습니다.") : null,
+  });
 
   const handleModalChange = (isOpen: boolean) => {
     if (!isOpen) {
       setSelectedReviewItem(null);
-      void refetch();
     }
   };
 
@@ -25,8 +41,19 @@ const ReviewWritableCategory = () => {
     setSelectedReviewItem(item);
   };
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (isError) return <div>오류가 발생했습니다.</div>;
+  if (isLoading)
+    return (
+      <div className="flex flex-col gap-6">
+        {[1, 2, 3].map(i => (
+          <ReviewWritableSkeleton key={i} />
+        ))}
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="mt-6 text-center text-red-500">모임 목록을 불러오는데 실패했습니다.</div>
+    );
 
   return (
     <div className="flex flex-col gap-6">
@@ -42,7 +69,7 @@ const ReviewWritableCategory = () => {
               className="relative flex w-full flex-col gap-4 overflow-hidden rounded-3xl bg-white sm:flex-row sm:items-stretch sm:p-6"
             >
               {/* 모임 이미지 */}
-              <div className="relative h-40 w-full shrink-0 overflow-hidden rounded-3xl sm:h-40 sm:w-40">
+              <div className="relative h-40 w-full shrink-0 overflow-hidden sm:h-40 sm:w-40 sm:rounded-3xl">
                 <Image src={item.image} alt={item.name} fill className="object-cover" />
               </div>
 
@@ -86,21 +113,14 @@ const ReviewWritableCategory = () => {
 
                 {/* 리뷰 작성 버튼 */}
                 <div className="mt-4 flex justify-end sm:mt-auto">
-                  {item.isReviewed ? (
+                  {item.isCompleted && (
                     <button
-                      className="h-11 w-32 rounded-2xl bg-gray-100 font-semibold text-gray-500"
-                      disabled
-                    >
-                      리뷰 작성 완료
-                    </button>
-                  ) : item.isCompleted ? (
-                    <button
-                      className="h-11 w-32 rounded-2xl bg-green-500 font-semibold text-white"
+                      className="h-11 w-32 cursor-pointer rounded-2xl bg-green-500 font-semibold text-white"
                       onClick={() => handleReviewClick(item)}
                     >
                       리뷰 작성하기
                     </button>
-                  ) : null}
+                  )}
                 </div>
               </div>
             </div>
@@ -108,12 +128,24 @@ const ReviewWritableCategory = () => {
         })
       )}
 
+      {/* 무한 스크롤 센티널 */}
+      {hasNextPage && <div ref={loadMoreRef} className="h-0 w-full" aria-hidden />}
+
+      {/* 로딩 스피너 */}
+      {isFetchingNextPage && (
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 text-base text-gray-600">
+          <Spinner className="size-7 text-green-500" />
+          <span>모임을 불러오는 중...</span>
+        </div>
+      )}
+
       {/* 리뷰 작성 모달 */}
       {selectedReviewItem && (
-        <ReviewWriteModal
+        <ReviewModal
           open={!!selectedReviewItem}
           onOpenChange={handleModalChange}
           item={selectedReviewItem}
+          mode="create"
         />
       )}
     </div>

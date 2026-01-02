@@ -1,7 +1,13 @@
 import { MoimType } from "@/types/moim.type";
-import { ReviewGathering } from "./review.type";
+import { ReviewGathering, ReviewUser } from "./review.type";
 
 export type MoimStatus = "이용 예정" | "개설 확정" | "개설 대기" | "이용 완료";
+
+export type ReviewModalMode = "create" | "edit";
+
+export type MypageSortBy = "dateTime" | "registrationEnd" | "joinedAt";
+
+export type MypageSortOrder = "asc" | "desc";
 
 export type MypageMoim = {
   teamId: string;
@@ -22,26 +28,37 @@ export type MypageMoim = {
   isReviewed: boolean; // 리뷰 작성 여부
 };
 
-// 요청 파라미터
-export type GetJoinedMoimsParams = {
-  completed?: boolean;
-  reviewed?: boolean;
-  limit?: number;
-  offset?: number;
-  sortBy?: string;
-  sortOrder?: string;
-};
-
 // 나의 모임 응답 타입
 export type GetJoinedMoimsResponse = MypageMoim[];
 
-// 내가 만든 모임 응답 타입
-export type CreateMoimsResponse = MypageMoim[];
+// 나의 모임 무한 스크롤을 위한 요청 파라미터 타입
+export type GetJoinedMoimsParams = {
+  completed?: boolean;
+  reviewed?: boolean;
+  limit: number;
+  offset: number;
+  sortBy?: MypageSortBy;
+  sortOrder?: MypageSortOrder;
+};
+
+// 내가 만든 모임 조회 파라미터
+export type GetCreatedMoimsParams = {
+  limit: number;
+  offset: number;
+};
 
 // 작성 가능한 리뷰 타입
 export type WritableReviewItem = MypageMoim & {
   gatheringId: number;
   score: number;
+  comment?: string;
+};
+
+// 리뷰 수정 타입 (모달)
+export type EditableReviewItem = {
+  id: number;
+  score: number;
+  comment?: string;
 };
 
 // 작성한 리뷰 타입
@@ -50,13 +67,6 @@ export type WrittenReviewItem = {
   score: number;
   comment: string;
   createdAt: string;
-
   Gathering: ReviewGathering;
-
-  User: {
-    teamId: number;
-    id: number;
-    name: string;
-    image: string | null;
-  };
+  User: ReviewUser;
 };

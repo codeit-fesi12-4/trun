@@ -6,19 +6,16 @@ import { useEffect, useState } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { Moim } from "@/types/moim.type";
 import { formatDeadline } from "@/utils/moim.util";
 import {
-  useCancelJoinMutaion,
   useCancelMoimMutation,
-  useCreateJoinMutaiton,
+  useCreateJoinMutation,
+  useCancelJoinMutation,
   useParticipantsQuery,
 } from "@/hooks/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 import FavoriteButton from "@/components/common/FavoriteButton";
-import { useAuthStore } from "@/stores/auth.store";
-import ConfirmationJoinModal from "./ConfirmationJoinModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +23,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link2, Share2 } from "lucide-react";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -35,17 +34,18 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
   const [isCreator, setIsCreator] = useState(false);
   const [isParticipant, setIsParticipant] = useState(false);
   const [isFull, setIsFull] = useState(false);
-  const [open, setOpen] = useState(false);
+
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
-  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutaiton();
-  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutaion();
+  const { mutateAsync: joinMoim, isPending: isJoinPending } = useCreateJoinMutation();
+  const { mutateAsync: cancelJoin, isPending: isCancelJoinPending } = useCancelJoinMutation();
 
-  const { data: participants } = useParticipantsQuery({ moimId: moim.id });
+  const moimId = Number(moim.id);
 
-  const router = useRouter();
+  const { data: participants } = useParticipantsQuery(moimId);
+  const { data: user } = useUserProfileQuery();
 
-  const user = useAuthStore(state => state.user);
   const userId = user?.id;
 
   useEffect(() => {
@@ -54,7 +54,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         setIsCreator(true);
       }
     };
-
     const distinguishParticipant = () => {
       const participantsIds = participants?.map((p: Participant) => p.userId);
       if (participantsIds?.find((p: number) => p === userId)) {
@@ -63,7 +62,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         setIsParticipant(false);
       }
     };
-
     const distinguishFull = () => {
       if (moim.capacity > moim.participantCount) {
         setIsFull(false);
@@ -71,52 +69,38 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         setIsFull(true);
       }
     };
-
     distinguishCreator();
     distinguishParticipant();
     distinguishFull();
   }, [moim, participants, userId]);
 
   const handleMoimCancel = async () => {
-    try {
-      await cancelMoim(moim.id);
-      await router.replace("/moim-find");
-
-      toast.success("모임이 취소되었습니다.");
-    } catch (error) {
-      console.error(error);
-      toast.error("모임 취소 실패", {
-        description: "잠시 후 다시 시도해주세요.",
-      });
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
     }
+    await cancelMoim(moimId);
   };
 
   const handleMoimJoin = async () => {
-    if (!userId) {
-      setOpen(true);
+    if (!user) {
+      setIsLoginModalOpen(true);
       return;
     }
-    try {
-      await joinMoim(moim.id);
-    } catch (error) {
-      console.error(error);
-      toast.error("모임 참여 실패", {
-        description: "잠시 후 다시 시도해주세요.",
-      });
-    }
+    await joinMoim(moimId);
   };
 
   const handleMoimLeave = async () => {
-    try {
-      await cancelJoin(moim.id);
-    } catch (error) {
-      console.error(error);
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
     }
+    await cancelJoin(moimId);
   };
 
   // 공유하기 버튼 기능 (해당 페이지에 대한 url 복사)
   const handleShareUrl = async () => {
-    const url = `${window.location.origin}/moim-find/${moim.id}`;
+    const url = `${window.location.origin}/moim-find/${moimId}`;
     try {
       await navigator.clipboard.writeText(url);
       toast.success("링크가 복사되었습니다.");
@@ -178,13 +162,13 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               <button
                 onClick={() => void handleMoimCancel()}
                 disabled={isCanCelMoimPending}
-                className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 sm:text-base md:text-xl"
+                className="h-full w-1/2 rounded-[12px] border border-gray-100 text-sm font-medium text-gray-500 hover:cursor-pointer sm:text-base md:text-xl"
               >
-                {isCanCelMoimPending ? "취소중..." : "취소하기"}
+                {isCanCelMoimPending ? "취소중..." : "모임 취소하기"}
               </button>
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
+                  <button className="w-1/2 rounded-[12px] bg-green-500 text-sm font-bold text-white hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold">
                     공유하기
                   </button>
                 </DropdownMenuTrigger>
@@ -196,11 +180,11 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
                     onClick={() => void handleShareUrl()}
                     className="cursor-pointer"
                   >
-                    <Link2 className="mr-2 size-4" />
+                    <Link2 className="mr-2 size-4 hover:cursor-pointer" />
                     링크 복사
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleShareKakao} className="cursor-pointer">
-                    <Share2 className="mr-2 size-4" />
+                    <Share2 className="mr-2 size-4 hover:cursor-pointer" />
                     카카오톡 공유
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -210,14 +194,14 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isCancelJoinPending}
               onClick={() => void handleMoimLeave()}
-              className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "취소중..." : "참여 취소하기"}
             </button>
           ) : isFull ? (
             <button
               disabled={isFull}
-              className="h-10 w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-gray-50 text-sm font-bold text-gray-500 hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               참여하기
             </button>
@@ -225,7 +209,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             <button
               disabled={isJoinPending}
               onClick={() => void handleMoimJoin()}
-              className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
+              className="h-10 w-full rounded-[12px] bg-green-500 text-sm font-bold text-white hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
               {isJoinPending ? "참여중..." : "참여하기"}
             </button>
@@ -233,7 +217,6 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
         </div>
       </div>
       <MoimDetailProgress moim={moim} />
-      <ConfirmationJoinModal open={open} onOpenChange={setOpen} />
     </div>
   );
 };

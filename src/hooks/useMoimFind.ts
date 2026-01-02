@@ -1,34 +1,24 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
-import { GetMoimsParams, MoimType, MoimLocation, Moim } from "@/types/moim.type";
-import {
-  MOIM_TYPE,
-  FILTER_CATEGORY,
-  MOIM_LOCATION,
-  MOIM_FILTER_SORT,
-  SORT_BY,
-  SORT_ORDER,
-} from "@/constants/moim";
+import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
+import { MOIM_LOCATION, SORT_PARAMS_MAP } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
-import { useAuthStore } from "@/stores/auth.store";
 import { formatDateWithDash } from "@/utils/date.util";
+import { useLoginModalStore } from "@/stores/loginModal.store";
+import { useUserProfileQuery } from "./useUserQuery";
+import { buildMoimsQueryString } from "@/utils/path.util";
+import useSyncQueryString from "./useSyncQueryString";
+import { useSearchParams } from "next/navigation";
+import parseFilters from "@/utils/parseFilters";
 
 export const useMoimFind = () => {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<MoimFilterValues>({
-    category: FILTER_CATEGORY.DALLIMFIT,
-    location: MOIM_LOCATION.ALL,
-    date: undefined,
-    sort: MOIM_FILTER_SORT.DEADLINE,
-  });
-
-  // 카테고리를 MoimType으로 변환
-  const convertCategoryToMoimType = (category: "달림핏" | "런케이션"): MoimType | undefined => {
-    if (category === FILTER_CATEGORY.DALLIMFIT) return MOIM_TYPE.DALLIMFIT;
-    return MOIM_TYPE.RUNCATION;
-  };
+  const [filters, setFilters] = useState<MoimFilterValues>(() =>
+    parseFilters(searchParams, "moim"),
+  );
 
   // 지역을 MoimLocation으로 변환
   const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
@@ -39,26 +29,23 @@ export const useMoimFind = () => {
   // API 파라미터 생성 (무한 스크롤용 - limit, offset 제외)
   const infiniteQueryParams = useMemo(() => {
     // 정렬 기준을 API 파라미터로 변환
-    const sortParams =
-      filters.sort === MOIM_FILTER_SORT.DEADLINE
-        ? {
-            sortBy: SORT_BY.REGISTRATION_END,
-            sortOrder: SORT_ORDER.ASC,
-          }
-        : {
-            sortBy: SORT_BY.PARTICIPANT_COUNT,
-            sortOrder: SORT_ORDER.DESC,
-          };
+
+    const sortParams = SORT_PARAMS_MAP[filters.sortBy];
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
-      type: convertCategoryToMoimType(filters.category),
+      type: filters.category,
       location: convertLocationToMoimLocation(filters.location),
       date: formatDateWithDash(filters.date),
       sortBy: sortParams.sortBy,
       sortOrder: sortParams.sortOrder,
     };
     return params;
-  }, [filters.category, filters.location, filters.date, filters.sort]);
+  }, [filters.category, filters.location, filters.date, filters.sortBy]);
+
+  useSyncQueryString(buildMoimsQueryString(infiniteQueryParams));
+
+  const { data: user } = useUserProfileQuery();
+  const isLoggedIn = !!user;
 
   // 무한 스크롤 쿼리
   const {
@@ -79,51 +66,16 @@ export const useMoimFind = () => {
     return moimsPages.pages.flatMap(page => page.data);
   }, [moimsPages]);
 
-  // 지역 목록 추출을 위한 별도 무한 스크롤 쿼리
-  const locationQueryParams = useMemo(
-    () => ({
-      type: convertCategoryToMoimType(filters.category),
-    }),
-    [filters.category],
-  );
-
-  const {
-    data: locationMoimsPages,
-    fetchNextPage: fetchNextLocationPage,
-    hasNextPage: hasNextLocationPage,
-    isFetchingNextPage: isFetchingNextLocationPage,
-  } = useMoimsInfiniteQuery({
-    params: locationQueryParams,
-    pageSize: 8,
-  });
-
-  const allLocationMoims = useMemo<Moim[]>(() => {
-    if (!locationMoimsPages?.pages) return [];
-    return locationMoimsPages.pages.flatMap(page => page.data);
-  }, [locationMoimsPages]);
-
-  const isAutoLoadingRef = useRef(false);
-
-  // 초기에 모든 지역을 가져오기 위해 자동으로 다음 페이지 로드
   useEffect(() => {
-    if (hasNextLocationPage && !isFetchingNextLocationPage && !isAutoLoadingRef.current) {
-      isAutoLoadingRef.current = true;
-      void fetchNextLocationPage().finally(() => {
-        isAutoLoadingRef.current = false;
-      });
-    }
-  }, [hasNextLocationPage, isFetchingNextLocationPage, fetchNextLocationPage]);
+    const reflectParseFilter = () => {
+      setFilters(parseFilters(searchParams, "moim"));
+    };
 
-  const availableLocations = useMemo(() => {
-    if (allLocationMoims.length === 0) return [MOIM_LOCATION.ALL];
-    const locations = new Set<string>();
-    allLocationMoims.forEach(moim => {
-      if (moim.location) {
-        locations.add(moim.location);
-      }
-    });
-    return [MOIM_LOCATION.ALL, ...Array.from(locations).sort()];
-  }, [allLocationMoims]);
+    reflectParseFilter();
+  }, [searchParams]);
+
+  // 정의된 지역 목록 사용
+  const availableLocations = useMemo(() => Object.values(MOIM_LOCATION), []);
 
   const filteredMoims = useMemo(() => {
     if (allMoims.length === 0) return [];
@@ -147,10 +99,8 @@ export const useMoimFind = () => {
     setFilters(newFilters);
   };
 
-  const token = useAuthStore(state => state.token);
-
   const handleCreateMoimClick = () => {
-    if (!token) {
+    if (!isLoggedIn) {
       setIsLoginModalOpen(true);
       return;
     }
@@ -158,10 +108,9 @@ export const useMoimFind = () => {
   };
 
   return {
+    filters,
     isModalOpen,
     setIsModalOpen,
-    isLoginModalOpen,
-    setIsLoginModalOpen,
     moimCardData: filteredMoims,
     availableLocations,
     isLoading,

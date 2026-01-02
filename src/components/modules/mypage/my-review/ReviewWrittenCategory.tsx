@@ -2,15 +2,63 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { useWrittenReviews } from "@/hooks/useMypageQuery";
+import { useReviewDeleteMutation, useWrittenReviewsInfinite } from "@/hooks/useMypageQuery";
+import ReviewWrittenSkeleton from "./ReviewWrittenSkeleton";
 import { format } from "date-fns";
+import { useState } from "react";
+import { EditableReviewItem } from "@/types/mypage.type";
+import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
+import ModalLayout from "@/components/layouts/ModalLayout";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { Spinner } from "@/components/ui/spinner";
 
 const ReviewWrittenCategory = () => {
-  const { data, isLoading, isError } = useWrittenReviews();
-  const items = data?.data ?? [];
+  const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (isError) return <div>오류가 발생했습니다.</div>;
+  // 리뷰 삭제 모달
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [reviewIdToDelete, setReviewIdToDelete] = useState<number | null>(null);
+
+  const reviewDeleteMutation = useReviewDeleteMutation();
+
+  const {
+    data,
+    isLoading,
+    isError, // 추가
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useWrittenReviewsInfinite();
+
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error: isError ? new Error("리뷰 목록을 불러오는데 실패했습니다.") : null,
+  });
+
+  const items = data?.pages.flat() ?? [];
+
+  // 리뷰 삭제 핸들러
+  const handleDeleteClick = (id: number) => {
+    setReviewIdToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  if (isLoading)
+    return (
+      <div className="flex flex-col gap-6 rounded-3xl bg-white p-6 lg:p-8">
+        {[1, 2, 3].map(i => (
+          <ReviewWrittenSkeleton key={i} />
+        ))}
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="mt-6 text-center text-red-500">리뷰 목록을 불러오는데 실패했습니다.</div>
+    );
 
   return (
     <div className="flex flex-col gap-6 rounded-3xl bg-white p-6 lg:p-8">
@@ -56,13 +104,44 @@ const ReviewWrittenCategory = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className="ml-auto flex items-center">
+                  {/* 리뷰 수정/삭제 */}
+                  <button
+                    onClick={() =>
+                      setSelectedReviewItem({
+                        id: review.id,
+                        score: review.score,
+                        comment: review.comment,
+                      })
+                    }
+                    className="cursor-pointer"
+                  >
+                    <Image
+                      src="/icons/ic_mypage_edit.svg"
+                      alt="수정"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
+                    />
+                  </button>
+                  <button onClick={() => handleDeleteClick(review.id)} className="cursor-pointer">
+                    <Image
+                      src="/icons/ic_trash.svg"
+                      alt="삭제"
+                      width={36}
+                      height={36}
+                      className="w-8 sm:w-9"
+                    />
+                  </button>
+                </div>
               </div>
 
-              {/* 타입 / 위치 */}
+              {/* 위치 */}
               <div className="flex flex-row items-center gap-1.5">
                 <div className="h-[13px] w-[3px] bg-gray-100 sm:h-4" />
                 <span className="text-sm font-medium text-gray-400 sm:text-base">
-                  {review.Gathering.type} · {review.Gathering.location}
+                  {review.Gathering.location}
                 </span>
               </div>
 
@@ -84,6 +163,56 @@ const ReviewWrittenCategory = () => {
             </div>
           </div>
         ))
+      )}
+
+      {/* 무한 스크롤 센티널 */}
+      {hasNextPage && <div ref={loadMoreRef} className="h-0 w-full" aria-hidden />}
+
+      {/* 로딩 스피너 */}
+      {isFetchingNextPage && (
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 text-base text-gray-600">
+          <Spinner className="size-7 text-green-500" />
+          <span>리뷰를 불러오는 중...</span>
+        </div>
+      )}
+
+      {/* 리뷰 수정 모달 */}
+      {selectedReviewItem && (
+        <ReviewModal
+          open={!!selectedReviewItem}
+          onOpenChange={() => setSelectedReviewItem(null)}
+          item={selectedReviewItem}
+          mode="edit"
+        />
+      )}
+
+      {/* 리뷰 삭제 확인 모달 */}
+      {isDeleteModalOpen && (
+        <ModalLayout
+          open={isDeleteModalOpen}
+          onOpenChange={setIsDeleteModalOpen}
+          title="리뷰 삭제"
+          confirmText="삭제하기"
+          onConfirm={() => {
+            if (reviewIdToDelete) {
+              reviewDeleteMutation.mutate(
+                { reviewId: reviewIdToDelete },
+                {
+                  onSuccess: () => {
+                    setIsDeleteModalOpen(false);
+                    setReviewIdToDelete(null);
+                  },
+                },
+              );
+            }
+          }}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          showCancel
+        >
+          <div className="flex items-center justify-center py-4 text-base font-medium">
+            작성하신 리뷰를 정말 삭제하시겠습니까?
+          </div>
+        </ModalLayout>
       )}
     </div>
   );

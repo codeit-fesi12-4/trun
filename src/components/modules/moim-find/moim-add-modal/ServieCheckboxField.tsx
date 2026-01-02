@@ -1,13 +1,14 @@
 "use client";
 
+import { MoimType } from "@/types/moim.type";
 import Image from "next/image";
 
 type ServieCheckboxFieldProps = {
   title: string;
   subtitle?: string;
-  service: string;
+  service: MoimType;
   isSelected: boolean;
-  onServiceChange: (service: string) => void;
+  onServiceChange: (service: MoimType) => void;
   iconSrc?: string;
   iconAlt?: string;
 };
@@ -25,7 +26,9 @@ const ServieCheckboxField = ({
     type="button"
     onClick={() => onServiceChange(service)}
     className={`flex flex-1 cursor-pointer items-center gap-3 rounded-lg border p-3 transition-colors sm:gap-4 sm:p-4 ${
-      isSelected ? "border-green-500 bg-[#DEFFF0] text-green-600" : "border-gray-50 text-gray-700"
+      isSelected
+        ? "border-green-500 bg-[#DEFFF0] text-green-600"
+        : "border-gray-50 text-gray-700 hover:border-green-500"
     }`}
   >
     {iconSrc && (

@@ -25,7 +25,7 @@ const MoimCardSkeleton = () => (
             <Skeleton className="h-10 w-10 shrink-0 rounded-full sm:h-12 sm:w-12" />
           </div>
 
-          {/* 하단: 왼쪽(뱃지+진행바) / 오른쪽(참여하기 버튼) */}
+          {/* 하단: 왼쪽(뱃지+진행바) / 오른쪽(상세보기 버튼) */}
           <div className="flex items-end justify-between gap-5">
             {/* 왼쪽: 뱃지들과 진행바/인원수 */}
             <div className="flex min-w-0 flex-1 flex-col gap-3.5">
@@ -39,7 +39,7 @@ const MoimCardSkeleton = () => (
               <Skeleton className="h-4 w-full" />
             </div>
 
-            {/* 오른쪽: 참여하기 버튼 스켈레톤 */}
+            {/* 오른쪽: 상세보기 버튼 스켈레톤 */}
             <Skeleton className="h-10 w-20 shrink-0 rounded-xl" />
           </div>
         </div>

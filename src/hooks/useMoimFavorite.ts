@@ -2,21 +2,26 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
-import { getFavoriteMoims } from "@/utils/favorite.util";
-import { useAuthStore } from "@/stores/auth.store";
+import { getFavoriteMoims, removeNonExistentFavoriteMoims } from "@/utils/favorite.util";
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
+import { useUserProfileQuery } from "./useUserQuery";
+import { useSession } from "next-auth/react";
 
 export const useMoimFavorite = () => {
   const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
   const previousFavoriteMoimIdsRef = useRef<number[]>([]);
   const isInitialMountRef = useRef(true);
   const allMoimsRef = useRef<Moim[]>([]);
+  const hasSyncedRef = useRef(false);
+  const { status: sessionStatus } = useSession();
 
-  const user = useAuthStore(state => state.user);
-  const userId = user?.id.toString() ?? null;
+  const { data: user } = useUserProfileQuery();
+
+  const userId = user?.id;
 
   const {
+    filters,
     moimCardData: allMoims,
     availableLocations,
     isLoading,
@@ -54,11 +59,25 @@ export const useMoimFavorite = () => {
     };
   }, [userId]);
 
+  // 실제 존재하는 모임과 비교하여 localStorage 동기화 (로딩 완료 후 한 번만 실행)
+  useEffect(() => {
+    // 로딩이 완료되고, 모임 데이터가 있고, 아직 동기화하지 않은 경우에만 실행
+    if (!isLoading && allMoims.length > 0 && !hasSyncedRef.current) {
+      const existingMoimIds = allMoims.map(moim => moim.id);
+      removeNonExistentFavoriteMoims(existingMoimIds, userId);
+      hasSyncedRef.current = true;
+    }
+  }, [isLoading, allMoims, userId]);
+
   // 찜한 모임이 제거되었을 때 알림 표시 (추후 sonnar 적용 예정)
   useEffect(() => {
     // 초기 마운트 시에는 알림 표시하지 않음
     if (isInitialMountRef.current) {
       isInitialMountRef.current = false;
+      return;
+    }
+
+    if (sessionStatus !== "authenticated") {
       return;
     }
 
@@ -82,17 +101,17 @@ export const useMoimFavorite = () => {
   }, [favoriteMoimIds]);
 
   // 찜한 모임만 필터링
-  const moimCardData = useMemo(() => {
-    if (!allMoims) return [];
-
-    return allMoims.filter(moim => favoriteMoimIds.includes(moim.id));
-  }, [allMoims, favoriteMoimIds]);
+  const moimCardData = useMemo(
+    () => allMoims.filter(moim => favoriteMoimIds.includes(moim.id)),
+    [allMoims, favoriteMoimIds],
+  );
 
   const handleFavoriteToggle = (moimId: number) => {
     void moimId;
   };
 
   return {
+    filters,
     moimCardData,
     availableLocations,
     isLoading,

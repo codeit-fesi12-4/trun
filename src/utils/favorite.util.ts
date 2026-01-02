@@ -5,7 +5,7 @@ export const FAVORITE_MOIMS_KEY = "favoriteMoims";
  * @param userId 사용자 ID (없으면 null)
  * @returns localStorage 키
  */
-const getFavoriteMoimsKey = (userId: string | null): string => {
+const getFavoriteMoimsKey = (userId: number | null): string => {
   if (!userId) return FAVORITE_MOIMS_KEY;
   return `${FAVORITE_MOIMS_KEY}_${userId}`;
 };
@@ -15,7 +15,7 @@ const getFavoriteMoimsKey = (userId: string | null): string => {
  * @param userId 사용자 ID (없으면 null)
  * @returns 찜한 모임 ID 배열
  */
-export const getFavoriteMoims = (userId: string | null = null): number[] => {
+export const getFavoriteMoims = (userId: number | null = null): number[] => {
   if (typeof window === "undefined") return [];
 
   try {
@@ -39,7 +39,7 @@ export const getFavoriteMoims = (userId: string | null = null): number[] => {
  * @param moimId 추가할 모임 ID
  * @param userId 사용자 ID (없으면 null)
  */
-export const addFavoriteMoim = (moimId: number, userId: string | null = null): void => {
+export const addFavoriteMoim = (moimId: number, userId: number | null = null): void => {
   if (typeof window === "undefined") return;
 
   try {
@@ -61,7 +61,7 @@ export const addFavoriteMoim = (moimId: number, userId: string | null = null): v
  * @param moimId 제거할 모임 ID
  * @param userId 사용자 ID (없으면 null)
  */
-export const removeFavoriteMoim = (moimId: number, userId: string | null = null): void => {
+export const removeFavoriteMoim = (moimId: number, userId: number | null = null): void => {
   if (typeof window === "undefined") return;
 
   try {
@@ -82,7 +82,7 @@ export const removeFavoriteMoim = (moimId: number, userId: string | null = null)
  * @param userId 사용자 ID (없으면 null)
  * @returns 찜한 목록에 있으면 true, 없으면 false
  */
-export const isFavoriteMoim = (moimId: number, userId: string | null = null): boolean => {
+export const isFavoriteMoim = (moimId: number, userId: number | null = null): boolean => {
   if (typeof window === "undefined") return false;
 
   const favorites = getFavoriteMoims(userId);
@@ -95,7 +95,7 @@ export const isFavoriteMoim = (moimId: number, userId: string | null = null): bo
  * @param userId 사용자 ID (없으면 null)
  * @returns 토글 후 찜한 상태 (true: 찜함, false: 찜하지 않음)
  */
-export const toggleFavoriteMoim = (moimId: number, userId: string | null = null): boolean => {
+export const toggleFavoriteMoim = (moimId: number, userId: number | null = null): boolean => {
   if (typeof window === "undefined") return false;
 
   const isFavorite = isFavoriteMoim(moimId, userId);
@@ -105,5 +105,33 @@ export const toggleFavoriteMoim = (moimId: number, userId: string | null = null)
   } else {
     addFavoriteMoim(moimId, userId);
     return true;
+  }
+};
+
+// localStorage에서 존재하지 않는 모임 ID를 제거
+export const removeNonExistentFavoriteMoims = (
+  existingMoimIds: number[],
+  userId: number | null = null,
+): number => {
+  if (typeof window === "undefined") return 0;
+
+  try {
+    const favorites = getFavoriteMoims(userId);
+    const existingSet = new Set(existingMoimIds);
+    const validFavorites = favorites.filter(id => existingSet.has(id));
+
+    // 제거된 ID가 있는 경우에만 업데이트
+    if (validFavorites.length !== favorites.length) {
+      const key = getFavoriteMoimsKey(userId);
+      localStorage.setItem(key, JSON.stringify(validFavorites));
+      // 같은 탭에서 실시간 업데이트를 위한 커스텀 이벤트 발생
+      window.dispatchEvent(new Event("favoriteMoimsChanged"));
+      return favorites.length - validFavorites.length;
+    }
+
+    return 0;
+  } catch (error) {
+    console.error("존재하지 않는 찜한 모임 제거 실패:", error);
+    return 0;
   }
 };

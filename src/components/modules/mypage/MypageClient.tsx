@@ -1,27 +1,16 @@
 "use client";
 
 import ProfileSection from "@/components/modules/mypage/ProfileCard";
+import ProfileCardSkeleton from "@/components/modules/mypage/ProfileCardSkeleton";
 import TabsSection from "@/components/modules/mypage/TabsSection";
-import { useAuthStore } from "@/stores/auth.store";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
+import { useUserProfileQuery } from "@/hooks/useUserQuery";
 
 const MypageClient = () => {
-  const user = useAuthStore(state => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    const handleClient = () => {
-      setIsClient(true);
-    };
-    handleClient();
-  }, []);
-
-  const handleModalOpen = () => {
-    setIsModalOpen(true);
-  };
+  const { data: user, isLoading } = useUserProfileQuery();
 
   return (
     <main className="flex w-full flex-1 flex-col lg:flex-row">
@@ -31,7 +20,7 @@ const MypageClient = () => {
           <h1 className="text-base font-semibold text-gray-900 sm:text-2xl">마이페이지</h1>
 
           <button
-            onClick={handleModalOpen}
+            onClick={() => setIsModalOpen(true)}
             className="cursor-pointer lg:absolute lg:top-[68px] lg:right-[52px]"
           >
             <Image src="/icons/ic_mypage_edit.svg" alt="수정 아이콘" width={32} height={32} />
@@ -40,15 +29,7 @@ const MypageClient = () => {
 
         {/* 내 프로필 */}
         <div className="mt-1.5 mb-6 sm:mt-6 sm:mb-10 lg:mr-10 lg:mb-0 lg:w-72">
-          {isClient && user && (
-            <ProfileSection
-              id={user.id}
-              name={user.name}
-              companyName={user.companyName}
-              email={user.email}
-              image={user.image}
-            />
-          )}
+          {isLoading || !user ? <ProfileCardSkeleton /> : <ProfileSection user={user} />}
         </div>
       </div>
 
@@ -58,7 +39,7 @@ const MypageClient = () => {
       </div>
 
       {/* 프로필 수정 모달 */}
-      <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />
+      {user && <ProfileEditModal open={isModalOpen} onOpenChange={setIsModalOpen} user={user} />}
     </main>
   );
 };
