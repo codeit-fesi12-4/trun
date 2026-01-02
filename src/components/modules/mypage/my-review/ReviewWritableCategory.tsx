@@ -28,7 +28,7 @@ const ReviewWritableCategory = () => {
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-    error: isError ? new Error("로드 실패") : null,
+    error: isError ? new Error("모임 목록을 불러오는데 실패했습니다.") : null,
   });
 
   const handleModalChange = (isOpen: boolean) => {

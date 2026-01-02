@@ -35,7 +35,7 @@ const ReviewWrittenCategory = () => {
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-    error: isError ? new Error("데이터 로딩 중 오류 발생") : null,
+    error: isError ? new Error("리뷰 목록을 불러오는데 실패했습니다.") : null,
   });
 
   const items = data?.pages.flat() ?? [];
@@ -57,7 +57,7 @@ const ReviewWrittenCategory = () => {
 
   if (isError)
     return (
-      <div className="mt-6 text-center text-red-500">모임 목록을 불러오는데 실패했습니다.</div>
+      <div className="mt-6 text-center text-red-500">리뷰 목록을 불러오는데 실패했습니다.</div>
     );
 
   return (
@@ -172,7 +172,7 @@ const ReviewWrittenCategory = () => {
       {isFetchingNextPage && (
         <div className="mt-6 flex flex-col items-center justify-center gap-3 text-base text-gray-600">
           <Spinner className="size-7 text-green-500" />
-          <span>모임을 불러오는 중...</span>
+          <span>리뷰를 불러오는 중...</span>
         </div>
       )}
 

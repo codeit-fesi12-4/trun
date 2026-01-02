@@ -18,7 +18,7 @@ const CreatedMoimTab = () => {
     hasNextPage,
     isLoading,
     isFetchingNextPage,
-    error: isError ? new Error("데이터 로드 실패") : null,
+    error: isError ? new Error("모임 목록을 불러오는데 실패했습니다.") : null,
   });
 
   if (isUserLoading || isLoading)
@@ -33,9 +33,7 @@ const CreatedMoimTab = () => {
   if (isError || !user) {
     return (
       <div className="mt-6 text-center text-red-500">
-        {isError
-          ? "모임 목록을 불러오는데 실패했습니다. 다시 시도해주세요."
-          : "로그인이 필요합니다."}
+        {isError ? "모임 목록을 불러오는데 실패했습니다." : "로그인이 필요합니다."}
       </div>
     );
   }
