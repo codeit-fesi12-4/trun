@@ -40,7 +40,6 @@ const CreatedMoimTab = () => {
     );
   }
 
-  // 6. 2차원 배열 데이터 펼치기
   const allCreatedMoims = data?.pages.flat() ?? [];
 
   return (
