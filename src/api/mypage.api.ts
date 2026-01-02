@@ -5,7 +5,7 @@ import {
   MypageMoim,
 } from "@/types/mypage.type";
 import { apiFetch } from "@/lib/apiClient";
-import { buildJoinedMoimsPath } from "@/utils/path.util";
+import { buildCreatedMoimsPath, buildJoinedMoimsPath } from "@/utils/path.util";
 
 // 참여한 나의 모임 조회
 export const getMoimJoined = (params: GetJoinedMoimsParams) =>
@@ -20,9 +20,7 @@ export const deleteReservation = (moimId: number) =>
   });
 
 // 내가 만든 모임
-export const getCreatedMoims = (params: GetCreatedMoimsParams) => {
-  const { limit, offset } = params;
-  return apiFetch<MypageMoim[]>(`/api/proxy/gatherings/my?limit=${limit}&offset=${offset}`, {
+export const getCreatedMoims = (params: GetCreatedMoimsParams) =>
+  apiFetch<MypageMoim[]>(`/api/proxy${buildCreatedMoimsPath(params)}`, {
     method: "GET",
   });
-};
