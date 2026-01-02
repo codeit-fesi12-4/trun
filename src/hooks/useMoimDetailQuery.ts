@@ -75,6 +75,7 @@ export const useCancelMoimMutation = () => {
       toast.success("모임이 취소되었습니다.");
       void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
       void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
+      void queryClient.invalidateQueries({ queryKey: ["moims"] });
       void router.replace("/moim-find");
     },
   });

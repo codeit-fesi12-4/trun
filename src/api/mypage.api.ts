@@ -1,9 +1,15 @@
-import { GetJoinedMoimsResponse, MypageMoim, WritableReviewItem } from "@/types/mypage.type";
+import {
+  GetCreatedMoimsParams,
+  GetJoinedMoimsParams,
+  GetJoinedMoimsResponse,
+  MypageMoim,
+} from "@/types/mypage.type";
 import { apiFetch } from "@/lib/apiClient";
+import { buildCreatedMoimsPath, buildJoinedMoimsPath } from "@/utils/path.util";
 
 // 참여한 나의 모임 조회
-export const getMoimJoined = () =>
-  apiFetch<GetJoinedMoimsResponse>(`/api/proxy/gatherings/joined`, {
+export const getMoimJoined = (params: GetJoinedMoimsParams) =>
+  apiFetch<GetJoinedMoimsResponse>(`/api/proxy${buildJoinedMoimsPath(params)}`, {
     method: "GET",
   });
 
@@ -13,22 +19,8 @@ export const deleteReservation = (moimId: number) =>
     method: "DELETE",
   });
 
-// 작성 가능한 리뷰
-export const getAvailableReviews = async (): Promise<WritableReviewItem[]> => {
-  const result = await getMoimJoined();
-
-  if (!result.ok) return []; // 실패하면 빈 배열 반환
-  return result.data
-    .filter(item => item.isCompleted && !item.isReviewed && !item.canceledAt)
-    .map(item => ({
-      ...item,
-      gatheringId: item.id,
-      score: 0,
-    }));
-};
-
 // 내가 만든 모임
-export const getCreatedMoims = () =>
-  apiFetch<MypageMoim[]>(`/api/proxy/gatherings/my`, {
+export const getCreatedMoims = (params: GetCreatedMoimsParams) =>
+  apiFetch<MypageMoim[]>(`/api/proxy${buildCreatedMoimsPath(params)}`, {
     method: "GET",
   });

@@ -2,13 +2,15 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { useReviewDeleteMutation, useWrittenReviews } from "@/hooks/useMypageQuery";
+import { useReviewDeleteMutation, useWrittenReviewsInfinite } from "@/hooks/useMypageQuery";
 import ReviewWrittenSkeleton from "./ReviewWrittenSkeleton";
 import { format } from "date-fns";
 import { useState } from "react";
 import { EditableReviewItem } from "@/types/mypage.type";
 import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
 import ModalLayout from "@/components/layouts/ModalLayout";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { Spinner } from "@/components/ui/spinner";
 
 const ReviewWrittenCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
@@ -17,9 +19,26 @@ const ReviewWrittenCategory = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [reviewIdToDelete, setReviewIdToDelete] = useState<number | null>(null);
 
-  const { data, isLoading, isError } = useWrittenReviews();
-  const items = data ?? [];
   const reviewDeleteMutation = useReviewDeleteMutation();
+
+  const {
+    data,
+    isLoading,
+    isError, // 추가
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useWrittenReviewsInfinite();
+
+  const { loadMoreRef } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+    error: isError ? new Error("리뷰 목록을 불러오는데 실패했습니다.") : null,
+  });
+
+  const items = data?.pages.flat() ?? [];
 
   // 리뷰 삭제 핸들러
   const handleDeleteClick = (id: number) => {
@@ -35,7 +54,11 @@ const ReviewWrittenCategory = () => {
         ))}
       </div>
     );
-  if (isError) return <div>오류가 발생했습니다.</div>;
+
+  if (isError)
+    return (
+      <div className="mt-6 text-center text-red-500">리뷰 목록을 불러오는데 실패했습니다.</div>
+    );
 
   return (
     <div className="flex flex-col gap-6 rounded-3xl bg-white p-6 lg:p-8">
@@ -141,6 +164,18 @@ const ReviewWrittenCategory = () => {
           </div>
         ))
       )}
+
+      {/* 무한 스크롤 센티널 */}
+      {hasNextPage && <div ref={loadMoreRef} className="h-0 w-full" aria-hidden />}
+
+      {/* 로딩 스피너 */}
+      {isFetchingNextPage && (
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 text-base text-gray-600">
+          <Spinner className="size-7 text-green-500" />
+          <span>리뷰를 불러오는 중...</span>
+        </div>
+      )}
+
       {/* 리뷰 수정 모달 */}
       {selectedReviewItem && (
         <ReviewModal

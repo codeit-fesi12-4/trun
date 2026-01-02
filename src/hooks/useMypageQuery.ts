@@ -1,23 +1,42 @@
 import { deleteReservation, getCreatedMoims, getMoimJoined } from "@/api/mypage.api";
 import { deleteReview, getReviews, postReviews, putReviewEdit } from "@/api/review.api";
-import { WritableReviewItem } from "@/types/mypage.type";
-import { PostReviewParams, PutReviewParams, ReviewItem } from "@/types/review.type";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { GetJoinedMoimsParams, WritableReviewItem } from "@/types/mypage.type";
+import {
+  PostReviewParams,
+  PutReviewParams,
+  ReviewSortBy,
+  ReviewSortOrder,
+} from "@/types/review.type";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserProfileQuery } from "./useUserQuery";
-import { sortMyMoims } from "@/utils/mypage.util";
 
 // 참여한 나의 모임 조회
-export const useJoinedMoims = () => {
+export const useJoinedMoimsInfinite = (
+  params: Omit<GetJoinedMoimsParams, "limit" | "offset"> = { sortOrder: "desc" },
+) => {
   const { data: user } = useUserProfileQuery();
   const userId = user?.id;
+  const LIMIT = 10;
 
-  return useQuery({
-    queryKey: ["mypage", "joinedMoims", userId],
-    queryFn: getMoimJoined,
-    select: res => {
-      const data = res.ok ? res.data : [];
-      return [...data].sort(sortMyMoims);
+  return useInfiniteQuery({
+    queryKey: ["mypage", "joinedMoims", "infinite", userId, params],
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await getMoimJoined({
+        ...params,
+        limit: LIMIT,
+        offset: pageParam,
+      });
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < LIMIT) return undefined;
+      return allPages.length * LIMIT;
     },
     enabled: !!userId,
   });
@@ -34,7 +53,9 @@ export const useCancelReservation = () => {
     onSuccess: (_, moimId) => {
       toast.success("예약이 취소되었습니다.");
 
-      void queryClient.invalidateQueries({ queryKey: ["mypage", "joinedMoims", userId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["mypage", "joinedMoims", "infinite", userId],
+      });
       void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
       void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
@@ -42,15 +63,32 @@ export const useCancelReservation = () => {
 };
 
 // 내가 만든 모임 조회
-export const useCreatedMoims = () =>
-  useQuery({
-    queryKey: ["mypage", "createdMoims"],
-    queryFn: async () => {
-      const res = await getCreatedMoims();
-      const data = res.ok ? res.data : [];
-      return [...data].sort(sortMyMoims);
+export const useCreatedMoimsInfinite = () => {
+  const { data: user } = useUserProfileQuery();
+  const userId = user?.id;
+  const LIMIT = 10;
+
+  return useInfiniteQuery({
+    queryKey: ["mypage", "createdMoims", "infinite", userId],
+    queryFn: async ({ pageParam = 0 }) => {
+      const res = await getCreatedMoims({
+        limit: LIMIT,
+        offset: pageParam,
+      });
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data;
     },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < LIMIT) return undefined;
+      return allPages.length * LIMIT;
+    },
+    enabled: !!userId,
   });
+};
 
 // 리뷰 등록
 export const useReviewMutation = (onCloseModal: () => void) => {
@@ -76,12 +114,22 @@ export const useReviewMutation = (onCloseModal: () => void) => {
 
 // 작성 가능한 리뷰
 export const useAvailableReviews = () => {
-  const { data: joinedMoims, isLoading, isError } = useJoinedMoims();
+  const { data: joinedData, ...rest } = useJoinedMoimsInfinite({
+    sortOrder: "desc",
+    completed: true,
+    reviewed: false,
+  });
 
-  // joinedMoims 데이터가 변경되면 이 변수도 즉시 자동으로 계산
-  const availableReviews: WritableReviewItem[] = joinedMoims
-    ? joinedMoims
-        .filter(item => item.isCompleted && !item.isReviewed && !item.canceledAt)
+  const availableReviews: WritableReviewItem[] = joinedData
+    ? joinedData.pages
+        .flat()
+        .filter(item => {
+          if (item.canceledAt) return false;
+          if (item.isReviewed) return false;
+          const now = new Date();
+          const registrationEnd = new Date(item.registrationEnd);
+          return registrationEnd < now;
+        })
         .map(item => ({
           ...item,
           gatheringId: item.id,
@@ -89,31 +137,45 @@ export const useAvailableReviews = () => {
         }))
     : [];
 
-  // useQuery와 같은 인터페이스를 유지하기 위해 객체로 반환
   return {
+    ...rest,
     data: availableReviews,
-    isLoading,
-    isError,
   };
 };
 
 // 작성한 리뷰
-export const useWrittenReviews = () => {
+export const useWrittenReviewsInfinite = (
+  sortBy: ReviewSortBy = "createdAt",
+  sortOrder: ReviewSortOrder = "desc",
+) => {
   const { data: user } = useUserProfileQuery();
   const userId = user?.id;
+  const LIMIT = 10;
 
-  return useQuery<ReviewItem[]>({
-    queryKey: ["mypage", "writtenReviews", userId],
-    queryFn: async () => {
+  return useInfiniteQuery({
+    queryKey: ["mypage", "writtenReviews", "infinite", userId, sortBy, sortOrder],
+    queryFn: async ({ pageParam = 0 }) => {
       if (!userId) return [];
-      const res = await getReviews({ userId });
-      if (!res.ok) throw new Error("리뷰 가져오기 실패");
+      const res = await getReviews({
+        userId,
+        limit: LIMIT,
+        offset: pageParam,
+        sortBy,
+        sortOrder,
+      });
 
-      return res.data.data;
+      if (!res.ok) {
+        toast.error(res.message);
+        throw new Error(res.message);
+      }
+      return res.data.data ?? [];
     },
-    select: data =>
-      // 작성일 기준 최신순 정렬
-      [...data].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (!Array.isArray(lastPage) || lastPage.length < LIMIT) return undefined;
+      return allPages.length * LIMIT;
+    },
     enabled: !!userId,
   });
 };
