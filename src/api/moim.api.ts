@@ -12,7 +12,7 @@ export const getMoimList = async (
   params?: GetMoimsParams,
 ): Promise<ApiResult<GetMoimsResponse>> => {
   const path = buildMoimsPath(params);
-  return apiFetch<GetMoimsResponse>(`/api/proxy/${path}`, {
+  return apiFetch<GetMoimsResponse>(`/api/proxy${path}`, {
     method: "GET",
   });
 };
