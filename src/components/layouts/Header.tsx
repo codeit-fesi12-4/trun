@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ConfirmationJoinModal from "@/components/modules/moim-detail/ConfirmationJoinModal";
+import ConfirmationJoinModal from "@/components/common/ConfirmationJoinModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useHeader } from "@/hooks/useHeader";
 import { useRouter } from "next/navigation";
