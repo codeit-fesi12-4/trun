@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getMoimList, postMoim } from "@/api/moim.api";
 import { CreateMoimRequest, GetMoimsParams, GetMoimsResponse } from "@/types/moim.type";
 import { toast } from "sonner";
+import { getMoimList, postMoim } from "@/services/moim.service";
 
 // React Query 훅 - 모임 목록 조회
 export const useMoimsQuery = ({

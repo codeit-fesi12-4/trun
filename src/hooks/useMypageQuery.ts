@@ -1,5 +1,5 @@
-import { deleteReservation, getCreatedMoims, getMoimJoined } from "@/api/mypage.api";
-import { deleteReview, getReviews, postReviews, putReviewEdit } from "@/api/review.api";
+import { deleteReservation, getCreatedMoims, getMoimJoined } from "@/services/mypage.service";
+import { deleteReview, getReviews, postReviews, putReviewEdit } from "@/services/review.service";
 import { GetJoinedMoimsParams, WritableReviewItem } from "@/types/mypage.type";
 import {
   PostReviewParams,

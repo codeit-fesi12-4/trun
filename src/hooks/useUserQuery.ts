@@ -1,4 +1,4 @@
-import { getUserProfile, putUpdateProfile } from "@/api/user.api";
+import { getUserProfile, putUpdateProfile } from "@/services/user.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
