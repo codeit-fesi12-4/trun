@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
 import MoimDetailParticipantList from "./MoimDetailParticipantList";
 import { Moim } from "@/types/moim.type";
-import { useParticipantsQuery } from "@/hooks/useMoimDetailQuery";
+import { useParticipantsQuery } from "@/hooks/queries/useMoimDetailQuery";
 
 type MoimDetailProgress = {
   moim: Moim;

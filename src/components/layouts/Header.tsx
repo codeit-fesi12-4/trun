@@ -15,7 +15,7 @@ import { useHeader } from "@/hooks/useHeader";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { useLoginModalStore } from "@/stores/loginModal.store";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 
 const Header = () => {
   const { isMounted, favoriteCount, handleLogout } = useHeader();

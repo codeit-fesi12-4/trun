@@ -13,7 +13,7 @@ import {
   useCreateJoinMutation,
   useCancelJoinMutation,
   useParticipantsQuery,
-} from "@/hooks/useMoimDetailQuery";
+} from "@/hooks/queries/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import {
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link2, Share2 } from "lucide-react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 
 type MoimDetailSummary = {
   moim: Moim;

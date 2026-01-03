@@ -6,7 +6,7 @@ import { formatDeadline } from "@/utils/moim.util";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
 import { useSession } from "next-auth/react";
-import { useUserProfileQuery } from "./useUserQuery";
+import { useUserProfileQuery } from "./queries/useUserQuery";
 
 export const useMoimCard = (
   item: Moim,

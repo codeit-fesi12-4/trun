@@ -5,7 +5,7 @@ import { useMoimFind } from "@/hooks/useMoimFind";
 import { getFavoriteMoims, removeNonExistentFavoriteMoims } from "@/utils/favorite.util";
 import { toast } from "sonner";
 import { Moim } from "@/types/moim.type";
-import { useUserProfileQuery } from "./useUserQuery";
+import { useUserProfileQuery } from "./queries/useUserQuery";
 import { useSession } from "next-auth/react";
 
 export const useMoimFavorite = () => {

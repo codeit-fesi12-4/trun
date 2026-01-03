@@ -2,7 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { useUserProfileQuery } from "./useUserQuery";
+import { useUserProfileQuery } from "./queries/useUserQuery";
 import { useEffect } from "react";
 
 export function ProfileBootstrapper() {

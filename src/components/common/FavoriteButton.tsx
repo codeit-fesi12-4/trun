@@ -4,7 +4,7 @@ import { addFavoriteMoim, isFavoriteMoim, removeFavoriteMoim } from "@/utils/fav
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 
 type FavoriteButtonProps = {
   moimId: number;

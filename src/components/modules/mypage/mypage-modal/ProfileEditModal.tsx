@@ -7,7 +7,7 @@ import {
   UpdateProfileForm,
   validateUpdateProfile,
 } from "@/utils/validators.utils";
-import { useUpdateProfileQuery } from "@/hooks/useUserQuery";
+import { useUpdateProfileQuery } from "@/hooks/queries/useUserQuery";
 import { toast } from "sonner";
 import { UserProfile } from "@/types/user.type";
 

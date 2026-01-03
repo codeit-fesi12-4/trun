@@ -6,7 +6,7 @@ import TabsSection from "@/components/modules/mypage/TabsSection";
 import Image from "next/image";
 import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 
 const MypageClient = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

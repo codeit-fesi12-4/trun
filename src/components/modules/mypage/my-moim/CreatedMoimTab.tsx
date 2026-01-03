@@ -4,7 +4,7 @@ import MyPageCard from "./MyPageMoimCard";
 import MoimCardSkeleton from "./MoimCardSkeleton";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
 import { useCreatedMoimsInfinite } from "@/hooks/useMypageQuery";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Spinner } from "@/components/ui/spinner";
 
