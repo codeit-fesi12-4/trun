@@ -16,7 +16,7 @@ type ReviewSortProps = {
 const AllReviewSort = ({ selectedSort, onSortChange }: ReviewSortProps) => (
   <DropdownMenu modal={false}>
     <DropdownMenuTrigger className="flex h-7 w-fit items-center justify-center gap-1 text-sm font-medium text-gray-500 hover:cursor-pointer focus:ring-0 focus:outline-none focus-visible:ring-0 data-[state=active]:border-0 sm:text-base">
-      <Image src="/icons/sort.svg" alt="정렬 아이콘" width={18} height={18} />
+      <Image src="/icons/common/sort.svg" alt="정렬 아이콘" width={18} height={18} />
       {REVIEW_FILTER_SORT[selectedSort]}
     </DropdownMenuTrigger>
     <DropdownMenuContent className="mr-8 border-0">

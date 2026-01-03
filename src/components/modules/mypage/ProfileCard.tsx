@@ -12,7 +12,7 @@ const ProfileSection = ({ user }: UserSectionProps) => (
     {/* 프로필 이미지 + 닉네임 */}
     <div className="flex items-center lg:flex-col">
       <Image
-        src={user.image ?? "/icons/default_profile.svg"}
+        src={user.image ?? "/icons/user/default_profile.svg"}
         alt="내 프로필 이미지"
         width={114}
         height={114}

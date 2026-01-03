@@ -64,7 +64,7 @@ const FavoriteButton = ({ moimId }: FavoriteButtonProps) => {
         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-100 hover:cursor-pointer sm:h-12 sm:w-12"
       >
         <Image
-          src={isFavorite ? "/icons/full_heart.svg" : "/icons/empty_heart.svg"}
+          src={isFavorite ? "/icons/favorite/full_heart.svg" : "/icons/favorite/empty_heart.svg"}
           alt={isFavorite ? "좋아요" : "좋아요 취소"}
           width={20}
           height={20}

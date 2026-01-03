@@ -39,7 +39,7 @@ const Header = () => {
         <div className="flex items-center justify-center gap-4 md:gap-9">
           <Link href="/">
             <Image
-              src="/icons/ic_logo.svg"
+              src="/icons/common/logo.svg"
               alt="trun 로고"
               width={112}
               height={112}
@@ -78,7 +78,7 @@ const Header = () => {
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Image
-                    src={user.image ? user.image : "/icons/default_profile.svg"}
+                    src={user.image ? user.image : "/icons/user/default_profile.svg"}
                     alt="내정보"
                     width={42}
                     height={42}

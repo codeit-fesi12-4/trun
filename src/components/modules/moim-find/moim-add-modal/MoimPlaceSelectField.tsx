@@ -39,7 +39,7 @@ const MoimPlaceSelectField = ({
       >
         <SelectValue placeholder={placeholder} />
         <Image
-          src="/icons/color=default, type=down.svg"
+          src="/icons/common/modal_down_arrow.svg"
           alt="dropdown"
           width={28}
           height={28}

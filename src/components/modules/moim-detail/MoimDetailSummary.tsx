@@ -132,7 +132,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             {formatDeadline(moim.registrationEnd) && (
               <Badge className="h-full rounded-[6px] bg-blue-100 pr-2 pl-1 text-xs font-semibold text-blue-600 md:text-sm">
                 <Image
-                  src="../icons/alarm.svg"
+                  src="/icons/moim/alarm.svg"
                   alt="알람 아이콘"
                   width={20}
                   height={20}
@@ -142,7 +142,9 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               </Badge>
             )}
           </div>
-          {isCreator && <Image src="/icons/crown.svg" alt="방장 아이콘" width={32} height={32} />}
+          {isCreator && (
+            <Image src="/icons/moim/crown.svg" alt="방장 아이콘" width={32} height={32} />
+          )}
         </div>
 
         {/* 제목 */}

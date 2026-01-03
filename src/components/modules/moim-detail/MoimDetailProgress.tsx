@@ -31,7 +31,7 @@ const MoimDetailProgress = ({ moim }: MoimDetailProgress) => {
           </div>
           {moim.participantCount >= 5 && (
             <Badge className="gap-0 bg-transparent p-0 text-xs font-medium text-green-600 md:text-base md:font-semibold">
-              <Image src="/icons/secure_check.svg" alt="check" width={18} height={18} />
+              <Image src="/icons/moim/secure_check.svg" alt="check" width={18} height={18} />
               개설 확정
             </Badge>
           )}

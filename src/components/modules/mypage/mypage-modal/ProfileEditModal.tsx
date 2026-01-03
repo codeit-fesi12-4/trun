@@ -121,10 +121,15 @@ export const ProfileEditModal = ({
                   height={112}
                 />
               ) : (
-                <Image src="/icons/default_profile.svg" alt="내정보" width={112} height={112} />
+                <Image
+                  src="/icons/user/default_profile.svg"
+                  alt="내정보"
+                  width={112}
+                  height={112}
+                />
               )}
               <Image
-                src="/icons/ic_mypage_modal_edit.svg"
+                src="/icons/mypage/mypage_modal_edit.svg"
                 alt="edit button"
                 width={40}
                 height={40}

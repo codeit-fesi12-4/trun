@@ -87,7 +87,12 @@ const ReviewWritableCategory = () => {
                   <div>
                     {/* 인원 */}
                     <p className="flex gap-1 pb-1 text-sm font-medium text-gray-900">
-                      <Image src="/icons/person.svg" alt="인원 아이콘" width={16} height={16} />
+                      <Image
+                        src="/icons/common/person.svg"
+                        alt="인원 아이콘"
+                        width={16}
+                        height={16}
+                      />
                       {item.participantCount}/{item.capacity}
                     </p>
 
