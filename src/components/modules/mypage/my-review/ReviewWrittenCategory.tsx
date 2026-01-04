@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { useReviewDeleteMutation, useWrittenReviewsInfinite } from "@/hooks/useMypageQuery";
 import ReviewWrittenSkeleton from "./ReviewWrittenSkeleton";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -11,6 +10,7 @@ import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModa
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Spinner } from "@/components/ui/spinner";
+import { useReviewDeleteMutation, useWrittenReviewsInfinite } from "@/hooks/queries/useMypageQuery";
 
 const ReviewWrittenCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
