@@ -49,7 +49,7 @@ const MoimFindClient = () => {
           {!isLoading && moimCardData.length === 0 && (
             <div className="mt-25 flex flex-col items-center justify-center gap-3">
               <Image
-                src="/icons/empty_moim.svg"
+                src="/icons/common/empty.svg"
                 alt="모임이 없음"
                 width={171}
                 height={136}
@@ -83,7 +83,7 @@ const MoimFindClient = () => {
         aria-label="모임 만들기"
       >
         <Image
-          src="/icons/ic_plus.svg"
+          src="/icons/moim/plus.svg"
           alt="플러스 아이콘"
           width={20}
           height={20}

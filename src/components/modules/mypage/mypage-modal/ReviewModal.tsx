@@ -5,7 +5,7 @@ import ModalLayout from "@/components/layouts/ModalLayout";
 import { ReviewForm } from "./ReviewForm";
 import { EditableReviewItem, ReviewModalMode, WritableReviewItem } from "@/types/mypage.type";
 import { toast } from "sonner";
-import { useReviewEditMutation, useReviewMutation } from "@/hooks/useMypageQuery";
+import { useReviewEditMutation, useReviewMutation } from "@/hooks/queries/useMypageQuery";
 
 type ReviewModalProps = {
   open: boolean;

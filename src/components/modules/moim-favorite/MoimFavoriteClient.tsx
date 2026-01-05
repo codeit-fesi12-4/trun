@@ -33,7 +33,7 @@ const MoimFavoriteClient = () => {
           {!isLoading && moimCardData.length === 0 && (
             <div className="mt-25 flex flex-col items-center justify-center gap-3">
               <Image
-                src="/icons/empty_moim.svg"
+                src="/icons/common/empty.svg"
                 alt="찜한 모임이 없음"
                 width={171}
                 height={136}

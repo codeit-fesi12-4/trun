@@ -1,6 +1,6 @@
 "use client";
 
-import { useMoimQuery } from "@/hooks/useMoimDetailQuery";
+import { useMoimQuery } from "@/hooks/queries/useMoimDetailQuery";
 import MoimDetailImage from "./MoimDetailImage";
 import MoimDetailImageSkeleton from "./detail-skeleton/MoimDetailImageSkeleton";
 import MoimDetailSummary from "./MoimDetailSummary";

@@ -78,7 +78,7 @@ const ConfirmationJoinModal = () => {
           onClick={cancelGoHome ? goHomeAndClose : closeOnly}
           className="absolute top-6 right-6 rounded-full p-1"
         >
-          <Image src="/icons/delete.svg" alt="닫기 버튼" width={24} height={24} />
+          <Image src="/icons/common/close.svg" alt="닫기 버튼" width={24} height={24} />
         </button>
         <DialogHeader className="flex h-[120px] flex-col items-center justify-center">
           <DialogTitle className="text-lg font-semibold text-gray-700">

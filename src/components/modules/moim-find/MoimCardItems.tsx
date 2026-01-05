@@ -77,7 +77,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
                 className="flex shrink-0 items-center rounded-md border-none bg-blue-100 px-1 py-0.5 pr-2 text-[12px] font-bold text-blue-400"
               >
                 <Image
-                  src="/icons/alarm.svg"
+                  src="/icons/moim/alarm.svg"
                   alt="alarm"
                   width={32}
                   height={32}
@@ -91,7 +91,7 @@ const MoimCardItems = ({ item, onFavoriteToggle, onJoinClick }: MoimCardItemsPro
           {/* 진행바/인원 수 */}
           <div className="flex min-w-0 items-center gap-2.5">
             <Image
-              src="/icons/person.svg"
+              src="/icons/common/person.svg"
               alt="person"
               width={14}
               height={14}

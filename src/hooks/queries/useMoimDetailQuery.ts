@@ -1,6 +1,12 @@
 "use client";
 
-import { deleteJoin, getMoim, getParticipants, postJoin, putMoim } from "@/api/moimDetail.api";
+import {
+  deleteJoin,
+  getMoim,
+  getParticipants,
+  postJoin,
+  putMoim,
+} from "@/services/moimDetail.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

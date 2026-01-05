@@ -36,7 +36,7 @@ const MoimDatePickerField = ({
             <span className="flex w-full items-center justify-between font-semibold text-gray-400">
               <span className="text-xs sm:text-sm">날짜 및 시간을 선택하세요</span>
               <Image
-                src="/icons/calendar.svg"
+                src="/icons/moim/calendar.svg"
                 alt="calendar"
                 width={14}
                 height={16}

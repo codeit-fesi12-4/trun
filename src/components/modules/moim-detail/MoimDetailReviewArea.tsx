@@ -13,7 +13,7 @@ import {
 import ReviewList from "./ReviewList";
 import { getPagesInLargeView, getPagesInSmallView } from "@/utils/pagenation.util";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
-import { useMoimReviewsQuery } from "@/hooks/useReviewQuery";
+import { useMoimReviewsQuery } from "@/hooks/queries/useReviewQuery";
 
 type MoimDetailReviewAreaProps = {
   moimId: number;

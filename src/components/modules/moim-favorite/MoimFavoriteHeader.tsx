@@ -22,7 +22,7 @@ const MoimFavoriteHeader = ({ onFilterChange, availableLocations, filters }: Moi
     <div className="mt-2 sm:mt-4">
       <div className="flex flex-row gap-3 px-2 sm:gap-[26px]">
         <Image
-          src="/icons/img_favorite.svg"
+          src="/icons/favorite/favorite.svg"
           alt="찜한 모임 이미지"
           width={68}
           height={50}

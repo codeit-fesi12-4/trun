@@ -3,7 +3,7 @@ import Image from "next/image";
 const AllReviewHero = () => (
   <header className="mt-2 mb-[35px] flex flex-row gap-3 sm:mt-4 sm:mb-[57px] sm:gap-[26px] md:mb-[71px]">
     <Image
-      src="/images/img_head.svg"
+      src="/icons/review/all_review.svg"
       alt="review header logo"
       width={68}
       height={50}

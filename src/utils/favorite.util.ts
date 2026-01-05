@@ -95,18 +95,19 @@ export const isFavoriteMoim = (moimId: number, userId: number | null = null): bo
  * @param userId 사용자 ID (없으면 null)
  * @returns 토글 후 찜한 상태 (true: 찜함, false: 찜하지 않음)
  */
-export const toggleFavoriteMoim = (moimId: number, userId: number | null = null): boolean => {
-  if (typeof window === "undefined") return false;
+// @@@
+// export const toggleFavoriteMoim = (moimId: number, userId: number | null = null): boolean => {
+//   if (typeof window === "undefined") return false;
 
-  const isFavorite = isFavoriteMoim(moimId, userId);
-  if (isFavorite) {
-    removeFavoriteMoim(moimId, userId);
-    return false;
-  } else {
-    addFavoriteMoim(moimId, userId);
-    return true;
-  }
-};
+//   const isFavorite = isFavoriteMoim(moimId, userId);
+//   if (isFavorite) {
+//     removeFavoriteMoim(moimId, userId);
+//     return false;
+//   } else {
+//     addFavoriteMoim(moimId, userId);
+//     return true;
+//   }
+// };
 
 // localStorage에서 존재하지 않는 모임 ID를 제거
 export const removeNonExistentFavoriteMoims = (

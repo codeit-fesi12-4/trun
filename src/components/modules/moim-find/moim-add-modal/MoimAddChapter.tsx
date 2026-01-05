@@ -40,7 +40,7 @@ export const MoimAddChapter = ({
               service="MINDFULNESS"
               isSelected={formData.type === "MINDFULNESS"}
               onServiceChange={onServiceChange}
-              iconSrc="/icons/dallimfit.svg"
+              iconSrc="/icons/common/dallimfit.svg"
               iconAlt="달림핏 아이콘"
             />
             <ServieCheckboxField
@@ -48,7 +48,7 @@ export const MoimAddChapter = ({
               service="WORKATION"
               isSelected={formData.type === "WORKATION"}
               onServiceChange={onServiceChange}
-              iconSrc="/icons/runcation.svg"
+              iconSrc="/icons/common/runcation.svg"
               iconAlt="런케이션 아이콘"
             />
           </div>

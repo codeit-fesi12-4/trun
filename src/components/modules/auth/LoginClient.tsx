@@ -10,7 +10,7 @@ import { AuthPasswordField } from "@/components/modules/auth/AuthPasswordField";
 import { AuthTextField } from "@/components/modules/auth/AuthTextField";
 import { Button } from "@/components/ui/button";
 import { validateLogin, type LoginErrors } from "@/utils/validators.utils";
-import { getAuthErrorMessage } from "@/utils/auth-error.util";
+import { getAuthErrorMessage } from "@/utils/authError.util";
 
 const LoginClient = () => {
   const router = useRouter();

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { getFavoriteMoims } from "@/utils/favorite.util";
-import { useUserProfileQuery } from "./useUserQuery";
+import { useUserProfileQuery } from "./queries/useUserQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { logout } from "@/utils/logout.util";
 import useLoginRedirect from "./useLoginRedirect";

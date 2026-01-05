@@ -46,7 +46,7 @@ const MyPageMoimCardContent = ({
                 {main === "개설 확정" ? (
                   <>
                     <Image
-                      src="/icons/ic_check.svg"
+                      src="/icons/moim/secure_check.svg"
                       alt="개설 확정 아이콘"
                       width={16}
                       height={16}
@@ -75,7 +75,7 @@ const MyPageMoimCardContent = ({
           <div className="flex flex-col pr-8">
             {/* 인원 */}
             <p className="flex gap-1 text-sm font-medium text-gray-950">
-              <Image src="/icons/person.svg" alt="인원 아이콘" width={16} height={16} />
+              <Image src="/icons/common/person.svg" alt="인원 아이콘" width={16} height={16} />
               {item.participantCount}/{item.capacity}
             </p>
 

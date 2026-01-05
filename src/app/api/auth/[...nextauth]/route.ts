@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { postSignin } from "@/api/auth.api";
+import { postSignin } from "@/services/auth.service";
 import type { NextAuthOptions } from "next-auth";
 import { cookies } from "next/headers";
 
