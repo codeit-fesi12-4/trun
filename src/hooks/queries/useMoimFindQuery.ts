@@ -3,26 +3,6 @@ import { CreateMoimRequest, GetMoimsParams, GetMoimsResponse } from "@/types/moi
 import { toast } from "sonner";
 import { getMoimList, postMoim } from "@/services/moim.service";
 
-// @@@
-// // React Query 훅 - 모임 목록 조회
-// export const useMoimsQuery = ({
-//   params,
-//   enabled = true,
-// }: {
-//   params?: GetMoimsParams;
-//   enabled?: boolean;
-// }) =>
-//   useQuery({
-//     queryKey: ["moims", params],
-//     queryFn: () => getMoimList(params),
-//     select: res => {
-//       const response = res as { ok?: boolean; data?: GetMoimsResponse };
-//       return response.ok ? response.data : undefined;
-//     },
-//     staleTime: 1000 * 60, // 1분
-//     enabled,
-//   });
-
 // React Query 훅 - 모임 목록 무한 스크롤 조회
 export const useMoimsInfiniteQuery = ({
   params,
