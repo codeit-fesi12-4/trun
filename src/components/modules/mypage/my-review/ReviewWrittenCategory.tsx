@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
-import { useReviewDeleteMutation, useWrittenReviewsInfinite } from "@/hooks/useMypageQuery";
 import ReviewWrittenSkeleton from "./ReviewWrittenSkeleton";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -11,6 +10,7 @@ import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModa
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Spinner } from "@/components/ui/spinner";
+import { useReviewDeleteMutation, useWrittenReviewsInfinite } from "@/hooks/queries/useMypageQuery";
 
 const ReviewWrittenCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<EditableReviewItem | null>(null);
@@ -77,7 +77,7 @@ const ReviewWrittenCategory = () => {
               <div className="flex flex-row items-center gap-3">
                 <div className="relative h-10 w-10 overflow-hidden rounded-full">
                   <Image
-                    src={review.User?.image ?? "/icons/default_profile.svg"}
+                    src={review.User?.image ?? "/icons/user/default_profile.svg"}
                     alt={review.User?.name ?? "익명"}
                     fill
                     className="object-cover"
@@ -118,7 +118,7 @@ const ReviewWrittenCategory = () => {
                     className="cursor-pointer"
                   >
                     <Image
-                      src="/icons/ic_mypage_edit.svg"
+                      src="/icons/mypage/mypage_edit.svg"
                       alt="수정"
                       width={36}
                       height={36}
@@ -127,7 +127,7 @@ const ReviewWrittenCategory = () => {
                   </button>
                   <button onClick={() => handleDeleteClick(review.id)} className="cursor-pointer">
                     <Image
-                      src="/icons/ic_trash.svg"
+                      src="/icons/mypage/trash.svg"
                       alt="삭제"
                       width={36}
                       height={36}

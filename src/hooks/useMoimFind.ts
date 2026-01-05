@@ -1,16 +1,16 @@
 import { useState, useMemo, useEffect } from "react";
-import { useMoimsInfiniteQuery } from "@/hooks/useMoimFindQuery";
+import { useMoimsInfiniteQuery } from "@/hooks/queries/useMoimFindQuery";
 import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
 import { MOIM_LOCATION, SORT_PARAMS_MAP } from "@/constants/moim";
 import { parseISO, isSameDay } from "date-fns";
 import { type MoimFilterValues } from "@/types/moimFind.type";
 import { formatDateWithDash } from "@/utils/date.util";
 import { useLoginModalStore } from "@/stores/loginModal.store";
-import { useUserProfileQuery } from "./useUserQuery";
+import { useUserProfileQuery } from "./queries/useUserQuery";
 import { buildMoimsQueryString } from "@/utils/path.util";
 import useSyncQueryString from "./useSyncQueryString";
 import { useSearchParams } from "next/navigation";
-import parseFilters from "@/utils/parseFilters";
+import parseFilters from "@/utils/parseFilters.util";
 
 export const useMoimFind = () => {
   const searchParams = useSearchParams();

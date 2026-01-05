@@ -17,7 +17,7 @@ const MoimDetailParticipantList = ({ participants }: MoimDetailParticipantListPr
           <li key={p.userId} className={idx === 0 ? "" : "-ml-2.5"}>
             <div className="relative h-[29px] w-[29px] overflow-hidden rounded-full">
               <Image
-                src={p.User.image ? p.User.image : "/icons/default_profile.svg"}
+                src={p.User.image ? p.User.image : "/icons/user/default_profile.svg"}
                 alt={`${p.User.name}의 프로필사진`}
                 fill
                 className="object-cover"

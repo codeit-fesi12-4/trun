@@ -3,11 +3,11 @@
 import { useState } from "react";
 import MyPageMoimCard from "./MyPageMoimCard";
 import MoimCardSkeleton from "./MoimCardSkeleton";
-import { useCancelReservation, useJoinedMoimsInfinite } from "@/hooks/useMypageQuery"; // Infinite 훅만 사용
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll"; // 팀원분이 만든 훅 추가
 import ModalLayout from "@/components/layouts/ModalLayout";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
 import { Spinner } from "@/components/ui/spinner";
+import { useCancelReservation, useJoinedMoimsInfinite } from "@/hooks/queries/useMypageQuery"; // Infinite 훅만 사용
 
 const MyMoimTab = () => {
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage, isError } =

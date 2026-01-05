@@ -6,7 +6,7 @@ import TabsSection from "@/components/modules/mypage/TabsSection";
 import Image from "next/image";
 import { useState } from "react";
 import { ProfileEditModal } from "./mypage-modal/ProfileEditModal";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 
 const MypageClient = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +23,7 @@ const MypageClient = () => {
             onClick={() => setIsModalOpen(true)}
             className="cursor-pointer lg:absolute lg:top-[68px] lg:right-[52px]"
           >
-            <Image src="/icons/ic_mypage_edit.svg" alt="수정 아이콘" width={32} height={32} />
+            <Image src="/icons/mypage/mypage_edit.svg" alt="수정 아이콘" width={32} height={32} />
           </button>
         </div>
 

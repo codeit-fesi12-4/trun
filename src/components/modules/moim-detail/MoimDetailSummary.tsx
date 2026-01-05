@@ -13,7 +13,7 @@ import {
   useCreateJoinMutation,
   useCancelJoinMutation,
   useParticipantsQuery,
-} from "@/hooks/useMoimDetailQuery";
+} from "@/hooks/queries/useMoimDetailQuery";
 import { Participant } from "@/types/moimDetail.type";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import {
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link2, Share2 } from "lucide-react";
 import { useLoginModalStore } from "@/stores/loginModal.store";
-import { useUserProfileQuery } from "@/hooks/useUserQuery";
+import { useUserProfileQuery } from "@/hooks/queries/useUserQuery";
 
 type MoimDetailSummary = {
   moim: Moim;
@@ -132,7 +132,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
             {formatDeadline(moim.registrationEnd) && (
               <Badge className="h-full rounded-[6px] bg-blue-100 pr-2 pl-1 text-xs font-semibold text-blue-600 md:text-sm">
                 <Image
-                  src="../icons/alarm.svg"
+                  src="/icons/moim/alarm.svg"
                   alt="알람 아이콘"
                   width={20}
                   height={20}
@@ -142,7 +142,9 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               </Badge>
             )}
           </div>
-          {isCreator && <Image src="/icons/crown.svg" alt="방장 아이콘" width={32} height={32} />}
+          {isCreator && (
+            <Image src="/icons/moim/crown.svg" alt="방장 아이콘" width={32} height={32} />
+          )}
         </div>
 
         {/* 제목 */}

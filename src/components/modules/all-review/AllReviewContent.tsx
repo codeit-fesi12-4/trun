@@ -5,12 +5,12 @@ import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import AllReviewHeader from "./AllReviewHeader";
 import AllReviewStats from "./AllReviewStats";
 import AllReviewList from "./AllReviewList";
-import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/useReviewQuery";
+import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/queries/useReviewQuery";
 import { buildDistribution } from "@/utils/review.util";
 import { buildReviewsQueryString } from "@/utils/path.util";
 import useSyncQueryString from "@/hooks/useSyncQueryString";
 import { useSearchParams } from "next/navigation";
-import parseFilters from "@/utils/parseFilters";
+import parseFilters from "@/utils/parseFilters.util";
 import { ReviewFilterValues } from "@/types/review.type";
 
 const AllReviewContent = () => {

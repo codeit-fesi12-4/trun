@@ -28,7 +28,7 @@ const MoimCard = ({ item, onFavoriteToggle, onJoinClick, priority = false }: Moi
             new Date(item.registrationEnd) < new Date()) && (
             <div className="absolute inset-0 flex items-center justify-center rounded-b-none bg-black/50 md:rounded-3xl">
               <Image
-                src="/icons/모집 마감.svg"
+                src="/icons/close_sign.svg"
                 alt="인원 마감"
                 width={86}
                 height={20}

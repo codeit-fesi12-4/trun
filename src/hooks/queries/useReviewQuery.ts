@@ -1,4 +1,4 @@
-import { getMoimReviews, getReviews, getReviewScores } from "@/api/review.api";
+import { getMoimReviews, getReviews, getReviewScores } from "@/services/review.service";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import { GetReviewScoresParams, GetReviewsParams, ReviewScore } from "@/types/review.type";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";

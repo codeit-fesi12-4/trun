@@ -4,13 +4,13 @@ import { useState } from "react";
 import Image from "next/image";
 import { EmptyState } from "@/components/modules/mypage/EmptyState";
 import ReviewWritableSkeleton from "./ReviewWritableSkeleton";
-import { useAvailableReviews } from "@/hooks/useMypageQuery";
 import { WritableReviewItem } from "@/types/mypage.type";
 import { formatDateTime } from "@/utils/mypage.util";
 import FavoriteButton from "@/components/common/FavoriteButton";
 import { ReviewModal } from "@/components/modules/mypage/mypage-modal/ReviewModal";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 import { Spinner } from "@/components/ui/spinner";
+import { useAvailableReviews } from "@/hooks/queries/useMypageQuery";
 
 const ReviewWritableCategory = () => {
   const [selectedReviewItem, setSelectedReviewItem] = useState<WritableReviewItem | null>(null);
@@ -87,7 +87,12 @@ const ReviewWritableCategory = () => {
                   <div>
                     {/* 인원 */}
                     <p className="flex gap-1 pb-1 text-sm font-medium text-gray-900">
-                      <Image src="/icons/person.svg" alt="인원 아이콘" width={16} height={16} />
+                      <Image
+                        src="/icons/common/person.svg"
+                        alt="인원 아이콘"
+                        width={16}
+                        height={16}
+                      />
                       {item.participantCount}/{item.capacity}
                     </p>
 

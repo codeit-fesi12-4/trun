@@ -9,7 +9,7 @@ import AuthLayout from "@/components/layouts/AuthLayout";
 import { AuthPasswordField } from "@/components/modules/auth/AuthPasswordField";
 import { AuthTextField } from "@/components/modules/auth/AuthTextField";
 import { Button } from "@/components/ui/button";
-import { postSignup } from "@/api/auth.api";
+import { postSignup } from "@/services/auth.service";
 import { validateSignup } from "@/utils/validators.utils";
 import { type SignupErrors, type SignupForm } from "@/types/auth.type";
 import { toast } from "sonner";
