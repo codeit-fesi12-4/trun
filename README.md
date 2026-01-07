@@ -1,6 +1,12 @@
 # 같이달림 Trun
 ![1](https://github.com/user-attachments/assets/4c7df759-30a7-4fa7-b370-e6db232c68bf)
 
+- 배포 링크 : https://trun-project.vercel.app/
+- 기획서 : https://codeit.notion.site/fd8eae01cd8e41e39d01c81c3a942814
+- 피그마 : https://www.figma.com/design/mBZtM6dXRb9xL6FnG08Uu0/-KDT-%EB%8B%A8%EA%B8%B0-%EC%8B%AC%ED%99%94--%EA%B0%99%EC%9D%B4%EB%8B%AC%EB%9E%A8?node-id=16763-24401&p=f&t=h6fc2vYIySlreywE-0
+  (디자인 시안 2 참고)
+- API 명세서 : https://fe-adv-project-together-dallaem.vercel.app/
+
 ## 목차
 
 1. 프로젝트 개요 <br/>
