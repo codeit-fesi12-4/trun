@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useRef, useEffect, useCallback } from "react";
 import { REVIEW_PAGE_SIZE } from "@/constants/pageSize";
 import AllReviewHeader from "./AllReviewHeader";
 import AllReviewStats from "./AllReviewStats";
@@ -8,27 +8,29 @@ import AllReviewList from "./AllReviewList";
 import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/queries/useReviewQuery";
 import { buildDistribution } from "@/utils/review.util";
 import { buildReviewsQueryString } from "@/utils/path.util";
-import useSyncQueryString from "@/hooks/useSyncQueryString";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import parseFilters from "@/utils/parseFilters.util";
 import { ReviewFilterValues } from "@/types/review.type";
 
 const AllReviewContent = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  const [filters, setFilters] = useState<ReviewFilterValues>(() =>
-    parseFilters(searchParams, "review"),
+  const filters = useMemo<ReviewFilterValues>(
+    () => parseFilters(searchParams, "review"),
+    [searchParams],
   );
 
-  const reviewQueryParams = {
-    limit: REVIEW_PAGE_SIZE.SCROLL,
-    type: filters.type,
-    location: filters.location,
-    sortBy: filters.sortBy,
-    sortOrder: filters.sortOrder,
-  };
-
-  useSyncQueryString(buildReviewsQueryString(reviewQueryParams));
+  const reviewQueryParams = useMemo(
+    () => ({
+      limit: REVIEW_PAGE_SIZE.SCROLL,
+      type: filters.type,
+      location: filters.location,
+      sortBy: filters.sortBy,
+      sortOrder: filters.sortOrder,
+    }),
+    [filters],
+  );
 
   const {
     data: reviewsPages,
@@ -45,18 +47,28 @@ const AllReviewContent = () => {
     params: { type: filters.type },
   });
 
-  const distribution = buildDistribution(scoresData);
+  const distribution = useMemo(() => buildDistribution(scoresData), [scoresData]);
   const averageScore = scoresData?.averageScore ?? 0;
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
+  const onFilterChange = useCallback(
+    (patch: Partial<ReviewFilterValues>) => {
+      const next: ReviewFilterValues = { ...filters, ...patch };
+
+      const queryString = buildReviewsQueryString({
+        type: next.type,
+        location: next.location,
+        sortBy: next.sortBy,
+        sortOrder: next.sortOrder,
+      });
+
+      router.replace(queryString ? `?${queryString}` : "", { scroll: false });
+    },
+    [filters, router],
+  );
+
   useEffect(() => {
-    const reflectParseFilter = () => {
-      setFilters(parseFilters(searchParams, "review"));
-    };
-
-    reflectParseFilter();
-
     const target = loadMoreRef.current;
     if (!target) return;
 
@@ -71,11 +83,11 @@ const AllReviewContent = () => {
 
     observer.observe(target);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage, searchParams]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <div className="flex flex-col gap-6">
-      <AllReviewHeader filters={filters} onFilterChange={setFilters} />
+      <AllReviewHeader filters={filters} onFilterChange={onFilterChange} />
 
       <AllReviewStats averageScore={averageScore} distribution={distribution} />
 
