@@ -99,7 +99,6 @@ export const useMoimFind = () => {
 
       const queryString = buildMoimFiltersQueryString(next);
 
-      // 필터 UI는 변경 빈도가 높아서 replace 권장
       router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
     },
     [filters, router, pathname],
