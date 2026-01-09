@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useMoimsInfiniteQuery } from "@/hooks/queries/useMoimFindQuery";
 import { GetMoimsParams, MoimLocation, Moim } from "@/types/moim.type";
 import { MOIM_LOCATION, SORT_PARAMS_MAP } from "@/constants/moim";
@@ -7,29 +7,31 @@ import { type MoimFilterValues } from "@/types/moimFind.type";
 import { formatDateWithDash } from "@/utils/date.util";
 import { useLoginModalStore } from "@/stores/loginModal.store";
 import { useUserProfileQuery } from "./queries/useUserQuery";
-import { buildMoimsQueryString } from "@/utils/path.util";
-import useSyncQueryString from "./useSyncQueryString";
-import { useSearchParams } from "next/navigation";
+import { buildMoimFiltersQueryString } from "@/utils/path.util";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import parseFilters from "@/utils/parseFilters.util";
 
 export const useMoimFind = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filters, setFilters] = useState<MoimFilterValues>(() =>
-    parseFilters(searchParams, "moim"),
-  );
+
+  const filters = useMemo(() => parseFilters(searchParams, "moim"), [searchParams]);
 
   // 지역을 MoimLocation으로 변환
-  const convertLocationToMoimLocation = (location: string): MoimLocation | undefined => {
-    if (location === MOIM_LOCATION.ALL) return undefined;
-    return location as MoimLocation;
-  };
+  const convertLocationToMoimLocation = useCallback(
+    (location: string): MoimLocation | undefined => {
+      if (location === MOIM_LOCATION.ALL) return undefined;
+      return location as MoimLocation;
+    },
+    [],
+  );
 
   // API 파라미터 생성 (무한 스크롤용 - limit, offset 제외)
   const infiniteQueryParams = useMemo(() => {
-    // 정렬 기준을 API 파라미터로 변환
-
     const sortParams = SORT_PARAMS_MAP[filters.sortBy];
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
@@ -40,9 +42,13 @@ export const useMoimFind = () => {
       sortOrder: sortParams.sortOrder,
     };
     return params;
-  }, [filters.category, filters.location, filters.date, filters.sortBy]);
-
-  useSyncQueryString(buildMoimsQueryString(infiniteQueryParams));
+  }, [
+    filters.category,
+    filters.location,
+    filters.date,
+    filters.sortBy,
+    convertLocationToMoimLocation,
+  ]);
 
   const { data: user } = useUserProfileQuery();
   const isLoggedIn = !!user;
@@ -66,14 +72,6 @@ export const useMoimFind = () => {
     return moimsPages.pages.flatMap(page => page.data);
   }, [moimsPages]);
 
-  useEffect(() => {
-    const reflectParseFilter = () => {
-      setFilters(parseFilters(searchParams, "moim"));
-    };
-
-    reflectParseFilter();
-  }, [searchParams]);
-
   // 정의된 지역 목록 사용
   const availableLocations = useMemo(() => Object.values(MOIM_LOCATION), []);
 
@@ -95,9 +93,16 @@ export const useMoimFind = () => {
     return allMoims;
   }, [allMoims, filters.date]);
 
-  const handleFilterChange = (newFilters: MoimFilterValues) => {
-    setFilters(newFilters);
-  };
+  const onFilterChange = useCallback(
+    (patch: Partial<MoimFilterValues>) => {
+      const next: MoimFilterValues = { ...filters, ...patch };
+
+      const queryString = buildMoimFiltersQueryString(next);
+
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
+    },
+    [filters, router, pathname],
+  );
 
   const handleCreateMoimClick = () => {
     if (!isLoggedIn) {
@@ -115,7 +120,7 @@ export const useMoimFind = () => {
     availableLocations,
     isLoading,
     error,
-    handleFilterChange,
+    onFilterChange,
     handleCreateMoimClick,
     fetchNextPage,
     hasNextPage,

@@ -5,13 +5,13 @@ import {
   GetMoimsParams,
   GetMoimsResponse,
 } from "@/types/moim.type";
-import { buildMoimsPath } from "@/utils/path.util";
+import { buildMoimPath } from "@/utils/path.util";
 
 // 모임 목록 조회 함수
 export const getMoimList = async (
   params?: GetMoimsParams,
 ): Promise<ApiResult<GetMoimsResponse>> => {
-  const path = buildMoimsPath(params);
+  const path = buildMoimPath(params);
   return apiFetch<GetMoimsResponse>(`/api/proxy${path}`, {
     method: "GET",
   });

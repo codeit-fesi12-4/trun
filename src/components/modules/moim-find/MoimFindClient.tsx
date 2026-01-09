@@ -17,7 +17,7 @@ const MoimFindClient = () => {
     availableLocations,
     isLoading,
     error,
-    handleFilterChange,
+    onFilterChange,
     handleCreateMoimClick,
     fetchNextPage,
     hasNextPage,
@@ -35,7 +35,7 @@ const MoimFindClient = () => {
   return (
     <>
       <MoimFindHeader
-        onFilterChange={handleFilterChange}
+        onFilterChange={onFilterChange}
         availableLocations={availableLocations}
         filters={filters}
       />
