@@ -1,4 +1,4 @@
-import { MoimSortBy, MoimSortOrder, MoimType } from "@/types/moim.type";
+import { MoimSortBy, MoimType } from "@/types/moim.type";
 import { MoimFilterValues } from "@/types/moimFind.type";
 import { ReviewFilterValues, ReviewSortBy, ReviewSortOrder, ReviewType } from "@/types/review.type";
 import { isValid, parse } from "date-fns";
@@ -9,8 +9,6 @@ const isMoimType = (v: string | null): v is MoimType => v === "MINDFULNESS" || v
 const isMoimSortBy = (v: string | null): v is MoimSortBy =>
   v === "dateTime" || v === "registrationEnd" || v === "participantCount";
 
-const isMoimSortOrder = (v: string | null): v is MoimSortOrder => v === "asc" || v === "desc";
-
 const isReviewType = (v: string | null): v is ReviewType =>
   v === "MINDFULNESS" || v === "WORKATION";
 
@@ -19,7 +17,6 @@ const isReviewSortBy = (v: string | null): v is ReviewSortBy =>
 
 const isReviewSortOrder = (v: string | null): v is ReviewSortOrder => v === "asc" || v === "desc";
 
-// date string => Date 타입 변경
 const parseDateParam = (dateParam: string | null) => {
   if (!dateParam) return undefined;
   const parsed = parse(dateParam, "yyyy-MM-dd", new Date());
@@ -43,7 +40,6 @@ function parseFilters(
       location: searchParams.get("location") ?? "지역 전체",
       date: parseDateParam(dateParam),
       sortBy: isMoimSortBy(sortByParam) ? sortByParam : "registrationEnd",
-      sortOrder: isMoimSortOrder(sortOrderParams) ? sortOrderParams : "desc",
     };
   }
 
