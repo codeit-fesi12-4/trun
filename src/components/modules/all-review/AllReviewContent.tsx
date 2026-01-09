@@ -7,14 +7,15 @@ import AllReviewStats from "./AllReviewStats";
 import AllReviewList from "./AllReviewList";
 import { useAllReviewQuery, useReviewScoresQuery } from "@/hooks/queries/useReviewQuery";
 import { buildDistribution } from "@/utils/review.util";
-import { buildReviewsQueryString } from "@/utils/path.util";
-import { useSearchParams, useRouter } from "next/navigation";
+import { buildReviewFiltersQueryString } from "@/utils/path.util";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import parseFilters from "@/utils/parseFilters.util";
 import { ReviewFilterValues } from "@/types/review.type";
 
 const AllReviewContent = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const filters = useMemo<ReviewFilterValues>(
     () => parseFilters(searchParams, "review"),
@@ -31,7 +32,6 @@ const AllReviewContent = () => {
     }),
     [filters],
   );
-
   const {
     data: reviewsPages,
     isLoading,
@@ -56,16 +56,11 @@ const AllReviewContent = () => {
     (patch: Partial<ReviewFilterValues>) => {
       const next: ReviewFilterValues = { ...filters, ...patch };
 
-      const queryString = buildReviewsQueryString({
-        type: next.type,
-        location: next.location,
-        sortBy: next.sortBy,
-        sortOrder: next.sortOrder,
-      });
+      const queryString = buildReviewFiltersQueryString(next);
 
-      router.replace(queryString ? `?${queryString}` : "", { scroll: false });
+      router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
     },
-    [filters, router],
+    [filters, router, pathname],
   );
 
   useEffect(() => {
