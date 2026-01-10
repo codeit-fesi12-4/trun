@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import MoimDetailProgress from "./MoimDetailProgress";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -31,10 +31,6 @@ type MoimDetailSummary = {
 };
 
 const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
-  const [isCreator, setIsCreator] = useState(false);
-  const [isParticipant, setIsParticipant] = useState(false);
-  const [isFull, setIsFull] = useState(false);
-
   const { setOpen: setIsLoginModalOpen } = useLoginModalStore();
 
   const { mutateAsync: cancelMoim, isPending: isCanCelMoimPending } = useCancelMoimMutation();
@@ -48,31 +44,21 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
   const userId = user?.id;
 
-  useEffect(() => {
-    const distinguishCreator = () => {
-      if (userId === moim.createdBy) {
-        setIsCreator(true);
-      }
-    };
-    const distinguishParticipant = () => {
-      const participantsIds = participants?.map((p: Participant) => p.userId);
-      if (participantsIds?.find((p: number) => p === userId)) {
-        setIsParticipant(true);
-      } else {
-        setIsParticipant(false);
-      }
-    };
-    const distinguishFull = () => {
-      if (moim.capacity > moim.participantCount) {
-        setIsFull(false);
-      } else {
-        setIsFull(true);
-      }
-    };
-    distinguishCreator();
-    distinguishParticipant();
-    distinguishFull();
-  }, [moim, participants, userId]);
+  const isCreator = useMemo(() => {
+    if (!userId) return false;
+    return userId === moim.createdBy;
+  }, [userId, moim.createdBy]);
+
+  const isParticipant = useMemo(() => {
+    if (!userId) return false;
+    const participantsIds = participants?.map((p: Participant) => p.userId) ?? [];
+    return participantsIds.includes(userId);
+  }, [userId, participants]);
+
+  const isFull = useMemo(
+    () => moim.participantCount >= moim.capacity,
+    [moim.participantCount, moim.capacity],
+  );
 
   const handleMoimCancel = async () => {
     if (!user) {
@@ -198,7 +184,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
               onClick={() => void handleMoimLeave()}
               className="h-10 w-full rounded-[12px] border border-green-500 bg-white text-sm font-bold text-green-600 hover:cursor-pointer sm:h-12 sm:text-base md:h-15 md:text-xl md:font-semibold"
             >
-              {isJoinPending ? "취소중..." : "참여 취소하기"}
+              {isCancelJoinPending ? "취소중..." : "참여 취소하기"}
             </button>
           ) : isFull ? (
             <button
