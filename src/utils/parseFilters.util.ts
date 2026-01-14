@@ -31,7 +31,7 @@ function parseFilters(
 ): MoimFilterValues | ReviewFilterValues {
   const typeParam = searchParams.get("type");
   const sortByParam = searchParams.get("sortBy");
-  const sortOrderParams = searchParams.get("sortOrder");
+  const sortOrderParam = searchParams.get("sortOrder");
   const dateParam = searchParams.get("date");
 
   if (kind === "moim") {
@@ -47,7 +47,7 @@ function parseFilters(
     type: isReviewType(typeParam) ? typeParam : "MINDFULNESS",
     location: searchParams.get("location") ?? "지역 전체",
     sortBy: isReviewSortBy(sortByParam) ? sortByParam : "createdAt",
-    sortOrder: isReviewSortOrder(sortOrderParams) ? sortOrderParams : "desc",
+    sortOrder: isReviewSortOrder(sortOrderParam) ? sortOrderParam : "desc",
   };
 }
 
