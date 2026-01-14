@@ -26,7 +26,7 @@ export const useMoimFavorite = () => {
     availableLocations,
     isLoading,
     error,
-    handleFilterChange,
+    onFilterChange,
   } = useMoimFind();
 
   // allMoims를 ref에 저장 (alert 표시 시 최신 값 사용)
@@ -98,7 +98,7 @@ export const useMoimFavorite = () => {
         }
       }
     }
-  }, [favoriteMoimIds]);
+  }, [favoriteMoimIds, sessionStatus]);
 
   // 찜한 모임만 필터링
   const moimCardData = useMemo(
@@ -116,7 +116,7 @@ export const useMoimFavorite = () => {
     availableLocations,
     isLoading,
     error,
-    handleFilterChange,
+    onFilterChange,
     onFavoriteToggle: handleFavoriteToggle,
   };
 };
