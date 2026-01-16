@@ -8,23 +8,23 @@ import {
   PostReviewParams,
   PutReviewParams,
 } from "@/types/review.type";
-import { buildReviewScoresPath, buildReviewsPath } from "@/utils/path.util";
+import { buildReviewScorePath, buildReviewPath } from "@/utils/path.util";
 
 // 모든 리뷰 가져오기
 export const getReviews = (params: GetReviewsParams) =>
-  apiFetch<GetReviewsResponse>(`/api/proxy${buildReviewsPath(params)}`, {
+  apiFetch<GetReviewsResponse>(`/api/proxy${buildReviewPath(params)}`, {
     method: "GET",
   });
 
 // 모임별 리뷰 가져오기
 export const getMoimReviews = (params: GetReviewsParams) =>
-  apiFetch<GetMoimReviewsResponse>(`/api/proxy${buildReviewsPath(params)}`, {
+  apiFetch<GetMoimReviewsResponse>(`/api/proxy${buildReviewPath(params)}`, {
     method: "GET",
   });
 
 // 리뷰 평점 가져오기
 export const getReviewScores = (params: GetReviewScoresParams) =>
-  apiFetch<GetReviewScoresResponse>(`/api/proxy${buildReviewScoresPath(params)}`, {
+  apiFetch<GetReviewScoresResponse>(`/api/proxy${buildReviewScorePath(params)}`, {
     method: "GET",
   });
 

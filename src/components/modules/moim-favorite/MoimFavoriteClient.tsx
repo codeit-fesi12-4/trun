@@ -11,7 +11,7 @@ const MoimFavoriteClient = () => {
     moimCardData,
     isLoading,
     error,
-    handleFilterChange,
+    onFilterChange,
     availableLocations,
     onFavoriteToggle,
   } = useMoimFavorite();
@@ -20,7 +20,7 @@ const MoimFavoriteClient = () => {
     <>
       <MoimFavoriteHeader
         filters={filters}
-        onFilterChange={handleFilterChange}
+        onFilterChange={onFilterChange}
         availableLocations={availableLocations}
       />
       {error && (
