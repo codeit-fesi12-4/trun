@@ -51,8 +51,7 @@ const MoimDetailSummary = ({ moim }: MoimDetailSummary) => {
 
   const isParticipant = useMemo(() => {
     if (!userId) return false;
-    const participantsIds = participants?.map((p: Participant) => p.userId) ?? [];
-    return participantsIds.includes(userId);
+    return participants?.some((p: Participant) => p.userId === userId) ?? false;
   }, [userId, participants]);
 
   const isFull = useMemo(
