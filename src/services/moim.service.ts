@@ -34,9 +34,9 @@ export const postMoim = async (
     formData.append("image", payload.image);
   } else {
     try {
-      const defaultImageResponse = await fetch("/images/img_login.png");
+      const defaultImageResponse = await fetch("/images/img_default.png");
       const defaultImageBlob = await defaultImageResponse.blob();
-      const defaultImageFile = new File([defaultImageBlob], "default-image.png", {
+      const defaultImageFile = new File([defaultImageBlob], "img_default.png", {
         type: defaultImageBlob.type,
       });
       formData.append("image", defaultImageFile);
