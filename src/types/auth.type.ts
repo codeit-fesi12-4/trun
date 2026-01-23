@@ -10,8 +10,11 @@ export type SigninRequest = {
   password: string;
 };
 
-export type LoginResponse = {
-  token: string;
+export type SigninResponse = {
+  error: string | null;
+  status: number;
+  ok: boolean;
+  url: string | null;
 };
 
 export type SignupResponse = {
@@ -47,3 +50,8 @@ export type SignupErrors = {
   password?: string;
   confirmPassword?: string;
 };
+
+// error: string | null
+// status: number
+// ok: boolean
+// url: string | null
