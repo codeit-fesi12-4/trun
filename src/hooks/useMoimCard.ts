@@ -5,7 +5,6 @@ import { isFavoriteMoim } from "@/utils/favorite.util";
 import { formatDeadline } from "@/utils/moim.util";
 import { Moim } from "@/types/moim.type";
 import { MoimCardActions } from "@/types/moimFind.type";
-import { useSession } from "next-auth/react";
 import { useUserProfileQuery } from "./queries/useUserQuery";
 
 export const useMoimCard = (
@@ -13,8 +12,10 @@ export const useMoimCard = (
   onFavoriteToggle?: MoimCardActions["onFavoriteToggle"],
   onJoinClick?: MoimCardActions["onJoinClick"],
 ) => {
-  const { status } = useSession();
   const { data: user } = useUserProfileQuery();
+  const me = useUserProfileQuery();
+
+  const status = me.isLoading ? "loading" : me.data ? "authenticated" : "unauthenticated";
 
   const userId = user?.id;
 
