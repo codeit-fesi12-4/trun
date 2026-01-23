@@ -45,7 +45,8 @@ const LoginClient = () => {
           return;
         }
         router.replace("/");
-      } catch {
+      } catch (error) {
+        console.warn(error);
         setServerError("로그인 중 오류가 발생했습니다.");
       }
     }
@@ -96,10 +97,12 @@ const LoginClient = () => {
           id="login-password"
           label="비밀번호"
           placeholder="비밀번호를 입력해주세요."
+          maxLength={32}
           autoComplete="current-password"
           value={password}
           onChange={event => {
-            setPassword(event.target.value.replace(/\s/g, ""));
+            const value = event.target.value.replace(/\s/g, "");
+            setPassword(value.slice(0, 32));
             if (serverError) setServerError(null);
             if (errors.password) setErrors(prev => ({ ...prev, password: undefined }));
           }}

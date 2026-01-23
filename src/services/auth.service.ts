@@ -19,4 +19,5 @@ export const postSignin = (payload: SigninRequest) =>
       Accept: "application/json",
     },
     body: JSON.stringify(payload),
+    throwOnError: false,
   });

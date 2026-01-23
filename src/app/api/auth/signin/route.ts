@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
   if (!upstream.ok || !data?.token) {
     return NextResponse.json(
-      { message: "잘못된 아이디나 비밀번호입니다." },
+      { message: data?.["message"] ?? "로그인 실패" },
       { status: upstream.status || 401 },
     );
   }

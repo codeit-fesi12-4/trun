@@ -14,10 +14,10 @@ export const loginSchema = z.object({
       (value: string) => {
         // 값이 있을 때만 길이 검증
         if (!value) return true;
-        return value.length >= 8 && value.length <= 128;
+        return value.length >= 8 && value.length <= 32;
       },
       {
-        message: "비밀번호는 8자 이상 128자 이하여야 합니다.",
+        message: "비밀번호는 8자 이상 입력해주세요.",
       },
     ),
 });
