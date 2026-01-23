@@ -5,7 +5,6 @@ import { unauthorizedHandler } from "@/utils/unauthorizedHandler.util";
 import { handleApiError } from "@/utils/error.util";
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { SessionProvider } from "next-auth/react";
 import { ReactNode, useState } from "react";
 
 export default function Providers({ children }: { children: ReactNode }) {
@@ -27,13 +26,12 @@ export default function Providers({ children }: { children: ReactNode }) {
 
     return queryClient;
   });
+
   return (
-    <SessionProvider>
-      <QueryClientProvider client={queryClient}>
-        <ProfileBootstrapper />
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <ProfileBootstrapper />
+      {children}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }

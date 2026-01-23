@@ -1,13 +1,14 @@
+import { ApiResult } from "@/lib/apiClient";
 import { getUserProfile, putUpdateProfile } from "@/services/user.service";
+import { UserProfile } from "@/types/user.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // 회원 정보 호출
-export const useUserProfileQuery = (enabled = false) =>
-  useQuery({
+export const useUserProfileQuery = () =>
+  useQuery<ApiResult<UserProfile>, Error, UserProfile | undefined>({
     queryKey: ["userProfile"],
-    queryFn: () => getUserProfile(),
-    enabled,
+    queryFn: getUserProfile,
     retry: false,
     staleTime: 1000 * 60,
     select: res => (res.ok ? res.data : undefined),
