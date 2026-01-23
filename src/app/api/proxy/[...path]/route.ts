@@ -32,6 +32,16 @@ async function proxy(req: Request, method: string, pathParts: string[]) {
     ? await upstream.json().catch(() => null)
     : await upstream.text().catch(() => "");
 
+  if (upstream.status === 401 && typeof body === "object") {
+    const code = body?.errors?.[0]?.code ?? body?.code;
+
+    if (code === "INVALID_TOKEN") {
+      const res = NextResponse.json(body, { status: 401 });
+      res.cookies.set("api-token", "", { path: "/", maxAge: 0 });
+      return res;
+    }
+  }
+
   return NextResponse.json(body, { status: upstream.status });
 }
 
