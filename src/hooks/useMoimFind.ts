@@ -33,8 +33,10 @@ export const useMoimFind = () => {
   // API 파라미터 생성 (무한 스크롤용 - limit, offset 제외)
   const infiniteQueryParams = useMemo(() => {
     const sortParams = SORT_PARAMS_MAP[filters.sortBy];
+    const idParam = searchParams.get("id"); // 쿼리스트링에서 id 파라미터 읽기
 
     const params: Omit<GetMoimsParams, "limit" | "offset"> = {
+      ...(idParam && { id: idParam }), // id 파라미터가 있으면 추가
       type: filters.category,
       location: convertLocationToMoimLocation(filters.location),
       date: formatDateWithDash(filters.date),
@@ -48,6 +50,7 @@ export const useMoimFind = () => {
     filters.date,
     filters.sortBy,
     convertLocationToMoimLocation,
+    searchParams,
   ]);
 
   const { data: user } = useUserProfileQuery();
@@ -99,9 +102,18 @@ export const useMoimFind = () => {
 
       const queryString = buildMoimFiltersQueryString(next);
 
-      router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
+      // id 파라미터가 있으면 유지
+      const idParam = searchParams.get("id");
+      const params = new URLSearchParams(queryString);
+      if (idParam) {
+        params.set("id", idParam);
+      }
+
+      router.replace(params.toString() ? `${pathname}?${params.toString()}` : pathname, {
+        scroll: false,
+      });
     },
-    [filters, router, pathname],
+    [filters, router, pathname, searchParams],
   );
 
   const handleCreateMoimClick = () => {
