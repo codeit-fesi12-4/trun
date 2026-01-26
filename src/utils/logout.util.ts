@@ -1,10 +1,10 @@
+import { apiFetch } from "@/lib/apiClient";
 import { QueryClient } from "@tanstack/react-query";
-import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 
 export const logout = async (queryClient: QueryClient) => {
   try {
-    await signOut({ redirect: false });
+    await apiFetch(`/api/auth/signout`, { method: "POST" });
     queryClient.removeQueries({ queryKey: ["userProfile"] });
   } catch (error) {
     console.error("Logout error:", error);

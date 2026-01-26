@@ -2,6 +2,7 @@ import { ApiError } from "@/utils/error.util";
 
 type ApiFetchOptions = RequestInit & {
   isFormData?: boolean;
+  throwOnError?: boolean;
 };
 
 export type ApiFailure = {
@@ -23,7 +24,7 @@ export const apiFetch = async <T>(
   path: string,
   options: ApiFetchOptions = {},
 ): Promise<ApiResult<T>> => {
-  const { isFormData, headers, ...rest } = options;
+  const { isFormData, headers, throwOnError = true, ...rest } = options;
 
   try {
     const response = await fetch(path, {
@@ -41,6 +42,10 @@ export const apiFetch = async <T>(
         result?.errors?.[0]?.message ?? result?.message ?? "요청 중 오류가 발생했습니다.";
 
       const code = result?.errors?.[0]?.code ?? result?.code ?? undefined;
+
+      if (!throwOnError && (response.status === 401 || response.status === 404)) {
+        return { ok: false, status: response.status, message, code };
+      }
 
       if (response.status === 400 || response.status === 403) {
         return { ok: false, status: response.status, message, code };
