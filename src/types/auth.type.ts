@@ -50,8 +50,3 @@ export type SignupErrors = {
   password?: string;
   confirmPassword?: string;
 };
-
-// error: string | null
-// status: number
-// ok: boolean
-// url: string | null
