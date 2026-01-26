@@ -44,7 +44,6 @@ export const apiFetch = async <T>(
       const code = result?.errors?.[0]?.code ?? result?.code ?? undefined;
 
       if (!throwOnError && (response.status === 401 || response.status === 404)) {
-        console.warn("????");
         return { ok: false, status: response.status, message, code };
       }
 

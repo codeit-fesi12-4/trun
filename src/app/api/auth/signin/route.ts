@@ -58,5 +58,5 @@ export async function POST(req: Request) {
     clearTimeout(timeoutId);
   }
 
-  return NextResponse.json({ ok: true }, { status: 200 });
+  return NextResponse.json({ ok: true, message: "로그인 성공" }, { status: 200 });
 }
