@@ -44,7 +44,7 @@ const LoginClient = () => {
           setServerError(result.message);
           return;
         }
-        router.replace("/");
+        router.replace(redirect ?? "/");
       } catch (error) {
         console.warn(error);
         setServerError("로그인 중 오류가 발생했습니다.");

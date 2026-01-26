@@ -11,7 +11,10 @@ function buildRedirectToLogin(request: NextRequest) {
 function getSafeRedirectParam(request: NextRequest): string | null {
   const redirect = request.nextUrl.searchParams.get("redirect");
   if (!redirect) return null;
-  if (redirect.startsWith("/") && !redirect.startsWith("//")) return redirect;
+  if (redirect.startsWith("/") && !redirect.startsWith("//")) {
+    if (redirect === "/login" || redirect === "/signup") return null;
+    return redirect;
+  }
   return null;
 }
 
