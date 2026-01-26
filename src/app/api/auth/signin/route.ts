@@ -18,35 +18,45 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "email/password required" }, { status: 400 });
   }
 
-  // 외부 백엔드 로그인 엔드포인트 (예시 경로는 프로젝트에 맞게 조정)
   const upstreamUrl = `${API_BASE_URL}${TEAM_NAME}/auths/signin`;
 
-  const upstream = await fetch(upstreamUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify(body),
-    cache: "no-store",
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10_000);
 
-  const data: UpstreamLoginResponse | null = await upstream.json().catch(() => null);
+  try {
+    const upstream = await fetch(upstreamUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(body),
+      cache: "no-store",
+      signal: controller.signal,
+    });
 
-  if (!upstream.ok || !data?.token) {
-    return NextResponse.json(
-      { message: data?.["message"] ?? "로그인 실패" },
-      { status: upstream.status || 401 },
-    );
+    const data: UpstreamLoginResponse | null = await upstream.json().catch(() => null);
+
+    if (!upstream.ok || !data?.token) {
+      return NextResponse.json(
+        { message: data?.["message"] ?? "로그인 실패" },
+        { status: upstream.status || 401 },
+      );
+    }
+
+    const cookieStore = await cookies();
+    cookieStore.set("api-token", data.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24, // 1일
+    });
+  } catch (e) {
+    if (e instanceof Error && e.name === "AbortError") {
+      return NextResponse.json({ message: "Upstream timeout" }, { status: 504 });
+    }
+    return NextResponse.json({ message: "Upstream request failed" }, { status: 502 });
+  } finally {
+    clearTimeout(timeoutId);
   }
 
-  // httpOnly 쿠키 저장
-  const cookieStore = await cookies();
-  cookieStore.set("api-token", data.token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24, // 1일
-  });
-
-  // 필요하면 최소 정보만 내려줌(토큰은 절대 내려주지 않음)
-  return NextResponse.json({ status: 200 });
+  return NextResponse.json({ ok: true }, { status: 200 });
 }
