@@ -6,15 +6,8 @@ import MoimCardList from "@/components/modules/moim-find/MoimCardList";
 import { useMoimFavorite } from "@/hooks/useMoimFavorite";
 
 const MoimFavoriteClient = () => {
-  const {
-    filters,
-    moimCardData,
-    isLoading,
-    error,
-    onFilterChange,
-    availableLocations,
-    onFavoriteToggle,
-  } = useMoimFavorite();
+  const { filters, moimCardData, isLoading, error, onFilterChange, availableLocations } =
+    useMoimFavorite();
 
   return (
     <>
@@ -45,11 +38,7 @@ const MoimFavoriteClient = () => {
               </p>
             </div>
           )}
-          <MoimCardList
-            items={moimCardData}
-            isLoading={isLoading}
-            onFavoriteToggle={onFavoriteToggle}
-          />
+          <MoimCardList items={moimCardData} isLoading={isLoading} />
         </>
       )}
     </>
