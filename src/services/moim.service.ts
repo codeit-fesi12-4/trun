@@ -5,13 +5,13 @@ import {
   GetMoimsParams,
   GetMoimsResponse,
 } from "@/types/moim.type";
-import { buildMoimsPath } from "@/utils/path.util";
+import { buildMoimPath } from "@/utils/path.util";
 
 // 모임 목록 조회 함수
 export const getMoimList = async (
   params?: GetMoimsParams,
 ): Promise<ApiResult<GetMoimsResponse>> => {
-  const path = buildMoimsPath(params);
+  const path = buildMoimPath(params);
   return apiFetch<GetMoimsResponse>(`/api/proxy${path}`, {
     method: "GET",
   });
@@ -34,9 +34,9 @@ export const postMoim = async (
     formData.append("image", payload.image);
   } else {
     try {
-      const defaultImageResponse = await fetch("/images/img_login.png");
+      const defaultImageResponse = await fetch("/images/img_default.png");
       const defaultImageBlob = await defaultImageResponse.blob();
-      const defaultImageFile = new File([defaultImageBlob], "default-image.png", {
+      const defaultImageFile = new File([defaultImageBlob], "img_default.png", {
         type: defaultImageBlob.type,
       });
       formData.append("image", defaultImageFile);

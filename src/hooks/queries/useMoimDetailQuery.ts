@@ -34,7 +34,7 @@ export const useCreateJoinMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => postJoin(moimId),
-    onSuccess: (data, moimId) => {
+    onSuccess: async (data, moimId) => {
       if (!data.ok) {
         toast.error(data.message);
         return;
@@ -42,8 +42,8 @@ export const useCreateJoinMutation = () => {
       if (data.data.message) {
         toast.success(data.data.message);
       }
-      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
+      await queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      await queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
   });
 };
@@ -53,7 +53,7 @@ export const useCancelJoinMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (moimId: number) => deleteJoin(moimId),
-    onSuccess: (data, moimId) => {
+    onSuccess: async (data, moimId) => {
       if (!data.ok) {
         toast.error(data.message);
         return;
@@ -61,8 +61,8 @@ export const useCancelJoinMutation = () => {
       if (data.data.message) {
         toast.success(data.data.message);
       }
-      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
+      await queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      await queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
     },
   });
 };
@@ -73,16 +73,16 @@ export const useCancelMoimMutation = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: (moimId: number) => putMoim(moimId),
-    onSuccess: (data, moimId) => {
+    onSuccess: async (data, moimId) => {
       if (!data.ok) {
         toast.error(data.message);
         return;
       }
       toast.success("모임이 취소되었습니다.");
-      void queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
-      void queryClient.invalidateQueries({ queryKey: ["moims"] });
-      void router.replace("/moim-find");
+      await queryClient.invalidateQueries({ queryKey: ["moim", moimId] });
+      await queryClient.invalidateQueries({ queryKey: ["participants", moimId] });
+      await queryClient.invalidateQueries({ queryKey: ["moims"] });
+      router.replace("/moim-find");
     },
   });
 };

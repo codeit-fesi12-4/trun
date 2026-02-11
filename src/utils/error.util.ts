@@ -19,10 +19,14 @@ export const handleApiError = (
 ) => {
   if (error instanceof ApiError) {
     if (error.status === 401) {
-      const reason: LoginModalReason =
-        error.code === "INVALID_TOKEN" ? "INVALID_TOKEN" : "UNAUTHORIZED";
-      options?.onUnauthorized?.(reason);
-
+      if (error.code === "UNAUTHORIZED") {
+        return;
+      }
+      if (error.code === "INVALID_TOKEN") {
+        options?.onUnauthorized?.("INVALID_TOKEN");
+        return;
+      }
+      options?.onUnauthorized?.("UNAUTHORIZED");
       return;
     } else {
       console.error(error);

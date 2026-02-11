@@ -1,53 +1,61 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useMoimFind } from "@/hooks/useMoimFind";
-import { getFavoriteMoims, removeNonExistentFavoriteMoims } from "@/utils/favorite.util";
-import { toast } from "sonner";
-import { Moim } from "@/types/moim.type";
+import { getFavoriteMoims } from "@/utils/favorite.util";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useUserProfileQuery } from "./queries/useUserQuery";
-import { useSession } from "next-auth/react";
 
 export const useMoimFavorite = () => {
-  const [favoriteMoimIds, setFavoriteMoimIds] = useState<number[]>([]);
-  const previousFavoriteMoimIdsRef = useRef<number[]>([]);
-  const isInitialMountRef = useRef(true);
-  const allMoimsRef = useRef<Moim[]>([]);
-  const hasSyncedRef = useRef(false);
-  const { status: sessionStatus } = useSession();
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const { data: user } = useUserProfileQuery();
-
   const userId = user?.id;
 
-  const {
-    filters,
-    moimCardData: allMoims,
-    availableLocations,
-    isLoading,
-    error,
-    handleFilterChange,
-  } = useMoimFind();
-
-  // allMoims를 ref에 저장 (alert 표시 시 최신 값 사용)
+  // favorites를 id로 변환 및 localStorage 동기화
   useEffect(() => {
-    allMoimsRef.current = allMoims;
-  }, [allMoims]);
+    const idParam = searchParams.get("id");
+    const favoritesParam = searchParams.get("favorites");
 
-  // localStorage에서 찜한 모임 ID 목록 가져오기
+    // favorites가 있으면 id로 변환
+    if (favoritesParam && !idParam) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("id", favoritesParam);
+      params.delete("favorites");
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      return;
+    }
+
+    // id가 없으면 localStorage에서 가져와서 id로 변환
+    if (!idParam) {
+      const ids = getFavoriteMoims(userId);
+      if (ids.length > 0) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("id", ids.join(","));
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }
+    }
+  }, [searchParams, userId, pathname, router]);
+
+  // localStorage 변경 감지하여 id 업데이트
   useEffect(() => {
-    const loadFavoriteMoims = () => {
-      setFavoriteMoimIds(prevIds => {
-        previousFavoriteMoimIdsRef.current = prevIds;
-        return getFavoriteMoims(userId);
-      });
-    };
-
-    loadFavoriteMoims();
-
-    // localStorage 변경 감지
     const handleStorageChange = () => {
-      loadFavoriteMoims();
+      const ids = getFavoriteMoims(userId);
+      const currentId = searchParams.get("id");
+      const newId = ids.join(",");
+
+      if (currentId !== newId) {
+        const params = new URLSearchParams(searchParams.toString());
+        if (ids.length > 0) {
+          params.set("id", newId);
+        } else {
+          params.delete("id");
+        }
+        router.replace(params.toString() ? `${pathname}?${params.toString()}` : pathname, {
+          scroll: false,
+        });
+      }
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -57,66 +65,8 @@ export const useMoimFavorite = () => {
       window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener("favoriteMoimsChanged", handleStorageChange);
     };
-  }, [userId]);
+  }, [searchParams, userId, pathname, router]);
 
-  // 실제 존재하는 모임과 비교하여 localStorage 동기화 (로딩 완료 후 한 번만 실행)
-  useEffect(() => {
-    // 로딩이 완료되고, 모임 데이터가 있고, 아직 동기화하지 않은 경우에만 실행
-    if (!isLoading && allMoims.length > 0 && !hasSyncedRef.current) {
-      const existingMoimIds = allMoims.map(moim => moim.id);
-      removeNonExistentFavoriteMoims(existingMoimIds, userId);
-      hasSyncedRef.current = true;
-    }
-  }, [isLoading, allMoims, userId]);
-
-  // 찜한 모임이 제거되었을 때 알림 표시 (추후 sonnar 적용 예정)
-  useEffect(() => {
-    // 초기 마운트 시에는 알림 표시하지 않음
-    if (isInitialMountRef.current) {
-      isInitialMountRef.current = false;
-      return;
-    }
-
-    if (sessionStatus !== "authenticated") {
-      return;
-    }
-
-    const previousIds = previousFavoriteMoimIdsRef.current;
-
-    // 찜한 모임이 제거된 경우만 알림 표시
-    // allMoims가 변경되는 것은 카테고리 변경일 수 있으므로, favoriteMoimIds가 실제로 변경되었을 때만 처리
-    if (previousIds.length > 0 && favoriteMoimIds.length < previousIds.length) {
-      // 제거된 모임 ID 찾기
-      const removedIds = previousIds.filter((id: number) => !favoriteMoimIds.includes(id));
-
-      if (removedIds.length > 0) {
-        // 제거된 모임 이름 찾기 (현재 allMoims에 포함된 모임만)
-        const removedMoim = allMoimsRef.current.find(moim => removedIds.includes(moim.id));
-
-        if (removedMoim) {
-          toast.success(`"${removedMoim.name}" 모임이 찜한 목록에서 제거되었습니다.`);
-        }
-      }
-    }
-  }, [favoriteMoimIds]);
-
-  // 찜한 모임만 필터링
-  const moimCardData = useMemo(
-    () => allMoims.filter(moim => favoriteMoimIds.includes(moim.id)),
-    [allMoims, favoriteMoimIds],
-  );
-
-  const handleFavoriteToggle = (moimId: number) => {
-    void moimId;
-  };
-
-  return {
-    filters,
-    moimCardData,
-    availableLocations,
-    isLoading,
-    error,
-    handleFilterChange,
-    onFavoriteToggle: handleFavoriteToggle,
-  };
+  // useMoimFind 사용 (id 파라미터가 포함된 상태)
+  return useMoimFind();
 };

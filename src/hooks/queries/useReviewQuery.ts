@@ -7,7 +7,14 @@ import { toast } from "sonner";
 // 모든 리뷰 가져오기
 export const useAllReviewQuery = (params: GetReviewsParams) =>
   useInfiniteQuery({
-    queryKey: ["reviews", params.type, params.location, params.sortBy, params.limit],
+    queryKey: [
+      "reviews",
+      params.type,
+      params.location,
+      params.sortBy,
+      params.sortOrder,
+      params.limit,
+    ],
     queryFn: async ({ pageParam = 0 }) => {
       const res = await getReviews({ ...params, offset: pageParam });
       if (!res.ok) {
